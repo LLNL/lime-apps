@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="xilinx.gnu.arm.toolchain.2073372037">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.arm.toolchain.2073372037" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.xilinx.sdk.managedbuilder.XELF.arm" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="apps" buildProperties="" description="" id="xilinx.gnu.arm.toolchain.2073372037" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="xilinx.gnu.arm.toolchain.2073372037.1927742210" name="/" resourcePath="">
+						<toolChain id="xilinx.gnu.arm.toolchain.192256522" name="xilinx.gnu.arm.toolchain" superClass="xilinx.gnu.arm.toolchain">
+							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.arm" id="xilinx.arm.target.gnu.base.1866493716" isAbstract="false" name="Debug Platform" superClass="xilinx.arm.target.gnu.base"/>
+							<builder arguments="build=zynq" command="make" id="xilinx.gnu.arm.toolchain.builder.1749833073" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.arm.toolchain.builder"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.assembler.1794798688" name="ARM gcc assembler" superClass="xilinx.gnu.arm.c.toolchain.assembler">
+								<inputType id="xilinx.gnu.assembler.input.1714512351" superClass="xilinx.gnu.assembler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1203007156" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.compiler.1906636328" name="ARM g++ compiler" superClass="xilinx.gnu.arm.cxx.toolchain.compiler">
+								<inputType id="xilinx.gnu.arm.cxx.compiler.input.1523883479" name="C++ source files" superClass="xilinx.gnu.arm.cxx.compiler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.toolchain.archiver.1771765959" name="ARM archiver" superClass="xilinx.gnu.arm.toolchain.archiver"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.linker.1618334627" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.linker.2052852673" name="ARM g++ linker" superClass="xilinx.gnu.arm.cxx.toolchain.linker">
+								<inputType id="xilinx.gnu.linker.input.6226146" superClass="xilinx.gnu.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+								<inputType id="xilinx.gnu.linker.input.lscript.1109759793" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="xilinx.gnu.arm.toolchain.2073372037.297856791">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.arm.toolchain.2073372037.297856791" moduleId="org.eclipse.cdt.core.settings" name="Direct">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.xilinx.sdk.managedbuilder.XELF.arm" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="apps" buildProperties="" description="" id="xilinx.gnu.arm.toolchain.2073372037.297856791" name="Direct" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="xilinx.gnu.arm.toolchain.2073372037.297856791." name="/" resourcePath="">
+						<toolChain id="xilinx.gnu.arm.toolchain.350506226" name="xilinx.gnu.arm.toolchain" superClass="xilinx.gnu.arm.toolchain">
+							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.arm" id="xilinx.arm.target.gnu.base.1720750172" isAbstract="false" name="Debug Platform" superClass="xilinx.arm.target.gnu.base"/>
+							<builder arguments="build=zynq D=DIRECT" command="make" id="xilinx.gnu.arm.toolchain.builder.981494728" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.arm.toolchain.builder"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.assembler.1241147092" name="ARM gcc assembler" superClass="xilinx.gnu.arm.c.toolchain.assembler">
+								<inputType id="xilinx.gnu.assembler.input.2144839460" superClass="xilinx.gnu.assembler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1094563680" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.compiler.1265163760" name="ARM g++ compiler" superClass="xilinx.gnu.arm.cxx.toolchain.compiler">
+								<inputType id="xilinx.gnu.arm.cxx.compiler.input.1773028158" name="C++ source files" superClass="xilinx.gnu.arm.cxx.compiler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.toolchain.archiver.1249275134" name="ARM archiver" superClass="xilinx.gnu.arm.toolchain.archiver"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.linker.1458830052" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.linker.69490462" name="ARM g++ linker" superClass="xilinx.gnu.arm.cxx.toolchain.linker">
+								<inputType id="xilinx.gnu.linker.input.1512773020" superClass="xilinx.gnu.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+								<inputType id="xilinx.gnu.linker.input.lscript.75132975" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="xilinx.gnu.arm.toolchain.2073372037.515573019">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.arm.toolchain.2073372037.515573019" moduleId="org.eclipse.cdt.core.settings" name="Client">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.xilinx.sdk.managedbuilder.XELF.arm" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="apps" buildProperties="" description="" id="xilinx.gnu.arm.toolchain.2073372037.515573019" name="Client" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="xilinx.gnu.arm.toolchain.2073372037.515573019." name="/" resourcePath="">
+						<toolChain id="xilinx.gnu.arm.toolchain.25115973" name="xilinx.gnu.arm.toolchain" superClass="xilinx.gnu.arm.toolchain">
+							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.arm" id="xilinx.arm.target.gnu.base.584174217" isAbstract="false" name="Debug Platform" superClass="xilinx.arm.target.gnu.base"/>
+							<builder arguments="build=zynq D=STATS,CLIENT" command="make" id="xilinx.gnu.arm.toolchain.builder.1012334414" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.arm.toolchain.builder"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.assembler.1897769650" name="ARM gcc assembler" superClass="xilinx.gnu.arm.c.toolchain.assembler">
+								<inputType id="xilinx.gnu.assembler.input.1712290702" superClass="xilinx.gnu.assembler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1264234933" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.compiler.157660086" name="ARM g++ compiler" superClass="xilinx.gnu.arm.cxx.toolchain.compiler">
+								<inputType id="xilinx.gnu.arm.cxx.compiler.input.1444848876" name="C++ source files" superClass="xilinx.gnu.arm.cxx.compiler.input"/>
+							</tool>
+							<tool id="xilinx.gnu.arm.toolchain.archiver.1194688615" name="ARM archiver" superClass="xilinx.gnu.arm.toolchain.archiver"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.linker.1764549390" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.linker.1026798525" name="ARM g++ linker" superClass="xilinx.gnu.arm.cxx.toolchain.linker">
+								<inputType id="xilinx.gnu.linker.input.1716820784" superClass="xilinx.gnu.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+								<inputType id="xilinx.gnu.linker.input.lscript.1517729627" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="apps.null.992877087" name="apps"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/apps"/>
+		</configuration>
+		<configuration configurationName="Direct">
+			<resource resourceType="PROJECT" workspacePath="/apps"/>
+		</configuration>
+		<configuration configurationName="Multiple configurations">
+			<resource resourceType="PROJECT" workspacePath="/apps"/>
+		</configuration>
+		<configuration configurationName="Client">
+			<resource resourceType="PROJECT" workspacePath="/apps"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.arm.toolchain.2073372037;xilinx.gnu.arm.toolchain.2073372037.1927742210;xilinx.gnu.arm.cxx.toolchain.compiler.1906636328;xilinx.gnu.arm.cxx.compiler.input.1523883479">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMGCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.arm.toolchain.2073372037;xilinx.gnu.arm.toolchain.2073372037.1927742210">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMGCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>build=zynq D=CLIENT</buildArguments>
+				<buildTarget>clean</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>build=zynq OPT="-O0 -g3" D=STATS,CLIENT</buildArguments>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
+</cproject>
