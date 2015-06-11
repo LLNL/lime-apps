@@ -283,8 +283,7 @@ double get_seconds()
 
 
 /*---------------------------------------------------------------------------*/
-#else 
-/*#elif defined(ANSI_C_CLOCK)*/
+#elif defined(ANSI_C_CLOCK)
 /*
  * ANSI C's clock().  Resolution is on the order of 0.01s.  The value of
  * CLOCKS_PER_SEC is required to be 1 million on all XSI-conformant systems.
@@ -310,7 +309,20 @@ double get_seconds()
   return ((double) clock()) / ((double)(CLOCKS_PER_SEC));
 }
 
-/*#else */
+#else
 /*# error "Please select a particular timing mechanism in the platform-specific config file."*/
+
+void init_timer(void)
+{
+#ifdef REPORT_CLOCK_TYPE
+  fprintf (stderr, "No clock used.\n");
+#endif
+}
+
+
+double get_seconds()
+{
+  return (0.0);
+}
 
 #endif /* various timers */
