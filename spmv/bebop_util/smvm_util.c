@@ -58,9 +58,9 @@
 #include <string.h>
 #include <time.h>      /* time_t time(time_t*) */
 #include <sys/types.h>
+#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>  /* for stats on files, like whether or not it's a directory */
-
-
+#endif
 
 
 /* should be in string.h */
@@ -80,7 +80,6 @@ smvm_exit (const int errcode)
 
   exit (errcode);
 }
-
 
 
 void
@@ -106,26 +105,26 @@ smvm_set_debug_level_from_environment ()
 
       value = strtol (valstring, NULL, 10);
       if (errno)
-	{
-	  fprintf (stderr, "*** smvm_set_debug_level_from_environment:"
-		   " SPMV_DEBUG_LEVEL is set to %s, which is not an "
-		   "integer ***\n", valstring);
-	  smvm_set_debug_level (0);
-	  return;
-	}
+        {
+          fprintf (stderr, "*** smvm_set_debug_level_from_environment:"
+                   " SPMV_DEBUG_LEVEL is set to %s, which is not an "
+                   "integer ***\n", valstring);
+          smvm_set_debug_level (0);
+          return;
+        }
       else
-	{
-	  if (value < 0)
-	    {
-	      fprintf (stderr, "*** smvm_set_debug_level_from_environment: "
-		       "SPMV_DEBUG_LEVEL is set to %d, which is negative and"
-		       " therefore invalid ***\n", value);
-	      smvm_set_debug_level (0);
-	      return;
-	    }
-	  else
-	    smvm_set_debug_level (value);
-	}
+        {
+          if (value < 0)
+            {
+              fprintf (stderr, "*** smvm_set_debug_level_from_environment: "
+                       "SPMV_DEBUG_LEVEL is set to %d, which is negative and"
+                       " therefore invalid ***\n", value);
+              smvm_set_debug_level (0);
+              return;
+            }
+          else
+            smvm_set_debug_level (value);
+        }
 #else /* No errno.h */
       char *endptr = NULL;
 
@@ -137,27 +136,27 @@ smvm_set_debug_level_from_environment ()
        * if *nptr is not ‘\0’ but **endptr is ‘\0’ on return, the entire 
        * string is valid."  */
       if (*valstring != '\0' && endptr != NULL && *endptr == '\0')
-	{
-	  /* We got value successfully. */
-	  if (value < 0)
-	    {
-	      fprintf (stderr, "*** smvm_set_debug_level_from_environment: "
-		       "SPMV_DEBUG_LEVEL is set to %d, which is negative and"
-		       " therefore invalid ***\n", value);
-	      smvm_set_debug_level (0);
-	      return;
-	    }
-	  else
-	    smvm_set_debug_level (value);
-	}
+        {
+          /* We got value successfully. */
+          if (value < 0)
+            {
+              fprintf (stderr, "*** smvm_set_debug_level_from_environment: "
+                       "SPMV_DEBUG_LEVEL is set to %d, which is negative and"
+                       " therefore invalid ***\n", value);
+              smvm_set_debug_level (0);
+              return;
+            }
+          else
+            smvm_set_debug_level (value);
+        }
       else
-	{
-	  fprintf (stderr, "*** smvm_set_debug_level_from_environment:"
-		   " SPMV_DEBUG_LEVEL is set to %s, which is not an "
-		   "integer ***\n", valstring);
-	  smvm_set_debug_level (0);
-	  return;
-	}
+        {
+          fprintf (stderr, "*** smvm_set_debug_level_from_environment:"
+                   " SPMV_DEBUG_LEVEL is set to %s, which is not an "
+                   "integer ***\n", valstring);
+          smvm_set_debug_level (0);
+          return;
+        }
 #endif /* HAVE_ERRNO_H */
     }
 }
@@ -264,12 +263,12 @@ smvm_debug_level ()
   return SPMV_DEBUG_LEVEL;
 }
 
+
 void 
 smvm_set_debug_level (const int level)
 {
   SPMV_DEBUG_LEVEL = level;
 }
-
 
 
 void
@@ -279,7 +278,6 @@ split_pathname (char** parentdir, char** namestem, char** extn, const char* cons
   char* path_copy = strdup (path);
   char* s;
   int n, k;
-  
 
   *extn = NULL; /* Will be filled in with at least the empty string */
   *parentdir = strdup (dirname (path_copy));
@@ -292,15 +290,15 @@ split_pathname (char** parentdir, char** namestem, char** extn, const char* cons
   for (k = n - 1; k >= 0; k--)
     {
       if (s[k] == '.')
-	{
-	  s[k] = '\0';
-	  if (k < n - 1) 
-	    {
-	      /* Save the extension */
-	      *extn = strdup (&s[k + 1]);
-	    }
-	  break;
-	}
+        {
+          s[k] = '\0';
+          if (k < n - 1) 
+            {
+              /* Save the extension */
+              *extn = strdup (&s[k + 1]);
+            }
+          break;
+        }
     }
   *namestem = s;
   if (*extn == NULL)
@@ -308,6 +306,7 @@ split_pathname (char** parentdir, char** namestem, char** extn, const char* cons
 
 #else
   *parentdir = *namestem = *extn = "";
+  WITH_DEBUG(fprintf(stderr, "*** split_pathname: you need <libgen.h> ***\n"));
 /*#  error "Sorry, you need the POSIX standard header file <libgen.h> to compile smvm_util.c."*/
 #endif /* HAVE_LIBGEN_H */
 }
@@ -316,8 +315,9 @@ split_pathname (char** parentdir, char** namestem, char** extn, const char* cons
 int
 directory_p (const char* const path)
 {
+#ifdef HAVE_SYS_STAT_H
   int saved_errno = 0;
-  int status = 0;
+  int status = 1;
   struct stat s;
 
   errno = 0;
@@ -333,18 +333,23 @@ directory_p (const char* const path)
     {
       mode_t mode = s.st_mode;
       if (S_ISDIR (mode))
-	return 1; /* is a directory */
+        return 1; /* is a directory */
       else
-	return 0;
+        return 0;
     }
+#else
+  WITH_DEBUG(fprintf(stderr, "*** directory_p: you need <stat.h> ***\n"));
+  return 0;
+#endif
 }
 
 
 int
 regular_file_p (const char* const path)
 {
+#ifdef HAVE_SYS_STAT_H
   int saved_errno = 0;
-  int status = 0;
+  int status = 1;
   struct stat s;
 
   errno = 0;
@@ -360,10 +365,12 @@ regular_file_p (const char* const path)
     {
       mode_t mode = s.st_mode;
       if (S_ISREG (mode))
-	return 1; /* is a regular file */
+        return 1; /* is a regular file */
       else
-	return 0;
+        return 0;
     }
+#else
+  WITH_DEBUG(fprintf(stderr, "*** regular_file_p: you need <stat.h> ***\n"));
+  return 0;
+#endif
 }
-
-
