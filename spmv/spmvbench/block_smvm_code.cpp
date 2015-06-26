@@ -20,17 +20,18 @@ using namespace std;
 #include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
-
-#define DEFAULT_BLOCK_LSZ 12 // log 2
+#include <stdio.h>
+#define DEFAULT_BLOCK_LSZ 15 // log 2 	
 #define MIN_COLS 2
+#define INVAL_RANGE	//Invalidate range vs entire L1 cache
 
 typedef int index_t; // used in bcsr_matrix_t
 
 extern IndexArray<index_t> dre; // Data Reorganization Engine
 
 #define tinc(a,b) (a += b)
-unsigned long long tsetup, treorg, toper, tcache;
-tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
+unsigned long long tsetup, treorg, toper, tcache,tLoop;
+tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8,t9,t10;
 
 SMVM_FP bsmvm_routines[12][12][1] = {
 {{bsmvm_1x1_1},{bsmvm_1x2_1},{bsmvm_1x3_1},{bsmvm_1x4_1},{bsmvm_1x5_1},{bsmvm_1x6_1},{bsmvm_1x7_1},{bsmvm_1x8_1},{bsmvm_1x9_1},{bsmvm_1x10_1},{bsmvm_1x11_1},{bsmvm_1x12_1}}
@@ -58,12 +59,13 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 	int i, j;
 	const size_t block_sz = 1U << DEFAULT_BLOCK_LSZ;
 	int col_len = row_start[end_row+1];
+	int rows_to_batch;
+	int max_size=block_sz/sizeof(double);
 #ifdef USE_SP
 	double * restrict block = (double*)SP_BEG; // view block
 #else
 	double * restrict block = NEWA(double, block_sz/sizeof(double)); // view block
 #endif
-
 	tget(t0);
 	// receive block: not needed when block has been invalidated before entry
 	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
@@ -72,45 +74,52 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 	dre.setup((double*)src, sizeof(double), col_idx, col_len);
 	dre.wait();
 	tget(t2);
-	for (i = start_row; i <= end_row; i++) {
+	// Iterate over each row of matrix
+	for (i = 0; i <= end_row; i++) {
 		size_t cols = row_start[i+1] - row_start[i];
-		register double d0 = dest[i];
-
 		if (cols < MIN_COLS) {
 			// Loop over vectors
 			for (j = row_start[i]; j < row_start[i+1]; j++) {
-				d0 += value[j] * src[col_idx[j]];
+				dest[i] += value[j] * src[col_idx[j]];
 			}
-		} else {
-			// Loop over vectors
-			const double * restrict row = value + row_start[i];
-			size_t view_off = row_start[i] * sizeof(double);
-			size_t view_end = view_off + (cols * sizeof(double));
-			for (; view_off < view_end; view_off += block_sz) {
-				unsigned view_sz = min(block_sz, view_end-view_off);
-				unsigned j;
-				tget(t4);
-				// fill block with indexed view
-				dre.fill(block, view_sz, view_off);
-				dre.wait();
-				tget(t5);
-				// receive block
-				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
-				tget(t6);
-				unsigned view_n = view_sz / sizeof(double);
-//				mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
-				for (j = 0; j < (view_n & ~3); ++j) {
-					d0 += row[j] * block[j];
+		} 
+		else {
+			int currentRow=row_start[i];
+			// Increases rows_to_batch until view buffer full or reaches end of matrix
+			for(rows_to_batch=1;row_start[i+rows_to_batch]-currentRow<max_size-1 && rows_to_batch<=end_row-i+1;rows_to_batch++);
+			rows_to_batch--;
+			const double * restrict row = value + currentRow;
+			size_t view_off = currentRow * sizeof(double);
+			size_t view_end = view_off + (row_start[i+rows_to_batch]-currentRow)*sizeof(double);
+			unsigned view_sz = view_end-view_off;
+			#ifndef INVAL_RANGE
+			tget(t3);
+			Xil_L1DCacheFlush();
+			#endif
+			tget(t4);
+			dre.fill(block, view_sz, view_off);
+			dre.wait();
+			tget(t5);
+			#ifdef INVAL_RANGE
+			Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
+			tget(t6);
+			#endif
+//			mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
+			// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
+			int p=0;
+			for(j=0;j<rows_to_batch;j++){
+				for (; p < (row_start[i+j+1]-currentRow); ++p) { 
+					dest[i+j] += row[p] * block[p];
 				}
-				for (; j < view_n; ++j) {
-					d0 += row[j] * block[j];
-				}
-				tinc(treorg, tdiff(t5,t4));
-				tinc(tcache, tdiff(t6,t5));
 			}
+			tinc(treorg, tdiff(t5,t4));
+			#ifdef INVAL_RANGE
+			tinc(tcache, tdiff(t6,t5));
+			#else
+			tinc(tcache,tdiff(t4,t3));
+			#endif
+			i+=rows_to_batch-1;
 		}
-
-		dest[i] = d0;
 	}
 	tget(t7);
 	// flush output product to memory
