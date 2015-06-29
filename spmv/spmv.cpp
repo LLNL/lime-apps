@@ -7,6 +7,7 @@ extern "C" {
 
 #include <smvm_benchmark.h>
 #include <smvm_timing_results.h>
+#include <smvm_util.h>
 
 #ifdef __cplusplus
 }
@@ -40,6 +41,8 @@ int main(int argc, char **argv) {
 
 	MONITOR_INIT
 	dre.wait(); // wait for DRE initialization
+	//smvm_set_debug_level_from_environment();
+	//smvm_set_debug_level(1);
 
 #if 1
 	spmv_params.m = 1 << 21;

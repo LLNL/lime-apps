@@ -128,7 +128,7 @@ partition (struct bcoo_matrix_t* A,
 	   int high, 
 	   void *workspace)
 {
-  int left, right, pivot;
+  int left, right;
   int int_pivot_item1 = 0;
   int int_pivot_item2 = 0;
   int int_swapspace = 0;
@@ -233,7 +233,7 @@ partition (struct bcoo_matrix_t* A,
   int_pivot_item2 = A->JJ[low];
   ASSIGN (pivot_item, VOIDAREF( A->val, block_size*low ));
 
-  pivot = left = low;
+  left = low;
   right = high;
 
   while (left < right)
@@ -908,9 +908,9 @@ create_empty_bcoo_matrix (const int bm,
 	{
 	  fprintf (stderr, "*** create_empty_bcoo_matrix:  Not enough space "
 		   "between II and JJ!  need space for BCOO_ARRAY_LENGTH=%d "
-		   "entries, but only have space for %lu ***\n", 
+		   "entries, but only have space for %ld ***\n", 
 		   BCOO_ARRAY_INIT_LENGTH, diff / sizeof(int));
-	  fprintf (stderr, "*** diff = %lu ***\n", diff);
+	  fprintf (stderr, "*** diff = %ld ***\n", diff);
 	  fprintf (stderr, "*** II = %p, JJ = %p ***\n", II, JJ);
 	  exit (EXIT_FAILURE);
 	}
@@ -1172,12 +1172,12 @@ valid_bcoo_matrix_p (struct bcoo_matrix_t* A)
       else 
         diff = (unsigned long) (A->II) - (unsigned long) (A->JJ);
 
-      if (diff < A->nnzb * sizeof (int))
+      if (diff < A->nnzb * sizeof(int))
 	{
 	  WITH_DEBUG(fprintf(stderr, "*** valid_bcoo_matrix_p: A->II and A->J"
-			     "J are too close together:  diff=%lu but A->nnzb="
+			     "J are too close together:  diff=%ld but A->nnzb="
 			     "%d and sizeof(int)=%lu ***\n", diff, A->nnzb, 
-			     sizeof(int)));
+			     (unsigned long)sizeof(int)));
 	  return 0;
 	}
 
@@ -1296,7 +1296,7 @@ bcoo_matrix_to_random_bcsr_matrix (struct bcoo_matrix_t* A)
       if (ABS(diff) < sizeof(int) * A->nnzb)
 	{
 	  /* If sizeof (sizeof(int)) > sizeof (int), then we need to use 
-	   * %lu in the format string; otherwise we use %u.  Unfortunately
+	   * %ld in the format string; otherwise we use %d.  Unfortunately
 	   * the C preprocessor doesn't allow us to use "sizeof" operators 
 	   * in an #if directive. */
 	  fprintf (stderr, "*** bcoo_matrix_to_random_bcsr_matrix: A->II and "

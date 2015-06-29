@@ -549,8 +549,7 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
   int decile_lengths[10];
 
   /* Vector for holding the column indices of the current row */
-  int* current_row = smvm_calloc (nnzb_per_block_row, sizeof (int));
-
+  int* current_row = smvm_calloc(nnzb_per_block_row, sizeof (int));
   /* allocate space for decile data */
   entries_per_decile = smvm_calloc(10, sizeof(int));
   colinds_to_add = smvm_calloc(nnzb_per_block_row, sizeof(int));
@@ -591,7 +590,7 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
 
     tmp1 = deciles_highest_to_lowest[insertpt];
     deciles_highest_to_lowest[insertpt] = i;
-	
+
     for (bi = insertpt+1; bi <= i; bi++) {
       tmp2 = deciles_highest_to_lowest[bi];
       deciles_highest_to_lowest[bi] = tmp1;
@@ -600,12 +599,14 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
   }
 
   /* sum up number of entry positions in each decile */
+  WITH_DEBUG(fprintf(stderr, "Sum up entry positions\n"));
   for (bi = 0; bi < bm; bi++) {
     decile_start_left = diagpos;
     decile_start_right = diagpos;
     decile_start_left_rounded = (int)floor(diagpos + .5);
     decile_start_right_rounded = decile_start_left_rounded;
 
+    WITH_DEBUG(if (bi % 1024 == 0) fputc('.',stderr));
     for (i = 0; i < 10; i++) {
       entries_per_decile_prev = entries_per_decile[i];
       amt_added = 0;
@@ -658,10 +659,11 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
 
     diagpos += ((double)bn)/((double)bm);
   }
+  WITH_DEBUG(fputc('\n',stderr));
 
   /* now place entries in their appropriate deciles. this loop looks a lot like the last
      one, except that the code for adding the entries is also in place. */
-
+  WITH_DEBUG(fprintf(stderr, "Place entries in deciles\n"));
   diagpos = 0.0;
 
   for (bi = 0; bi < bm; bi++) {
@@ -672,6 +674,7 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
     decile_start_left_rounded = (int)floor(diagpos + .5);
     decile_start_right_rounded = decile_start_left_rounded;
 
+    WITH_DEBUG(if (bi % 1024 == 0) fputc('.',stderr));
     for (i = 0; i < 10; i++) {
       entries_per_decile_per_row = 0;
 
@@ -820,28 +823,28 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
         decile_length--;
 
       while (num_iterations < MAX_NUM_ITERATIONS && 
-	     num_added_without_duplicates < nnzb_per_decile_this_row_rounded[i])
-	{
-	  /* Key to local variables:
-	   *
-	   * num_added_this_round_with_dups:
-	   *   Number of block entries that we have added _this_iteration_.
-	   *   Duplicate entries are counted.  We will remove the duplicate
-	   *   entries at the end of this iteration.
-	   */
-	  int num_added_this_round_with_dups = 0;
-
-	  WITH_DEBUG2(fprintf(stderr, "\tIteration %d, added %d thus far to row\n", 
-				  num_iterations + 1, num_added_without_duplicates));
-	  /* 
-	   * While the total number of block entries added to this row 
-	   * (including the potential duplicates from this round) is less than
-	   * the number we are supposed to add, add another block entry.
-	   */
-	  while (num_added_without_duplicates + num_added_this_round_with_dups < nnzb_per_decile_this_row_rounded[i])
-	    {              
+             num_added_without_duplicates < nnzb_per_decile_this_row_rounded[i])
+        {
+          /* Key to local variables:
+           *
+           * num_added_this_round_with_dups:
+           *   Number of block entries that we have added _this_iteration_.
+           *   Duplicate entries are counted.  We will remove the duplicate
+           *   entries at the end of this iteration.
+           */
+          int num_added_this_round_with_dups = 0;
+        
+          WITH_DEBUG2(fprintf(stderr, "\tIteration %d, added %d thus far to row\n", 
+                      num_iterations + 1, num_added_without_duplicates));
+          /* 
+           * While the total number of block entries added to this row 
+           * (including the potential duplicates from this round) is less than
+           * the number we are supposed to add, add another block entry.
+           */
+          while (num_added_without_duplicates + num_added_this_round_with_dups < nnzb_per_decile_this_row_rounded[i])
+            {              
               /* add entry to [0,decile_length-1] */
-	      int bj = smvm_random_integer(0,decile_length-1);
+              int bj = smvm_random_integer(0,decile_length-1);
 
               /* place this entry in its proper spot, given that the
                  current decile might be split */
@@ -860,45 +863,46 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
                   bj += (decile_start_right_rounded - decile_split_point - 1);
               }
 
-	      current_row[num_added_without_duplicates + num_added_this_round_with_dups] = bj;
-	      num_added_this_round_with_dups++;
-	    }
+              current_row[num_added_without_duplicates + num_added_this_round_with_dups] = bj;
+              num_added_this_round_with_dups++;
+            }
 
           WITH_DEBUG2(fprintf(stderr, "\t-- Added %d this round with potential dups\n",
-               num_added_this_round_with_dups));
+                      num_added_this_round_with_dups));
 
-	  /* Remove duplicate entries in this row */
-	  num_added_without_duplicates = 
-	    remove_duplicates (current_row, num_added_without_duplicates + 
-			                    num_added_this_round_with_dups);
+          /* Remove duplicate entries in this row */
+          num_added_without_duplicates = 
+            remove_duplicates(current_row, num_added_without_duplicates + 
+                              num_added_this_round_with_dups);
 
-	  num_iterations++;
-	}
+          num_iterations++;
+        }
 
       if (num_added_without_duplicates < nnzb_per_decile_this_row_rounded[i])
-	{
-	  WITH_DEBUG2(fprintf (stderr, "*** __create_random_matrix_banded_by_nnz_per_row: at blo"
-			       "ck row %d, added only %d nonzero blocks instead of at least %d: "
-			       "reverting to \"deterministic\" algorithm ***\n", 
-			       bi, num_added_without_duplicates, nnzb_per_block_row));
-	  smvm_free (current_row);
+        {
+          WITH_DEBUG2(fprintf(stderr, "*** __create_random_matrix_banded_by_statistics: at blo"
+                      "ck row %d, added only %d nonzero blocks instead of at least %d: "
+                      "reverting to \"deterministic\" algorithm ***\n", 
+                      bi, num_added_without_duplicates, nnzb_per_block_row));
+          smvm_free(colinds_to_add);
           smvm_free(entries_per_decile);
-	  destroy_bcsr_matrix (A);
+          smvm_free(current_row);
+          destroy_bcsr_matrix(A);
 
           /* will at some point need to write deterministic version of generator */
           die_with_message("need to use deterministic algorithm",8);
-	}
+        }
       else 
-	{
-	  int k;
-	  /* We succeeded in adding all the entries which we wanted to add to 
-	   * the current row, so now we can copy the entries into the matrix. */
-	  A->rowptr[bi] = nnzb_per_block_row * bi;
-	  for (k = 0; k < nnzb_per_decile_this_row_rounded[i]; k++) {
-	    colinds_to_add[row_elem_add_ct] = current_row[k];
+        {
+          int k;
+          /* We succeeded in adding all the entries which we wanted to add to 
+           * the current row, so now we can copy the entries into the matrix. */
+          A->rowptr[bi] = nnzb_per_block_row * bi;
+          for (k = 0; k < nnzb_per_decile_this_row_rounded[i]; k++) {
+            colinds_to_add[row_elem_add_ct] = current_row[k];
             row_elem_add_ct++;
-	  }
-	}
+          }
+        }
 
       /* the endpoint of this decile becomes the starting point of the next one */
       decile_start_left = decile_end_left;
@@ -916,23 +920,24 @@ __create_random_matrix_banded_by_statistics (const int bm, const int bn,
     for (idx = 0; idx < nnzb_per_block_row; idx++)
       A->colind[nnzb_per_block_row*bi + idx] = colinds_to_add[idx];
   }
+  WITH_DEBUG(fputc('\n',stderr));
 
   /* ??? should it be nnzb or nnz? */
   A->rowptr[bm] = nnzb;
 
-  smvm_free (current_row);
-
   /* Fill in the values array with random doubles */
+  WITH_DEBUG(fprintf(stderr, "Fill array with %d values\n", nnz));
   {
     double* vals = (double*) (A->values);
     int k;
     for (k = 0; k < nnz; k++)
-      vals[k] = smvm_random_double (-1.0, 1.0);
+      vals[k] = smvm_random_double(-1.0, 1.0);
   }
 
   /* cleanup */
-  smvm_free(entries_per_decile);
   smvm_free(colinds_to_add);
+  smvm_free(entries_per_decile);
+  smvm_free(current_row);
 
   return A;
 }
@@ -1299,7 +1304,7 @@ create_random_matrix_banded_by_statistics (const int bm, const int bn,
 					   const int nnzb_per_block_row, 
 					   const double *interval_fracs)
 {
-  double row_density = 0.0;
+  /* double row_density = 0.0; */
 
   WITH_DEBUG2( fprintf (stderr, "=== create_random_matrix_banded_by_nnz_per_row ===\n") );
 
@@ -1334,7 +1339,7 @@ create_random_matrix_banded_by_statistics (const int bm, const int bn,
       return NULL;
     }
 
-  row_density = ((double) nnzb_per_block_row) / ((double) bn);
+  /* row_density = ((double) nnzb_per_block_row) / ((double) bn); */
 
   /* deterministic algorithm will go here */
   /*  if (row_density > 1.0/3.0)
