@@ -12,11 +12,12 @@
 
 #if defined(CLOCKS) && defined(ZYNQ)
 
+#include <stdio.h> /* printf */
 #include "xparameters.h" /* XPAR_* */
 
 #define CLOCKS_EMULATE clocks_emulate();
 #define CLOCKS_NORMAL  clocks_normal();
-#define TICKS_ESEC (2571428545/2)
+#define TICKS_ESEC (2571428545UL/2)
 
 #define T_V_W 103 // DRAM Vault Write, off-chip
 #define T_V_R 84  // DRAM Vault Read, off-chip

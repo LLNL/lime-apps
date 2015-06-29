@@ -133,7 +133,7 @@ smvm_set_debug_level_from_environment ()
        * strtol() stores the address of the first invalid character in 
        * *endptr.  If there were no digits at all, strtol() stores the 
        * original value of nptr in *endptr (and returns 0).  In particular, 
-       * if *nptr is not ‘\0’ but **endptr is ‘\0’ on return, the entire 
+       * if *nptr is not '\0' but **endptr is '\0' on return, the entire 
        * string is valid."  */
       if (*valstring != '\0' && endptr != NULL && *endptr == '\0')
         {

@@ -288,6 +288,14 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
 
       __WITH_DEBUG2( fprintf (stderr, "\tTiming loop\n") );
 
+#if 0
+		fprintf(stdout, "Rows (blocks): %d\n", num_block_rows);
+		fprintf(stdout, "Row index: %p\n", row_start);
+		fprintf(stdout, "Col index: %p\n", col_idx);
+		fprintf(stdout, "CSR values: %p\n", values);
+		fprintf(stdout, "Src vector: %p\n", src);
+		fprintf(stdout, "Dst vector: %p\n", dest);
+#endif
 		tsetup = treorg = tcache = 0;
 		CLOCKS_EMULATE
 		CACHE_BARRIER
