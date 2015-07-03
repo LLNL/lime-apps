@@ -44,12 +44,7 @@ using namespace std;
 typedef unsigned char uchar_t;
 typedef unsigned long ulong_t;
 
-#if defined(SIMP)
-#include "simp.hpp"
-typedef simp<uchar_t> uchar_p;
-#else
 typedef uchar_t* uchar_p;
-#endif
 
 Decimate2D dre1; // Data Reorganization Engine
 Decimate2D dre2;

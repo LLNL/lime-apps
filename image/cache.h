@@ -47,9 +47,6 @@ inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
 inline void cache_invalidate(const void *ptr, size_t size) {Xil_DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
 } // namespace host
 
-#elif defined(SIMP)
-#define host sim
-
 #else
 namespace host {
 inline void cache_flush(void) {}

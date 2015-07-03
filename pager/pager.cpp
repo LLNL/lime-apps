@@ -36,18 +36,10 @@ using namespace std;
 typedef int index_t; // used in adjacency list
 typedef size_t gsize_t; // graph size type
 
-#if defined(SIMP)
-#include "simp.hpp"
-typedef simp<double> double_p;
-typedef simp<index_t> index_p;
-typedef std::vector< std::vector <index_t, sim::allocator<index_t> >, sim::allocator<index_t> > graph_t;
-typedef std::vector<double, sim::allocator<double> > double_vec_t;
-#else
 typedef double* double_p;
 typedef index_t* index_p;
 typedef std::vector< std::vector <index_t> > graph_t;
 typedef std::vector<double> double_vec_t;
-#endif
 
 #if defined(PARTIAL)
 bool cflag = false;
@@ -62,13 +54,6 @@ char *oname = NULL;
 IndexArray<index_t> dre; // Data Reorganization Engine
 
 // TODO: find a better place for these globals
-
-#if defined(SIMP) && !defined(NATIVE)
-#include "HMC.hpp"
-#define VAULTS 4 // number of vaults
-#define BANKS 8 // number of banks 16 MB each
-HMC hmc(VAULTS, BANKS);
-#endif
 
 #if defined(STATS) || defined(TRACE) 
 XAxiPmon apm;

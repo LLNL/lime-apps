@@ -13,8 +13,6 @@
 // defined(STATS)  : print memory access statistics
 // defined(TRACE)  : enable trace capture
 // defined(CLOCKS) : enable clock scaling for emulation
-// defined(SIMP)   : sim pointers are used to capture memory access statistics
-// defined(NATIVE) : memory addresses are native to the system
 // defined(ENTIRE) : flush/invalidate entire cache
 // defined(USE_SP) : use scratch pad memory
 // defined(USE_OCM) : use on-chip memory (SRAM) for scratch pad, otherwise use special DRAM section

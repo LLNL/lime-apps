@@ -16,15 +16,7 @@
 
 #ifdef __cplusplus
 
-#if defined(SIMP)
-#include "simalloc.hpp"
-#define ALLOCATOR(t) sim::allocator<t>
-#define NEWA(t,n) new(sim::alloc) t [n]
-#define DELETEA(p) operator delete[](p, sim::alloc)
-#define NALLOC(t,n) (t*)sim::malloc((n)*sizeof(t))
-#define NFREE(p) sim::free(p)
-
-#elif defined(USE_LSU) || defined(USE_DMAC) || defined(CLIENT)
+#if defined(USE_LSU) || defined(USE_DMAC) || defined(CLIENT)
 // FIXME: NEWA doesn't construct, only works for simple types
 // TODO: make allocator for accelerator
 #include <malloc.h> // memalign, free
