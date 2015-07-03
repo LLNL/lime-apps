@@ -359,8 +359,8 @@ int main(int argc, char** argv)
 	if (block_sz > SP_SIZE) block_sz = SP_SIZE;
 #endif
 	printf("rmat scale: %u\n", rmat_scale);
-	printf("view_size: %u\n", block_sz);
 #if defined(USE_ACC)
+	printf("view_size: %u\n", block_sz);
 	printf("min_edges: %u\n", MIN_EDGES); // threshold
 #endif
 

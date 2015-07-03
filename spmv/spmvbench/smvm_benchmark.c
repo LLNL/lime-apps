@@ -129,7 +129,7 @@ smvm_allocate_sparse_data_structures (int** p_row_start, int** p_col_idx,
 /***********************************************************************/
 int
 smvm_benchmark_with_results (struct SMVM_parameters *p_params, 
-			     struct SMVM_timing_results* p_results)
+			     struct SMVM_timing_results* p_results, const int b_verify)
 {
   /* Output level parameters:
    *
@@ -316,7 +316,7 @@ smvm_benchmark_with_results (struct SMVM_parameters *p_params,
    */
   smvm_timing_run_with_results2 (p_results, m_eff, n_eff, r, c, A->rowptr, 
                                  A->colind, A->values, num_nonzero_blocks,
-                                 x, yy0, num_trials, b_warn, b_dbg, 1, tol);
+                                 x, yy0, num_trials, b_warn, b_dbg, b_verify, tol);
 
   WITH_DEBUG( fprintf(stderr,"\nDeallocating matrix and vectors...") );
   destroy_bcsr_matrix (A);

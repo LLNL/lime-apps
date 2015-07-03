@@ -93,7 +93,7 @@ smvm_benchmark (struct SMVM_parameters *p_params);
  */
 int
 smvm_benchmark_with_results (struct SMVM_parameters *p_params, 
-			     struct SMVM_timing_results* p_results);
+			     struct SMVM_timing_results* p_results, const int b_verify);
 
 
 #endif /* NOT _smvm_benchmark_h */
