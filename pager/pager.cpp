@@ -137,25 +137,12 @@ void page_rank_itr(
 				dre.wait();
 				tget(t5);
 				// receive block
-				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz); // 2.92188 sec
+				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
 				tget(t6);
 				unsigned view_n = view_sz / sizeof(double);
-//				mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
-				for (j = 0; j < (view_n & ~3); ++j) {
-					tmp += block[j]; // 2.90258 sec
-//					tmp += block[j+1];
-//					tmp += block[j+2];
-//					tmp += block[j+3];
-//					mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, &block[j]); // 3.0338 sec
-				}
-				for (; j < view_n; ++j) {
+				for (j = 0; j < view_n; ++j) {
 					tmp += block[j];
 				}
-//				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, (unsigned int)&block[j-1] & 0x1FU);
-//				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, (unsigned int)&block[j] & 0x1FU);
-//				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, (unsigned int)&block[j+4] & 0x1FU);
-//				dsb(); /* Wait for L1 invalidate to complete */
-				//Xil_L1DCacheInvalidateRange((unsigned int)block, (view_sz+(32)) & ~(32-1));
 				tinc(treorg, tdiff(t5,t4));
 				tinc(tcache, tdiff(t6,t5));
 			}

@@ -1,12 +1,12 @@
 #
 # $Id: $
 #
-# Description: Makefile for pager_mcu program
+# Description: Makefile for spmv_mcu program
 #
 # $Log: $
 #
 
-TARGET = pager_mcu
+TARGET = spmv_mcu
 VERSION = 1.0
 LABEL = V$(subst .,_,$(VERSION))
 BSP = $(WORKSPACE_LOC)/standalone_bsp_mb
