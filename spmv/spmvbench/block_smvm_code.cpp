@@ -21,15 +21,14 @@ using namespace std;
 #include "ticks.h"
 #include "clocks.h"
 #include <stdio.h>
-#define DEFAULT_BLOCK_LSZ 15 // log 2 	
 #define MIN_COLS 2
-#define INVAL_RANGE	//Invalidate range vs entire L1 cache
+#define tinc(a,b) (a += b)
 
 typedef int index_t; // used in bcsr_matrix_t
 
 extern IndexArray<index_t> dre; // Data Reorganization Engine
-
-#define tinc(a,b) (a += b)
+extern size_t block_sz;
+extern bool inval_all;
 unsigned long long tsetup, treorg, toper, tcache,tLoop;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8,t9,t10;
 
@@ -57,10 +56,9 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 	const double src[], double dest[])
 {
 	int i, j;
-	const size_t block_sz = 1U << DEFAULT_BLOCK_LSZ;
 	int col_len = row_start[end_row+1];
 	int rows_to_batch;
-	int max_size=block_sz/sizeof(double);
+	int max_block_size=block_sz/sizeof(double);
 #ifdef USE_SP
 	double * restrict block = (double*)SP_BEG; // view block
 #else
@@ -86,38 +84,45 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 		else {
 			int currentRow=row_start[i];
 			// Increases rows_to_batch until view buffer full or reaches end of matrix
-			for(rows_to_batch=1;row_start[i+rows_to_batch]-currentRow<max_size-1 && rows_to_batch<=end_row-i+1;rows_to_batch++);
-			rows_to_batch--;
+			for(rows_to_batch=0; row_start[i+rows_to_batch]-currentRow < max_block_size-2 && rows_to_batch <= end_row-i; rows_to_batch++);
+			if(rows_to_batch==0) rows_to_batch++;
 			const double * restrict row = value + currentRow;
 			size_t view_off = currentRow * sizeof(double);
 			size_t view_end = view_off + (row_start[i+rows_to_batch]-currentRow)*sizeof(double);
-			unsigned view_sz = view_end-view_off;
-			#ifndef INVAL_RANGE
-			tget(t3);
-			Xil_L1DCacheFlush();
-			#endif
-			tget(t4);
-			dre.fill(block, view_sz, view_off);
-			dre.wait();
-			tget(t5);
-			#ifdef INVAL_RANGE
-			Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
-			tget(t6);
-			#endif
-//			mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
-			// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
-			int p=0;
-			for(j=0;j<rows_to_batch;j++){
-				for (; p < (row_start[i+j+1]-currentRow); ++p) { 
-					dest[i+j] += row[p] * block[p];
+			int element_in_row=0;
+			for(int view_iter=0; view_off < view_end; view_off+=block_sz, view_iter++){
+				unsigned view_sz = min(block_sz, view_end-view_off);
+				if(inval_all){
+					tget(t3);
+					Xil_L1DCacheFlush();
+				}
+				tget(t4);
+				dre.fill(block, view_sz, view_off);
+				dre.wait();
+				tget(t5);
+				if(!inval_all){
+					Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
+					tget(t6);
+				}
+	//			mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
+				// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
+				int element_in_block=0;
+				for(j=0; j < rows_to_batch; j++){
+					int cnt=min(row_start[i+j+1]-currentRow-view_iter*max_block_size,max_block_size);
+					register double d0 =0;
+					for (; element_in_block < (int)cnt; ++element_in_block,++element_in_row) {
+						d0 += row[element_in_row] * block[element_in_block];
+					}
+					dest[i+j]+=d0;
+				}
+				tinc(treorg, tdiff(t5,t4));
+				if(inval_all){
+					tinc(tcache, tdiff(t6,t5));
+				}
+				else{
+					tinc(tcache,tdiff(t4,t3));
 				}
 			}
-			tinc(treorg, tdiff(t5,t4));
-			#ifdef INVAL_RANGE
-			tinc(tcache, tdiff(t6,t5));
-			#else
-			tinc(tcache,tdiff(t4,t3));
-			#endif
 			i+=rows_to_batch-1;
 		}
 	}
