@@ -116,7 +116,7 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 					dest[i+j]+=d0;
 				}
 				tinc(treorg, tdiff(t5,t4));
-				if(!inval_range){
+				if(inval_range){
 					tinc(tcache, tdiff(t6,t5));
 				}
 				else{
