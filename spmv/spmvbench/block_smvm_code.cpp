@@ -28,7 +28,7 @@ typedef int index_t; // used in bcsr_matrix_t
 
 extern IndexArray<index_t> dre; // Data Reorganization Engine
 extern size_t block_sz;
-extern bool inval_all;
+extern bool inval_range;
 unsigned long long tsetup, treorg, toper, tcache,tLoop;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8,t9,t10;
 
@@ -92,7 +92,7 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 			int element_in_row=0;
 			for(int view_iter=0; view_off < view_end; view_off+=block_sz, view_iter++){
 				unsigned view_sz = min(block_sz, view_end-view_off);
-				if(inval_all){
+				if(!inval_range){
 					tget(t3);
 					Xil_L1DCacheFlush();
 				}
@@ -100,7 +100,7 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 				dre.fill(block, view_sz, view_off);
 				dre.wait();
 				tget(t5);
-				if(!inval_all){
+				if(inval_range){
 					Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
 					tget(t6);
 				}
@@ -116,7 +116,7 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 					dest[i+j]+=d0;
 				}
 				tinc(treorg, tdiff(t5,t4));
-				if(inval_all){
+				if(!inval_range){
 					tinc(tcache, tdiff(t6,t5));
 				}
 				else{

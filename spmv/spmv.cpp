@@ -23,7 +23,7 @@ extern "C" {
 #include "clocks.h"
 
 // Arguments when STANDALONE
-#define ARGS (char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
+#define ARGS (char*)"-r",(char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -32,7 +32,7 @@ extern "C" {
 typedef int index_t; // used in bcsr_matrix_t
 
 IndexArray<index_t> dre; // Data Reorganization Engine
-bool inval_all=false;
+bool inval_range=false;
 unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 
 // TODO: find a better place for these globals
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	while ((opt = getopt(argc, argv, "rcd:f:n:i:s:v:")) != -1) {
 		switch (opt) {
 		case 'r':
-			inval_all=true;
+			inval_range=true;
 			break;
 		case 'c':
 			cflag = true;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 	}
 	if (nok) {
 		fprintf(stderr, "Usage: spmv -r -c -d<int> -f<float> -n<int> -i[null|<float>,...] -s<int> -v<int>\n");
-		fprintf(stderr, "  -r  invalidate entire L1 cache\n");
+		fprintf(stderr, "  -r  invalidate range of L1 cache\n");
 		fprintf(stderr, "  -c  check result\n");
 		fprintf(stderr, "  -d  debug level\n");
 		fprintf(stderr, "  -f  percent fill\n");
