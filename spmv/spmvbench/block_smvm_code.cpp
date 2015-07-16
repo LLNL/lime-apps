@@ -82,13 +82,13 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 			}
 		} 
 		else {
-			int currentRow=row_start[i];
+			int current_row=row_start[i];
 			// Increases rows_to_batch until view buffer full or reaches end of matrix
-			for(rows_to_batch=0; row_start[i+rows_to_batch]-currentRow < max_block_size-2 && rows_to_batch <= end_row-i; rows_to_batch++);
-			if(rows_to_batch==0) rows_to_batch++;
-			const double * restrict row = value + currentRow;
-			size_t view_off = currentRow * sizeof(double);
-			size_t view_end = view_off + (row_start[i+rows_to_batch]-currentRow)*sizeof(double);
+			for(rows_to_batch=1; row_start[i+rows_to_batch]-current_row < max_block_size && rows_to_batch <= end_row-i; rows_to_batch++);
+			if(rows_to_batch > 1) rows_to_batch--;
+			const double * restrict row = value + current_row;
+			size_t view_off = current_row * sizeof(double);
+			size_t view_end = view_off + (row_start[i+rows_to_batch]-current_row)*sizeof(double);
 			int element_in_row=0;
 			for(int view_iter=0; view_off < view_end; view_off+=block_sz, view_iter++){
 				unsigned view_sz = min(block_sz, view_end-view_off);
@@ -108,7 +108,7 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 				// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
 				int element_in_block=0;
 				for(j=0; j < rows_to_batch; j++){
-					int cnt=min(row_start[i+j+1]-currentRow-view_iter*max_block_size,max_block_size);
+					int cnt=min(row_start[i+j+1]-current_row-view_iter*max_block_size,max_block_size);
 					register double d0 =0;
 					for (; element_in_block < (int)cnt; ++element_in_block,++element_in_row) {
 						d0 += row[element_in_row] * block[element_in_block];
