@@ -1,20 +1,22 @@
 #
 # $Id: $
 #
-# Description: Makefile for pager program
+# Description: Makefile for strm program
 #
 # $Log: $
 #
 
-TARGET = pager
+TARGET = strm
 VERSION = 1.0
 LABEL = V$(subst .,_,$(VERSION))
 
 #DEFS += -DVERSION=$(VERSION)
 #DEFS += -DTIMEOFDAY
+DEFS += -DSTREAM_ARRAY_SIZE=20000000
+DEFS += -DNTIMES=2
 
 SRC = .. ../../shared
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp hash_nbits.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
 #MODULES += 
 
 # comma separated list of defines
@@ -24,7 +26,7 @@ ifdef D
 endif
 
 ifneq (,$(findstring M5,$(DEFS)))
-  M5OP = m5op_arm_A64
+  M5OP = m5op_x86
   SRC += ../../m5
   MODULES += $(M5OP)
 endif
@@ -35,15 +37,16 @@ VPATH = $(subst ' ',:,$(SRC))
 
 OPT = -O3
 #OPT += -ftree-vectorize -ffast-math
-MACH = -march=armv8-a
+#MACH = -march=core2
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
-# include boost
-CPPFLAGS += -I$(HOME)/local/include
 CFLAGS = $(MACH) $(OPT) -Wall
 CXXFLAGS = $(CFLAGS)
 LDFLAGS += -static
-LDLIBS = -L$(HOME)/local/lib
+#LDLIBS = -lm
+ifneq (,$(findstring GETTIME,$(DEFS)))
+  LDLIBS += -lrt
+endif
 
 #VAR = $(if $(findstring CYGWIN,$(shell uname -s)),CYG_TRUE,CYG_FALSE)
 
@@ -52,7 +55,7 @@ all: $(TARGET)
 
 .PHONY: check
 check: $(TARGET)
-	./$(TARGET) -s18 -v15
+	./$(TARGET)
 
 .PHONY: clean
 clean:
@@ -67,7 +70,7 @@ vars:
 	@echo DEFS: $(DEFS)
 
 $(TARGET): $(OBJECTS)
-	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # establish module specific dependencies

@@ -23,7 +23,7 @@ extern "C" {
 #include "clocks.h"
 
 // Arguments when STANDALONE
-#define ARGS (char*)"-r",(char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
+#define ARGS (char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -32,7 +32,7 @@ extern "C" {
 typedef int index_t; // used in bcsr_matrix_t
 
 IndexArray<index_t> dre; // Data Reorganization Engine
-bool inval_range=false;
+
 unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 
 // TODO: find a better place for these globals
@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 	argc = sizeof(args)/sizeof(char *)-1;
 	argv = args;
 #endif
+
 	MONITOR_INIT
 	dre.wait(); // wait for DRE initialization
 	//smvm_set_debug_level_from_environment();
@@ -65,11 +66,8 @@ int main(int argc, char **argv)
 	spmv_params.n = 1 << DEFAULT_MATRIX_LSZ;
 	spmv_params.percent_fill = -DEFAULT_NNZ;
 	spmv_params.interval_fracs = ifrac;
-	while ((opt = getopt(argc, argv, "rcd:f:n:i:s:v:")) != -1) {
+	while ((opt = getopt(argc, argv, "cd:f:n:i:s:v:")) != -1) {
 		switch (opt) {
-		case 'r':
-			inval_range=true;
-			break;
 		case 'c':
 			cflag = true;
 			break;
@@ -105,11 +103,9 @@ int main(int argc, char **argv)
 		default: /* '?' */
 			nok = true;
 		}
-
 	}
 	if (nok) {
-		fprintf(stderr, "Usage: spmv -r -c -d<int> -f<float> -n<int> -i[null|<float>,...] -s<int> -v<int>\n");
-		fprintf(stderr, "  -r  invalidate range of L1 cache\n");
+		fprintf(stderr, "Usage: spmv -c -d<int> -f<float> -n<int> -i[null|<float>,...] -s<int> -v<int>\n");
 		fprintf(stderr, "  -c  check result\n");
 		fprintf(stderr, "  -d  debug level\n");
 		fprintf(stderr, "  -f  percent fill\n");
@@ -126,13 +122,16 @@ int main(int argc, char **argv)
 #if defined(USE_ACC)
 	printf("view_size: %u\n", block_sz);
 #endif
+
 	/* * * * * * * * * * get arguments end * * * * * * * * * */
 
 	spmv_params.r = 1;
 	spmv_params.c = 1;
 	spmv_params.num_trials = 1;
 	spmv_params.dataoutfile = fout; /* not used */
+
 	smvm_benchmark_with_results(&spmv_params, &timing_results, cflag);
+
 //	fprintf(fout, "Mean time:          %.6f sec\n", timing_results.t_median); /* actually mean time */
 //	fprintf(fout, "Min time:           %.6f sec\n", timing_results.t_min);
 //	fprintf(fout, "Max time:           %.6f sec\n", timing_results.t_max);

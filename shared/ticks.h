@@ -45,10 +45,9 @@ less high-order bit. Uncomment "unsigned" to use a full tick count.
 /* deprecated */
 #include <sys/timeb.h>
 typedef struct timeb tick_t;
-#define TICKS_SEC 1000
+#define TICKS_SEC 1000U
 #define tget(t) ftime(&(t))
-#define tdiff(f,s) (((unsigned long)f.time*TICKS_SEC+f.millitm)-((unsigned long)s.time*TICKS_SEC+s.millitm))
-#define tsec(f,s) ((us long)tdiff(f,s)/(double)TICKS_SEC)
+#define tval(t) ((unsigned long long)t.time*TICKS_SEC+t.millitm)
 
 #elif defined(TIMEOFDAY)
 
@@ -56,19 +55,20 @@ typedef struct timeb tick_t;
 typedef struct timeval tick_t;
 #define TICKS_SEC 1000000UL
 #define tget(t) gettimeofday(&(t),NULL)
-#define tdiff(f,s) (((unsigned long)f.tv_sec*TICKS_SEC+f.tv_usec)-((unsigned long)s.tv_sec*TICKS_SEC+s.tv_usec))
-#define tsec(f,s) ((us long)tdiff(f,s)/(double)TICKS_SEC)
+#define tval(t) ((unsigned long long)t.tv_sec*TICKS_SEC+t.tv_usec)
 
 #elif defined(GETTIME)
 
-/* must link with lib -lrt */
+/* may need to link with lib -lrt */
 #include <time.h>
 typedef struct timespec tick_t;
 #define TICKS_SEC 1000000000UL
-// clock types: CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID
-#define tget(t) clock_gettime(CLOCK_REALTIME,&(t))
-#define tdiff(f,s) (((unsigned long long)f.tv_sec*TICKS_SEC+f.tv_nsec)-((unsigned long long)s.tv_sec*TICKS_SEC+s.tv_nsec))
-#define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
+#ifndef CLOCK_TYPE
+#error CLOCK_TYPE must be defined as one of: \
+CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID
+#endif
+#define tget(t) clock_gettime(CLOCK_TYPE,&(t))
+#define tval(t) ((unsigned long long)t.tv_sec*TICKS_SEC+t.tv_nsec)
 
 #elif defined(RDTSC)
 
@@ -76,14 +76,11 @@ typedef union {
 	unsigned long long ui64;
 	struct {unsigned int lo, hi;} ui32;
 } tick_t;
-//#define TICKS_SEC 1662000000UL
-//#define TICKS_SEC 2497000000UL
 #ifndef TICKS_SEC
 #error TICKS_SEC must be defined to match the CPU clock frequency
 #endif
 #define tget(t) __asm__ __volatile__ ("lfence\n\trdtsc" : "=a" ((t).ui32.lo), "=d"((t).ui32.hi))
-#define tdiff(f,s) ((f).ui64-(s).ui64)
-#define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
+#define tval(t) ((t).ui64)
 
 #elif defined(XILTIME)
 
@@ -93,8 +90,16 @@ typedef XTime tick_t;
 #define TICKS_SEC COUNTS_PER_SECOND
 #endif
 #define tget(t) XTime_GetTime(&(t))
-#define tdiff(f,s) (f-s)
-#define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
+#define tval(t) (t)
+
+#elif defined(M5RPNS)
+
+/* must link with m5op_<arch>.o */
+#include <m5op.h>
+typedef uint64_t tick_t;
+#define TICKS_SEC 1000000000UL
+#define tget(t) t = rpns()
+#define tval(t) (t)
 
 #else
 
@@ -102,9 +107,13 @@ typedef XTime tick_t;
 typedef clock_t tick_t;
 #define TICKS_SEC CLOCKS_PER_SEC
 #define tget(t) t = clock()
-#define tdiff(f,s) (f-s)
-#define tsec(f,s) ((us long)tdiff(f,s)/(double)TICKS_SEC)
+#define tval(t) (t)
 
 #endif
+
+#define tinc(a,b) ((a) += (b))
+#define tdec(a,b) ((a) -= (b))
+#define tdiff(f,s) (tval(f)-tval(s))
+#define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
 
 #endif /* _TICKS_H */

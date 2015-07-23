@@ -26,7 +26,7 @@
 #define T_DRAM_W 45
 #define T_DRAM_R 45
 #define T_QUEUE_W (T_V_W-T_DRAM_W-T_TRANS) // 00 20 40, ra=57
-#define T_QUEUE_R (T_V_R-T_DRAM_W-T_TRANS) // 00 20 40, ra=13
+#define T_QUEUE_R (T_V_R-T_DRAM_R-T_TRANS) // 00 20 40, ra=13
 #define T_TRANS  24  // 24 32 40
 
 inline void clocks_emulate(void)

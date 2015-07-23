@@ -61,7 +61,6 @@ typedef uran_t*  uran_p;
 
 extern IndexArray<index_t> dre; // Data Reorganization Engine
 
-#define tinc(a,b) (a += b)
 __UINT64_TYPE__ tsetup, treorg, toper, tcache;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
 tick_t start, finish;

@@ -1,20 +1,22 @@
 #
 # $Id: $
 #
-# Description: Makefile for pager program
+# Description: Makefile for strm program
 #
 # $Log: $
 #
 
-TARGET = pager
+TARGET = strm
 VERSION = 1.0
 LABEL = V$(subst .,_,$(VERSION))
 
 #DEFS += -DVERSION=$(VERSION)
 #DEFS += -DTIMEOFDAY
+DEFS += -DSTREAM_ARRAY_SIZE=20000000
+DEFS += -DNTIMES=2
 
 SRC = .. ../../shared
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp hash_nbits.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
 #MODULES += 
 
 # comma separated list of defines
@@ -38,8 +40,6 @@ OPT = -O3
 MACH = -march=armv8-a
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
-# include boost
-CPPFLAGS += -I$(HOME)/local/include
 CFLAGS = $(MACH) $(OPT) -Wall
 CXXFLAGS = $(CFLAGS)
 LDFLAGS += -static
@@ -52,7 +52,7 @@ all: $(TARGET)
 
 .PHONY: check
 check: $(TARGET)
-	./$(TARGET) -s18 -v15
+	./$(TARGET)
 
 .PHONY: clean
 clean:
@@ -67,7 +67,7 @@ vars:
 	@echo DEFS: $(DEFS)
 
 $(TARGET): $(OBJECTS)
-	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # establish module specific dependencies

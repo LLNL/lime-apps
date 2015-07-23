@@ -34,6 +34,7 @@ OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
 
 OPT = -O3
+#OPT += -ftree-vectorize -ffast-math
 MACH = -march=armv8-a
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))

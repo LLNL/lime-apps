@@ -20,17 +20,16 @@ using namespace std;
 #include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
-#include <stdio.h>
+
 #define MIN_COLS 2
-#define tinc(a,b) (a += b)
 
 typedef int index_t; // used in bcsr_matrix_t
 
 extern IndexArray<index_t> dre; // Data Reorganization Engine
 extern size_t block_sz;
-extern bool inval_range;
-unsigned long long tsetup, treorg, toper, tcache,tLoop;
-tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8,t9,t10;
+
+unsigned long long tsetup, treorg, toper, tcache;
+tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
 
 SMVM_FP bsmvm_routines[12][12][1] = {
 {{bsmvm_1x1_1},{bsmvm_1x2_1},{bsmvm_1x3_1},{bsmvm_1x4_1},{bsmvm_1x5_1},{bsmvm_1x6_1},{bsmvm_1x7_1},{bsmvm_1x8_1},{bsmvm_1x9_1},{bsmvm_1x10_1},{bsmvm_1x11_1},{bsmvm_1x12_1}}
@@ -92,19 +91,18 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 			int element_in_row=0;
 			for(int view_iter=0; view_off < view_end; view_off+=block_sz, view_iter++){
 				unsigned view_sz = min(block_sz, view_end-view_off);
-				if(!inval_range){
-					tget(t3);
-					Xil_L1DCacheFlush();
-				}
+#ifdef ENTIRE
+				tget(t3);
+				Xil_L1DCacheFlush();
+#endif
 				tget(t4);
 				dre.fill(block, view_sz, view_off);
 				dre.wait();
 				tget(t5);
-				if(inval_range){
-					Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
-					tget(t6);
-				}
-	//			mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
+#ifndef ENTIRE
+				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
+				tget(t6);
+#endif
 				// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
 				int element_in_block=0;
 				for(j=0; j < rows_to_batch; j++){
@@ -116,12 +114,11 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 					dest[i+j]+=d0;
 				}
 				tinc(treorg, tdiff(t5,t4));
-				if(inval_range){
-					tinc(tcache, tdiff(t6,t5));
-				}
-				else{
-					tinc(tcache,tdiff(t4,t3));
-				}
+#ifdef ENTIRE
+				tinc(tcache, tdiff(t4,t3));
+#else
+				tinc(tcache, tdiff(t6,t5));
+#endif
 			}
 			i+=rows_to_batch-1;
 		}

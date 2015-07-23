@@ -15,6 +15,7 @@ all:
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
+	cd strm/$(build) && $(MAKE) $@
 
 .PHONY: image
 image:
@@ -32,6 +33,10 @@ randa:
 spmv:
 	cd spmv/$(build) && $(MAKE) all
 
+.PHONY: strm
+strm:
+	cd strm/$(build) && $(MAKE) all
+
 .PHONY: dist
 dist: distclean
 	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz .c* .p* .s* *
@@ -45,3 +50,4 @@ distclean:
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
+	cd strm/$(build) && $(MAKE) $@

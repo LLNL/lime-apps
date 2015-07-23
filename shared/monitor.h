@@ -166,7 +166,13 @@ inline void trace_stop(void)
 
 #if defined(USE_SD)
 #include "ff.h"
-#if 1
+#if 0
+/*
+   Save a memory trace to SD card. A file name is prompted for and entered
+   from the terminal. Data is copied from a port on the Trace Capture Device
+   (tcd) to Zynq on-chip memory in blocks of size BLK_SZ and then written to
+   the SD card.
+*/
 inline void trace_capture(void)
 {
 	typedef int elem_t;
@@ -226,8 +232,11 @@ inline void trace_capture(void)
 			goto tc;
 		}
 		tot += blen;
-		if ((tot & ((1<<20)-1)) == 0) xil_printf("\rtrace length:0x%x\r", tot);
-//if (tot >= (1<<26)) tmp = 0;
+		if ((tot & ((1U<<20)-1)) == 0U) xil_printf("\rtrace length:0x%x\r", tot);
+		if (tot >= (1U<<30)) {
+			print(" -- error: trace capture memory exceeded\r\n");
+			goto tc;
+		}
 	} while (tmp);
 tc:
 //	Xil_DCacheDisable();
@@ -249,6 +258,11 @@ tc:
 	xil_printf("capture bandwidth:%ld bytes/sec\r\n", tot/time);
 }
 #else
+/*
+   Save a memory trace to SD card. A file name is prompted for and entered
+   from the terminal. Data is copied from a port on the Trace Capture Device
+   (tcd) to the heap in one contiguous block and then written to the SD card.
+*/
 inline void trace_capture(void)
 {
 	typedef int elem_t;
@@ -332,10 +346,14 @@ tc:
 	xil_printf("capture bandwidth:%ld bytes/sec\r\n", tot/time);
 
 	_exit(0); /* avoid destructors, type XMD% stop to terminate */
-	/* if needed run "hw_server -s tcp::3121" before "Dump/Restore Data File" tool */
 }
 #endif
 #else /* USE_SD */
+/*
+   Save a memory trace to the heap for later download through JTAG with the
+   "Dump/Restore Data File" tool. Data is first copied from a port on the
+   Trace Capture Device (tcd) to the heap in one contiguous block.
+*/
 inline void trace_capture(void)
 {
 	typedef int elem_t;

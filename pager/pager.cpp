@@ -59,7 +59,6 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 XAxiPmon apm;
 #endif // STATS || TRACE
 
-#define tinc(a,b) (a += b)
 unsigned long long tsetup, treorg, toper, tcache;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
 
