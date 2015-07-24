@@ -18,6 +18,10 @@ sub scan {
 			$q_del = $1; $t_del = $2; # nanoseconds
 			next;
 		}
+		if (/QUEUE_W:(\d+) QUEUE_R:(\d+) TRANS:(\d+)/) {
+			$q_del = ($1+$2)/2; $t_del = $3; # nanoseconds
+			next;
+		}
 		if (/page rank time:(\d+\.\d+)/) { # page rank
 			$tref->{$q_del}{$t_del}{RUN} = $1; # seconds
 			next;
@@ -125,86 +129,197 @@ foreach my $qd (sort keys %{$tab{ST}}) {
 
 print "\n";
 print "PageRank CPU Data Transferred (bytes) - Stock Algorithm\n";
-my $ST_CPU_Tran = 0;
-my $ST_count = 0;
+my $ST_CPU_bytes = 0;
+my $ST_CPU_count = 0;
 foreach my $qd (sort keys %{$tab{ST}}) {
 	foreach my $td (sort keys %{$tab{ST}{$qd}}) {
-		$ST_CPU_Tran += ($tab{ST}{$qd}{$td}{CPU_TranW} + $tab{ST}{$qd}{$td}{CPU_TranR}) * 32; # CPU cache line = 32 bytes
-		$ST_count++;
+		# CPU cache line = 32 bytes
+		$ST_CPU_bytes += ($tab{ST}{$qd}{$td}{CPU_TranW} + $tab{ST}{$qd}{$td}{CPU_TranR}) * 32;
+		$ST_CPU_count++;
 	}
 }
-print "Average: ", int($ST_CPU_Tran / $ST_count), "\n";
+print "Average, ", int($ST_CPU_bytes / $ST_CPU_count), "\n";
 
 print "\n";
 print "PageRank CPU Data Transferred (bytes) - View Buffer Algorithm\n";
-my $VB_CPU_Tran = 0;
-my $VB_count = 0;
+my $VB_CPU_bytes = 0;
+my $VB_CPU_count = 0;
 foreach my $qd (sort keys %{$tab{VB}}) {
 	foreach my $td (sort keys %{$tab{VB}{$qd}}) {
-		$VB_CPU_Tran += ($tab{VB}{$qd}{$td}{CPU_TranW} + $tab{VB}{$qd}{$td}{CPU_TranR}) * 32; # CPU cache line = 32 bytes
-		$VB_count++;
+		# CPU cache line = 32 bytes
+		$VB_CPU_bytes += ($tab{VB}{$qd}{$td}{CPU_TranW} + $tab{VB}{$qd}{$td}{CPU_TranR}) * 32;
+		$VB_CPU_count++;
 	}
 }
-print "Average: ", int($VB_CPU_Tran / $VB_count), "\n";
+print "Average, ", int($VB_CPU_bytes / $VB_CPU_count), "\n";
 
 print "\n";
-print "PageRank Energy (Joules) - Stock Algorithm\n";
+print "PageRank Energy (Joules) - Stock Algorithm, Narrow and HMC\n";
 print "Queue Delay / Link Delay";
 foreach my $td (sort keys %{$tab{ST}{(sort keys %{$tab{ST}})[0]}}) {
 	print ", ", $td;
 }
 print "\n";
+my $ST_energy = 0;
+my $ST_count = 0;
 foreach my $qd (sort keys %{$tab{ST}}) {
 	print $qd;
 	foreach my $td (sort keys %{$tab{ST}{$qd}}) {
-		my $CPU_DRAM_BytesW = $tab{ST}{$qd}{$td}{CPU_TranW} * 32; # CPU cache line = 32 bytes
-		my $CPU_DRAM_BytesR = $tab{ST}{$qd}{$td}{CPU_TranR} * 32;
-
-		my $dram_far  = $CPU_DRAM_BytesW + $CPU_DRAM_BytesR;
-
+		# CPU cache line = 32 bytes
+		my $transport_far_bytes = ($tab{ST}{$qd}{$td}{CPU_TranW} + $tab{ST}{$qd}{$td}{CPU_TranR}) * 32;
+		my $access_dram_bytes = $transport_far_bytes;
 		my $energy =
-			$dram_far  * 30.0e-12 * 8;
+			#$transport_near_bytes *  0.0e-12 * 8 +
+			$transport_far_bytes  * 10.3e-12 * 8 +
+			#$access_sram_bytes    *  1.0e-12 * 8 +
+			$access_dram_bytes    * 19.4e-12 * 8;
 		print ", ", $energy;
-		$tab{ST}{$qd}{$td}{ENERGY} = $energy;
+		#$tab{ST}{$qd}{$td}{ENERGY} = $energy;
+		$ST_energy += $energy;
+		$ST_count++;
 	}
 	print "\n";
 }
+print "Average, ", $ST_energy / $ST_count, "\n";
 
 print "\n";
-print "PageRank Energy (Joules) - View Buffer Algorithm\n";
+print "PageRank Energy (Joules) - View Buffer Algorithm, Narrow Access Memory\n";
 print "Queue Delay / Link Delay";
 foreach my $td (sort keys %{$tab{VB}{(sort keys %{$tab{VB}})[0]}}) {
 	print ", ", $td;
 }
 print "\n";
+my $VB_NAM_energy = 0;
+my $VB_NAM_count = 0;
 foreach my $qd (sort keys %{$tab{VB}}) {
 	print $qd;
 	foreach my $td (sort keys %{$tab{VB}{$qd}}) {
-		my $MCU_DRAM_BytesW = 0;
-		my $MCU_DRAM_BytesR = ($tab{VB}{$qd}{$td}{ACC_TranR} - $tab{VB}{$qd}{$td}{ACC_TranW}) * 16; # MCU cache line = 16 bytes
+		my %reqs;
+		$reqs{MCU}{SRAM}{W} = 0;
+		$reqs{MCU}{SRAM}{R} = 0;
+		$reqs{MCU}{DRAM}{W} = 0;
+		$reqs{MCU}{DRAM}{R} = $tab{VB}{$qd}{$td}{ACC_TranR} - $tab{VB}{$qd}{$td}{ACC_TranW};
 
-		my $LSU_SRAM_BytesW = $tab{VB}{$qd}{$td}{ACC_TranW} * 8; # double = 8 bytes
-		my $LSU_DRAM_BytesW = 0;
-		my $LSU_SRAM_BytesR = 0;
-		my $LSU_DRAM_BytesR = $tab{VB}{$qd}{$td}{ACC_TranW} * 16; # LSU_TransR == LSU_TransW, HMC minimum = 16 bytes
+		$reqs{LSU}{SRAM}{W} = $tab{VB}{$qd}{$td}{ACC_TranW};
+		$reqs{LSU}{SRAM}{R} = 0;
+		$reqs{LSU}{DRAM}{W} = 0;
+		$reqs{LSU}{DRAM}{R} = $tab{VB}{$qd}{$td}{ACC_TranW}; # LSU_TransR == LSU_TransW
 
-		my $CPU_SRAM_BytesW = 0;
-		my $CPU_DRAM_BytesW = $tab{VB}{$qd}{$td}{CPU_TranW} * 32; # CPU cache line = 32 bytes
-		my $CPU_SRAM_BytesR = int($LSU_SRAM_BytesW * 1.0270825380417175 / 32) * 32;
-		my $CPU_DRAM_BytesR = $tab{VB}{$qd}{$td}{CPU_TranR} * 32 - $CPU_SRAM_BytesR;
+		$reqs{CPU}{SRAM}{W} = 0;
+		$reqs{CPU}{SRAM}{R} = int($reqs{LSU}{SRAM}{W}* 8 * 1.0270825380417175 / 32);
+		$reqs{CPU}{DRAM}{W} = $tab{VB}{$qd}{$td}{CPU_TranW};
+		$reqs{CPU}{DRAM}{R} = $tab{VB}{$qd}{$td}{CPU_TranR} - $reqs{CPU}{SRAM}{R};
+		my %length = (CPU => 32, LSU => 8, MCU => 16);
 
-		my $sram_near = $LSU_SRAM_BytesW + $LSU_SRAM_BytesR;
-		my $sram_far  = $CPU_SRAM_BytesW + $CPU_SRAM_BytesR;
-		my $dram_near = $MCU_DRAM_BytesW + $MCU_DRAM_BytesR + $LSU_DRAM_BytesW + $LSU_DRAM_BytesR;
-		my $dram_far  = $CPU_DRAM_BytesW + $CPU_DRAM_BytesR;
-
+		my $transport_near_bytes = 0;
+		my $transport_far_bytes = 0;
+		my $access_sram_bytes = 0;
+		my $access_dram_bytes = 0;
+		foreach my $mast (keys %reqs) {
+			foreach my $ram (keys %{$reqs{$mast}}) {
+				foreach my $type (keys %{$reqs{$mast}{$ram}}) {
+					my $transport_bytes = $length{$mast};
+					my $access_bytes = $length{$mast};
+					my $requests = $reqs{$mast}{$ram}{$type};
+					# Narrow Access Memory: transport min. 8 bytes, access multiple 8 bytes
+					if ($ram eq "DRAM") {
+						if ($transport_bytes < 8) {$transport_bytes = 8;}
+						$access_bytes = int(($access_bytes+7)/8) * 8;
+					}
+					if ($mast eq "CPU") {
+						$transport_far_bytes  += $requests * $transport_bytes;
+					} else {
+						$transport_near_bytes += $requests * $transport_bytes;
+					}
+					if ($ram eq "SRAM") {
+						$access_sram_bytes += $requests * $access_bytes;
+					} else {
+						$access_dram_bytes += $requests * $access_bytes;
+					}
+				}
+			}
+		}
 		my $energy =
-			$sram_near *  1.0e-12 * 8 +
-			$sram_far  * 21.0e-12 * 8 +
-			$dram_near * 10.0e-12 * 8 +
-			$dram_far  * 30.0e-12 * 8;
+			#$transport_near_bytes *  0.0e-12 * 8 +
+			$transport_far_bytes  * 10.3e-12 * 8 +
+			$access_sram_bytes    *  1.0e-12 * 8 +
+			$access_dram_bytes    * 19.4e-12 * 8;
 		print ", ", $energy;
-		$tab{VB}{$qd}{$td}{ENERGY} = $energy;
+		#$tab{VB_NAM}{$qd}{$td}{ENERGY} = $energy;
+		$VB_NAM_energy += $energy;
+		$VB_NAM_count++;
 	}
 	print "\n";
 }
+print "Average, ", $VB_NAM_energy / $VB_NAM_count, "\n";
+
+print "\n";
+print "PageRank Energy (Joules) - View Buffer Algorithm, HMC\n";
+print "Queue Delay / Link Delay";
+foreach my $td (sort keys %{$tab{VB}{(sort keys %{$tab{VB}})[0]}}) {
+	print ", ", $td;
+}
+print "\n";
+my $VB_HMC_energy = 0;
+my $VB_HMC_count = 0;
+foreach my $qd (sort keys %{$tab{VB}}) {
+	print $qd;
+	foreach my $td (sort keys %{$tab{VB}{$qd}}) {
+		my %reqs;
+		$reqs{MCU}{SRAM}{W} = 0;
+		$reqs{MCU}{SRAM}{R} = 0;
+		$reqs{MCU}{DRAM}{W} = 0;
+		$reqs{MCU}{DRAM}{R} = $tab{VB}{$qd}{$td}{ACC_TranR} - $tab{VB}{$qd}{$td}{ACC_TranW};
+
+		$reqs{LSU}{SRAM}{W} = $tab{VB}{$qd}{$td}{ACC_TranW};
+		$reqs{LSU}{SRAM}{R} = 0;
+		$reqs{LSU}{DRAM}{W} = 0;
+		$reqs{LSU}{DRAM}{R} = $tab{VB}{$qd}{$td}{ACC_TranW}; # LSU_TransR == LSU_TransW
+
+		$reqs{CPU}{SRAM}{W} = 0;
+		$reqs{CPU}{SRAM}{R} = int($reqs{LSU}{SRAM}{W}* 8 * 1.0270825380417175 / 32);
+		$reqs{CPU}{DRAM}{W} = $tab{VB}{$qd}{$td}{CPU_TranW};
+		$reqs{CPU}{DRAM}{R} = $tab{VB}{$qd}{$td}{CPU_TranR} - $reqs{CPU}{SRAM}{R};
+		my %length = (CPU => 32, LSU => 8, MCU => 16);
+
+		my $transport_near_bytes = 0;
+		my $transport_far_bytes = 0;
+		my $access_sram_bytes = 0;
+		my $access_dram_bytes = 0;
+		foreach my $mast (keys %reqs) {
+			foreach my $ram (keys %{$reqs{$mast}}) {
+				foreach my $type (keys %{$reqs{$mast}{$ram}}) {
+					my $transport_bytes = $length{$mast};
+					my $access_bytes = $length{$mast};
+					my $requests = $reqs{$mast}{$ram}{$type};
+					# HMC: transport min. 16 bytes, access multiple 32 bytes
+					if ($ram eq "DRAM") {
+						if ($transport_bytes < 16) {$transport_bytes = 16;}
+						$access_bytes = int(($access_bytes+31)/32) * 32;
+					}
+					if ($mast eq "CPU") {
+						$transport_far_bytes  += $requests * $transport_bytes;
+					} else {
+						$transport_near_bytes += $requests * $transport_bytes;
+					}
+					if ($ram eq "SRAM") {
+						$access_sram_bytes += $requests * $access_bytes;
+					} else {
+						$access_dram_bytes += $requests * $access_bytes;
+					}
+				}
+			}
+		}
+		my $energy =
+			#$transport_near_bytes *  0.0e-12 * 8 +
+			$transport_far_bytes  * 10.3e-12 * 8 +
+			$access_sram_bytes    *  1.0e-12 * 8 +
+			$access_dram_bytes    * 19.4e-12 * 8;
+		print ", ", $energy;
+		#$tab{VB_HMC}{$qd}{$td}{ENERGY} = $energy;
+		$VB_HMC_energy += $energy;
+		$VB_HMC_count++;
+	}
+	print "\n";
+}
+print "Average, ", $VB_HMC_energy / $VB_HMC_count, "\n";
