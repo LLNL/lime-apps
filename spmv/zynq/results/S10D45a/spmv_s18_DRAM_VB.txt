@@ -1,0 +1,83 @@
+make D=TRACE,CLOCKS,USE_SP,USE_SD,CLIENT
+view_size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:311 CPU_DRAM_R:312
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+SpMV time: 0.451125 sec
+Setup time: 0.000001 sec
+Reorg time: 0.217144 sec
+Oper. time: 0.219573 sec
+Cache time: 0.014407 sec
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            39.514093
+num_loads:          36700188
+num_stores:         71303168
+enter trace file name: sp18dv.bin
+trace length:0x2F5C1E20
+capture time:153 sec
+capture bandwidth:5193242 bytes/sec
+
+make D=TRACE,STATS,CLOCKS,USE_SD,CLIENT,USE_SP
+view_size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:311 CPU_DRAM_R:312
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+SpMV time: 0.451139 sec
+Setup time: 0.000001 sec
+Reorg time: 0.217118 sec
+Oper. time: 0.219609 sec
+Cache time: 0.014410 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 67129 4710742 2148128 150743776 0
+ACC 8912896 11141121 71303168 106954768 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            39.512864
+num_loads:          36700188
+num_stores:         71303168
+enter trace file name: sp18dv1.bin
+trace length:0x2F5C2E20
+capture time:154 sec
+capture bandwidth:5159547 bytes/sec
+
+make D=TRACE,STATS,CLOCKS,USE_SD,CLIENT,USE_SP
+view_size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:311 CPU_DRAM_R:312
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+SpMV time: 0.451082 sec
+Setup time: 0.000001 sec
+Reorg time: 0.217118 sec
+Oper. time: 0.219548 sec
+Cache time: 0.014415 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 67034 4710824 2145088 150746304 0
+ACC 8912896 11141121 71303168 106954768 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            39.517872
+num_loads:          36700188
+num_stores:         71303168
+enter trace file name: sp18dv2.bin
+trace address:0x24D020 length:0x2F5C2A20
+capture time:112 sec
+capture bandwidth:7094368 bytes/sec

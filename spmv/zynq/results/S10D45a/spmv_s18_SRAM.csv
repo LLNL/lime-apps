@@ -1,0 +1,39 @@
+
+SpMV Run Time (seconds) - Stock Algorithm
+Queue Delay / Link Delay, 24
+20, 0.399681
+
+SpMV Run Time (seconds) - View Buffer Algorithm
+Queue Delay / Link Delay, 24
+20, 0.360290
+
+SpMV Speedup
+ST_RUN/VB_RUN
+Queue Delay / Link Delay, 24
+20, 1.10933137195037
+
+SpMV Speedup Upper Bound
+ST_RUN/(VB_OPERATION+VB_CACHE)
+Queue Delay / Link Delay, 24
+20, 2.78917911749723
+
+SpMV CPU Data Transferred (bytes) - Stock Algorithm
+Average, 461751904
+
+SpMV CPU Data Transferred (bytes) - View Buffer Algorithm
+Average, 155696928
+
+SpMV Energy (Joules) - Stock Algorithm, Narrow and HMC
+Queue Delay / Link Delay, 24
+20, 0.1097122523904
+Average, 0.1097122523904
+
+SpMV Energy (Joules) - View Buffer Algorithm, Narrow Access Memory
+Queue Delay / Link Delay, 24
+20, 0.0425355280896
+Average, 0.0425355280896
+
+SpMV Energy (Joules) - View Buffer Algorithm, HMC
+Queue Delay / Link Delay, 24
+20, 0.0812674114304
+Average, 0.0812674114304

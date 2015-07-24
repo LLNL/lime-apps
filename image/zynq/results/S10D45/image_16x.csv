@@ -1,0 +1,32 @@
+
+ImageDifference Run Time (seconds) - Stock Algorithm
+Queue Delay / Link Delay, 24
+0, 0.042132
+20, 0.051906
+40, 0.061991
+
+ImageDifference Run Time (seconds) - View Buffer Algorithm
+Queue Delay / Link Delay, 24
+0, 0.014096
+20, 0.014427
+40, 0.014954
+
+ImageDifference Speedup
+ST_RUN/VB_RUN
+Queue Delay / Link Delay, 24
+0, 2.98893303064699
+20, 3.5978373882304
+40, 4.14544603450582
+
+ImageDifference Speedup Upper Bound
+ST_RUN/(VB_OPERATION+VB_CACHE)
+Queue Delay / Link Delay, 24
+0, 5.14369429862044
+20, 6.10874426268095
+40, 7.03563727159233
+
+ImageDifference CPU Data Transferred (bytes) - Stock Algorithm
+Average, 64429034
+
+ImageDifference CPU Data Transferred (bytes) - View Buffer Algorithm
+Average, 5511936

@@ -1,0 +1,99 @@
+gem5, x86_64, arm_detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+Matrix Dim (r x c): (2097152 x 2097152)
+ticks from trace: 9,718,901,972 @ 0.25 ns/tick
+seconds from trace: 2.429725493
+
+gem5, x86_64, detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+Matrix Dim (r x c): (2097152 x 2097152)
+ticks from trace: 7,849,475,873 @ 0.25 ns/tick
+seconds from trace: 1.96236896825
+
+model name      : AMD Opteron(tm) Processor 6128 @ 2.00GHz
+kraken@lloyd23:./spmv
+SpMV time: 1.581518 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 1.581517 sec
+Cache time: 0.000001 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            90.170542
+num_loads:          293601308
+num_stores:         570425344
+
+model name      : Intel(R) Xeon(R) CPU E7- 4850  @ 2.00GHz
+leviathan@lloyd23:./spmv
+SpMV time: 0.938091 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.938090 sec
+Cache time: 0.000001 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            152.017593
+num_loads:          293601308
+num_stores:         570425344
+
+model name      : Intel(R) Xeon(R) CPU E7-4870 v2 @ 2.30GHz
+bertha@lloyd23:./spmv
+SpMV time: 0.599842 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.599841 sec
+Cache time: 0.000001 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            237.739831
+num_loads:          293601308
+num_stores:         570425344
+
+model name      : Intel(R) Xeon(R) CPU E5-2695 v2 @ 2.40GHz
+catalyst160@pascoe3:./spmv 
+SpMV time: 0.548996 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.548995 sec
+Cache time: 0.000001 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            259.758424
+num_loads:          293601308
+num_stores:         570425344
+
+model name      : Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz
+[lloyd23@opem x86_64]$ ./spmv
+SpMV time: 0.516811 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.516811 sec
+Cache time: 0.000000 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            275.935179
+num_loads:          293601308
+num_stores:         570425344
+
+model name      : Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz
+cab1@lloyd23:./spmv
+SpMV time: 0.508492 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.508492 sec
+Cache time: 0.000000 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            280.449517
+num_loads:          293601308
+num_stores:         570425344

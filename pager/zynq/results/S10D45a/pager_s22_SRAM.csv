@@ -1,0 +1,39 @@
+
+PageRank Run Time (seconds) - Stock Algorithm
+Queue Delay / Link Delay, 24
+20, 6.56069
+
+PageRank Run Time (seconds) - View Buffer Algorithm
+Queue Delay / Link Delay, 24
+20, 5.14142
+
+PageRank Speedup
+ST_RUN/VB_RUN
+Queue Delay / Link Delay, 24
+20, 1.27604630627336
+
+PageRank Speedup Upper Bound
+ST_RUN/(VB_OPERATION+VB_CACHE)
+Queue Delay / Link Delay, 24
+20, 2.46782664889717
+
+PageRank CPU Data Transferred (bytes) - Stock Algorithm
+Average, 7883969856
+
+PageRank CPU Data Transferred (bytes) - View Buffer Algorithm
+Average, 3191486368
+
+PageRank Energy (Joules) - Stock Algorithm, Narrow and HMC
+Queue Delay / Link Delay, 24
+20, 1.8732312377856
+Average, 1.8732312377856
+
+PageRank Energy (Joules) - View Buffer Algorithm, Narrow Access Memory
+Queue Delay / Link Delay, 24
+20, 0.8281370717696
+Average, 0.8281370717696
+
+PageRank Energy (Joules) - View Buffer Algorithm, HMC
+Queue Delay / Link Delay, 24
+20, 1.2505985327488
+Average, 1.2505985327488

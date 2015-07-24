@@ -1,0 +1,70 @@
+# Configuration
+# CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+# LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+# MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.134444 seconds
+0.031197413 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.073935 sec
+Oper. time: 0.060456 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573144 1053096 50340608 33699072 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:20 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:311 CPU_DRAM_R:315
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.134942 seconds
+0.031082331 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.074432 sec
+Oper. time: 0.060457 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573144 1053093 50340608 33698944 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:40 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:391 CPU_DRAM_R:395
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:319 ACC_DRAM_R:303
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.136951 seconds
+0.030626200 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.076441 sec
+Oper. time: 0.060457 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573144 1053092 50340608 33698944 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.

@@ -1,0 +1,364 @@
+
+##### PageRank #####
+				for (j = 0; j < view_n; ++j) {
+					tmp += block[j];
+				}
+
+.L44:
+	fldd	d19, [r2, #-192]
+	add	r3, r1, #5
+	fldd	d16, [r2, #-200]
+	cmp	r0, r3
+	fldd	d18, [r2, #-184]
+	add	r3, r1, #4
+	fldd	d17, [r2, #-176]
+	pld	[r2]
+	mov	r1, r3
+	add	r2, r2, #32
+	faddd	d16, d19, d16
+	faddd	d16, d16, d18
+	faddd	d16, d16, d17
+	faddd	d8, d8, d16
+	bhi	.L44
+.L43:
+	add	r2, r7, r3, asl #3
+.L45:
+	fldmiad	r2!, {d16}
+	add	r3, r3, #1
+	cmp	r4, r3
+	faddd	d8, d8, d16
+	bhi	.L45
+
+##### RandomAccess #####
+		for (j=0; j<VECT_LEN; j+=4) {
+			block[j] ^= ran[j];
+			block[j+1] ^= ran[j+1];
+			block[j+2] ^= ran[j+2];
+			block[j+3] ^= ran[j+3];
+			mtcp(XREG_CP15_CLEAN_INVAL_DC_LINE_MVA_POC, ((unsigned int)&block[j]));
+		}
+
+.L11:
+	fldd	d23, [r2, #-24]	@ int
+	pld	[r3]
+	fldd	d22, [r2, #-16]	@ int
+	sub	r1, r3, #184
+	fldd	d21, [r2, #-8]	@ int
+	ldrd	r4, [r2], #32
+	fldd	d19, [r3, #-184]	@ int
+	fldd	d18, [r3, #-176]	@ int
+	fldd	d17, [r3, #-168]	@ int
+	fldd	d16, [r3, #-160]	@ int
+	fmdrr	d20, r4, r5	@ int
+	veor	d19, d19, d23
+	veor	d18, d18, d22
+	veor	d17, d17, d21
+	veor	d16, d16, d20
+	fstd	d19, [r3, #-184]	@ int
+	fstd	d18, [r3, #-176]	@ int
+	fstd	d17, [r3, #-168]	@ int
+	fstd	d16, [r3, #-160]	@ int
+@ 186 "../core_single_cpu_lcg.cpp" 1
+	mcr p15, 0, r1,  c7, c14, 1
+
+@ 0 "" 2
+	add	r3, r3, #32
+	cmp	r3, r0
+	bne	.L11
+
+##### SpMV CH #####
+			int p=0;
+			for(j=0;j<rows_to_batch;j++){
+				for (; p < (row_start[i+j+1]-currentRow); ++p) { 
+					dest[i+j] += row[p] * block[p];
+				}
+			}
+
+.L1030:
+	fldd	d18, [r2, #-104]
+	pld	[r2]
+	fldd	d17, [r0, #-24]
+	mov	lr, r0
+	add	ip, ip, #4
+	add	r2, r2, #32
+	add	r3, ip, #1
+	add	r0, r0, #32
+	cmp	r7, r3
+	fmacd	d16, d18, d17
+	fstd	d16, [r1]
+	fldd	d18, [r2, #-128]
+	fldd	d17, [r0, #-48]
+	fmacd	d16, d18, d17
+	fstd	d16, [r1]
+	fldd	d18, [r2, #-120]
+	fldd	d17, [r0, #-40]
+	fmacd	d16, d18, d17
+	fstd	d16, [r1]
+	fldd	d18, [r2, #-112]
+	fldd	d17, [lr]
+	fmacd	d16, d18, d17
+	fstd	d16, [r1]
+	bgt	.L1030
+	ldr	lr, [sp, #24]
+.L1034:
+	mov	r2, ip, asl #3
+	fldd	d16, [r1]
+	add	r0, r5, r2
+	add	r2, r9, r2
+.L1032:
+	fldmiad	r0!, {d18}
+	cmp	lr, r3
+	fldmiad	r2!, {d17}
+	add	r3, r3, #1
+	fmacd	d16, d18, d17
+	fstd	d16, [r1]
+	bgt	.L1032
+
+##### SpMV SL #####
+				for (j = 0; j < view_n; ++j) {
+					d0 += row[j] * block[j];
+				}
+
+.L1025:
+	fldd	d17, [r2, #-136]
+	mov	lr, r1
+	fldd	d16, [r1, #-24]
+	add	r3, r0, #5
+	fldd	d22, [r2, #-128]
+	cmp	r3, ip
+	fldd	d21, [r1, #-16]
+	add	r3, r0, #4
+	fldd	d20, [r2, #-120]
+	pld	[r2]
+	fmuld	d16, d17, d16
+	mov	r0, r3
+	fldd	d19, [r1, #-8]
+	add	r2, r2, #32
+	fldd	d18, [r2, #-144]
+	add	r1, r1, #32
+	fldd	d17, [lr]
+	fmacd	d16, d22, d21
+	fmacd	d16, d20, d19
+	fmacd	d16, d18, d17
+	faddd	d8, d8, d16
+	bcc	.L1025
+.L1024:
+	ldr	ip, [sp, #4]
+	mov	r2, r3, asl #3
+	add	r1, ip, r2
+	add	r2, r9, r2
+.L1026:
+	fldmiad	r1!, {d17}
+	add	r3, r3, #1
+	fldmiad	r2!, {d16}
+	cmp	r5, r3
+	fmacd	d8, d17, d16
+	bhi	.L1026
+
+##### ImageDiff #####
+				while (ptr1 < end1) {
+					int dR = abs(ptr1[0] - ptr2[0]); // 0.029731 sec @ decimate 16
+					int dG = abs(ptr1[1] - ptr2[1]);
+					int dB = abs(ptr1[2] - ptr2[2]);
+					ptr1 += elem_sz;
+					ptr2 += elem_sz;
+					davg[didx++] = (dR + dG + dB) / 3;
+				}
+
+.L339:
+	.align	3
+.L337:
+	.word	1431655766
+	.word	1431655766
+	.word	1431655766
+	.word	1431655766
+	.word	.LANCHOR0+320
+	.word	.LANCHOR0+328
+	.word	.LANCHOR0+40
+	.word	.LANCHOR0+188
+	.word	.LANCHOR0+304
+	.word	.LANCHOR0+360
+	.word	.LANCHOR0+148
+	.word	.LANCHOR0+384
+	.word	.LANCHOR0+368
+	.word	.LANCHOR0+376
+.L338:
+	bcs	.L135
+	add	r6, r2, #4
+	ldr	r4, [sp, #48]
+	rsb	lr, r6, r1
+	ldr	r10, [sp, #72]
+	add	lr, lr, #3
+	mov	r0, lr, lsr #2
+	str	r4, [sp, #80]
+	add	r5, r10, r4
+	add	r0, r0, #1
+	mov	ip, r0, asl #2
+	str	r0, [sp, #32]
+	add	r0, r5, r0
+	ldr	r7, [sp, #32]
+	add	r4, r3, ip
+	add	ip, r2, ip
+	cmp	r4, r5
+	cmphi	r0, r3
+	movhi	r4, #0
+	movls	r4, #1
+	cmp	ip, r5
+	cmphi	r0, r2
+	movhi	ip, #0
+	movls	ip, #1
+	and	ip, r4, ip
+	cmp	r7, #15
+	movls	ip, #0
+	andhi	ip, ip, #1
+	cmp	ip, #0
+	beq	.L136
+	mov	r4, lr, lsr #6
+	movs	lr, r4, asl #4
+	beq	.L137
+	mov	r6, r2
+	mov	r7, r3
+	mov	r8, #0
+.L142:
+	mov	ip, r6
+	mov	r0, r7
+	add	r8, r8, #1
+	pld	[r5, #32]
+	vld4.8	{d24, d26, d28, d30}, [ip]!
+	cmp	r4, r8
+	add	r6, r6, #64
+	add	r7, r7, #64
+	vld4.8	{d16, d18, d20, d22}, [r0]!
+	vld4.8	{d25, d27, d29, d31}, [ip]
+	vld4.8	{d17, d19, d21, d23}, [r0]
+	vmovl.u8 q5, d24
+	vmovl.u8 q2, d26
+	vmovl.u8 q0, d16
+	vmovl.u8 q3, d18
+	vmovl.u16 q7, d10
+	vmovl.u16 q6, d0
+	vmovl.u16 q5, d11
+	vmovl.u16 q0, d1
+	vabd.s32 q7, q7, q6
+	vmovl.u16 q6, d4
+	vabd.s32 q0, q5, q0
+	vmovl.u16 q2, d5
+	vmovl.u16 q5, d6
+	vmovl.u16 q3, d7
+	vmovl.u8 q1, d25
+	vabd.s32 q6, q6, q5
+	vabd.s32 q2, q2, q3
+	vmovl.u8 q5, d28
+	vmovl.u8 q3, d20
+	vadd.i32	q0, q0, q2
+	vadd.i32	q6, q7, q6
+	vmovl.u16 q2, d6
+	vmovl.u16 q7, d10
+	vmovl.u16 q3, d7
+	vmovl.u16 q5, d11
+	vabd.s32 q7, q7, q2
+	vmovl.u8 q2, d17
+	vabd.s32 q5, q5, q3
+	vmovl.u8 q3, d27
+	vmovl.u8 q13, d19
+	vmovl.u8 q12, d29
+	vmovl.u16 q9, d2
+	vmovl.u8 q10, d21
+	vmovl.u16 q1, d3
+	vmovl.u16 q15, d4
+	vmovl.u16 q2, d5
+	vmovl.u16 q14, d6
+	vmovl.u16 q11, d26
+	vmovl.u16 q3, d7
+	vmovl.u16 q13, d27
+	vabd.s32 q15, q9, q15
+	vabd.s32 q2, q1, q2
+	vmovl.u16 q9, d24
+	vmovl.u16 q1, d20
+	vmovl.u16 q12, d25
+	vmovl.u16 q10, d21
+	vabd.s32 q11, q14, q11
+	vabd.s32 q8, q3, q13
+	vabd.s32 q1, q9, q1
+	vabd.s32 q12, q12, q10
+	vadd.i32	q9, q15, q11
+	vadd.i32	q8, q2, q8
+	vadd.i32	q10, q5, q0
+	vadd.i32	q9, q1, q9
+	vadd.i32	q11, q7, q6
+	vadd.i32	q8, q12, q8
+	vmull.s32 q3, d20, d8
+	vmull.s32 q1, d22, d8
+	vmull.s32 q0, d23, d9
+	vmull.s32 q2, d21, d9
+	vmull.s32 q14, d18, d8
+	vmull.s32 q15, d19, d9
+	vmull.s32 q12, d16, d8
+	vmull.s32 q13, d17, d9
+	vuzp.32	q1, q0
+	vshr.s32	q11, q11, #31
+	vuzp.32	q12, q13
+	vshr.s32	q10, q10, #31
+	vuzp.32	q3, q2
+	vshr.s32	q9, q9, #31
+	vuzp.32	q14, q15
+	vshr.s32	q8, q8, #31
+	vsub.i32	q10, q2, q10
+	vsub.i32	q11, q0, q11
+	vsub.i32	q8, q13, q8
+	vsub.i32	q9, q15, q9
+	vmovn.i32	d24, q11
+	vmovn.i32	d25, q10
+	vmovn.i32	d20, q9
+	vmovn.i32	d21, q8
+	vmovn.i16	d16, q12
+	vmovn.i16	d17, q10
+	vst1.8	{q8}, [r5]!
+	bhi	.L142
+	ldr	r9, [sp, #32]
+	mov	r0, lr, asl #2
+	ldr	r10, [sp, #48]
+	add	r2, r2, r0
+	add	r3, r3, r0
+	cmp	r9, lr
+	add	r10, r10, lr
+	str	r10, [sp, #48]
+	beq	.L145
+	ldr	r4, [sp, #72]
+	add	r6, r2, #4
+	add	r5, r4, r10
+.L137:
+	ldr	lr, [sp, #92]
+	b	.L141
+.L330:
+	add	r6, r6, #4
+.L141:
+	ldrb	r7, [r2]	@ zero_extendqisi2
+	add	r3, r3, #4
+	ldrb	r4, [r3, #-4]	@ zero_extendqisi2
+	ldrb	r8, [r3, #-3]	@ zero_extendqisi2
+	ldrb	ip, [r2, #1]	@ zero_extendqisi2
+	ldrb	r0, [r2, #2]	@ zero_extendqisi2
+	rsb	r4, r4, r7
+	ldrb	r7, [r3, #-2]	@ zero_extendqisi2
+	cmp	r4, #0
+	rsblt	r4, r4, #0
+	rsb	ip, r8, ip
+	mov	r2, r6
+	cmp	ip, #0
+	rsblt	ip, ip, #0
+	rsb	r0, r7, r0
+	add	ip, r4, ip
+	cmp	r0, #0
+	rsblt	r0, r0, #0
+	cmp	r1, r6
+	add	r0, r0, ip
+	smull	r8, ip, lr, r0
+	sub	r0, ip, r0, asr #31
+	strb	r0, [r5], #1
+	bhi	.L330
+.L145:
+	ldr	r8, [sp, #80]
+	ldr	r9, [sp, #32]
+	add	r8, r8, r9
+	str	r8, [sp, #48]

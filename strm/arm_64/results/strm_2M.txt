@@ -1,0 +1,69 @@
+gem5, arm_64, detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+rpns timer
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 2000000 (elements), Offset = 0 (elements)
+Memory per array = 15.3 MiB (= 0.0 GiB).
+Total memory required = 45.8 MiB (= 0.0 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            3001.4     0.010662     0.010662     0.010662
+Scale:           1628.3     0.019652     0.019652     0.019652
+Add:             2025.5     0.023698     0.023698     0.023698
+Triad:           2008.7     0.023896     0.023896     0.023896
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+
+gem5, arm_64, arm_detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+rpns timer
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 2000000 (elements), Offset = 0 (elements)
+Memory per array = 15.3 MiB (= 0.0 GiB).
+Total memory required = 45.8 MiB (= 0.0 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            5265.5     0.006077     0.006077     0.006077
+Scale:           4616.9     0.006931     0.006931     0.006931
+Add:             5545.8     0.008655     0.008655     0.008655
+Triad:           5589.9     0.008587     0.008587     0.008587
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+
+Processor       : AArch64 Processor rev 0 (aarch64)
+fyi75-pub
+-bash-4.2$ ./strm
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 2000000 (elements), Offset = 0 (elements)
+Memory per array = 15.3 MiB (= 0.0 GiB).
+Total memory required = 45.8 MiB (= 0.0 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:           13349.7     0.002397     0.002397     0.002397
+Scale:          11869.3     0.002696     0.002696     0.002696
+Add:            11692.8     0.004105     0.004105     0.004105
+Triad:          11037.0     0.004349     0.004349     0.004349
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------

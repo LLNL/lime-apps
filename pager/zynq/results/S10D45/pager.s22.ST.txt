@@ -1,0 +1,76 @@
+# Configuration
+# CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+# LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+# MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+
+rmat scale: 22
+view_size: 32768
+RMAT generation, vertices:4194304
+RMAT generation, edges:67108864
+RMAT generation, bytes:553648128
+RMAT generation, time:1169.21 sec, EPS:57396.8
+PageRank Vectors, bytes:67108864
+page rank
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+page rank time:5.28695 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 5.26697 sec
+Cache time: 0.0199849 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1058133 244586566 33860256 *-763164448 0
+errors:0
+
+rmat scale: 22
+view_size: 32768
+RMAT generation, vertices:4194304
+RMAT generation, edges:67108864
+RMAT generation, bytes:553648128
+RMAT generation, time:1169.45 sec, EPS:57385.2
+PageRank Vectors, bytes:67108864
+page rank
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:20 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:311 CPU_DRAM_R:315
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+page rank time:6.53007 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 6.51008 sec
+Cache time: 0.0199867 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1058040 244564547 33857280 *-763868992 0
+errors:0
+
+rmat scale: 22
+view_size: 32768
+RMAT generation, vertices:4194304
+RMAT generation, edges:67108864
+RMAT generation, bytes:553648128
+RMAT generation, time:1169.02 sec, EPS:57406.3
+PageRank Vectors, bytes:67108864
+page rank
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:40 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:391 CPU_DRAM_R:395
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:319 ACC_DRAM_R:303
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+page rank time:7.76785 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 7.74786 sec
+Cache time: 0.0199869 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1058426 244519270 33869632 *-765317852 0
+errors:0

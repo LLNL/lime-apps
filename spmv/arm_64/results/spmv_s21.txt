@@ -1,0 +1,25 @@
+gem5, arm_64, arm_detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+Matrix Dim (r x c): (2097152 x 2097152)
+ticks from trace: 9,144,740,756 @ 0.25 ns/tick
+seconds from trace: 2.286185194
+
+gem5, arm_64, detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+Matrix Dim (r x c): (2097152 x 2097152)
+ticks from trace: 7,962,462,842 @ 0.25 ns/tick
+seconds from trace: 1.9906157105
+
+Processor       : AArch64 Processor rev 0 (aarch64)
+fyi75-pub
+-bash-4.2$ ./spmv
+SpMV time: 1.705554 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 1.705552 sec
+Cache time: 0.000002 sec
+Matrix Dim (r x c): (2097152 x 2097152)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    71303168
+Repetitions:        1
+Mflop/s:            83.612912
+num_loads:          293601308
+num_stores:         570425344

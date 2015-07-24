@@ -1,0 +1,53 @@
+# Configuration
+# CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+# LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+# MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+# DRAM has shareable attribute in page table entry
+
+# Scratch pad area uses SRAM (0x40080000 - 0x400fffff)
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:9.668587 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639960 sec
+view w:1000 h:500
+ref1:0x402890a0 ref2:0x5ead1180 davg:0x7d3191a0
+block size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:100 CPU_DRAM_B:311 CPU_DRAM_R:315
+Slot 1 - ACC_SRAM_B:22 ACC_SRAM_R:10 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.014435 sec
+Setup time: 0.000002 sec
+Reorg time: 0.005930 sec
+Oper. time: 0.006527 sec
+Cache time: 0.001977 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15662 156619 501184 5011808 0
+ACC 1000000 1000000 4000000 8000000 1000000
+max difference: 0
+
+# Scratch pad area uses DRAM (0x40100000 - 0x401fffff)
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:9.667481 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639959 sec
+view w:1000 h:500
+ref1:0x402890a0 ref2:0x5ead1180 davg:0x7d3191a0
+block size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:100 CPU_DRAM_B:311 CPU_DRAM_R:315
+Slot 1 - ACC_SRAM_B:22 ACC_SRAM_R:10 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.020373 sec
+Setup time: 0.000002 sec
+Reorg time: 0.005989 sec
+Oper. time: 0.012405 sec
+Cache time: 0.001977 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15664 156501 501248 5008032 0
+ACC 1000000 1000000 4000000 8000000 1000000
+max difference: 0
