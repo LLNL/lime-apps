@@ -22,6 +22,7 @@ using namespace std;
 #include "clocks.h"
 
 #define MIN_COLS 2
+//#define PARTIAL 10 // used to shorten run time for trace capture
 
 typedef int index_t; // used in bcsr_matrix_t
 
@@ -50,7 +51,7 @@ SMVM_FP bsmvm_routines[12][12][1] = {
 #if defined(USE_ACC)
 #define restrict __restrict__
 
-void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
+void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 	const int row_start[], const int col_idx[], const double value[], 
 	const double src[], double dest[])
 {
@@ -63,6 +64,10 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 #else
 	double * restrict block = NEWA(double, block_sz/sizeof(double)); // view block
 #endif
+#if defined(PARTIAL)
+	end_row /= PARTIAL;
+#endif
+
 	tget(t0);
 	// receive block: not needed when block has been invalidated before entry
 	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
@@ -142,12 +147,15 @@ void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
 
 #else /* USE_ACC */
 
-void bsmvm_1x1_1 (const int start_row, const int end_row, const int bm,
+void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
                const int row_start[], const int col_idx[], const double value[], 
                const double src[], double dest[])
 {
   int i, j;
-  
+#if defined(PARTIAL)
+	end_row /= PARTIAL;
+#endif
+
   for (i=start_row; i<=end_row; i++)
   {
     register double d0;
