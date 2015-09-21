@@ -13,7 +13,7 @@ LABEL = V$(subst .,_,$(VERSION))
 #DEFS += -DVERSION=$(VERSION)
 #DEFS += -DTIMEOFDAY
 
-SRC = .. ../../shared
+SRC = ../../shared ../src
 HEADERS = config.h alloc.h cache.h monitor.h ColorImage.hpp Decimate2D.hpp ticks.h clocks.h
 MODULES += ColorImage
 
@@ -54,7 +54,7 @@ check: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE)
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE)
 
 .PHONY: vars
 vars:

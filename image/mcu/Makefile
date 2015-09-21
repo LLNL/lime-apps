@@ -9,8 +9,10 @@
 TARGET = image_mcu
 VERSION = 1.0
 LABEL = V$(subst .,_,$(VERSION))
-BSP = $(WORKSPACE_LOC)/standalone_bsp_mb
 EXE = .elf
+
+BSP = $(WORKSPACE_LOC)/standalone_bsp_mb
+APPS_DIR ?= $(WORKSPACE_LOC)/apps
 
 #DEFS += -DVERSION=$(VERSION)
 
@@ -19,7 +21,7 @@ CC = mb-gcc
 CXX = mb-g++
 SIZE = mb-size
 
-SRC = ../.. ../../../shared
+SRC = $(APPS_DIR)/shared $(APPS_DIR)/image/src
 HEADERS = Decimate2D.hpp lsu_cmd.h stream.h
 MODULES += mcu_main lsu_cmd stream
 
@@ -54,7 +56,7 @@ check: $(TARGET)$(EXE)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE) $(TARGET)$(EXE).size
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE) $(TARGET)$(EXE).size
 
 .PHONY: vars
 vars:
