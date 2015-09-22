@@ -13,7 +13,7 @@ LABEL = V$(subst .,_,$(VERSION))
 #DEFS += -DVERSION=$(VERSION)
 #DEFS += -DTIMEOFDAY
 
-SRC = .. ../../shared
+SRC = ../../shared ../src
 HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp hash_nbits.hpp ticks.h clocks.h
 #MODULES += 
 
@@ -38,8 +38,11 @@ OPT = -O3
 MACH = -march=armv8-a
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
-# include boost
-CPPFLAGS += -I$(HOME)/local/include
+ifdef BOOST_ROOT
+  CPPFLAGS += -I$(BOOST_ROOT)
+else ifneq (,$(wildcard $(HOME)/local/include/boost))
+  CPPFLAGS += -I$(HOME)/local/include
+endif
 CFLAGS = $(MACH) $(OPT) -Wall
 CXXFLAGS = $(CFLAGS)
 LDFLAGS += -static
@@ -56,7 +59,7 @@ check: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE)
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE)
 
 .PHONY: vars
 vars:

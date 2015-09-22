@@ -23,7 +23,8 @@ extern "C" {
 #include "clocks.h"
 
 // Arguments when STANDALONE
-#define ARGS (char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
+#define ARGS (char*)"-c", (char*)"-s18", (char*)"-n34", (char*)"-v15"
+//#define ARGS (char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size

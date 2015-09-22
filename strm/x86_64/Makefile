@@ -15,7 +15,7 @@ LABEL = V$(subst .,_,$(VERSION))
 DEFS += -DSTREAM_ARRAY_SIZE=20000000
 DEFS += -DNTIMES=2
 
-SRC = .. ../../shared
+SRC = ../../shared ../src
 HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
 #MODULES += 
 
@@ -59,7 +59,7 @@ check: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE)
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE)
 
 .PHONY: vars
 vars:

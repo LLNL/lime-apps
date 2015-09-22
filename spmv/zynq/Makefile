@@ -9,8 +9,10 @@
 TARGET = spmv
 VERSION = 1.0
 LABEL = V$(subst .,_,$(VERSION))
-BSP = $(WORKSPACE_LOC)/standalone_bsp_a9
 EXE = .elf
+
+BSP = $(WORKSPACE_LOC)/standalone_bsp_a9
+APPS_DIR ?= $(WORKSPACE_LOC)/apps
 
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DZYNQ -DXILTIME -DSTANDALONE
@@ -20,7 +22,7 @@ CC = arm-xilinx-eabi-gcc
 CXX = arm-xilinx-eabi-g++
 SIZE = arm-xilinx-eabi-size
 
-SRC = .. ../../shared ../bebop_util ../matrix_generator ../spmvbench
+SRC = $(addprefix $(APPS_DIR)/,shared spmv/src $(addprefix spmv/src/,bebop_util matrix_generator spmvbench))
 HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp ticks.h clocks.h
 MODULES += block_smvm_code smvm_benchmark smvm_timing_results smvm_timing_run smvm_verify_result timing
 MODULES += bcoo_matrix bcsr_matrix create_rand
@@ -34,7 +36,7 @@ endif
 
 ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_arm
-  SRC += ../../m5
+  SRC += $(APPS_DIR)/m5
   MODULES += $(M5OP)
 endif
 
@@ -53,8 +55,6 @@ OPT = -O3 -ftree-vectorize -ffast-math
 MACH = -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
-# include boost
-CPPFLAGS += -I$(HOME)/local/include
 CPPFLAGS += -I$(BSP)/ps7_cortexa9_0/include
 CFLAGS = $(MACH) $(OPT) -Wall
 CXXFLAGS = $(CFLAGS)
@@ -65,8 +65,8 @@ LDLIBS = -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,-lstdc++,--end-group
 
 .PHONY: all
 all: $(TARGET)$(EXE)
-ifneq (,$(findstring CLIENT,$(DEFS)))
-	cd mcu && $(MAKE) D=
+ifneq (,$(and $(findstring CLIENT,$(DEFS)),$(wildcard ../mcu)))
+	cd ../mcu && $(MAKE) D=
 endif
 
 .PHONY: check
@@ -75,8 +75,10 @@ check: $(TARGET)$(EXE)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE) $(TARGET)$(EXE).size
-	cd mcu && $(MAKE) clean
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE) $(TARGET)$(EXE).size
+ifneq (,$(wildcard ../mcu))
+	cd ../mcu && $(MAKE) clean
+endif
 
 .PHONY: vars
 vars:

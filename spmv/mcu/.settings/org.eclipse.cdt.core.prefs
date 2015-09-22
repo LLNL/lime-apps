@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/xilinx.gnu.mb.toolchain.410703311/WORKSPACE_LOC/delimiter=;
+environment/project/xilinx.gnu.mb.toolchain.410703311/WORKSPACE_LOC/operation=append
+environment/project/xilinx.gnu.mb.toolchain.410703311/WORKSPACE_LOC/value=${workspace_loc}
+environment/project/xilinx.gnu.mb.toolchain.410703311/append=true
+environment/project/xilinx.gnu.mb.toolchain.410703311/appendContributed=true

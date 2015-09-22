@@ -13,7 +13,7 @@ LABEL = V$(subst .,_,$(VERSION))
 #DEFS += -DVERSION=$(VERSION)
 #DEFS += -DTIMEOFDAY
 
-SRC = .. ../../shared
+SRC = ../../shared ../src
 HEADERS = hpcc.h RandomAccess.h config.h alloc.h cache.h monitor.h IndexArray.hpp ticks.h clocks.h
 MODULES += core_single_cpu_lcg utility
 
@@ -53,7 +53,7 @@ check: $(TARGET)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJECTS) $(TARGET)$(EXE)
+	$(RM) $(wildcard *.o) $(TARGET)$(EXE)
 
 .PHONY: vars
 vars:
