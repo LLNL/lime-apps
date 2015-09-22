@@ -6,7 +6,7 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.2
+PACKAGE = apps-1.3
 build=x86_64
 
 .PHONY: all
@@ -39,11 +39,11 @@ strm:
 
 .PHONY: dist
 dist: distclean
-	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz .c* .p* .s* *
+	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs --exclude='*.o' --exclude='*.log' .project *
 
 .PHONY: distclean
 distclean:
-	$(RM) -rf ../$(PACKAGE).tgz
+	$(RM) ../$(PACKAGE).tgz
 
 .DEFAULT:
 	cd image/$(build) && $(MAKE) $@
