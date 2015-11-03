@@ -1,0 +1,84 @@
+# Configuration
+# CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+# LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+# MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+# DRAM has shareable attribute in page table entry
+
+########## ARM only ##########
+---------- stock code ----------
+
+rmat scale: 18
+RMAT generation, vertices:262144
+RMAT generation, edges:4194304
+RMAT generation, bytes:34603008
+RMAT generation, time:51.6926 sec, EPS:81139.3
+Running BFS from source:0
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+BFS time:0.210928 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 0.210114 sec
+Cache time: 0.000813574 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 347449 3481466 11118368 111406944 0
+enter trace file name: bfs18st.bin
+trace address:0x28CEC0 length:0x74D7220
+capture time:18 sec
+capture bandwidth:6806444 bytes/sec
+
+rmat scale: 19
+RMAT generation, vertices:524288
+RMAT generation, edges:8388608
+RMAT generation, bytes:69206016
+RMAT generation, time:112.825 sec, EPS:74350.3
+Running BFS from source:0
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+BFS time:0.626114 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 0.624504 sec
+Cache time: 0.00161042 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 732758 11557345 23448256 369835072 0
+enter trace file name: bfs19st.bin
+trace address:0x28CEC0 length:0x1770C420
+capture time:55 sec
+capture bandwidth:7150294 bytes/sec
+
+rmat scale: 20
+RMAT generation, vertices:1048576
+RMAT generation, edges:16777216
+RMAT generation, bytes:138412032
+RMAT generation, time:245.073 sec, EPS:68457.9
+Running BFS from source:1
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+BFS time:1.93527 sec
+Setup time: 0 sec
+Reorg time: 0 sec
+Oper. time: 1.93207 sec
+Cache time: 0.00320002 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1474107 38617959 47171424 1235774816 0
+enter trace file name: bfs20st.bin
+ -- error: ran out of heap for trace
+trace address:0x28CEC0 length:0x3F000000
+capture time:150 sec
+capture bandwidth:7046430 bytes/sec

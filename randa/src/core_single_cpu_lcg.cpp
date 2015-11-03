@@ -118,7 +118,7 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 	if (tidx == NULL) {printf(" -- error: allocating tidx\n"); return;}
 	//printf("Table:%p tidx:%p block:%p\n", Table, tidx, block); fflush(stdout);
 	tget(t0);
-	// receive block FIXME: is this needed when memory has been invalidated before entry?
+	// receive block, not needed when memory has been invalidated before entry.
 	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
 	tget(t1);
 	/* Set up view of Table */

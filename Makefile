@@ -6,16 +6,21 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.3
+PACKAGE = apps-1.4
 build=x86_64
 
 .PHONY: all
 all:
+	cd bfs/$(build) && $(MAKE) $@
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
+
+.PHONY: bfs
+bfs:
+	cd bfs/$(build) && $(MAKE) all
 
 .PHONY: image
 image:
@@ -46,6 +51,7 @@ distclean:
 	$(RM) ../$(PACKAGE).tgz
 
 .DEFAULT:
+	cd bfs/$(build) && $(MAKE) $@
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@

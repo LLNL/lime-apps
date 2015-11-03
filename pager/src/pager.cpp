@@ -102,7 +102,7 @@ void page_rank_itr(
 #endif
 
 	tget(t0);
-	// receive block FIXME: is this needed when memory has been invalidated before entry?
+	// receive block, not needed when memory has been invalidated before entry.
 	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
 	tget(t1);
 
