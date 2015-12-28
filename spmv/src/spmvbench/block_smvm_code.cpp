@@ -17,20 +17,13 @@ using namespace std;
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
-#define MIN_COLS 2
 //#define PARTIAL 10 // used to shorten run time for trace capture
 
-typedef int index_t; // used in bcsr_matrix_t
-
-extern IndexArray<index_t> dre; // Data Reorganization Engine
-extern size_t block_sz;
-
-unsigned long long tsetup, treorg, toper, tcache;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
+unsigned long long tsetup, treorg, toper, tcache;
 
 SMVM_FP bsmvm_routines[12][12][1] = {
 {{bsmvm_1x1_1},{bsmvm_1x2_1},{bsmvm_1x3_1},{bsmvm_1x4_1},{bsmvm_1x5_1},{bsmvm_1x6_1},{bsmvm_1x7_1},{bsmvm_1x8_1},{bsmvm_1x9_1},{bsmvm_1x10_1},{bsmvm_1x11_1},{bsmvm_1x12_1}}
@@ -49,7 +42,17 @@ SMVM_FP bsmvm_routines[12][12][1] = {
 
 
 #if defined(USE_ACC)
+
+#include "IndexArray.hpp"
+
+#define MIN_COLS 2
 #define restrict __restrict__
+
+typedef int index_t; // int used in bcsr_matrix_t
+
+extern IndexArray<index_t> dre; // Data Reorganization Engine
+extern size_t block_sz;
+
 
 void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 	const int row_start[], const int col_idx[], const double value[], 

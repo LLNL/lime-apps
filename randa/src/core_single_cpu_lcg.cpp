@@ -51,7 +51,6 @@
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
@@ -59,14 +58,18 @@ typedef index_t* index_p;
 typedef table_t* table_p;
 typedef uran_t*  uran_p;
 
-extern IndexArray<index_t> dre; // Data Reorganization Engine
-
-__UINT64_TYPE__ tsetup, treorg, toper, tcache;
-tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
 tick_t start, finish;
+tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
+unsigned long long tsetup, treorg, toper, tcache;
 
 
 #if defined(USE_ACC)
+
+#include "IndexArray.hpp"
+
+#define restrict __restrict__
+
+extern IndexArray<index_t> dre; // Data Reorganization Engine
 
 /*
    For LCG:
@@ -90,8 +93,6 @@ cmpp(const void *p1, const void *p2)
 	else return 1;
 }
 #endif
-
-#define restrict __restrict__
 
 static void
 RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Table, nupdate_t nupdate)
@@ -346,8 +347,10 @@ HPCC_RandomAccess_LCG(HPCC_Params *params, int doIO, double *GUPs, int *failure)
 //		fprintf(outFile, "CPU time used  = %.6f seconds\n", cputime);
 		fprintf(outFile, "Real time used = %.6f seconds\n", realtime);
 		fprintf(outFile, "%.9f Billion(10^9) Updates per second [GUP/s]\n", *GUPs);
+#if defined(USE_ACC)
 		fprintf(outFile, "Setup time: %f sec\n", tsetup/(double)TICKS_ESEC);
 		fprintf(outFile, "Reorg time: %f sec\n", treorg/(double)TICKS_ESEC);
+#endif
 		fprintf(outFile, "Oper. time: %f sec\n", toper/(double)TICKS_ESEC);
 		fprintf(outFile, "Cache time: %f sec\n", tcache/(double)TICKS_ESEC);
 		STATS_PRINT

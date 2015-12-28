@@ -12,6 +12,8 @@ vararg.h (if necessary)
 mpi.h
 */
 //#include "hpl.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "hpccver.h"
 

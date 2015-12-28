@@ -23,7 +23,7 @@ CXX = arm-xilinx-eabi-g++
 SIZE = arm-xilinx-eabi-size
 
 SRC = $(APPS_DIR)/shared $(APPS_DIR)/pager/src
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp hash_nbits.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h hash_nbits.hpp ticks.h clocks.h
 #MODULES += 
 
 # comma separated list of defines
@@ -36,6 +36,10 @@ ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_arm
   SRC += $(APPS_DIR)/m5
   MODULES += $(M5OP)
+endif
+
+ifneq (,$(wildcard ../src/IndexArray.hpp))
+  HEADERS += IndexArray.hpp
 endif
 
 ifneq (,$(findstring CLIENT,$(DEFS)))

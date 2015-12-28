@@ -16,7 +16,7 @@ LABEL = V$(subst .,_,$(VERSION))
 DEFS += -DHAVE__COMPLEX
 
 SRC = ../../shared ../src ../src/bebop_util ../src/matrix_generator ../src/spmvbench
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
 MODULES += block_smvm_code smvm_benchmark smvm_timing_results smvm_timing_run smvm_verify_result timing
 MODULES += bcoo_matrix bcsr_matrix create_rand
 MODULES += __complex mt19937ar random_number smvm_malloc smvm_util sort_joint_arrays
@@ -31,6 +31,10 @@ ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_x86
   SRC += ../../m5
   MODULES += $(M5OP)
+endif
+
+ifneq (,$(wildcard ../src/IndexArray.hpp))
+  HEADERS += IndexArray.hpp
 endif
 
 OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))

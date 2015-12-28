@@ -12,12 +12,12 @@
 #include <fstream> // ofstream
 using namespace std;
 
+#include "hash_nbits.hpp"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
-#include "hash_nbits.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
@@ -27,19 +27,21 @@ using namespace std;
 //#define ARGS (char*)"-s19", (char*)"-v15"
 //#define ARGS (char*)"-s22", (char*)"-v15"
 
-#define DEFAULT_RMAT_SCALE 16U // power of 2
-#define DEFAULT_BLOCK_SZ 12 // power of 2
-#define MIN_EDGES 128
+#define DEFAULT_RMAT_SCALE 16U // log 2 size
+#define DEFAULT_BLOCK_LSZ 12 // log 2 size
 //#define PARTIAL 131072 // used to shorten run time for trace capture
 
 // Use 32-bit integers for *smaller* graph
-typedef int index_t; // used in adjacency list
+typedef unsigned int index_t; // used in adjacency list
 typedef size_t gsize_t; // graph size type
 
 typedef double* double_p;
 typedef index_t* index_p;
 typedef std::vector< std::vector <index_t> > graph_t;
 typedef std::vector<double> double_vec_t;
+
+typedef boost::compressed_sparse_row_graph<boost::directedS, boost::no_property, boost::no_property, boost::no_property, index_t, index_t> DummyForRMAT;
+typedef boost::rmat_iterator<boost::mt19937, DummyForRMAT> RMATGen;
 
 #if defined(PARTIAL)
 bool cflag = false;
@@ -48,10 +50,8 @@ bool cflag = true;
 #endif
 bool pflag = false;
 unsigned rmat_scale = DEFAULT_RMAT_SCALE;
-unsigned block_sz = 1U<<DEFAULT_BLOCK_SZ;
+unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 char *oname = NULL;
-
-IndexArray<index_t> dre; // Data Reorganization Engine
 
 // TODO: find a better place for these globals
 
@@ -59,18 +59,20 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 XAxiPmon apm;
 #endif // STATS || TRACE
 
-unsigned long long tsetup, treorg, toper, tcache;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
+unsigned long long tsetup, treorg, toper, tcache;
 
 
 //------------------ Support ------------------//
 
-typedef boost::compressed_sparse_row_graph<boost::directedS, boost::no_property, boost::no_property, boost::no_property, index_t, index_t> DummyForRMAT;
-typedef boost::rmat_iterator<boost::mt19937, DummyForRMAT> RMATGen;
-
 #if defined(USE_ACC)
 
+#include "IndexArray.hpp"
+
+#define MIN_EDGES 128
 #define restrict __restrict__
+
+IndexArray<index_t> dre; // Data Reorganization Engine
 
 /**
  * Single Iteration of Page Rank
@@ -290,7 +292,9 @@ int main(int argc, char** argv)
 #endif
 
 	MONITOR_INIT
+#if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
+#endif
 	while ((opt = getopt(argc, argv, "cps:v:o:")) != -1) {
 		switch (opt) {
 		case 'c':
@@ -321,7 +325,7 @@ int main(int argc, char** argv)
 		fprintf(stderr, "  -c  check first iteration\n");
 		fprintf(stderr, "  -p  show progress\n");
 		fprintf(stderr, "  -s  RMAT scale 2^n, default: n=%d\n", DEFAULT_RMAT_SCALE);
-		fprintf(stderr, "  -v  view buffer block size 2^n, default: n=%d\n", DEFAULT_BLOCK_SZ);
+		fprintf(stderr, "  -v  view buffer block size 2^n, default: n=%d\n", DEFAULT_BLOCK_LSZ);
 		fprintf(stderr, "  -o  output page rank, default: NULL\n");
 		fprintf(stderr, "\n");
 		return EXIT_FAILURE;
@@ -410,8 +414,10 @@ int main(int argc, char** argv)
 	secs = tesec(finish, start);
 	if (secs == 0.0) secs = 1.0/TICKS_ESEC;
 	cout << "page rank time:" << secs << " sec" << endl;
+#if defined(USE_ACC)
 	cout << "Setup time: " << tsetup/(double)TICKS_ESEC << " sec" << endl;
 	cout << "Reorg time: " << treorg/(double)TICKS_ESEC << " sec" << endl;
+#endif
 	cout << "Oper. time: " << toper/(double)TICKS_ESEC << " sec" << endl;
 	cout << "Cache time: " << tcache/(double)TICKS_ESEC << " sec" << endl;
 	STATS_PRINT

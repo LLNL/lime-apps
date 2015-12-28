@@ -28,18 +28,18 @@ extern "C" {
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
-typedef int index_t; // used in bcsr_matrix_t
-
-extern IndexArray<index_t> dre; // Data Reorganization Engine
+#define __WITH_DEBUG2( OP )  do {if(b_dbg) { OP; }} while(0)
 
 extern unsigned long long tsetup, treorg, toper, tcache;
-extern tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
 
-#define __WITH_DEBUG2( OP )  do {if(b_dbg) { OP; }} while(0)
+#if defined(USE_ACC)
+#include "IndexArray.hpp"
+typedef int index_t; // int used in bcsr_matrix_t
+extern IndexArray<index_t> dre; // Data Reorganization Engine
+#endif
 
 
 /************************************************************************/
@@ -320,8 +320,10 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
 		secs = tesec(finish, start)/num_trials;
 		if (secs == 0.0) secs = 1.0/TICKS_ESEC;
 		fprintf(stdout, "SpMV time: %f sec\n", secs);
+#if defined(USE_ACC)
 		fprintf(stdout, "Setup time: %f sec\n", tsetup/(double)TICKS_ESEC);
 		fprintf(stdout, "Reorg time: %f sec\n", treorg/(double)TICKS_ESEC);
+#endif
 		fprintf(stdout, "Oper. time: %f sec\n", toper/(double)TICKS_ESEC);
 		fprintf(stdout, "Cache time: %f sec\n", tcache/(double)TICKS_ESEC);
 		STATS_PRINT

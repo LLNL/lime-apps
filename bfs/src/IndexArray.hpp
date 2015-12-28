@@ -19,8 +19,6 @@
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
-#define load(p,i) (p)[i]
-
 #if defined(USE_DMAC)
 #include <cstring> // memcpy, memset
 #include "dmac_cmd.h"
@@ -52,7 +50,7 @@ void *smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, size_
 	}
 	return dst;
 }
-#endif // use CPU
+#endif
 
 #define memcpy ::memcpy
 #define memset ::memset
@@ -82,9 +80,11 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 };
 #endif
 
+#ifdef __microblaze__
 // Invalidate single data cache line from addr
 // Assumes C_DCACHE_USE_WRITEBACK is 0, therefore rB (i.e. r0) is not used
 #define wdcc(addr) __asm__ __volatile__ ("wdc.clear\t%0,r0\n" :: "d" (addr))
+#endif
 
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
@@ -797,7 +797,6 @@ template<typename T> IndexArray<T> *IndexArray<T>::dre_client[MAX_DRE];
 #endif
 
 // let them be used by application
-//#undef load
 //#undef memcpy
 //#undef memset
 

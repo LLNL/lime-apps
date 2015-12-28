@@ -12,26 +12,15 @@ vararg.h (if necessary)
 mpi.h
 */
 //#include "hpl.h"
-#include <stdio.h> /* printf, fopen */
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "hpccver.h"
 
 #include <math.h>
-#include <time.h>
+//#include <time.h>
 
 #define MPIFFT_TIMING_COUNT 8
-
-#ifndef __INT32_TYPE__
-#define __INT32_TYPE__ int
-#define __UINT32_TYPE__ unsigned int
-#ifdef LONG_IS_64BITS
-#define __INT64_TYPE__ long
-#define __UINT64_TYPE__ unsigned long
-#else
-#define __INT64_TYPE__ long long
-#define __UINT64_TYPE__ unsigned long long
-#endif
-#endif
 
 /* Define 64-bit types and corresponding format strings for printf() and constants */
 #ifdef LONG_IS_64BITS
@@ -48,35 +37,41 @@ typedef long long s64Int;
 #define ZERO64B 0LL
 #endif
 
-//typedef struct {
-//  double GBs, time, residual;
-//  int n, nb, nprow, npcol;
-//} PTRANS_RuntimeData;
+/*
+typedef struct {
+  double GBs, time, residual;
+  int n, nb, nprow, npcol;
+} PTRANS_RuntimeData;
+*/
 
 /* parameters of execution */
 typedef struct {
   /* HPL section */
-//   HPL_T_test                 test;
-//   int                        nval  [HPL_MAX_PARAM],
-//                              nbval [HPL_MAX_PARAM],
-//                              pval  [HPL_MAX_PARAM],
-//                              qval  [HPL_MAX_PARAM],
-//                              nbmval[HPL_MAX_PARAM],
-//                              ndvval[HPL_MAX_PARAM],
-//                              ndhval[HPL_MAX_PARAM];
-//   HPL_T_ORDER                porder;
-//   HPL_T_FACT                 pfaval[HPL_MAX_PARAM],
-//                              rfaval[HPL_MAX_PARAM];
-//   HPL_T_TOP                  topval[HPL_MAX_PARAM];
-//   HPL_T_FACT                 rpfa;
-//   HPL_T_SWAP                 fswap;
-//   int ns, nbs, npqs, npfs, nbms, ndvs, nrfs, ntps, ndhs, tswap, L1notran, Unotran, equil, align;
+/*
+   HPL_T_test                 test;
+   int                        nval  [HPL_MAX_PARAM],
+                              nbval [HPL_MAX_PARAM],
+                              pval  [HPL_MAX_PARAM],
+                              qval  [HPL_MAX_PARAM],
+                              nbmval[HPL_MAX_PARAM],
+                              ndvval[HPL_MAX_PARAM],
+                              ndhval[HPL_MAX_PARAM];
+   HPL_T_ORDER                porder;
+   HPL_T_FACT                 pfaval[HPL_MAX_PARAM],
+                              rfaval[HPL_MAX_PARAM];
+   HPL_T_TOP                  topval[HPL_MAX_PARAM];
+   HPL_T_FACT                 rpfa;
+   HPL_T_SWAP                 fswap;
+   int ns, nbs, npqs, npfs, nbms, ndvs, nrfs, ntps, ndhs, tswap, L1notran, Unotran, equil, align;
+*/
 
   /* HPCC section */
   char inFname[256 + 1], outFname[256 + 1];
-//  int PTRANSns, PTRANSnval[2 * HPL_MAX_PARAM];
-//  int PTRANSnbs, PTRANSnbval[2 * HPL_MAX_PARAM];
-//  int PTRANSnpqs, PTRANSpval[2 * HPL_MAX_PARAM], PTRANSqval[2 * HPL_MAX_PARAM];
+/*
+  int PTRANSns, PTRANSnval[2 * HPL_MAX_PARAM];
+  int PTRANSnbs, PTRANSnbval[2 * HPL_MAX_PARAM];
+  int PTRANSnpqs, PTRANSpval[2 * HPL_MAX_PARAM], PTRANSqval[2 * HPL_MAX_PARAM];
+*/
   double MPIRandomAccess_LCG_GUPs, MPIRandomAccess_GUPs, Star_LCG_GUPs, Single_LCG_GUPs, StarGUPs, SingleGUPs,
     MPIRandomAccess_ErrorsFraction, MPIRandomAccess_time, MPIRandomAccess_CheckTime,
     MPIRandomAccess_TimeBound,
@@ -85,23 +80,25 @@ typedef struct {
     StarStreamCopyGBs, StarStreamScaleGBs,
     StarStreamAddGBs, StarStreamTriadGBs, SingleStreamCopyGBs, SingleStreamScaleGBs,
     SingleStreamAddGBs, SingleStreamTriadGBs, StarDGEMMGflops, SingleDGEMMGflops;
-//  double StarFFTGflops, SingleFFTGflops, MPIFFTGflops, MPIFFT_maxErr;
-//  double MaxPingPongLatency, RandomlyOrderedRingLatency, MinPingPongBandwidth,
-//    NaturallyOrderedRingBandwidth, RandomlyOrderedRingBandwidth,
-//    MinPingPongLatency, AvgPingPongLatency, MaxPingPongBandwidth, AvgPingPongBandwidth,
-//    NaturallyOrderedRingLatency;
-//  int DGEMM_N;
-//  int StreamThreads, StreamVectorSize;
-//  int FFT_N;
-//  int MPIFFT_Procs;
+  double StarFFTGflops, SingleFFTGflops, MPIFFTGflops, MPIFFT_maxErr;
+  double MaxPingPongLatency, RandomlyOrderedRingLatency, MinPingPongBandwidth,
+    NaturallyOrderedRingBandwidth, RandomlyOrderedRingBandwidth,
+    MinPingPongLatency, AvgPingPongLatency, MaxPingPongBandwidth, AvgPingPongBandwidth,
+    NaturallyOrderedRingLatency;
+  int DGEMM_N;
+  int StreamThreads, StreamVectorSize;
+  int FFT_N;
+  int MPIFFT_Procs;
   int MPIRandomAccess_LCG_Algorithm, MPIRandomAccess_Algorithm;
 
-//  HPL_RuntimeData HPLrdata;
-//  PTRANS_RuntimeData PTRANSrdata;
+/*
+  HPL_RuntimeData HPLrdata;
+  PTRANS_RuntimeData PTRANSrdata;
+*/
 
   int Failure; /* over all failure of the benchmark */
 
-//  double MPIFFTtimingsForward[MPIFFT_TIMING_COUNT], MPIFFTtimingsBackward[MPIFFT_TIMING_COUNT];
+  double MPIFFTtimingsForward[MPIFFT_TIMING_COUNT], MPIFFTtimingsBackward[MPIFFT_TIMING_COUNT];
 
   size_t HPLMaxProcMem;
   int HPLMaxProc, HPLMinProc;
@@ -112,7 +109,7 @@ typedef struct {
     RunStarFFT, RunSingleFFT, RunMPIFFT,
     RunLatencyBandwidth;
 
-//  int FFTEnblk, FFTEnp, FFTEl2size;
+  int FFTEnblk, FFTEnp, FFTEl2size;
   s64Int RandomAccess_LCG_N, RandomAccess_N, MPIRandomAccess_LCG_ExeUpdates, MPIRandomAccess_ExeUpdates,
     MPIRandomAccess_LCG_N, MPIRandomAccess_N, MPIRandomAccess_LCG_Errors, MPIRandomAccess_Errors, MPIFFT_N;
 } HPCC_Params;
@@ -136,21 +133,23 @@ int HPCC_external_finalize(int argc, char *argv[], void *extdata);
 extern int HPCC_Init(HPCC_Params *params);
 extern int HPCC_Finalize(HPCC_Params *params);
 extern int HPCC_LocalVectorSize(HPCC_Params *params, int vecCnt, size_t size, int pow2);
-//extern int
-//HPCC_Defaults(HPL_T_test *TEST, int *NS, int *N,
-//              int *NBS, int *NB,
-//              HPL_T_ORDER *PMAPPIN,
-//              int *NPQS, int *P, int *Q,
-//              int *NPFS, HPL_T_FACT *PF,
-//              int *NBMS, int *NBM,
-//              int *NDVS, int *NDV,
-//              int *NRFS, HPL_T_FACT *RF,
-//              int *NTPS, HPL_T_TOP *TP,
-//              int *NDHS, int *DH,
-//              HPL_T_SWAP *FSWAP, int *TSWAP, int *L1NOTRAN, int *UNOTRAN, int *EQUIL, int *ALIGN, MPI_Comm comm);
-//
-//extern int HPL_main(int ARGC, char **ARGV, HPL_RuntimeData *rdata, int *failure);
-//extern float HPL_slamch (const HPL_T_MACH);
+/*
+extern int
+HPCC_Defaults(HPL_T_test *TEST, int *NS, int *N,
+              int *NBS, int *NB,
+              HPL_T_ORDER *PMAPPIN,
+              int *NPQS, int *P, int *Q,
+              int *NPFS, HPL_T_FACT *PF,
+              int *NBMS, int *NBM,
+              int *NDVS, int *NDV,
+              int *NRFS, HPL_T_FACT *RF,
+              int *NTPS, HPL_T_TOP *TP,
+              int *NDHS, int *DH,
+              HPL_T_SWAP *FSWAP, int *TSWAP, int *L1NOTRAN, int *UNOTRAN, int *EQUIL, int *ALIGN, MPI_Comm comm);
+
+extern int HPL_main(int ARGC, char **ARGV, HPL_RuntimeData *rdata, int *failure);
+extern float HPL_slamch (const HPL_T_MACH);
+*/
 extern double HPCC_dweps();
 extern float HPCC_sweps();
 extern int HPCC_StarDGEMM(HPCC_Params *params);

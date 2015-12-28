@@ -7,12 +7,12 @@
 #include <iostream> // cout, endl
 using namespace std;
 
+#include "ColorImage.hpp"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "ColorImage.hpp"
-#include "Decimate2D.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
@@ -26,8 +26,8 @@ using namespace std;
 #define DEFAULT_LOOP_COUNT 10000
 #define DEFAULT_DECIMATE_MIN 4
 #define DEFAULT_DECIMATE_MAX 4
-#define DEFAULT_BLOCK_MIN 12 // power of 2
-#define DEFAULT_BLOCK_MAX 12 // power of 2
+#define DEFAULT_BLOCK_MIN 12 // log 2 size
+#define DEFAULT_BLOCK_MAX 12 // log 2 size
 #define DEFAULT_IMAGE_W 512
 #define DEFAULT_IMAGE_H 512
 
@@ -35,19 +35,10 @@ using namespace std;
 
 #define restrict __restrict__
 
-#ifdef ENTIRE
-#define fill_X fill_E
-#else
-#define fill_X fill_R
-#endif
-
 typedef unsigned char uchar_t;
 typedef unsigned long ulong_t;
 
 typedef uchar_t* uchar_p;
-
-Decimate2D dre1; // Data Reorganization Engine
-Decimate2D dre2;
 
 // TODO: find a better place for these globals
 
@@ -55,9 +46,25 @@ Decimate2D dre2;
 XAxiPmon apm;
 #endif // STATS || TRACE
 
-unsigned long long tsetup, treorg, toper, tcache;
-tick_t t0, t1, t2, t3, t4, t5, t6, t7;
 tick_t start, finish;
+tick_t t0, t1, t2, t3, t4, t5, t6, t7;
+unsigned long long tsetup, treorg, toper, tcache;
+
+#if defined(USE_ACC)
+
+#include "Decimate2D.hpp"
+
+#ifdef ENTIRE
+#define fill_X fill_E
+#else
+#define fill_X fill_R
+#endif
+
+Decimate2D dre1; // Data Reorganization Engine
+Decimate2D dre2;
+
+#endif /* USE_ACC */
+
 
 //------------------ Support ------------------//
 
@@ -88,7 +95,7 @@ bool check(void *buf, size_t buf_sz)
 
 	fflush(stdout);
 	for (i = 0; i < buf_sz; i++) {
-		int tmp = load(ptr,i);
+		int tmp = ptr[i];
 		if (tmp != 0x11) {
 			fprintf(stderr, " -- error: offset:%lu value:%02x\n", (ulong_t)i, tmp);
 			ecount++;
@@ -124,8 +131,10 @@ int main(int argc, char *argv[])
 #endif
 
 	MONITOR_INIT
+#if defined(USE_ACC)
 	dre1.wait(); // wait for DRE initialization
 	dre2.wait();
+#endif
 	while ((opt = getopt(argc, argv, "bd:l:v:w:h:o:s")) != -1) {
 		switch (opt) {
 		case 'b':
@@ -201,6 +210,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+
 	/* * * * * * * * * * block test * * * * * * * * * */
 
 	if (bflag) {
@@ -225,7 +235,6 @@ int main(int argc, char *argv[])
 
 		/* reference initialization */
 		pattern(ref, ref_width, ref_height, sizeof(element_t), decimate);
-		size_t view_end = (ref_width/decimate) * (ref_height/decimate) * sizeof(element_t);
 
 		/* select random points in decimated view */
 		for (i = 0; i < loop_count; i++) {
@@ -233,9 +242,12 @@ int main(int argc, char *argv[])
 			pt[i].y = rand() % (ref_height/decimate);
 		}
 
+		/* decimate portion of reference image into smaller view buffer around select points */
+#if defined(USE_ACC)
 		CACHE_SEND(dre1, ref, ref_width*ref_height*sizeof(element_t))
 		dre1.setup(ref, ref_width, ref_height, sizeof(element_t), decimate);
 		dre1.wait();
+		size_t view_end = (ref_width/decimate) * (ref_height/decimate) * sizeof(element_t);
 		for (size_t block_sz = block_min; block_sz <= block_max; block_sz <<= 1) {
 			bool err = false;
 			printf("block size: %lu", (ulong_t)block_sz); fflush(stdout);
@@ -279,6 +291,11 @@ int main(int argc, char *argv[])
 			printf("time: %.3f usec\n", tesec(finish, start)/loop_count*1000000);
 			STATS_PRINT
 		} // for block_sz...
+#else /* USE_ACC */
+		/* * * * * * * * * * * */
+		/* TODO: Stock version */
+		/* * * * * * * * * * * */
+#endif /* USE_ACC */
 
 		} // for decimate...
 
@@ -327,16 +344,22 @@ int main(int argc, char *argv[])
 		CACHE_BARRIER
 		STATS_START
 
-		/* decimate */
+		/* decimate entire reference image into view buffer */
 		/* assume input data is in memory and not cached (flushed and invalidated) */
 		tget(start);
 
+#if defined(USE_ACC)
 		dre1.setup(ref.getDataArray(), ref.getWidth(), ref.getHeight(),
 			ref.getPixelSz(), decimate);
 		dre1.wait();
 		dre1.fill(buf, buf_sz, 0);
 		dre1.wait();
 		CACHE_RECV(dre1, buf, buf_sz)
+#else /* USE_ACC */
+		/* * * * * * * * * * * */
+		/* TODO: Stock version */
+		/* * * * * * * * * * * */
+#endif /* USE_ACC */
 
 		/* assume output data is in memory (flushed) */
 		tget(finish);
@@ -363,10 +386,11 @@ int main(int argc, char *argv[])
 		} // for decimate...
 
 		/* ColorImage ref, view destructors call CACHE_DISPOSE */
+	}
 
 	/* * * * * * * * * * two image arguments * * * * * * * * * */
 
-	} else if (argc-optind == 2) {
+	if (argc-optind == 2) {
 		ColorImage ref1, ref2; // reference images
 		unsigned int maxd = 0xFF;
 #ifdef USE_SP
@@ -498,7 +522,7 @@ int main(int argc, char *argv[])
 				register const uchar_t *end1 = ptr1 + end;
 				//__asm__ __volatile__ ("nop");
 				while (ptr1 < end1) {
-					int dR = abs(ptr1[0] - ptr2[0]); // 0.029731 sec @ decimate 16
+					int dR = abs(ptr1[0] - ptr2[0]);
 					int dG = abs(ptr1[1] - ptr2[1]);
 					int dB = abs(ptr1[2] - ptr2[2]);
 					ptr1 += elem_sz;
@@ -582,7 +606,7 @@ int main(int argc, char *argv[])
 			register const uchar_t *end1 = ptr1 + elem_sz * ref_w;
 			//__asm__ __volatile__ ("nop");
 			while (ptr1 < end1) {
-				int dR = abs(ptr1[0] - ptr2[0]); // 0.138057 sec @ decimate 16
+				int dR = abs(ptr1[0] - ptr2[0]);
 				int dG = abs(ptr1[1] - ptr2[1]);
 				int dB = abs(ptr1[2] - ptr2[2]);
 				ptr1 += ref_inc;
@@ -608,8 +632,10 @@ int main(int argc, char *argv[])
 		CLOCKS_NORMAL
 		toper = tdiff(finish,start)-tsetup-treorg-tcache;
 		printf("overall time: %f sec\n", tesec(finish, start));
+#if defined(USE_ACC)
 		printf("Setup time: %f sec\n", tsetup/(double)TICKS_ESEC);
 		printf("Reorg time: %f sec\n", treorg/(double)TICKS_ESEC);
+#endif
 		printf("Oper. time: %f sec\n", toper/(double)TICKS_ESEC);
 		printf("Cache time: %f sec\n", tcache/(double)TICKS_ESEC);
 		STATS_PRINT

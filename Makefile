@@ -12,6 +12,7 @@ build=x86_64
 .PHONY: all
 all:
 	cd bfs/$(build) && $(MAKE) $@
+	cd dgemm/$(build) && $(MAKE) $@
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
@@ -21,6 +22,10 @@ all:
 .PHONY: bfs
 bfs:
 	cd bfs/$(build) && $(MAKE) all
+
+.PHONY: dgemm
+dgemm:
+	cd dgemm/$(build) && $(MAKE) all
 
 .PHONY: image
 image:
@@ -52,6 +57,7 @@ distclean:
 
 .DEFAULT:
 	cd bfs/$(build) && $(MAKE) $@
+	cd dgemm/$(build) && $(MAKE) $@
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@

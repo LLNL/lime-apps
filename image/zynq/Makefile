@@ -23,7 +23,7 @@ CXX = arm-xilinx-eabi-g++
 SIZE = arm-xilinx-eabi-size
 
 SRC = $(APPS_DIR)/shared $(APPS_DIR)/image/src
-HEADERS = config.h alloc.h cache.h monitor.h ColorImage.hpp Decimate2D.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h ColorImage.hpp ticks.h clocks.h
 MODULES += ColorImage
 
 # comma separated list of defines
@@ -36,6 +36,10 @@ ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_arm
   SRC += $(APPS_DIR)/m5
   MODULES += $(M5OP)
+endif
+
+ifneq (,$(wildcard ../src/Decimate2D.hpp))
+  HEADERS += Decimate2D.hpp
 endif
 
 ifneq (,$(findstring CLIENT,$(DEFS)))

@@ -19,8 +19,6 @@
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
-#define load(p,i) (p)[i]
-
 #if defined(USE_DMAC)
 #include <cstring> // memcpy, memset
 #include "dmac_cmd.h"
@@ -52,7 +50,7 @@ void *smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, size_
 	}
 	return dst;
 }
-#endif // use CPU
+#endif
 
 #define memcpy ::memcpy
 #define memset ::memset
@@ -82,9 +80,11 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 };
 #endif
 
+#ifdef __microblaze__
 // Invalidate single data cache line from addr
 // Assumes C_DCACHE_USE_WRITEBACK is 0, therefore rB (i.e. r0) is not used
 #define wdcc(addr) __asm__ __volatile__ ("wdc.clear\t%0,r0\n" :: "d" (addr))
+#endif
 
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
@@ -250,11 +250,19 @@ public:
 		getfslx(header, 0, FSL_CONTROL);
 	}
 
+	/*
+	   The load-store unit (LSU) version 2.1 appears to have a bug in the
+	   back-pressure for store commands. A workaround is to pace store commands
+	   going to the LSU with delays or nops so that its throughput is not
+	   exceeded, otherwise the system will lock up.
+	*/
 	/* with normal clocks (ARM:600MHz-4:2:1, DRE:166MHz, delay:0) 0 nops: hang, 2&4 nops same time, 8 nops: time increase */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:12-452) 19 nops:hang, 20 nops:1.77x20, 24 nops:1.87x20, 28 nops:1.97x20 sec */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:8) 4 nops:hang, 5 nops:0.167 sec, 6 nops:0.167 sec, 8 nops:0.170 sec, 12 nops:0.184 sec, 16 nops:0.198 sec */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:16) 0 nops:0.139, 1 nop:0.140, 2 nops:0.144, 3 nops:0.147, 4 nops:0.150, 5 nops:0.154 sec */
-#define WIDX_DELAY //__asm__ __volatile__("nop");
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:3083, pipe:16) 53 nops:hang, 54 nops:0.477753, 56 nops:0.481692, 64 nops:0.508615 */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:7883, pipe:16) 145 nops:hang, 146 nops:1.111478, 148 nops:1.111570, 152 nops:1.123122, 160 nops:1.150022, 176 nops:1.203596, 192 nops:1.257273 */
+#define WIDX_DELAY //__asm__ __volatile__("nop\n\tnop");
 
 	/* drain buffer starting from view offset */
 
@@ -802,7 +810,6 @@ template<typename T> IndexArray<T> *IndexArray<T>::dre_client[MAX_DRE];
 #endif
 
 // let them be used by application
-//#undef load
 //#undef memcpy
 //#undef memset
 

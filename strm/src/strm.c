@@ -49,7 +49,7 @@
 
 #include "config.h"
 #include "alloc.h"
-//#include "cache.h"
+//#include "cache.h" /* does not need cache barrier */
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"

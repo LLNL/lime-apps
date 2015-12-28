@@ -1,5 +1,5 @@
 
-typedef __UINT32_TYPE__ index_t;
+typedef __INT32_TYPE__ index_t;
 
 #define SERVER 1
 #include "IndexArray.hpp"

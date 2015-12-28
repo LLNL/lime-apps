@@ -12,11 +12,8 @@
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
-
-IndexArray<index_t> dre; // Data Reorganization Engine
 
 // TODO: find a better place for these globals
 
@@ -24,12 +21,18 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 XAxiPmon apm;
 #endif // STATS || TRACE
 
+#if defined(USE_ACC)
+#include "IndexArray.hpp"
+IndexArray<index_t> dre; // Data Reorganization Engine
+#endif // USE_ACC
+
 
 int main()
 {
 	HPCC_Params params;
 
 	MONITOR_INIT
+#if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
 #if 0
 	/* test communication performance between Host and DRE (uncomment wait) */
@@ -47,6 +50,7 @@ int main()
 		return 0;
 	}
 #endif
+#endif // USE_ACC
 
 	params.outFname[0] = '\0'; /* use stdout */
 	params.HPLMaxProcMem = (size_t)1 << 29; /* half-gig */

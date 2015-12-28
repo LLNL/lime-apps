@@ -1,5 +1,17 @@
 /* -*- mode: C; tab-width: 2; indent-tabs-mode: nil; -*- */
 
+#ifndef __INT32_TYPE__
+#define __INT32_TYPE__ int
+#define __UINT32_TYPE__ unsigned int
+#ifdef LONG_IS_64BITS
+#define __INT64_TYPE__ long
+#define __UINT64_TYPE__ unsigned long
+#else
+#define __INT64_TYPE__ long long
+#define __UINT64_TYPE__ unsigned long long
+#endif
+#endif
+
 /* * * * * Random number generator * * * * */
 #ifdef LONG_IS_64BITS
 #define POLY 0x0000000000000007UL
@@ -12,21 +24,21 @@
 #define LCG_MUL64 6364136223846793005ULL
 #define LCG_ADD64 1
 
-typedef __INT64_TYPE__  sran_t;
-typedef __UINT64_TYPE__ uran_t;
-
-/* Verify updates to Table */
-#define VERIFY 1
 /* Do random number generation in serial */
 //#define RAND_SERIAL 1
 /* Count duplicate random numbers in block */
 //#define COUNT_DUP 1
+
+typedef __INT64_TYPE__  sran_t;
+typedef __UINT64_TYPE__ uran_t;
 
 /* * * * * Table configuration * * * * */
 /* TableSize multiplier to get number of updates to table */
 /* (suggested: 4x number of table entries) */
 #define UPDATE_FACTOR 0.0625
 //#define UPDATE_FACTOR ((double)VECT_LEN/TableSize*4)
+/* Verify updates to Table */
+#define VERIFY 1
 
 typedef __UINT32_TYPE__ index_t;
 typedef __UINT32_TYPE__ nupdate_t;

@@ -23,7 +23,7 @@ CXX = arm-xilinx-eabi-g++
 SIZE = arm-xilinx-eabi-size
 
 SRC = $(addprefix $(APPS_DIR)/,shared spmv/src $(addprefix spmv/src/,bebop_util matrix_generator spmvbench))
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
 MODULES += block_smvm_code smvm_benchmark smvm_timing_results smvm_timing_run smvm_verify_result timing
 MODULES += bcoo_matrix bcsr_matrix create_rand
 MODULES += __complex mt19937ar random_number smvm_malloc smvm_util sort_joint_arrays
@@ -38,6 +38,10 @@ ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_arm
   SRC += $(APPS_DIR)/m5
   MODULES += $(M5OP)
+endif
+
+ifneq (,$(wildcard ../src/IndexArray.hpp))
+  HEADERS += IndexArray.hpp
 endif
 
 ifneq (,$(findstring CLIENT,$(DEFS)))

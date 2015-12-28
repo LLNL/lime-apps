@@ -16,8 +16,6 @@
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
-#define load(p,i) (p)[i]
-
 #if defined(USE_DMAC)
 #include <cstring> // memcpy, memset
 #include "dmac_cmd.h"
@@ -32,7 +30,7 @@
 #define memcpy lsu_memcpy
 #define memset ::memset
 
-#else
+#else // use CPU
 #include <cstring> // memcpy, memset
 
 void *smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, size_t src_inc, size_t n)
@@ -611,7 +609,6 @@ public:
 }; // class Decimate2D
 
 // let them be used by application
-//#undef load
 //#undef memcpy
 //#undef memset
 

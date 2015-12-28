@@ -14,7 +14,7 @@ LABEL = V$(subst .,_,$(VERSION))
 #DEFS += -DTIMEOFDAY
 
 SRC = ../../shared ../src
-HEADERS = config.h alloc.h cache.h monitor.h IndexArray.hpp hash_nbits.hpp ticks.h clocks.h
+HEADERS = config.h alloc.h cache.h monitor.h hash_nbits.hpp ticks.h clocks.h
 #MODULES += 
 
 # comma separated list of defines
@@ -27,6 +27,10 @@ ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_x86
   SRC += ../../m5
   MODULES += $(M5OP)
+endif
+
+ifneq (,$(wildcard ../src/IndexArray.hpp))
+  HEADERS += IndexArray.hpp
 endif
 
 OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))

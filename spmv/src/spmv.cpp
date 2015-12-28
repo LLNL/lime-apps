@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <unistd.h> // getopt, optarg
+#include <string.h> // strncmp
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,7 +19,6 @@ extern "C" {
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
-#include "IndexArray.hpp"
 #include "ticks.h"
 #include "clocks.h"
 
@@ -29,10 +29,6 @@ extern "C" {
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
 #define DEFAULT_NNZ 34 // number of non-zeros per row
-
-typedef int index_t; // used in bcsr_matrix_t
-
-IndexArray<index_t> dre; // Data Reorganization Engine
 
 unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 
@@ -61,7 +57,6 @@ int main(int argc, char **argv)
 #endif
 
 	MONITOR_INIT
-	dre.wait(); // wait for DRE initialization
 	//smvm_set_debug_level_from_environment();
 	spmv_params.m = 1 << DEFAULT_MATRIX_LSZ;
 	spmv_params.n = 1 << DEFAULT_MATRIX_LSZ;
@@ -119,9 +114,6 @@ int main(int argc, char **argv)
 	}
 #ifdef USE_SP
 	if (block_sz > SP_SIZE) block_sz = SP_SIZE;
-#endif
-#if defined(USE_ACC)
-	printf("view_size: %u\n", block_sz);
 #endif
 
 	/* * * * * * * * * * get arguments end * * * * * * * * * */
