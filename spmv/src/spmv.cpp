@@ -38,6 +38,12 @@ unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 XAxiPmon apm;
 #endif // STATS || TRACE
 
+#if defined(USE_ACC)
+#include "IndexArray.hpp"
+typedef int index_t; // int used in bcsr_matrix_t
+IndexArray<index_t> dre; // Data Reorganization Engine
+#endif
+
 
 int main(int argc, char **argv)
 {
