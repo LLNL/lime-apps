@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="xilinx.gnu.mb.toolchain.689245363">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.toolchain.689245363" moduleId="org.eclipse.cdt.core.settings" name="Default">
+		<cconfiguration id="xilinx.gnu.mb.toolchain.1259017303">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.toolchain.1259017303" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
+					<extension id="com.xilinx.sdk.managedbuilder.XELF.mb" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="com.xilinx.sdk.managedbuilder.XELF.mb" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="pager_mb" buildProperties="" description="" id="xilinx.gnu.mb.toolchain.689245363" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
-					<folderInfo id="xilinx.gnu.mb.toolchain.689245363.1537669291" name="/" resourcePath="">
-						<toolChain id="xilinx.gnu.mb.toolchain.920648384" name="xilinx.gnu.mb.toolchain" superClass="xilinx.gnu.mb.toolchain">
-							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.193782631" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base"/>
-							<builder enabledIncrementalBuild="true" id="xilinx.gnu.mb.toolchain.builder.1697186599" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder"/>
-							<tool id="xilinx.gnu.mb.c.toolchain.assembler.1463890714" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler">
-								<option id="xilinx.gnu.both.asm.option.include.paths.1468302170" name="Include Paths (-I)" superClass="xilinx.gnu.both.asm.option.include.paths" valueType="includePath">
+				<configuration buildProperties="" description="" id="xilinx.gnu.mb.toolchain.1259017303" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="xilinx.gnu.mb.toolchain.1259017303.1892952136" name="/" resourcePath="">
+						<toolChain id="xilinx.gnu.mb.toolchain.1217465832" name="xilinx.gnu.mb.toolchain" superClass="xilinx.gnu.mb.toolchain">
+							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.488139322" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base"/>
+							<builder id="xilinx.gnu.mb.toolchain.builder.593560542" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder"/>
+							<tool id="xilinx.gnu.mb.c.toolchain.assembler.199998684" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler">
+								<option id="xilinx.gnu.both.asm.option.include.paths.1750366999" superClass="xilinx.gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/standalone_bsp_mb/engine_0_mcu_0_microblaze_0/include}&quot;"/>
 								</option>
-								<inputType id="xilinx.gnu.assembler.input.1425216105" superClass="xilinx.gnu.assembler.input"/>
+								<inputType id="xilinx.gnu.assembler.input.2028720770" superClass="xilinx.gnu.assembler.input"/>
 							</tool>
-							<tool id="xilinx.gnu.mb.c.toolchain.compiler.127023590" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler"/>
-							<tool id="xilinx.gnu.mb.cxx.toolchain.compiler.1205141422" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler">
-								<option id="xilinx.gnu.compiler.dircategory.includes.2083578517" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
+							<tool id="xilinx.gnu.mb.c.toolchain.compiler.1202208719" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.mb.cxx.toolchain.compiler.1848810064" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler">
+								<option id="xilinx.gnu.compiler.dircategory.includes.1401424322" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/standalone_bsp_mb/engine_0_mcu_0_microblaze_0/include}&quot;"/>
 								</option>
-								<inputType id="xilinx.gnu.mb.cxx.compiler.input.695588906" name="C++ source files" superClass="xilinx.gnu.mb.cxx.compiler.input"/>
+								<inputType id="xilinx.gnu.mb.cxx.compiler.input.81068821" name="C++ source files" superClass="xilinx.gnu.mb.cxx.compiler.input"/>
 							</tool>
-							<tool id="xilinx.gnu.mb.toolchain.archiver.1684663835" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
-							<tool id="xilinx.gnu.mb.c.toolchain.linker.1260889971" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker"/>
-							<tool id="xilinx.gnu.mb.cxx.toolchain.linker.361079764" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker">
-								<inputType id="xilinx.gnu.linker.input.2030153382" superClass="xilinx.gnu.linker.input">
+							<tool id="xilinx.gnu.mb.toolchain.archiver.1630017117" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
+							<tool id="xilinx.gnu.mb.c.toolchain.linker.660988104" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.mb.cxx.toolchain.linker.82179136" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker">
+								<inputType id="xilinx.gnu.linker.input.1123070986" superClass="xilinx.gnu.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
-								<inputType id="xilinx.gnu.linker.input.lscript.1602184663" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+								<inputType id="xilinx.gnu.linker.input.lscript.1435289444" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
@@ -54,20 +54,15 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="pager_mb.null.522761724" name="pager_mb"/>
+		<project id="pager_mb.null.401468773" name="pager_mb"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/pager_mb"/>
-		</configuration>
-	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="xilinx.gnu.mb.toolchain.689245363;xilinx.gnu.mb.toolchain.689245363.1537669291;xilinx.gnu.mb.cxx.toolchain.compiler.1205141422;xilinx.gnu.mb.cxx.compiler.input.695588906">
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.mb.toolchain.1259017303;xilinx.gnu.mb.toolchain.1259017303.1892952136">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="xilinx.gnu.mb.toolchain.689245363;xilinx.gnu.mb.toolchain.689245363.1537669291">
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.mb.toolchain.1259017303;xilinx.gnu.mb.toolchain.1259017303.1892952136;xilinx.gnu.mb.cxx.toolchain.compiler.1848810064;xilinx.gnu.mb.cxx.compiler.input.81068821">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 	</storageModule>

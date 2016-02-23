@@ -25,8 +25,8 @@ using namespace std;
 
 // Arguments when STANDALONE
 //#define ARGS (char*)"-s16", (char*)"-v15"
-//#define ARGS (char*)"-s18", (char*)"-v15"
-#define ARGS (char*)"-s19", (char*)"-v15"
+#define ARGS (char*)"-s18", (char*)"-v15"
+//#define ARGS (char*)"-s19", (char*)"-v15"
 //#define ARGS (char*)"-s20", (char*)"-v15"
 //#define ARGS (char*)"-s22", (char*)"-v15"
 

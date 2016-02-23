@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="xilinx.gnu.armlinux.toolchain.363834885">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.armlinux.toolchain.363834885" moduleId="org.eclipse.cdt.core.settings" name="Default">
+		<cconfiguration id="xilinx.gnu.arm.toolchain.2101773047">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.arm.toolchain.2101773047" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
+					<extension id="com.xilinx.sdk.managedbuilder.XELF.arm" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="com.xilinx.sdk.managedbuilder.XELF.armlinux" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="strm_a9" buildProperties="" description="" id="xilinx.gnu.armlinux.toolchain.363834885" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
-					<folderInfo id="xilinx.gnu.armlinux.toolchain.363834885.426701661" name="/" resourcePath="">
-						<toolChain id="xilinx.gnu.armlinux.toolchain.1790834354" name="xilinx.gnu.armlinux.toolchain" superClass="xilinx.gnu.armlinux.toolchain">
-							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.armlinux" id="xilinx.armlinux.target.gnu.base.1826962229" isAbstract="false" name="Debug Platform" superClass="xilinx.armlinux.target.gnu.base"/>
-							<builder enabledIncrementalBuild="true" id="xilinx.gnu.armlinux.toolchain.builder.934639091" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.armlinux.toolchain.builder"/>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.assembler.1607140845" name="ARM Linux gcc assembler" superClass="xilinx.gnu.armlinux.c.toolchain.assembler">
-								<option id="xilinx.gnu.both.asm.option.include.paths.653987501" name="Include Paths (-I)" superClass="xilinx.gnu.both.asm.option.include.paths" valueType="includePath">
+				<configuration buildProperties="" description="" id="xilinx.gnu.arm.toolchain.2101773047" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="xilinx.gnu.arm.toolchain.2101773047.2062457488" name="/" resourcePath="">
+						<toolChain id="xilinx.gnu.arm.toolchain.734757594" name="xilinx.gnu.arm.toolchain" superClass="xilinx.gnu.arm.toolchain">
+							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.arm" id="xilinx.arm.target.gnu.base.592391658" isAbstract="false" name="Debug Platform" superClass="xilinx.arm.target.gnu.base"/>
+							<builder id="xilinx.gnu.arm.toolchain.builder.1631053387" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU make" superClass="xilinx.gnu.arm.toolchain.builder"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.assembler.746579820" name="ARM gcc assembler" superClass="xilinx.gnu.arm.c.toolchain.assembler">
+								<option id="xilinx.gnu.both.asm.option.include.paths.1788365550" superClass="xilinx.gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/standalone_bsp_a9/ps7_cortexa9_0/include}&quot;"/>
 								</option>
-								<inputType id="xilinx.gnu.assembler.input.1705486477" superClass="xilinx.gnu.assembler.input"/>
+								<inputType id="xilinx.gnu.assembler.input.143383036" superClass="xilinx.gnu.assembler.input"/>
 							</tool>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.compiler.952296672" name="ARM Linux gcc compiler" superClass="xilinx.gnu.armlinux.c.toolchain.compiler"/>
-							<tool id="xilinx.gnu.armlinux.cxx.toolchain.compiler.1762590825" name="ARM Linux g++ compiler" superClass="xilinx.gnu.armlinux.cxx.toolchain.compiler">
-								<option id="xilinx.gnu.compiler.dircategory.includes.282359941" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
+							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1388385970" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.compiler.426914648" name="ARM g++ compiler" superClass="xilinx.gnu.arm.cxx.toolchain.compiler">
+								<option id="xilinx.gnu.compiler.dircategory.includes.2006273862" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/standalone_bsp_a9/ps7_cortexa9_0/include}&quot;"/>
 								</option>
-								<inputType id="xilinx.gnu.armlinux.cxx.compiler.input.126224780" name="C++ source files" superClass="xilinx.gnu.armlinux.cxx.compiler.input"/>
+								<inputType id="xilinx.gnu.arm.cxx.compiler.input.684409172" name="C++ source files" superClass="xilinx.gnu.arm.cxx.compiler.input"/>
 							</tool>
-							<tool id="xilinx.gnu.armlinux.toolchain.archiver.1848867243" name="ARM Linux archiver" superClass="xilinx.gnu.armlinux.toolchain.archiver"/>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.linker.253710340" name="ARM Linux gcc linker" superClass="xilinx.gnu.armlinux.c.toolchain.linker"/>
-							<tool id="xilinx.gnu.armlinux.cxx.toolchain.linker.1981601431" name="ARM Linux g++ linker" superClass="xilinx.gnu.armlinux.cxx.toolchain.linker">
-								<inputType id="xilinx.gnu.linker.input.175758426" superClass="xilinx.gnu.linker.input">
+							<tool id="xilinx.gnu.arm.toolchain.archiver.2039482444" name="ARM archiver" superClass="xilinx.gnu.arm.toolchain.archiver"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.linker.1086788468" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.arm.cxx.toolchain.linker.1126752096" name="ARM g++ linker" superClass="xilinx.gnu.arm.cxx.toolchain.linker">
+								<inputType id="xilinx.gnu.linker.input.890149557" superClass="xilinx.gnu.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
-								<inputType id="xilinx.gnu.linker.input.lscript.1386528375" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+								<inputType id="xilinx.gnu.linker.input.lscript.1057424363" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
@@ -54,23 +54,19 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="strm_a9.null.1119090558" name="strm_a9"/>
+		<project id="strm_a9.null.1150779643" name="strm_a9"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/strm_a9"/>
-		</configuration>
-	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="xilinx.gnu.armlinux.toolchain.363834885;xilinx.gnu.armlinux.toolchain.363834885.426701661">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMLinuxGCCManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.arm.toolchain.2101773047;xilinx.gnu.arm.toolchain.2101773047.2062457488;xilinx.gnu.arm.cxx.toolchain.compiler.426914648;xilinx.gnu.arm.cxx.compiler.input.684409172">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="xilinx.gnu.armlinux.toolchain.363834885;xilinx.gnu.armlinux.toolchain.363834885.426701661;xilinx.gnu.armlinux.cxx.toolchain.compiler.1762590825;xilinx.gnu.armlinux.cxx.compiler.input.126224780">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMLinuxGCCManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="xilinx.gnu.arm.toolchain.2101773047;xilinx.gnu.arm.toolchain.2101773047.2062457488">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.ARMGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
 			<target name="stock" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
