@@ -260,9 +260,18 @@ public:
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:12-452) 19 nops:hang, 20 nops:1.77x20, 24 nops:1.87x20, 28 nops:1.97x20 sec */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:8) 4 nops:hang, 5 nops:0.167 sec, 6 nops:0.167 sec, 8 nops:0.170 sec, 12 nops:0.184 sec, 16 nops:0.198 sec */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:16) 0 nops:0.139, 1 nop:0.140, 2 nops:0.144, 3 nops:0.147, 4 nops:0.150, 5 nops:0.154 sec */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:683, pipe:16) 6 nops:hang, 7 nops:0.161580, 8 nops:0.162386, 16 nops:0.188441 */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:1483, pipe:16) 22 nops:hang, 23 nops:0.266660, 24 nops:0.268247, 32 nops:0.295191 */
 	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:3083, pipe:16) 53 nops:hang, 54 nops:0.477753, 56 nops:0.481692, 64 nops:0.508615 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:7883, pipe:16) 145 nops:hang, 146 nops:1.111478, 148 nops:1.111570, 152 nops:1.123122, 160 nops:1.150022, 176 nops:1.203596, 192 nops:1.257273 */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:7883, pipe:16) 145 nops:hang, 146 nops:1.111478, 148 nops:1.111570, 152 nops:1.123122, 160 nops:1.150022 */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:15883, pipe:16) 59 loops:hang, 60 loops:2.168174, 70 loops:2.316196, 90 loops:2.651352, 180 loops:4.159924 */
+	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:31883, pipe:16) 120 loops:hang, 121 loops:4.279794, 123 loops:4.280244, 125 loops:4.303539, 130 loops:4.387349 */
 #define WIDX_DELAY //__asm__ __volatile__("nop\n\tnop");
+#if 0
+#define WIDX_DELAY \
+for (int i = 0; i < 121; i++) \
+__asm__ __volatile__("nop");
+#endif
 
 	/* drain buffer starting from view offset */
 

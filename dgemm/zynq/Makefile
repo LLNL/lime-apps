@@ -49,9 +49,11 @@ OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))
 
 VPATH = $(subst ' ',:,$(SRC))
 
-OPT = -O3 -ftree-vectorize
+OPT = -O3
 # -ffast-math causes hang on dgemm
-MACH = -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
+# Zynq-7000 SoC: ARM v7-A architecture, Cortex-A9 processor, VFPv3 floating point, NEON co-processor
+MACH = -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
+# -mneon-for-64bits (gcc v4.9.x)
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CPPFLAGS += -I$(BSP)/ps7_cortexa9_0/include
