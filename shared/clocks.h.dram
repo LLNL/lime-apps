@@ -19,8 +19,8 @@
 #define CLOCKS_NORMAL  clocks_normal();
 #define TICKS_ESEC (2571428545UL/2)
 
-#define T_V_W 103 // DRAM Vault Write, off-chip
-#define T_V_R 84  // DRAM Vault Read, off-chip
+#define T_V_W 4000 // DRAM Vault Write, off-chip
+#define T_V_R 4000  // DRAM Vault Read, off-chip
 #define T_SRAM_W 10
 #define T_SRAM_R 10
 #define T_DRAM_W 45 // (T_V_W - T_TRANS) // 45
@@ -42,7 +42,7 @@ inline void clocks_emulate(void)
 	volatile unsigned int *delay1   = (unsigned int *)XPAR_AXI_DELAY_1_BASEADDR; /* slot 0, CPU DRAM W, R */
 	volatile unsigned int *delay2   = (unsigned int *)XPAR_AXI_DELAY_2_BASEADDR; /* slot 1, ACC SRAM W, R */
 	volatile unsigned int *delay3   = (unsigned int *)XPAR_AXI_DELAY_3_BASEADDR; /* slot 1, ACC DRAM W, R */
-//	volatile unsigned int *delay4   = (unsigned int *)XPAR_AXI_DELAY_4_BASEADDR; /* slot 2, CPU ACC  W, R */
+	volatile unsigned int *delay4   = (unsigned int *)XPAR_AXI_DELAY_4_BASEADDR; /* slot 2, CPU ACC  W, R */
 	*unlock   =     0xDF0D;
 	*arm_cc   = 0x1F000E00; /* 13:8 DIVISOR = 14 */
 	*clk_621  = 0x00000000; /* bit 0 CLK_621_TRUE = 0 (4:2:1) */
@@ -57,7 +57,7 @@ inline void clocks_emulate(void)
 	delay1[2] = 4*(T_DRAM_W+T_QUEUE_W+T_TRANS) - 45; delay1[4] = 4*(T_DRAM_R+T_QUEUE_R+T_TRANS) - 44;
 	delay2[2] = 4*(T_SRAM_W)                   - 21; delay2[4] = 4*(T_SRAM_R)                   - 36;
 	delay3[2] = 4*(T_DRAM_W+T_QUEUE_W)         - 21; delay3[4] = 4*(T_DRAM_R+T_QUEUE_R)         - 37;
-//	delay4[0] = delay4[1] = delay4[2] = delay4[3] = delay4[4] = 0; /* .80 ns per count */
+	delay4[0] = delay4[1] = delay4[2] = delay4[3] = delay4[4] = 0; /* .80 ns per count */
 	printf("SRAM_W:%u SRAM_R:%u DRAM_W:%u DRAM_R:%u QUEUE_W:%u QUEUE_R:%u TRANS:%u V_W:%u V_R:%u\n",
 			T_SRAM_W, T_SRAM_R, T_DRAM_W, T_DRAM_R, T_QUEUE_W, T_QUEUE_R, T_TRANS,
 			T_DRAM_W+T_QUEUE_W+T_TRANS, T_DRAM_R+T_QUEUE_R+T_TRANS);
@@ -66,7 +66,7 @@ inline void clocks_emulate(void)
 	printf("FPGA0_CLK_CTRL:%08X FPGA1_CLK_CTRL:%08X\n", *fpga0_cc, *fpga1_cc);
 	printf("Slot 0 - CPU_SRAM_B:%u CPU_SRAM_R:%u CPU_DRAM_B:%u CPU_DRAM_R:%u\n", delay0[2], delay0[4], delay1[2], delay1[4]);
 	printf("Slot 1 - ACC_SRAM_B:%u ACC_SRAM_R:%u ACC_DRAM_B:%u ACC_DRAM_R:%u\n", delay2[2], delay2[4], delay3[2], delay3[4]);
-//	printf("Slot 2 - CPU_ACC(AW,W,B,AR,R):%u,%u,%u,%u,%u\n", delay4[0], delay4[1], delay4[2], delay4[3], delay4[4]);
+	printf("Slot 2 - CPU_ACC(AW,W,B,AR,R):%u,%u,%u,%u,%u\n", delay4[0], delay4[1], delay4[2], delay4[3], delay4[4]);
 }
 
 inline void clocks_normal(void)
@@ -81,7 +81,7 @@ inline void clocks_normal(void)
 	volatile unsigned int *delay1   = (unsigned int *)XPAR_AXI_DELAY_1_BASEADDR; /* slot 0, CPU DRAM W, R */
 	volatile unsigned int *delay2   = (unsigned int *)XPAR_AXI_DELAY_2_BASEADDR; /* slot 1, ACC SRAM W, R */
 	volatile unsigned int *delay3   = (unsigned int *)XPAR_AXI_DELAY_3_BASEADDR; /* slot 1, ACC DRAM W, R */
-//	volatile unsigned int *delay4   = (unsigned int *)XPAR_AXI_DELAY_4_BASEADDR; /* slot 2, CPU Device W, R */
+	volatile unsigned int *delay4   = (unsigned int *)XPAR_AXI_DELAY_4_BASEADDR; /* slot 2, CPU Device W, R */
 	*unlock   =     0xDF0D;
 	*arm_cc   = 0x1F000300; /* 13:8 DIVISOR = 3 */
 	*clk_621  = 0x00000000; /* bit 0 CLK_621_TRUE = 0 (4:2:1) */
@@ -89,7 +89,7 @@ inline void clocks_normal(void)
 	*fpga1_cc = 0x00100600; /* 25:20 DIVISOR1 = 1, 13:8 DIVISOR0 = 6, 5:4 SRCSEL = 0 (IO PLL) */
 	delay0[2] = 0; delay0[4] = 0; delay1[2] = 0; delay1[4] = 0;
 	delay2[2] = 0; delay2[4] = 0; delay3[2] = 0; delay3[4] = 0;
-//	delay4[0] = delay4[1] = delay4[2] = delay4[3] = delay4[4] = 0;
+	delay4[0] = delay4[1] = delay4[2] = delay4[3] = delay4[4] = 0;
 }
 
 #else /* CLOCKS */
