@@ -26,8 +26,9 @@
 // defined(USE_LSU)  : use the load-store unit
 // defined(USE_DMAC) : use the ARM DMA controller
 // defined(USE_INDEX) : use index command in LSU
+// defined(USE_HASH)  : use the hash unit
 
-#if defined(DIRECT) || defined(CLIENT) || defined(SERVER) || defined(USE_LSU) || defined(USE_DMAC)
+#if defined(DIRECT) || defined(CLIENT) || defined(SERVER) || defined(USE_LSU) || defined(USE_DMAC) || defined(USE_HASH)
 #define USE_ACC 1 // use accelerator or engine code
 #endif
 #endif /* CONFIG_H_ */

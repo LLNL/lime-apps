@@ -11,6 +11,9 @@
 #include <stddef.h> /* size_t */
 #include "stream.h"
 
+#define AP_HEAD(go,wr,sel,len,tid,tdest) \
+	((go) << 23 | (wr) << 22 | (sel) << 19 | (len) << 16 | (tid) << 8 | (tdest))
+
 #define READ_CH 0
 #define WRITE_CH 1
 
@@ -30,6 +33,7 @@ extern stream_t *gport;
 extern unsigned gfwd_id;
 extern unsigned gret_id;
 
+extern void aport_set(stream_t *port);
 extern unsigned aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel);
 extern void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, unsigned val);
 extern void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, unsigned *val, unsigned n);

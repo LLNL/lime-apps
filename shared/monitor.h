@@ -161,11 +161,15 @@ inline void trace_stop(void)
 	XAxiPmon_StopEventLog(&apm);
 }
 
-#define ENTRY_SZ 32   /* 32 bytes, 256 bits */
-#define BLK_SZ (1<<17) /* 128 Kbytes */
+#define ENTRY_SZ 32U   /* 32 bytes, 256 bits */
+#define BLK_SZ (1U<<17) /* 128 Kbytes */
 
 #if defined(USE_SD)
 #include "ff.h"
+#if _FFCONF == 8255
+#define f_mount(fs,path,opt) f_mount(opt,fs)
+#endif
+
 #if 0
 /*
    Save a memory trace to SD card. A file name is prompted for and entered
@@ -175,19 +179,23 @@ inline void trace_stop(void)
 */
 inline void trace_capture(void)
 {
-	typedef int elem_t;
-	volatile elem_t *tcd = (elem_t*)XPAR_AXI_TCD_0_BASEADDR;
-	register elem_t tmp;
+	typedef int tcd_t;
+	tcd_t *buf_beg = (tcd_t*)0x00000000; /* copy buffer */
+	tcd_t *buf_end = (tcd_t*)((size_t)buf_beg + BLK_SZ);
+	volatile tcd_t *tcd = (tcd_t*)XPAR_AXI_TCD_0_BASEADDR;
+	register tcd_t *bptr = buf_beg;
+	register tcd_t tmp;
+	unsigned int blen = 0;
 	unsigned long tot = 0, time;
 	unsigned int fn_len;
 	XTime start, finish;
 	FATFS fs; /* Work area (file system object) for logical drives */
+	TCHAR *drive = (TCHAR *)"0:/"; /* Logical drive */
 	FIL fdst; /* File object */
 	TCHAR fn[80]; /* File name */
 	FRESULT fr; /* FatFs function common result code */
 	UINT bw; /* File write count */
 	//BYTE buffer[BLK_SZ] __attribute__ ((aligned (512))); /* File copy buffer */
-	BYTE *buffer = 0x00000000; /* File copy buffer */
 
 	/* get file name */
 	print("enter trace file name: ");
@@ -201,32 +209,38 @@ inline void trace_capture(void)
 	fn[fn_len] = '\0';
 	if (fn_len == 0) return;
 	XTime_GetTime(&start);
-	Xil_DCacheDisable();
+	//Xil_DCacheDisable();
 	/* register work area for each logical drive */
-	fr = f_mount(0, &fs);
+print("f_mount\r\n");
+	fr = f_mount(&fs, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = mount(0, fs)\r\n", fr);
+		xil_printf("fr:%d = mount(fs, drive, 0)\r\n", fr);
 		goto tc;
 	}
 	/* create destination file */
+print("f_open\r\n");
 	fr = f_open(&fdst, fn, FA_CREATE_ALWAYS | FA_WRITE);
 	if (fr != FR_OK) {
 		xil_printf("fr:%d = open(fd, fn:%s, FA_CREATE_ALWAYS | FA_WRITE)\r\n", fr, fn);
 		goto tc;
 	}
-//	Xil_DCacheEnable();
+	Xil_DCacheFlush();
+print("grab\r\n");
 	do { /* grab trace */
-		register elem_t *bptr = (elem_t*)buffer;
-		unsigned int blen = 0;
+		bptr = buf_beg;
+print("fill\r\n");
 		do { /* fill buffer */
 			unsigned int i;
 			tmp = 0;
-			for (i = 0; i < (ENTRY_SZ/sizeof(elem_t)); i++) /* fill entry */
-				tmp |= *bptr++ = *tcd;
+			for (i = 0; i < (ENTRY_SZ/sizeof(tcd_t)); i++) /* fill entry */
+				{ outbyte('.'); tmp |= *bptr++ = *tcd; }
 			blen += ENTRY_SZ;
-		} while (tmp && blen < BLK_SZ);
+xil_printf("entry - tmp:%x blen:%d tot:0x%lx\r\n", tmp, blen, tot);
+		} while (tmp && bptr < buf_end);
+		Xil_L1DCacheFlush(); /* L1 only is enabled for scratchpad area */
 		/* write buffer */
-		fr = f_write(&fdst, buffer, blen, &bw);
+print("f_write\r\n");
+		fr = f_write(&fdst, buf_beg, blen, &bw);
 		if (fr != FR_OK /*|| bw != blen*/) {
 			xil_printf("fr:%d = write(fd, buf, br:%d, bw:%d)\r\n", fr, blen, bw);
 			goto tc;
@@ -239,18 +253,18 @@ inline void trace_capture(void)
 		}
 	} while (tmp);
 tc:
-//	Xil_DCacheDisable();
 	/* close file */
+print("f_close\r\n");
 	fr = f_close(&fdst);
 	if (fr != FR_OK) {
 		xil_printf("fr:%d = close(fd)\r\n", fr);
 	}
 	/* unregister work area prior to discarding it */
-	fr = f_mount(0, NULL);
+	fr = f_mount(NULL, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = unmount(0, NULL)\r\n", fr);
+		xil_printf("fr:%d = unmount(NULL, drive, 0)\r\n", fr);
 	}
-	Xil_DCacheEnable();
+	//Xil_DCacheEnable();
 	XTime_GetTime(&finish);
 	time = (finish-start)/COUNTS_PER_SECOND;
 	xil_printf("trace length:0x%lx\r\n", tot);
@@ -266,8 +280,8 @@ tc:
 inline void trace_capture(void)
 {
 	typedef int elem_t;
-	extern char _heap_start[];
-	extern char _heap_end[];
+	extern unsigned char _heap_start[];
+	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
 	elem_t *mem_beg = (elem_t*)(((size_t)&_heap_start) & 0x3FFFFFFF);
 	elem_t *mem_end = (elem_t*)(((size_t)&_heap_end) & 0x3FFFFFFF);
@@ -278,6 +292,7 @@ inline void trace_capture(void)
 	unsigned long tot = 0, time;
 	XTime start, finish;
 	FATFS fs; /* Work area (file system object) for logical drives */
+	TCHAR *drive = (TCHAR *)"0:/"; /* Logical drive */
 	FIL fdst; /* File object */
 	TCHAR fn[80]; /* File name */
 	FRESULT fr; /* FatFs function common result code */
@@ -307,11 +322,11 @@ inline void trace_capture(void)
 	} while (tmp && dst < mem_end);
 	Xil_DCacheFlush();
 
-	Xil_DCacheDisable();
+	//Xil_DCacheDisable();
 	/* register work area for each logical drive */
-	fr = f_mount(0, &fs);
+	fr = f_mount(&fs, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = mount(0, fs)\r\n", fr);
+		xil_printf("fr:%d = mount(fs, drive, 0)\r\n", fr);
 		goto tc;
 	}
 	/* create destination file */
@@ -333,11 +348,11 @@ tc:
 		xil_printf("fr:%d = close(fd)\r\n", fr);
 	}
 	/* unregister work area prior to discarding it */
-	fr = f_mount(0, NULL);
+	fr = f_mount(NULL, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = unmount(0, NULL)\r\n", fr);
+		xil_printf("fr:%d = unmount(NULL, drive, 0)\r\n", fr);
 	}
-	Xil_DCacheEnable();
+	//Xil_DCacheEnable();
 	XTime_GetTime(&finish);
 	time = (finish-start)/COUNTS_PER_SECOND;
 	if (tmp) print(" -- error: ran out of heap for trace\r\n");
@@ -357,8 +372,8 @@ tc:
 inline void trace_capture(void)
 {
 	typedef int elem_t;
-	extern char _heap_start[];
-	extern char _heap_end[];
+	extern unsigned char _heap_start[];
+	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
 	elem_t *mem_beg = (elem_t*)(((size_t)&_heap_start) & 0x3FFFFFFF);
 	elem_t *mem_end = (elem_t*)(((size_t)&_heap_end) & 0x3FFFFFFF);

@@ -1,0 +1,41 @@
+[lloyd23@nome x86_64]$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.20 -r\$HOME/bio/metag/reads/SRR033549.nr.fasta -q\$HOME/bio/metag/reads/SRR033549.nr.fasta
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+ -- can't open file: $HOME/bio/metag/reads/SRR033549.nr.fasta
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/SRR033549.nr.fasta
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:2186057.421830
+add time in seconds:4.280184
+adds per second:2015398.403433
+Fill    time: 1.166628 sec
+Drain   time: 0.417945 sec
+Insert  time: 2.505062 sec
+Cache   time: 0.009425 sec
+Oper.   time: 0.181124 sec
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+query.............................................................................................................
+bases per second:7453838.316290
+query time in seconds:15.993015
+lookups per second:6856322.588330
+Fill    time: 13.740727 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.059147 sec
+Oper.   time: 2.193141 sec
+lookups:109653270 hits:41841138 38.16%

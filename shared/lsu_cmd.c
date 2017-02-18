@@ -5,6 +5,40 @@
  *      Author: lloyd23
  */
 
+//      aport header
+//       31 bits  0
+//     |------------|
+//   0 | header:24  | tuser:(go:1 write:1 select:3 length:3) tid:8 tdest:8
+//     |------------|
+
+//      hash unit
+//      register map
+// reg   31 bits  0
+//     |------------|
+//   0 | status:32  |
+//   1 | tlen_lo:32 | currently used as a mask for hash instead of mod
+//   2 | tlen_hi:32 |
+//   3 | command:30 | seldi:1 seldo:1 seed:4 tdest:4 tid:4 hlen:8 klen:8
+//   4 | data_lo:32 |
+//   5 | data_hi:32 |
+//   6 | hash_lo:32 |
+//   7 | hash_hi:32 |
+//     |------------|
+
+//      load-store unit
+//      register map
+// reg   31  bits   0
+//     |--------------|
+//   0 | status:32    | zero:24 okay:1 slverr:1 decerr:1 interr:1 treqstat:1 tdest:3
+//   1 | command:8    | reqstat:1 ignore:4 command:3
+//   2 | address:32   |
+//   3 | size:30      |
+//   4 | inc/index:30 |
+//   5 | rep:30       |
+//   6 | ignore:32    |
+//   7 | ignore:32    |
+//     |--------------|
+
 #include "lsu_cmd.h"
 
 typedef struct {
@@ -48,6 +82,11 @@ stream_t *gport;
 unsigned gfwd_id;
 unsigned gret_id;
 
+
+void aport_set(stream_t *port)
+{
+	gport = port;
+}
 
 unsigned aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel)
 {

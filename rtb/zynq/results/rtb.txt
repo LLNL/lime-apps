@@ -1,0 +1,686 @@
+
+#define ARGS (char*)"-e1K", (char*)"-k16", (char*)"-rtestdb.fa", (char*)"-qtestqr.fa"
+block size: 4096
+k-mer length:16
+max entries:1000
+key size:8 data size:4
+bases per second:121592.514533
+add time in seconds:0.000864
+adds per second:40530.838178
+size:35 unique:35 duplicates:0 0.00%
+load_factor:0.034180
+bucket_count:1024
+max_elem_per_key:1
+max_psl:2
+bases per second:193058.576894
+query time in seconds:0.000844
+lookups per second:69880.098385
+lookups:59 hits:35 59.32%
+
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.60", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+heap start:0x40225070 top:0x6023d000 end:0x7f225070
+total:1056964608 used:536969104
+read.....................................
+bases per second:67233.951981
+add time in seconds:605.133044
+adds per second:61863.243781
+size:37435493 unique:20132675 duplicates:17302818 46.22%
+load_factor:0.600001
+bucket_count:33554432
+max_elem_per_key:80203
+max_psl:83
+heap start:0x40225070 top:0x7e977000 end:0x7f225070
+total:1056964608 used:1047863184
+query.............................................................................................................
+bases per second:738015.508622
+query time in seconds:161.526887
+lookups per second:678854.596463
+lookups:109653270 hits:86170628 78.58%
+
+#define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qamr_cur.fa"
+block size: 4096
+k-mer length:18
+max entries:8388608
+key size:8 data size:4
+bases per second:84637.232201
+add time in seconds:38.782908
+adds per second:83126.025259
+size:3223869 unique:1189529 duplicates:2034340 63.10%
+load_factor:0.141803
+bucket_count:8388608
+max_elem_per_key:275
+max_psl:8
+heap start:0x40225070 top:0x4a01b000 end:0x7f225070
+total:1056964608 used:165633936
+bases per second:756506.508335
+query time in seconds:4.338995
+lookups per second:742999.002741
+lookups:3223869 hits:3223869 100.00%
+
+$ make D=BLOCK_HASH
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DBLOCK_HASH -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.22", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read.........
+bases per second:51303.757977
+add time in seconds:204.004763
+adds per second:47278.979404
+size:9645137 unique:7382833 duplicates:2262304 23.46%
+load_factor:0.220026
+bucket_count:33554432
+max_elem_per_key:21620
+max_psl:16
+heap start:0x40225070 top:0x4022c000 end:0x7f225070
+total:1056964608 used:28560 # must be using sbrk instead of _sbrk?
+query.............................................................................................................
+bases per second:624856.842989
+query time in seconds:190.778655
+lookups per second:574766.973103
+lookups:109653270 hits:44558074 40.64%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT
+#define BLOCK_HASH 1
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.22", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+# Does not use LSU or HSU; fill and drain done by MCU.
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read.........
+bases per second:34165.063732
+add time in seconds:306.342499
+adds per second:31484.815308
+size:9645137 unique:7382833 duplicates:2262304 23.46%
+load_factor:0.220026
+bucket_count:33554432
+max_elem_per_key:21620
+max_psl:15
+heap start:0x40239240 top:0x6ac8a000 end:0x7f239240
+total:1056964608 used:715460032
+query.............................................................................................................
+bases per second:162126.247690
+query time in seconds:735.287159
+lookups per second:149129.858608
+lookups:109653270 hits:44558074 40.64%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT
+#define BLOCK_HASH 1
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.22", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+# Does not use LSU or HSU; fill and drain done by MCU.
+# standalone_bsp_a9: 2016.3
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read.........
+bases per second:33303.804150
+add time in seconds:314.264729
+adds per second:30691.121520
+size:9645137 unique:7382833 duplicates:2262304 23.46%
+load_factor:0.220026
+bucket_count:33554432
+max_elem_per_key:21620
+max_psl:16
+heap start:0x40239260 top:0x6ac8a000 end:0x7f239260
+total:1056964608 used:715460000
+query.............................................................................................................
+bases per second:140488.089065
+query time in seconds:848.537045
+lookups per second:129226.261367
+lookups:109653270 hits:44558074 40.64%
+
+# Does not use LSU or HSU; fill and drain done by ARM; Jan 31, 2017
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+# standalone_bsp_a9: 2016.3
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:50681.064513
+add time in seconds:184.619800
+adds per second:46724.544143
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x402250b0 top:0x69cd9000 end:0x7f2250b0
+total:1056964608 used:699088720
+query.............................................................................................................
+bases per second:637236.482376
+query time in seconds:187.072384
+lookups per second:586154.233944
+lookups:109653270 hits:41841138 38.16%
+
+# Does not use LSU or HSU; fill and drain done by MCU; Jan 31, 2017
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+mb-g++ -mcpu=v10.0 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul -O2 -Wall -fno-strict-aliasing -ffunction-sections -fdata-sections  -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_mb/engine_0_mcu_0_microblaze_0/include  -c -o mcu_main.o C:/Users/lloyd23/xwork/apps/rtb/src/mcu_main.cc
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+# standalone_bsp_a9 & _mb: 2016.3
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:33227.498025
+add time in seconds:281.595924
+adds per second:30633.525817
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x40239260 top:0x69ce9000 end:0x7f239260
+total:1056964608 used:699071904
+query.............................................................................................................
+bases per second:143289.929377
+query time in seconds:831.945054
+lookups per second:131803.500127
+lookups:109653270 hits:41841138 38.16%
+
+# Use LSU and HSU; fill and drain done by MCU; Jan 31, 2017
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+mb-g++ -mcpu=v10.0 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul -O2 -Wall -fno-strict-aliasing -ffunction-sections -fdata-sections  -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_mb/engine_0_mcu_0_microblaze_0/include  -c -o mcu_main.o C:/Users/lloyd23/xwork/apps/rtb/src/mcu_main.cc
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+# standalone_bsp_a9 & _mb: 2016.3
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:36974.608287
+add time in seconds:253.058205
+adds per second:34088.110296
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x40239260 top:0x69ce9000 end:0x7f239260
+total:1056964608 used:699071904
+query.............................................................................................................
+bases per second:260662.840122
+query time in seconds:457.331578
+lookups per second:239767.545637
+lookups:109653270 hits:41841138 38.16%
+
+# Use LSU and HSU; fill and drain done by ARM; Jan 31, 2017
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:49561.715903
+add time in seconds:188.789428
+adds per second:45692.579758
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x40239260 top:0x69ce9000 end:0x7f239260
+total:1056964608 used:699071904
+query.............................................................................................................
+bases per second:535190.660172
+query time in seconds:222.741832
+lookups per second:492288.624557
+lookups:109653270 hits:41841138 38.16%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:42591.236012
+add time in seconds:219.686698 # normal clocks
+adds per second:39266.264556
+Fill   time: 2.864344 sec
+Drain  time: 8.061657 sec
+Scan   time: 0.000000 sec
+Insert time: 39.571790 sec
+Cache  time: 0.095522 sec
+Oper.  time: 0.666917 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 10475446 13285304 332780224 424597144 0
+ACC 40122207 83182368 -1859453724 -1100773792 80624
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d360 top:0x69ced000 end:0x7f23d360
+total:1056964608 used:699071648
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:2423949.071492
+query time in seconds:49.179807
+lookups per second:2229640.095025
+Fill   time: 41.119600 sec
+Drain  time: 0.000000 sec
+Scan   time: 0.000000 sec
+Insert time: 0.000000 sec
+Cache  time: 0.949422 sec
+Oper.  time: 7.110785 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397952 32138665 1005614720 1021628072 0
+ACC 374442201 844535537 *-1271468032 *-1457030752 652151
+lookups:109653270 hits:41841138 38.16%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLOCKS,STATS
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLOCKS -DSTATS -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:222113.407218
+add time in seconds:42.125904
+adds per second:204773.672374
+Insert  time: 38.169315 sec
+Cache   time: 0.000535 sec
+Oper.   time: 0.658505 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 16000623 36410828 509585888 1164613912 0
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x402291b0 top:0x69cdd000 end:0x7f2291b0
+total:1056964608 used:699088464
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:3437954.223967
+query time in seconds:34.674501
+lookups per second:3162360.411268
+Insert  time: 0.000000 sec
+Cache   time: 0.002704 sec
+Oper.   time: 7.376642 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 13658522 350256609 405952960 *-1683499512 0
+lookups:109653270 hits:41841138 38.16%
+
+# use wdcc on MicroBlaze
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:190140.569047
+add time in seconds:49.209530
+adds per second:175296.858837
+Fill    time: 1.371717 sec
+ Accel  time: 0.000000 sec
+ Scan   time: 0.000000 sec
+ CacheA time: 0.000000 sec
+Drain   time: 7.507162 sec
+Insert  time: 39.568892 sec
+Cache   time: 0.094366 sec
+Oper.   time: 0.667393 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 10481628 13300997 332978048 425099352 0
+ACC 40102048 76795495 -1860058204 -1202963760 115576
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d360 top:0x69ced000 end:0x7f23d360
+total:1056964608 used:699071648
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:3930876.185789
+query time in seconds:30.326406
+lookups per second:3615768.687343
+Fill    time: 22.271187 sec
+ Accel  time: 0.000000 sec
+ Scan   time: 0.000000 sec
+ CacheA time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.945670 sec
+Oper.   time: 7.109549 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397953 32139029 1005614752 1021639752 0
+ACC 374286096 763060221 *-1281788872 *1534331488 1630046
+lookups:109653270 hits:41841138 38.16%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:217899.737555
+add time in seconds:42.940520
+adds per second:200888.951403
+Fill   time: 1.924308 sec
+Drain  time: 2.062682 sec
+Accel  time: 0.274649 sec
+Scan   time: 0.730628 sec
+CacheA time: 0.917746 sec
+Insert time: 38.285235 sec
+Cache  time: 0.068391 sec
+Oper.  time: 0.599904 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 22465033 58591940 716447008 1874409496 0
+ACC 25878828 34505104 -2086640640 -2017630432 0
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:3393599.046458
+query time in seconds:35.127706
+lookups per second:3121560.840287
+Fill   time: 26.665444 sec
+Drain  time: 0.000000 sec
+Accel  time: 3.484076 sec
+Scan   time: 12.592162 sec
+CacheA time: 10.574036 sec
+Insert time: 0.000000 sec
+Cache  time: 0.698663 sec
+Oper.  time: 7.763599 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 59991473 357181901 1888607392 *-1461890328 0
+ACC 328959810 438613080 *-1993533952 *-1116307792 0
+lookups:109653270 hits:41841138 38.16%
+
+# bool _put(const key_type key, const mapped_type &value)
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:218342.412835
+add time in seconds:42.853461
+adds per second:201297.068336
+Fill   time: 1.928332 sec
+Drain  time: 1.979937 sec
+Accel  time: 0.274681 sec
+Scan   time: 0.734487 sec
+CacheA time: 0.917879 sec
+Insert time: 38.276559 sec
+Cache  time: 0.068410 sec
+Oper.  time: 0.600222 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 22455043 58669313 716127328 1876885464 0
+ACC 25878828 34505104 -2086640640 -2017630432 0
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+...
+
+# use mapped_type in _scan, _get, _put with flush inside
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:213660.256018
+add time in seconds:43.792553
+adds per second:196980.433613
+Fill    time: 1.367021 sec
+ Accel  time: 0.271291 sec
+ Scan   time: 0.692138 sec
+ CacheA time: 0.403073 sec
+Drain   time: 3.491638 sec
+Insert  time: 38.280472 sec
+Cache   time: 0.068720 sec
+Oper.   time: 0.584702 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 22098403 57508936 704714848 1839753464 0
+ACC 25878828 34505104 -2086640640 -2017630432 0
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:4101229.357178
+query time in seconds:29.066735
+lookups per second:3772465.981733
+Fill    time: 20.634335 sec
+ Accel  time: 3.444929 sec
+ Scan   time: 12.059544 sec
+ CacheA time: 5.123072 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.697942 sec
+Oper.   time: 7.734458 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 55323113 345006107 1739219872 *-1851515736 0
+ACC 328959810 438613080 *-1993533952 *-1116307792 0
+lookups:109653270 hits:41841138 38.16%
+
+# add mtcp() to _scan()
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:214372.211426
+add time in seconds:43.647112
+adds per second:197636.808775
+Fill    time: 1.209270 sec
+ Accel  time: 0.271394 sec
+ Scan   time: 0.937173 sec
+ CacheA time: 0.000216 sec
+Drain   time: 3.492575 sec
+Insert  time: 38.294451 sec
+Cache   time: 0.068956 sec
+Oper.   time: 0.581859 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 22085627 56649281 704306016 1812244504 0
+ACC 25878828 34505104 -2086640640 -2017630432 0
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:4351985.473904
+query time in seconds:27.391945
+lookups per second:4003120.948250
+Fill    time: 19.136141 sec
+ Accel  time: 3.444782 sec
+ Scan   time: 15.682409 sec
+ CacheA time: 0.002665 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.696517 sec
+Oper.   time: 7.559288 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 55353864 323939008 1740203904 *1769304456 0
+ACC 328959810 438613080 *-1993533952 *-1116307792 0
+lookups:109653270 hits:41841138 38.16%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-a", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+add......
+add time in seconds:178.243437
+adds per second:37658.166295
+size:6712321 unique:6711654 duplicates:667 0.01%
+load_factor:0.200023
+bucket_count:33554432
+max_elem_per_key:2
+max_psl:15
+heap start:0x4023d340 top:0x69bed000 end:0x7f23d340
+total:1056964608 used:698023104
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:3189887.400571
+query time in seconds:37.371021
+lookups per second:2934179.158537
+Fill   time: 28.909405 sec
+Drain  time: 0.000000 sec
+Accel  time: 3.483770 sec
+Scan   time: 14.837162 sec
+CacheA time: 10.573612 sec
+Insert time: 0.000000 sec
+Cache  time: 0.698592 sec
+Oper.  time: 7.763023 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 67264686 420414433 2121350208 *561550792 0
+ACC 328959810 438613080 *-1993533952 *-1116307792 0
+lookups:109653270 hits:10388 0.01%
