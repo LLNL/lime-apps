@@ -684,3 +684,1069 @@ Slot TranW TranR ByteW ByteR StrobeLW
 CPU 67264686 420414433 2121350208 *561550792 0
 ACC 328959810 438613080 *-1993533952 *-1116307792 0
 lookups:109653270 hits:10388 0.01%
+
+# full pipeline with probe and flow units
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLIENT,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLIENT -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+mb-g++ -mcpu=v10.0 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul -O2 -Wall -fno-strict-aliasing -ffunction-sections -fdata-sections  -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_mb/engine_0_mcu_0_microblaze_0/include  -c -o mcu_main.o C:/Users/lloyd23/xwork/apps/rtb/src/mcu_main.cc
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:201269.706698
+add time in seconds:46.488506
+adds per second:185557.177725
+Fill    time: 0.241792 sec
+ Accel  time: 0.000000 sec
+ Scan   time: 0.000000 sec
+ CacheA time: 0.000000 sec
+Drain   time: 7.241603 sec
+Insert  time: 38.284675 sec
+Cache   time: 0.067286 sec
+Oper.   time: 0.653150 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 10483033 13309373 333023008 425367416 0
+ACC 18939799 53001670 199143936 -1583664960 8669088
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:1076061937 # bad
+max_psl:15
+heap start:0x4023d360 top:0x69cee000 end:0x7f23d360
+total:1056964608 used:699075744
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:10714282.955344
+query time in seconds:11.126209
+lookups per second:9855402.965199
+Fill    time: 3.075622 sec
+ Accel  time: 0.000000 sec
+ Scan   time: 0.000000 sec
+ CacheA time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.628063 sec
+Oper.   time: 7.422525 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32398003 45737359 1005616352 1456786376 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:41841138 38.16%
+
+# full pipeline with probe and flow units
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_nr.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+........
+bases per second:219387.237227
+add time in seconds:42.649372
+adds per second:202260.326387
+Fill    time: 0.258679 sec
+ Accel  time: 0.257886 sec
+ Scan   time: 0.000105 sec
+ CacheA time: 0.000245 sec
+Drain   time: 3.502908 sec
+Insert  time: 38.253288 sec
+Cache   time: 0.054679 sec
+Oper.   time: 0.579819 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20064020 39108864 639614592 1250951160 0
+ACC 8626276 34505104 34505104 -2017630432 8626276
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+.............................................................................................................
+bases per second:10087358.211118
+query time in seconds:11.817698
+lookups per second:9278733.858275
+Fill    time: 3.283220 sec
+ Accel  time: 3.274376 sec
+ Scan   time: 0.001585 sec
+ CacheA time: 0.002886 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.532113 sec
+Oper.   time: 8.002365 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32398020 45742637 1005616896 1456955208 0
+ACC 109653270 438613080 438613080 *-1116307792 109653270
+lookups:109653270 hits:41841138 38.16%
+
+# shuffled query set, 256 byte alignment, 110 ns off-chip access time
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:41 QUEUE_R:41 TRANS:24 V_W:110 V_R:110
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:395 CPU_DRAM_R:396
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:323 ACC_DRAM_R:307
+........
+bases per second:217805.485136
+add time in seconds:42.959102
+adds per second:200802.056990
+Fill    time: 0.244558 sec
+ Accel  time: 0.243822 sec
+ Scan   time: 0.000125 sec
+ CacheA time: 0.000228 sec
+Drain   time: 3.806132 sec
+Insert  time: 38.268963 sec
+Cache   time: 0.054801 sec
+Oper.   time: 0.584648 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20079754 38363007 640118080 1227083512 0
+ACC 8626276 25878828 34505104 -2017630432 8626276
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:41 QUEUE_R:41 TRANS:24 V_W:110 V_R:110
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:395 CPU_DRAM_R:396
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:323 ACC_DRAM_R:307
+.............................................................................................................
+bases per second:10249711.600639
+query time in seconds:11.630508
+lookups per second:9428072.650536
+Fill    time: 3.103998 sec
+ Accel  time: 3.095156 sec
+ Scan   time: 0.001663 sec
+ CacheA time: 0.002665 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.531816 sec
+Oper.   time: 7.994693 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32399806 45750462 1005674048 1457205576 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:41841138 38.16%
+
+# V_W:106 V_R:85 ns access time
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,USE_LSU,CLOCKS,STATS
+#define USE_HASH 1
+#define BLOCK_HASH 1
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DUSE_LSU -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+........
+bases per second:219483.164369
+add time in seconds:42.630732
+adds per second:202348.764782
+Fill    time: 0.244292 sec
+ Accel  time: 0.243574 sec
+ Scan   time: 0.000105 sec
+ CacheA time: 0.000229 sec
+Drain   time: 3.493798 sec
+Insert  time: 38.256085 sec
+Cache   time: 0.054766 sec
+Oper.   time: 0.581790 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20081400 38311599 640170752 1225438680 0
+ACC 8626276 25878828 34505104 -2017630432 8626276
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+heap start:0x4023d340 top:0x69ced000 end:0x7f23d340
+total:1056964608 used:699071680
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10267166.738341
+query time in seconds:11.610735
+lookups per second:9444128.546818
+Fill    time: 3.101924 sec
+ Accel  time: 3.092747 sec
+ Scan   time: 0.001714 sec
+ CacheA time: 0.002974 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.531352 sec
+Oper.   time: 7.977458 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32399729 45750264 1005671584 1457199176 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:41841138 38.16%
+
+# missing flush in _putp()
+#define BLOCK_HASH 1
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=USE_HASH,CLOCKS,STATS
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DUSE_HASH -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3421362.367714
+add time in seconds:2.126667
+adds per second:3155891.619756
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.628986 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.497681 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 13260463 25015170 422442208 800071448 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10943425.868980
+query time in seconds:10.893239
+lookups per second:10066177.289522
+Fill    time: 3.094636 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287644 sec
+Oper.   time: 7.510958 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397949 45738673 1005614624 1456828296 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses Accelerator Code - Hardware # # # # # # # # # #
+
+#define BLOCK_HASH 1
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=USE_HASH,CLOCKS,STATS
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DUSE_HASH -DCLOCKS -DSTATS -DUSE_SP -DUSE_OCM -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+
+# uses Xil_DCacheFlushLine in update2()
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2003541.244463
+add time in seconds:3.631620
+adds per second:1848082.238498
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 3.139383 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.492237 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14454458 25217660 460650048 806551064 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10949836.615823
+query time in seconds:10.886861
+lookups per second:10072074.137095
+Fill    time: 3.094115 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.288168 sec
+Oper.   time: 7.504577 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738661 1005614656 1456827816 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2003488.578728
+add time in seconds:3.631715
+adds per second:1848033.659208
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 3.139555 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.492160 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14453891 25215706 460631904 806488504 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10940174.327317
+query time in seconds:10.896476
+lookups per second:10063186.398439
+Fill    time: 3.093630 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.288228 sec
+Oper.   time: 7.514619 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738649 1005614656 1456827464 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2003689.830482
+add time in seconds:3.631350
+adds per second:1848219.295413
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 3.139401 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.491949 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14454774 25219058 460660160 806595768 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10947604.842121
+query time in seconds:10.889080
+lookups per second:10070021.267178
+Fill    time: 3.094087 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.288146 sec
+Oper.   time: 7.506847 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738661 1005614656 1456827912 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# uses Xil_DCacheFlushRange in update2()
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2041663.825365
+add time in seconds:3.563809
+adds per second:1883246.807655
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 3.070932 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.492877 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14451143 25142802 460543968 804155640 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10963690.178812
+query time in seconds:10.873104
+lookups per second:10084817.168647
+Fill    time: 3.094929 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287535 sec
+Oper.   time: 7.490640 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397949 45738693 1005614624 1456828872 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# uses mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot); in update2()
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3314129.156815
+add time in seconds:2.195479
+adds per second:3056978.860667
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.701552 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.493927 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14247562 25321314 454029376 809867960 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10952112.840329
+query time in seconds:10.884598
+lookups per second:10074167.894543
+Fill    time: 3.093988 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287843 sec
+Oper.   time: 7.502767 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738658 1005614656 1456827880 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# uses mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot); in update2()
+# uses Xil_Out32(XPS_L2CC_BASEADDR + XPS_L2CC_CACHE_CLEAN_PA_OFFSET, (unsigned int)slot);
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3234713.527657
+add time in seconds:2.249380
+adds per second:2983725.258270
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.761394 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.487986 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14584041 25245293 464796704 807435352 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10954298.670326
+query time in seconds:10.882426
+lookups per second:10076178.503702
+Fill    time: 3.094365 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287601 sec
+Oper.   time: 7.500461 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738693 1005614656 1456828904 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# used in update2(), notice dsb(); after mtcp();
+# mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot); dsb();
+# Xil_Out32(XPS_L2CC_BASEADDR + XPS_L2CC_CACHE_CLEAN_PA_OFFSET, (unsigned int)slot);
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3186327.115634
+add time in seconds:2.283538
+adds per second:2939093.250374
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.794014 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.489525 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14584873 25301958 464823328 809248632 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67ef6000 end:0x7f23d340
+total:1056964608 used:667651264
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10955552.397828
+query time in seconds:10.881181
+lookups per second:10077331.729707
+Fill    time: 3.094962 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287344 sec
+Oper.   time: 7.498875 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738659 1005614656 1456827808 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# uses Xil_DCacheFlush(); after block insert
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2795203.465696
+add time in seconds:2.603066
+adds per second:2578317.712309
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.693816 sec
+Cache   time: 0.409006 sec
+Oper.   time: 0.500244 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15412838 26895796 491318208 860251480 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10980920.540018
+query time in seconds:10.856043
+lookups per second:10100666.307001
+Fill    time: 3.093893 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287169 sec
+Oper.   time: 7.474981 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738589 1005614656 1456825672 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# uses CACHE_SEND_ALL(a) which is Xil_DCacheFlush() after all insertions
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3426026.838926
+add time in seconds:2.123772
+adds per second:3160194.164774
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.629733 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.494039 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14259427 25413668 454409056 812823320 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67e06000 end:0x7f23d340
+total:1056964608 used:666668224
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10953770.200299
+query time in seconds:10.882951
+lookups per second:10075692.396970
+Fill    time: 3.094301 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287796 sec
+Oper.   time: 7.500854 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397950 45738546 1005614656 1456824264 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# used in update2(): mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
+# used in setup(): Xil_SetTlbAttributes((INTPTR)ptr, 0x4c0e);
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3053973.120527
+add time in seconds:2.382503
+adds per second:2817008.881895
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.889837 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.492666 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14520712 19425211 462770176 621192728 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67ef6000 end:0x7f23d340
+total:1056964608 used:667651264
+stats time in seconds:0.022395
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10959609.295656
+query time in seconds:10.877153
+lookups per second:10081063.417871
+Fill    time: 3.094450 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287718 sec
+Oper.   time: 7.494985 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32397949 45738671 1005614624 1456828200 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# used in update2(): mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
+# used in setup(): Xil_SetTlbAttributes((INTPTR)ptr, 0x14de6);
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3011782.018748
+add time in seconds:2.415879
+adds per second:2778091.477007
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.922842 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.493037 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14504790 19015495 462260672 608081780 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67ef6000 end:0x7f23d340
+total:1056964608 used:667651264
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10952574.281220
+query time in seconds:10.884140
+lookups per second:10074592.345339
+Fill    time: 3.094877 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287739 sec
+Oper.   time: 7.501524 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32411561 45738486 1006050208 1456822344 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# used in update2(): mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
+# used in setup(): Xil_SetTlbAttributes((INTPTR)ptr, 0x04c06);
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3053849.368178
+add time in seconds:2.382600
+adds per second:2816894.731753
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.889984 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.492615 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 14503266 19412595 462211904 620789016 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x4023d340 top:0x67ef6000 end:0x7f23d340
+total:1056964608 used:667651264
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:10964437.758239
+query time in seconds:10.872363
+lookups per second:10085504.820498
+Fill    time: 3.094467 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.287746 sec
+Oper.   time: 7.490150 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32411598 45738481 1006051392 1456822216 0
+ACC 109653270 328959810 438613080 *-1116307792 109653270
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses Accelerator Code - Software # # # # # # # # # #
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=DIRECT,CLOCKS,STATS
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DDIRECT -DCLOCKS -DSTATS -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:3434483.523956
+add time in seconds:2.118543
+adds per second:3167994.677712
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 1.623913 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.494630 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 12107848 21567725 385558528 689753176 0
+ACC 0 0 0 0 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+heap start:0x40229190 top:0x67df8000 end:0x7f229190
+total:1056964608 used:666693232
+stats time in seconds:0.022394
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:3615058.039515
+query time in seconds:32.975777
+lookups per second:3325267.203648
+Fill    time: 25.128015 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.002967 sec
+Oper.   time: 7.844795 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 11860108 331869717 348403712 *2023087272 0
+ACC 0 0 0 0 0
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses STL # # # # # # # # # #
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/zynq
+$ make D=CLOCKS,STATS
+arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -ffast-math -Wall -std=c++11 -DZYNQ -DXILTIME -DSTANDALONE -DCLOCKS -DSTATS -IC:/Users/lloyd23/xwork/apps/shared -IC:/Users/lloyd23/xwork/apps/rtb/src -IC:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include  -c -o rtb.o C:/Users/lloyd23/xwork/apps/rtb/src/rtb.cpp
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+readSRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+......
+bases per second:2693665.801611
+add time in seconds:2.701189
+adds per second:2484658.570500
+Insert  time: 2.168124 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.533065 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 13625141 28417981 434111904 908961336 0
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:113
+max_elem_per_key:7
+max_psl:107
+heap start:0x402c5090 top:0x5419f000 end:0x7f2c5090
+total:1056964608 used:334339952
+stats time in seconds:13.445034
+querySRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+.............................................................................................................
+bases per second:2868257.027527
+query time in seconds:41.561599
+lookups per second:2638331.368684
+Insert  time: 0.000000 sec
+Lookup  time: 32.481582 sec
+Oper.   time: 9.080017 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 18065460 440232761 546974976 *1195737320 0
+lookups:109653270 hits:36118031 32.94%

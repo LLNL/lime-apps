@@ -1,19 +1,23 @@
 #
 # $Id: $
 #
-# Description: Makefile for rtb program
+# Description: Makefile for fasta program
 #
 # $Log: $
 #
 
-TARGET = rtb
-VERSION = 3.0
+TARGET = fasta
+VERSION = 1.5
 LABEL = V$(subst .,_,$(VERSION))
 
-SRC = ../../shared ../src
-
 #DEFS += -DVERSION=$(VERSION)
-DEFS += -DTIMEOFDAY
+#DEFS += -DTIMEOFDAY
+DEFS += -DFASTA_TEST
+
+SRC = ../src
+#MODULES = 
+HEADERS = fasta.h
+#HEADERS += $(addsuffix .h,$(MODULES))
 
 # comma separated list of defines
 ifdef D
@@ -21,23 +25,7 @@ ifdef D
   DEFS += $(patsubst %,-D%,$(subst $(SEP), ,$(D)))
 endif
 
-HEADERS = block_map.h config.h alloc.h cache.h monitor.h ticks.h clocks.h
-MODULES = fasta path
-
-ifneq (,$(findstring M5,$(DEFS)))
-  M5OP = m5op_x86
-  SRC += ../../m5
-  HEADERS += m5op.h
-  OBJECTS += $(M5OP).o
-endif
-
-ifneq (,$(wildcard ../src/KVstore.hpp))
-  HEADERS += KVstore.hpp
-  MODULES += short
-endif
-
-HEADERS += $(addsuffix .h,$(MODULES))
-OBJECTS += $(addsuffix .o,$(TARGET) $(MODULES))
+OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))
 
 VPATH = $(subst ' ',:,$(SRC))
 
@@ -47,7 +35,7 @@ OPT = -O3
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CFLAGS = $(MACH) $(OPT) -Wall
-CXXFLAGS = $(CFLAGS) -std=c++11
+#CXXFLAGS = $(CFLAGS) -std=c++11
 LDFLAGS += -static
 #LDLIBS = -lrt
 
@@ -56,11 +44,11 @@ all: $(TARGET)
 
 .PHONY: check
 check: $(TARGET)
-	./$(TARGET) -e1K -k16 -r../src/testdb.fa -q../src/testqr.fa
+	./$(TARGET) -s ../src/testqr.fa -
 
 .PHONY: clean
 clean:
-	$(RM) $(wildcard *.o) $(TARGET)$(EXE)
+	$(RM) $(OBJECTS) $(TARGET)$(EXE)
 
 .PHONY: vars
 vars:
@@ -71,13 +59,8 @@ vars:
 	@echo DEFS: $(DEFS)
 
 $(TARGET): $(OBJECTS)
-	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # establish module specific dependencies
-# module.o: module.h
+#module.o: module.h
 $(TARGET).o: $(HEADERS)
-fasta.o: fasta.h
-path.o: path.h
-short.o: short.h
-$(M5OP).o: m5ops.h

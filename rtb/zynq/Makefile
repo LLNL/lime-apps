@@ -13,9 +13,16 @@ EXE = .elf
 
 BSP = $(WORKSPACE_LOC)/standalone_bsp_a9
 APPS_DIR ?= $(WORKSPACE_LOC)/apps
+SRC = $(APPS_DIR)/shared $(APPS_DIR)/rtb/src
 
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DZYNQ -DXILTIME -DSTANDALONE
+
+# comma separated list of defines
+ifdef D
+  SEP := ,
+  DEFS += $(patsubst %,-D%,$(subst $(SEP), ,$(D)))
+endif
 
 # ARM Processor
 # CC = arm-xilinx-eabi-gcc
@@ -25,37 +32,29 @@ CC = arm-none-eabi-gcc
 CXX = arm-none-eabi-g++
 SIZE = arm-none-eabi-size
 
-SRC = $(APPS_DIR)/shared $(APPS_DIR)/rtb/src
+HEADERS = block_map.h config.h alloc.h cache.h monitor.h ticks.h clocks.h
 MODULES = fasta path
-HEADERS = config.h alloc.h cache.h monitor.h ticks.h clocks.h
-HEADERS += $(addsuffix .h,$(MODULES))
-
-# comma separated list of defines
-ifdef D
-  SEP := ,
-  DEFS += $(patsubst %,-D%,$(subst $(SEP), ,$(D)))
-endif
 
 ifneq (,$(findstring M5,$(DEFS)))
   M5OP = m5op_arm
   SRC += $(APPS_DIR)/m5
   HEADERS += m5op.h
-  MODULES += $(M5OP)
+  OBJECTS += $(M5OP).o
 endif
 
 ifneq (,$(wildcard ../src/KVstore.hpp))
-  HEADERS += KVstore.hpp short.h
+  HEADERS += KVstore.hpp
   MODULES += short
 endif
 
-ifneq (,$(or $(findstring CLIENT,$(DEFS)), $(findstring USE_LSU,$(DEFS))))
+ifneq (,$(or $(findstring CLIENT,$(DEFS)), $(findstring USE_HASH,$(DEFS))))
   # Must use scratch pad because code expects inner (L1) cacheable only
   DEFS += -DUSE_SP -DUSE_OCM
-  HEADERS += stream.h lsu_cmd.h
-  MODULES += stream lsu_cmd
+  MODULES += aport stream
 endif
 
-OBJECTS = $(addsuffix .o, fatfs $(TARGET) $(MODULES))
+HEADERS += $(addsuffix .h,$(MODULES))
+OBJECTS += $(addsuffix .o,$(TARGET) fatfs $(MODULES))
 
 VPATH = $(subst ' ',:,$(SRC))
 
@@ -110,5 +109,6 @@ $(TARGET).o: $(HEADERS)
 fasta.o: fasta.h
 path.o: path.h
 short.o: short.h
+aport.o: aport.h stream.h
 stream.o: stream.h
-$(M5OP).o: m5op.h m5ops.h
+$(M5OP).o: m5ops.h

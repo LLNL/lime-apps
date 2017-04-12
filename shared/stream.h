@@ -16,6 +16,8 @@
 
 #ifdef __microblaze__
 
+#include "fsl.h"
+
 typedef struct {
 } stream_t;
 

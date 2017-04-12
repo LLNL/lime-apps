@@ -125,3 +125,335 @@ Insert  time: 0.000000 sec
 Cache   time: 0.020000 sec
 Oper.   time: 26.690000 sec
 lookups:109653270 hits:41841138 38.16%
+
+# No MAX_ELEM
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -p -e32Mi -l.20 -r/cygdrive/l/bio/SRR033549.nr.fasta -q/cygdrive/l/bio/srr_sh.fa
+block length: 1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read......
+bases per second:1332617.339135
+add time in seconds:5.460007
+adds per second:1229216.739099
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:15709
+max_elem_per_key:15512
+max_psl:7000
+stats time in seconds:4.300006
+query.............................................................................................................
+bases per second:42075.036406
+query time in seconds:2833.255968
+lookups per second:38702.210897
+lookups:109653270 hits:36118031 32.94%
+
+#define MAX_ELEM 8
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -p -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read......
+bases per second:1828163.073121
+add time in seconds:3.980006
+adds per second:1686312.030685
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:129
+max_elem_per_key:8
+max_psl:122
+stats time in seconds:4.240006
+query.............................................................................................................
+bases per second:2817517.886231
+query time in seconds:42.310059
+lookups per second:2591659.586199
+lookups:109653270 hits:36118031 32.94%
+
+#define MAX_ELEM 8
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make D=NO_BUFFER
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DNO_BUFFER -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -p -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read......
+bases per second:1818887.021669
+add time in seconds:4.000006
+adds per second:1677753.733369
+gather stats...
+size:6711025 unique:5379341 duplicates:1331684 19.84%
+load_factor (elem):0.199065
+load_factor (keys):0.159564
+bucket_count:33712729
+max_elem_per_bucket:129
+max_elem_per_key:8
+max_psl:122
+stats time in seconds:4.260006
+query.............................................................................................................
+bases per second:2767800.834269
+query time in seconds:43.070060
+lookups per second:2545927.960165
+lookups:109653270 hits:36116303 32.94%
+
+# with update()
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make D=DIRECT
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -p -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read......
+bases per second:1787737.361502
+add time in seconds:4.070005
+adds per second:1649023.035598
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.300003 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.770002 sec
+gather stats...
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000000
+query.............................................................................................................
+bases per second:2251353.713852
+query time in seconds:52.950075
+lookups per second:2070880.352861
+Fill    time: 24.880034 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.030000 sec
+Oper.   time: 28.040041 sec
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses Accelerator Code # # # # # # # # # #
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make D=DIRECT,RDTSC,TICKS_SEC=2200000000
+g++  -O3 -Wall -std=c++11 -DDIRECT -DRDTSC -DTICKS_SEC=2200000000 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DDIRECT -DRDTSC -DTICKS_SEC=2200000000 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DDIRECT -DRDTSC -DTICKS_SEC=2200000000 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DDIRECT -DRDTSC -DTICKS_SEC=2200000000 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DDIRECT -DRDTSC -DTICKS_SEC=2200000000 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1767446.623868
+add time in seconds:4.116730
+adds per second:1630306.699245
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.379254 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.737475 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000058
+bases per second:2279607.321909
+query time in seconds:52.293808
+lookups per second:2096869.090864
+Fill    time: 24.379818 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.003313 sec
+Oper.   time: 27.910677 sec
+lookups:109653270 hits:36118031 32.94%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1792467.167674
+add time in seconds:4.059265
+adds per second:1653385.846098
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.325837 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.733429 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000058
+bases per second:2278471.177216
+query time in seconds:52.319884
+lookups per second:2095824.021976
+Fill    time: 24.388919 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.003322 sec
+Oper.   time: 27.927643 sec
+lookups:109653270 hits:36118031 32.94%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1754312.665173
+add time in seconds:4.147550
+adds per second:1618191.832206
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.364523 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.783028 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000058
+bases per second:2249976.425135
+query time in seconds:52.982488
+lookups per second:2069613.470572
+Fill    time: 24.746424 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.003315 sec
+Oper.   time: 28.232748 sec
+lookups:109653270 hits:36118031 32.94%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make D=DIRECT,TIMEOFDAY
+g++  -O3 -Wall -std=c++11 -DDIRECT -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DDIRECT -DTIMEOFDAY -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DDIRECT -DTIMEOFDAY -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DDIRECT -DTIMEOFDAY -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DDIRECT -DTIMEOFDAY -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1753277.108434
+add time in seconds:4.150000
+adds per second:1617236.626506
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.300000 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.850000 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000000
+bases per second:2235273.068197
+query time in seconds:53.331000
+lookups per second:2056088.766384
+Fill    time: 25.101000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.060000 sec
+Oper.   time: 28.170000 sec
+lookups:109653270 hits:36118031 32.94%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1774658.536585
+add time in seconds:4.100000
+adds per second:1636959.024390
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.290000 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.810000 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000000
+bases per second:2229045.400150
+query time in seconds:53.480000
+lookups per second:2050360.321616
+Fill    time: 24.580000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.040000 sec
+Oper.   time: 28.860000 sec
+lookups:109653270 hits:36118031 32.94%
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.20 -r$HOME/bio/SRR033549.nr.fasta -q$HOME/bio/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:1774658.536585
+add time in seconds:4.100000
+adds per second:1636959.024390
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 2.530000 sec
+Cache   time: 0.000000 sec
+Oper.   time: 1.570000 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000000
+bases per second:2229462.277913
+query time in seconds:53.470000
+lookups per second:2050743.781560
+Fill    time: 24.890000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.030000 sec
+Oper.   time: 28.550000 sec
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses STL # # # # # # # # # #
+

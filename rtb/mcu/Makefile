@@ -13,17 +13,9 @@ EXE = .elf
 
 BSP = $(WORKSPACE_LOC)/standalone_bsp_mb
 APPS_DIR ?= $(WORKSPACE_LOC)/apps
+SRC = $(APPS_DIR)/shared $(APPS_DIR)/rtb/src
 
 #DEFS += -DVERSION=$(VERSION)
-
-# Xilinx MicroBlaze Soft Processor
-CC = mb-gcc
-CXX = mb-g++
-SIZE = mb-size
-
-SRC = $(APPS_DIR)/shared $(APPS_DIR)/rtb/src
-HEADERS = KVstore.hpp lsu_cmd.h stream.h short.h
-MODULES += mcu_main lsu_cmd stream short
 
 # comma separated list of defines
 ifdef D
@@ -31,7 +23,16 @@ ifdef D
   DEFS += $(patsubst %,-D%,$(subst $(SEP), ,$(D)))
 endif
 
-OBJECTS = $(addsuffix .o,$(MODULES))
+# Xilinx MicroBlaze Soft Processor
+CC = mb-gcc
+CXX = mb-g++
+SIZE = mb-size
+
+HEADERS = KVstore.hpp
+MODULES = short aport stream
+
+HEADERS += $(addsuffix .h,$(MODULES))
+OBJECTS += $(addsuffix .o,mcu_main $(MODULES))
 
 VPATH = $(subst ' ',:,$(SRC))
 
@@ -76,5 +77,5 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # module.o: module.h
 mcu_main.o: $(HEADERS)
 short.o: short.h
-lsu_cmd.o: lsu_cmd.h stream.h
+aport.o: aport.h stream.h
 stream.o: stream.h

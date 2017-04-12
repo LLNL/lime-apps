@@ -19,8 +19,8 @@
 #define CLOCKS_NORMAL  clocks_normal();
 #define TICKS_ESEC (2571428545UL/2)
 
-#define T_V_W 103 // DRAM Vault Write, off-chip
-#define T_V_R 84  // DRAM Vault Read, off-chip
+#define T_V_W 106 // DRAM Vault Write, off-chip
+#define T_V_R  85 // DRAM Vault Read, off-chip
 #define T_SRAM_W 10
 #define T_SRAM_R 10
 #define T_DRAM_W 45 // (T_V_W - T_TRANS) // 45
@@ -46,8 +46,15 @@ inline void clocks_emulate(void)
 	*unlock   =     0xDF0D;
 	*arm_cc   = 0x1F000E00; /* 13:8 DIVISOR = 14 */
 	*clk_621  = 0x00000000; /* bit 0 CLK_621_TRUE = 0 (4:2:1) */
+#if 1
+	/* DRE at 1.25 GHz */
 	*fpga0_cc = 0x00101000; /* 25:20 DIVISOR1 = 1, 13:8 DIVISOR0 = 16, 5:4 SRCSEL = 0 (IO PLL) */
 	*fpga1_cc = 0x00101000; /* 25:20 DIVISOR1 = 1, 13:8 DIVISOR0 = 16, 5:4 SRCSEL = 0 (IO PLL) */
+#else
+	/* DRE at 2.5 GHz */
+	*fpga0_cc = 0x00100800; /* 25:20 DIVISOR1 = 1, 13:8 DIVISOR0 = 8, 5:4 SRCSEL = 0 (IO PLL) */
+	*fpga1_cc = 0x00100800; /* 25:20 DIVISOR1 = 1, 13:8 DIVISOR0 = 8, 5:4 SRCSEL = 0 (IO PLL) */
+#endif
 
 	/* when using DRAM (0x00080000) for SRAM */
 	// CPU_ACC target: min 4 accesses (42 ns) + CPU compare for ready (10 ns) + ACC command interpreter (80) = 258 ns

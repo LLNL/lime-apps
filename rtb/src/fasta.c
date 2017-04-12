@@ -1,9 +1,12 @@
 /*
-$Id: fasta.c,v 1.4 2010/09/03 20:14:35 scott Exp $
+$Id: fasta.c,v 1.5 2017/03/20 11:58:00 scott Exp $
 
 Description: FASTA file read and write
 
 $Log: fasta.c,v $
+Revision 1.5  2017/03/20 11:58:00  scott
+Add Fasta_Shuffle and update FASTA_TEST section code.
+
 Revision 1.4  2010/09/03 20:14:35  scott
 Update FASTA_TEST section code.
 
@@ -19,7 +22,7 @@ Initial revision
 */
 
 #include <stdio.h>
-#include <stdlib.h> /* malloc, realloc, free */
+#include <stdlib.h> /* malloc, realloc, free, rand */
 #include <ctype.h> /* isspace */
 
 #include "fasta.h"
@@ -122,6 +125,21 @@ int Fasta_Max_Length(sequence *entry, int ecount)
 	return(max_len);
 }
 
+void Fasta_Shuffle(sequence *entry, int ecount)
+{
+	int i, j;
+	sequence temp;
+
+	/* Fisher-Yates shuffle or Knuth shuffle */
+	srand(ecount);
+	for (i = ecount-1; i > 0; --i) {
+		j = rand() % (i+1);
+		temp = entry[i]; /* swap */
+		entry[i] = entry[j];
+		entry[j] = temp;
+	}
+}
+
 #ifdef FASTA_TEST
 
 #include <string.h> /* strlen */
@@ -135,6 +153,7 @@ int Fasta_Max_Length(sequence *entry, int ecount)
 
 #define DEFAULT_WIDTH 70
 
+#define SFLAG 0x01
 #define VFLAG 0x1000
 
 int flags; /* argument flags */
@@ -149,6 +168,9 @@ int main(int argc, char *argv[])
 	while (--argc > 0 && (*++argv)[0] == '-')
 		for (s = argv[0]+1; *s; s++)
 			switch (*s) {
+			case 's':
+				flags |= SFLAG;
+				break;
 			case 'w':
 				if (isdigit(s[1])) warg = atoi(s+1);
 				else nok = 1;
@@ -164,8 +186,9 @@ int main(int argc, char *argv[])
 			}
 
 	if (flags & VFLAG) fprintf(stderr, "Version: %s\n", TOSTRING(VERSION));
-	if (nok || argc < 1 || (argc > 0 && *argv[0] == '?')) {
-		fprintf(stderr, "Usage: fasta -v -w<int> <in_file> [<out_file>]\n");
+	if (nok || argc < 1 || argc > 2 || (argc > 0 && *argv[0] == '?')) {
+		fprintf(stderr, "Usage: fasta -sv -w<int> <in_file> [<out_file>]\n");
+		fprintf(stderr, "  -s  shuffle entries\n");
 		fprintf(stderr, "  -w  width (columns) of entry, default %d\n", DEFAULT_WIDTH);
 		fprintf(stderr, "  -v  version\n");
 		exit(EXIT_FAILURE);
@@ -179,12 +202,14 @@ int main(int argc, char *argv[])
 			fprintf(stderr, " -- can't open file: %s\n", argv[0]);
 			exit(EXIT_FAILURE);
 		}
-		if (argc < 2) {
-			fout = stdout;
-		} else if ((fout = fopen(argv[1], "w")) == NULL) {
-			fprintf(stderr, " -- can't open file: %s\n", argv[1]);
-			exit(EXIT_FAILURE);
-		}
+		if (argc == 2) {
+			if (argv[1][0] == '-') {
+				fout = stdout;
+			} else if ((fout = fopen(argv[1], "w")) == NULL) {
+				fprintf(stderr, " -- can't open file: %s\n", argv[1]);
+				exit(EXIT_FAILURE);
+			}
+		} else fout = NULL;
 
 		ecount = Fasta_Read_File(fin, &entry);
 		fclose(fin);
@@ -192,8 +217,14 @@ int main(int argc, char *argv[])
 		maxseqlen = Fasta_Max_Length(entry, ecount);
 		printf("sequences:%d maxlen:%d\n", ecount, maxseqlen);
 
-		Fasta_Write_File(fout, entry, ecount, warg);
-		fclose(fout);
+		if (flags & SFLAG) {
+			Fasta_Shuffle(entry, ecount);
+		}
+
+		if (fout != NULL) {
+			Fasta_Write_File(fout, entry, ecount, warg);
+			fclose(fout);
+		}
 	}
 	return(0);
 }

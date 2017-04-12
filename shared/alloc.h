@@ -27,7 +27,7 @@
 */
 #ifdef __cplusplus
 
-#if defined(USE_LSU) || defined(USE_DMAC) || defined(CLIENT)
+#if defined(USE_ACC)
 // FIXME: NEWA doesn't construct, only works for simple types
 // TODO: make allocator for accelerator
 #include <malloc.h> // memalign, free
@@ -49,7 +49,7 @@
 
 #else // __cplusplus
 
-#if defined(USE_LSU) || defined(USE_DMAC) || defined(CLIENT)
+#if defined(USE_ACC)
 #include <malloc.h> // memalign, free
 #define NALLOC(t,n) (t*)memalign(ALIGN_SZ,CEIL((n)*sizeof(t),ALIGN_SZ))
 #define NFREE(p) free(p)
@@ -109,8 +109,10 @@ inline void spfree(void *aptr)
 
 #if defined(ZYNQ)
 #ifdef __cplusplus
+#include <cstdint> // uintXX_t
 extern "C" {void *_sbrk(intptr_t increment); void *sbrk(intptr_t increment);}
 #else
+#include <stdint.h> // uintXX_t
 extern void *_sbrk(intptr_t increment); extern void *sbrk(intptr_t increment);
 #endif
 extern unsigned char _heap_start[];

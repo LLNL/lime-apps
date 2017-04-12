@@ -3,6 +3,7 @@ typedef unsigned long long int key_type;
 typedef void * value_type;
 
 #define SERVER 1
+#include "config.h"
 #include "KVstore.hpp"
 
 int main()

@@ -14,7 +14,7 @@
 /* NOTE: if invalidate is used on non-cache aligned and sized allocations, */
 /* it can corrupt the heap. */
 
-#if defined(USE_ACC)
+#if defined(USE_STREAM)
 #define CACHE_INVALIDATE(a,p,n) {a.cache_invalidate(p,n); host::cache_invalidate(p,n);}
 #define CACHE_BARRIER(a) {a.cache_flush(); a.cache_invalidate(); host::cache_flush_invalidate();}
 
@@ -23,13 +23,13 @@
 #define CACHE_BARRIER(a) {host::cache_flush_invalidate();}
 #endif
 
-#if defined(USE_ACC)
+#if defined(USE_STREAM)
 #define CACHE_SEND_ALL(a) {host::cache_flush(); /*a.cache_flush(); a.cache_invalidate();*/}
 #define CACHE_RECV_ALL(a) {/*a.cache_flush();*/ host::cache_flush_invalidate();}
-// #define CACHE_SEND(a,p,n) {host::cache_flush(p,n); /*a.cache_invalidate(p,n);*/}
-// #define CACHE_RECV(a,p,n) {/*a.cache_flush(p,n);*/ host::cache_invalidate(p,n);}
-#define CACHE_SEND(a,p,n) {host::cache_flush(p,n); a.cache_invalidate(p,n);}
-#define CACHE_RECV(a,p,n) {a.cache_flush(p,n); host::cache_invalidate(p,n);}
+#define CACHE_SEND(a,p,n) {host::cache_flush(p,n); /*a.cache_invalidate(p,n);*/}
+#define CACHE_RECV(a,p,n) {/*a.cache_flush(p,n);*/ host::cache_invalidate(p,n);}
+// #define CACHE_SEND(a,p,n) {host::cache_flush(p,n); a.cache_invalidate(p,n);}
+// #define CACHE_RECV(a,p,n) {a.cache_flush(p,n); host::cache_invalidate(p,n);}
 
 #else
 #define CACHE_SEND_ALL(a)
@@ -44,13 +44,17 @@
 #include "xpseudo_asm.h" // mtcp, dsb
 #include "xreg_cortexa9.h" // XREG_CP15_*
 #include "xil_mmu.h" // Xil_SetTlbAttributes
+/* 0x15de6: Shareable, Domain:1111, Outer & Inner Cacheable: Write-Back, Write-Allocate */
+/* 0x14de6: Shareable, Domain:1111, Inner Cacheable: Write-Back, Write-Allocate */
+/* 0x04c06: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, Write-Allocate */
+/* 0x04c0e: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, no Write-Allocate */
 namespace host {
 inline void cache_init(void) {
 	char *ptr;
 	// Xil_ICacheEnable();
 	// Xil_DCacheEnable();
-	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x4c0e); /* Inner Cacheable */
-	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x4c0e); /* Inner Cacheable */
+	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x4c06); /* Inner Cacheable */
+	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x4c06); /* Inner Cacheable */
 	for (ptr = (char*)0x40200000; ptr < (char*)0x7fffffff; ptr += 0x100000)
 		Xil_SetTlbAttributes((INTPTR)ptr, 0x15de6); /* Cacheable */
 }

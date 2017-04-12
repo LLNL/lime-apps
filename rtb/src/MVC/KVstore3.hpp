@@ -1,12 +1,22 @@
 #ifndef _KV_STORE_HPP
 #define _KV_STORE_HPP
 
+#if defined(CLIENT) || defined(SERVER) || defined(DIRECT)
+#define USE_LSU 1
+#endif
+#if defined(CLIENT) || defined(SERVER) || defined(USE_LSU)
+#define USE_STREAM 1
+#endif
+#if defined(USE_LSU)
+#define USE_HASH 1
+#endif
+
 #include <cstddef> // size_t
 #include <algorithm> // min
-#include <stdint.h> // uintXX_t
 #define SOFT 1
 #include "short.h" // shortNN_hash
 #include "alloc.h"
+
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
@@ -16,11 +26,11 @@
 #define memcpy dmac_memcpy
 #define memset ::memset
 
-#elif defined(USE_LSU)
+#elif defined(USE_LSU) || defined(USE_HASH)
 #include <cstring> // memcpy, memset
 #include "lsu_cmd.h"
-#define memcpy lsu_memcpy
-#define memset ::memset
+// #define memcpy lsu_memcpy
+// #define memset ::memset
 
 #else // use CPU
 #include <cstring> // memcpy, memset
@@ -42,11 +52,12 @@
 // DRAM space needs L1 and L2 (Xil_DCache*)
 // MicroBlaze only has L1
 // ARM has L1 and L2
-#if defined(USE_STREAM) && defined(__microblaze__)
+#if defined(SERVER) && defined(__microblaze__)
 #include "xil_cache.h"
 class cache {
 public:
 inline void cache_flush(void) {Xil_L1DCacheFlush();}
+// inline void cache_flush(const void *ptr) {}
 inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
 inline void cache_flush_invalidate(void) {Xil_L1DCacheFlush();}
 inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
@@ -54,12 +65,12 @@ inline void cache_invalidate(void) {Xil_L1DCacheInvalidate();}
 inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
 };
 
-#elif defined(USE_STREAM) && defined(__arm__)
-#include "xl2cc.h" // XPS_L2CC_*
+#elif defined(DIRECT) && defined(__arm__)
 #include "xil_cache.h"
 class cache {
 public:
 inline void cache_flush(void) {Xil_DCacheFlush();}
+// inline void cache_flush(const void *ptr) {mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, ((unsigned int)ptr));} // L1 flush line
 inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
 inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
 inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
@@ -101,7 +112,18 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
 #if defined(USE_STREAM)
-#include "aport.h"
+#include "stream.h"
+
+// TODO: move to aport.h (or lsu_cmd.h)
+#define ARM0_PN 0 /* ARM 0 port number */
+#define MCU0_PN 1 /* MCU 0 port number */
+#define LSU0_PN 2 /* LSU 0 port number */
+#define LSU1_PN 3 /* LSU 1 port number */
+#define HSU0_PN 4 /* HSU 0 port number */
+#define LSU2_PN 5 /* LSU 2 port number */
+#define getID(pn) ((pn)<<1)
+#define HSU_CMD(seldi,seldo,seed,tdest,tid,hlen,klen) \
+	((seldi) << 29 | (seldo) << 28 | (seed) << 24 | (tdest) << 20 | (tid) << 16 | (hlen) << 8 | (klen))
 
 /* no resource management of units is performed */
 /* units are preassigned */
@@ -168,6 +190,7 @@ class _KVstore
 public:
 	typedef _Key key_type;
 	typedef _Tp mapped_type;
+	typedef unsigned int status_t;
 	typedef unsigned int psl_t;
 	typedef struct {
 		key_type key;
@@ -177,40 +200,51 @@ public:
 
 	slot_s *data_base; // data array base address
 	size_t data_len; // data array len
-	const size_t key_sz; // key size up to sizeof(key_type)
-	const size_t elem_sz; // element size sizeof(mapped_type)
-	const mapped_type null_value; // null value;
+	const key_type *key_base; // key array base address
+	size_t key_len; // key array length
+	size_t key_sz; // key size up to sizeof(key_type)
+	status_t *status_base; // status array base address
+	slot_s *scratch_base; // scratch array base address
+	mapped_type null_value; // null value;
 
 	size_t elements;
+	size_t elem_sz;
 	size_t hash_mask;
 	size_t topsearch;
-
-	_KVstore()
-	: key_sz(sizeof(key_type)),
-	  elem_sz(sizeof(mapped_type)),
-	  null_value(NULL)
-	{ }
 
 	/* setup key/value store */
 	/* This setup is called by the server (accelerator) & client (host) */
 	/* The slot memory was previously allocated from the system heap */
 
-	void _setup(void *data, size_t dlen)
+	void _setup(
+		void *data, size_t dlen,
+		const void *key, size_t klen, size_t ksize,
+		void *status, void *scratch
+		)
 	{
 		data_base = (slot_s *)data;
 		data_len = dlen;
+		key_base = (const key_type *)key;
+		key_len = klen;
+		key_sz = ksize;
+		status_base = (status_t *)status;
+		scratch_base = (slot_s *)scratch;
 		elements = 0;
+		elem_sz = sizeof(mapped_type);
 #if defined(BLOCK_HASH)
 		hash_mask = (dlen/MAX_PSL)-1;
 #else
 		hash_mask = dlen-1;
 #endif
 		topsearch = 0;
-#if defined(SERVER)
+		null_value = NULL;
+		// data_base and scratch are only used on the accelerator
 		if (data_base != NULL) {
-			cache_invalidate(data_base, sizeof(slot_s)*(dlen+MAX_SEARCH-1));
+			cache_invalidate(data_base, sizeof(slot_s)*(dlen+MAX_SEARCH-1)); // null on arm
 		}
-#endif
+		if (scratch != NULL) {
+			cache_invalidate(scratch, sizeof(slot_s)*MAX_PSL*klen); // null on arm
+		}
 	}
 
 	/* compute hash of key and form index */
@@ -226,167 +260,6 @@ public:
 		return hash & hash_mask;
 #endif
 	}
-
-	/* scan: return pointer to element if found */ // FIXME: comment
-
-	bool _scan(slot_s *slot, size_t imax, const key_type key, mapped_type &value)
-	{
-		size_t idx = 0;
-		/* search for key */
-#if defined(USE_STREAM) && defined(__microblaze__)
-		wdcc(&slot[idx]);
-#elif defined(USE_STREAM) && defined(__arm__)
-		mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
-		// dsb();
-#endif
-		while (slot[idx].probes && idx < imax) {
-			if (slot[idx].key == key) {
-				value = slot[idx].value;
-				return true; /* found */
-			}
-			idx++;
-#if defined(USE_STREAM) && defined(__microblaze__)
-			wdcc(&slot[idx]);
-#elif defined(USE_STREAM) && defined(__arm__)
-			// two slots (16 bytes) per cache line (32 bytes)
-			if ((idx & 1) == 0) {
-				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
-				// dsb();
-			}
-#endif
-		}
-		value = null_value;
-		return false;
-	}
-
-	/* get: return pointer to element if found */ // FIXME: comment
-
-	bool _get(const key_type key, mapped_type &value)
-	{
-		size_t idx = hash_idx(key);
-		size_t itop = idx + topsearch;
-		/* search for key */
-		while (data_base[idx].probes && idx < itop) {
-			if (data_base[idx].key == key) {
-				value = data_base[idx].value;
-				return true; /* found */
-			}
-			idx++;
-		}
-		value = null_value;
-		return false;
-	}
-
-	/* put: return pointer to element, allocate new slot if needed */ // FIXME: comment
-
-	bool _put(const key_type key, const mapped_type &value)
-	{
-		size_t idx = hash_idx(key);
-		size_t itop = idx + topsearch;
-		size_t imax = idx + MAX_SEARCH;
-		/* search for key */
-		while (data_base[idx].probes && idx < imax) {
-			if (data_base[idx].key == key) {
-				data_base[idx].value = value;
-#if defined(USE_STREAM)
-				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line? - no
-				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
-#endif // USE_STREAM
-				return true; /* found */
-			}
-			idx++;
-		}
-		/* add key */
-		if (idx < imax) {
-			data_base[idx].key = key;
-			data_base[idx].probes = 1;
-			data_base[idx].value = value;
-#if defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[idx], (unsigned)sizeof(slot_s));
-#endif // USE_STREAM
-			elements++;
-			if (++idx > itop) topsearch += idx-itop;
-			return false; /* not found, but added */
-		}
-		/* spill */
-		return false;
-	}
-
-	/* update1: return element and pointer to slot, allocate new slot if needed */
-	// TODO: improve performance if possible.
-#if 0
-	slot_s* _update1(const key_type key, mapped_type &value)
-	{
-		slot_s *slot = data_base + hash_idx(key);
-		slot_s *tops = slot + topsearch;
-		slot_s *maxs = slot + MAX_SEARCH;
-		/* search for key */
-		while (slot->probes && slot < maxs) {
-			if (slot->key == key) {
-				value = slot->value;
-				return slot; /* found */
-			}
-			slot++;
-		}
-		/* add key */
-		if (slot < maxs) {
-			slot->key = key;
-			slot->probes = 1;
-			value = slot->value;
-			elements++;
-			if (slot >= tops) topsearch += (slot-tops)+1;
-			return slot; /* not found, but added */
-		}
-		/* spill */
-		return nullptr;
-	}
-#else
-	slot_s* _update1(const key_type key, mapped_type &value)
-	{
-		size_t idx = hash_idx(key);
-		size_t itop = idx + topsearch;
-		size_t imax = idx + MAX_SEARCH;
-		/* search for key */
-		while (data_base[idx].probes && idx < imax) {
-			if (data_base[idx].key == key) {
-				value = data_base[idx].value;
-				return &data_base[idx]; /* found */
-			}
-			idx++;
-		}
-		/* add key */
-		if (idx < imax) {
-			data_base[idx].key = key;
-			data_base[idx].probes = 1;
-			value = data_base[idx].value;
-			elements++;
-			if (idx >= itop) topsearch += idx-itop+1;
-			return &data_base[idx]; /* not found, but added */
-		}
-		/* spill */
-		return nullptr;
-	}
-#endif
-
-	/* update2: update element in specified slot */
-	// If flush done by caller, slot_s needs to be exposed.
-
-	inline void _update2(slot_s *slot, const mapped_type &value)
-	{
-		if (slot->value != value || slot->probes == 1) {
-			slot->value = value;
-#if defined(USE_STREAM) && defined(__microblaze__)
-			// TODO: 
-#elif defined(USE_STREAM) && defined(__arm__)
-			// Xil_DCacheFlushLine((unsigned int)slot); // doesn't straddle cache line
-			// Xil_DCacheFlushRange((unsigned int)slot, (unsigned)sizeof(slot_s));
-			mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
-			// dsb(); Xil_Out32(XPS_L2CC_BASEADDR + XPS_L2CC_CACHE_CLEAN_PA_OFFSET, (unsigned int)slot);
-#endif // USE_STREAM
-		}
-	}
-
-public:
 
 #if defined(USE_HASH)
 
@@ -409,46 +282,156 @@ public:
 		/* so no action is needed to setup the data path */
 	}
 
+#else // USE_HASH
+
+	/* get: return pointer to element if found */
+
+	bool _get(const key_type key, mapped_type &value)
+	{
+		size_t idx = hash_idx(key);
+		size_t itop = idx + topsearch;
+		/* search for key */
+		while (data_base[idx].probes && idx < itop) {
+			// if (memcmp(&data_base[idx].key, &key, key_sz) == 0) {
+			if (data_base[idx].key == key) {
+				value = data_base[idx].value;
+				return true; /* found */
+			}
+			idx++;
+		}
+		value = null_value;
+		return false;
+	}
+
 #endif // USE_HASH
+
+	/* put: return pointer to element, allocate new slot if needed */
+
+	bool _put(const key_type key, const mapped_type &value)
+	{
+		size_t idx = hash_idx(key);
+		size_t itop = idx + topsearch;
+		size_t imax = idx + MAX_SEARCH;
+		/* search for key */
+		while (data_base[idx].probes && idx < imax) {
+			// if (memcmp(&data_base[idx].key, &key, key_sz) == 0) {
+			if (data_base[idx].key == key) {
+				data_base[idx].value = value;
+#if defined(USE_ACC)
+				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line - no?
+				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
+#endif // USE_ACC
+				return true; /* found */
+			}
+			idx++;
+		}
+		/* add key */
+		if (idx < imax) {
+			// memcpy(&data_base[idx].key, &key, key_sz);
+			data_base[idx].key = key;
+			data_base[idx].probes = 1;
+			data_base[idx].value = value;
+#if defined(USE_ACC)
+			Xil_DCacheFlushRange((unsigned int)&data_base[idx], (unsigned)sizeof(slot_s));
+#endif // USE_ACC
+			elements++;
+			if (++idx > itop) topsearch += idx-itop;
+			return false; /* not found, but added */
+		}
+		/* spill */
+#if 0
+		{ /* print out hash table free and used segments */
+			int free = 0;
+			int used = 0;
+			int max_contig_free = 0;
+			int max_contig_used = 0;
+			int ibeg = 0;
+			int contig = 0;
+			int umode = 0;
+			for (size_t i = 0; i < slots; i++) {
+				if (umode) {
+					if (data_base[i].probes != 0) {
+						contig++; used++;
+					} else {
+						free++;
+						if (contig > max_contig_used)
+							max_contig_used = contig;
+						printf("u ibeg:%d contig:%d\n", ibeg, contig);
+						ibeg = i;
+						contig = 1;
+						umode = 0;
+					}
+				} else {
+					if (data_base[i].probes == 0) {
+						contig++; free++;
+					} else {
+						used++;
+						if (contig > max_contig_free)
+							max_contig_free = contig;
+						printf("f ibeg:%d contig:%d\n", ibeg, contig);
+						ibeg = i;
+						contig = 1;
+						umode = 1;
+					}
+				}
+			}
+			printf("%c ibeg:%d contig:%d\n", (umode)?'u':'f', ibeg, contig);
+			printf("bidx:%zu eidx:%zu imax:%zu\n", imax - MAX_SEARCH, idx, imax);
+			printf("free:%d used:%d mcfree:%d mcused:%d\n", free, used, max_contig_free, max_contig_used);
+			printf("slots:%zu elements:%zu topsearch:%zu\n", slots, elements, topsearch);
+		}
+#endif
+#if !defined(SERVER) || !defined(__microblaze__)
+		fprintf(stderr, " -- hash table full, load factor:%f\n", (double)elements/data_len);
+		fprintf(stderr, " -- key:%010llX ibeg:%u itop:%u imax:%u idx:%u\n", key, (unsigned)hash_idx(key), (unsigned)itop, (unsigned)imax, (unsigned)idx);
+		fprintf(stderr, " -- elements:%u elem_sz:%u hash_mask:%X topsearch:%u\n", (unsigned)elements, (unsigned)elem_sz, (unsigned)hash_mask, (unsigned)topsearch);
+		fprintf(stderr, " -- data_len:%u key_len:%u key_sz:%u\n", (unsigned)data_len, (unsigned)key_len, (unsigned)key_sz);
+		fprintf(stderr, " --    data:%10p-%10p\n", data_base, data_base+data_len);
+		fprintf(stderr, " --     key:%10p-%10p\n", key_base, key_base+key_len);
+		fprintf(stderr, " --  status:%10p-%10p\n", status_base, status_base+key_len+1);
+		fprintf(stderr, " -- scratch:%10p-%10p\n", scratch_base, scratch_base+key_len*MAX_PSL);
+		exit(1);
+#endif
+		return false;
+	}
+
+public:
 
 	/* setup key/value store */
 	/* This setup is called by the client (host) */
 	/* The slot memory is allocated from the system heap */
 
-	void setup(size_t elements)
+	void setup(
+		size_t elements,
+		const void *key, size_t klen, size_t ksize,
+		void *status
+		)
 	{
-		slot_s *data;
+		slot_s *data, *scratch;
 		size_t dlen;
 		size_t slots;
 
 		// constraint: table length must be power of 2
 		for (dlen = 1; dlen < elements; dlen <<= 1);
 		slots = dlen+MAX_SEARCH-1;
-#if defined(USE_STREAM) && defined(__arm__)
-		{
-			char *ptr;
-			size_t size = CEIL((slots)*sizeof(slot_s), (1U<<20));
-			data = (slot_s*)memalign((1U<<20), size);
-			if ((size_t)data & ((1U<<20)-1)) fprintf(stderr, " -- error: table not aligned\n");
-			ptr = (char*)data;
-			while (size) {
-				Xil_SetTlbAttributes((INTPTR)ptr, 0x04de6);
-				ptr += (1U<<20);
-				size -= (1U<<20);
-			}
-		}
-#else
 		data = NALLOC(slot_s, slots);
-#endif
 		chk_alloc(data, sizeof(slot_s)*slots, "NALLOC data in setup()");
+		cache_invalidate(data, sizeof(slot_s)*slots);
 		memset(data, 0, sizeof(slot_s)*slots);
-#if defined(USE_STREAM)
+#if defined(USE_ACC)
 		// flush all caches on host for data range
-		// FIXME: can't use cache_flush(ptr, size) because it uses L1D variant
 		Xil_DCacheFlushRange((unsigned int)data, (unsigned)sizeof(slot_s)*slots);
-#endif // USE_STREAM
+#endif // USE_ACC
 
-		_setup(data, dlen);
+// #if defined(USE_HASH)
+		// scratch = SP_NALLOC(slot_s, MAX_PSL*klen); // TODO: use MAX_SEARCH?
+		// chk_alloc(scratch, sizeof(slot_s)*MAX_PSL*klen, "SP_NALLOC scratch in setup()");
+		// Xil_DCacheInvalidateRange((unsigned int)scratch, (unsigned)sizeof(slot_s)*MAX_PSL*klen);
+// #else // USE_HASH
+		scratch = NULL;
+// #endif // USE_HASH
+
+		_setup(data, dlen, key, klen, ksize, status, scratch);
 		// Hash unit configuration is done here (by the client/host) to avoid
 		// duplication, which would occur if hash_config() was inside
 		// _KVstore<K,V>::_setup(). In that case, it would be called from
@@ -459,30 +442,76 @@ public:
 	}
 
 	/* fill and drain assumptions */
-	/* buffers are aligned */
+	/* buf, buf_sz & offset are a multiple of elem_sz (view buffer is aligned) */
+	/* buf_sz does not overreach end of view */
+	/* offset is zero */
 
 #if defined(USE_HASH)
 
-	/* fill buffer from store based on keys */
-	/* TODO: make getfsl(), putfsl() version of fill() */
+	/* scan: return pointer to element if found */
 
-	void fill(void *buf, size_t len, const void *key, size_t stride)
+	bool _scan(slot_s *slot, size_t imax, const key_type key, mapped_type &value)
 	{
+		size_t idx = 0;
+		/* search for key */
+#if defined(SERVER) && defined(__microblaze__)
+		wdcc(&slot[idx]);
+#elif defined(DIRECT) && defined(__arm__)
+		mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
+		// dsb();
+#endif
+		while (slot[idx].probes && idx < imax) {
+			// if (memcmp(&slot[idx].key, &key, key_sz) == 0) {
+			if (slot[idx].key == key) {
+				value = slot[idx].value;
+				return true; /* found */
+			}
+			idx++;
+#if defined(SERVER) && defined(__microblaze__)
+			wdcc(&slot[idx]);
+#elif defined(DIRECT) && defined(__arm__)
+			// two slots (16 bytes) per cache line (32 bytes)
+			if ((idx & 1) == 0) {
+				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
+				// dsb();
+			}
+#endif
+		}
+		value = null_value;
+		return false;
+	}
+
+	/* fill buffer starting from view offset */
+
+	void fill(void *buf, size_t buf_sz, void *key, size_t stride) // NOTE: key and stride args
+	{
+		// size_t idx = 0; // offset / elem_sz;
+		// mapped_type *bptr = (mapped_type*)buf; /* pointer to current view element */
+		unsigned n = buf_sz/elem_sz;
 		unsigned reg[7];
+#if !defined(__microblaze__)
+		tick_t tA, tB, tC, tD, tE;
+		extern unsigned long long taccel, tscan, tcacheA;
+#endif
+
+		// if (n > key_len) n = key_len;
+		tget(tA);
+		// cache_flush(); /* flush data_base before LSU access */
+		tget(tB);
 
 		/* LSU2 contiguous store (with stride command) */
-		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_CMD(1,LSU_smove); /* reqstat=1, command=smove */
-		reg[3] = (unsigned)buf;        /* address */
-		reg[4] = sizeof(mapped_type);  /* size */
-		reg[5] = sizeof(mapped_type);  /* increment */
-		reg[6] = len;                  /* repetitions */
+		reg[1] = 0x00000000;          /* clear status */
+		reg[2] = 0x80 | CMD_smove;    /* request status, smove command */
+		reg[3] = (unsigned)buf;       /* address */
+		reg[4] = sizeof(mapped_type); /* size */
+		reg[5] = sizeof(mapped_type); /* increment */
+		reg[6] = n;                   /* repetitions */
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 6); // go
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 6); // debug
 
 		/* LSU2 indexed load */
 		reg[1] = 0x00000000;             /* clear status */
-		reg[2] = LSU_CMD(0,LSU_index);   /* reqstat=0, command=index */
+		reg[2] = CMD_index;              /* index command */
 		reg[3] = (unsigned)data_base;    /* base address */
 		reg[4] = sizeof(slot_s)*MAX_PSL; /* size */ /* TODO: */
 		/*reg[?] = sizeof(slot_s)*MAX_PSL;*/ /* trans size, repetitions */ /* TODO: reg 4 is index */
@@ -490,46 +519,84 @@ public:
 
 		/* start streaming keys */
 		/* LSU1 contiguous load (with strided move) */
-		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_CMD(0,LSU_smove); /* reqstat=0, command=smove */
-		reg[3] = (unsigned)key;        /* address */
-		reg[4] = sizeof(key_type);     /* size */
-		reg[5] = stride;               /* increment */
-		reg[6] = len;                  /* repetitions */
+		reg[1] = 0x00000000;         /* clear status */
+		reg[2] = CMD_smove;          /* reqstat=0, command=smove */
+		reg[3] = (unsigned)key;      /* address */
+		reg[4] = sizeof(key_type);   /* size */
+		reg[5] = stride;             /* increment */
+		reg[6] = n;                  /* repetitions */
 		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 6); // go
 		// aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 0, 0, reg, 6); // debug
 
+// dump_reg(); exit(1);
 		/* receive store status */
 		stream_recv(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
+		tget(tC);
+
+		/* scan scratch area for matches */
+		// TODO: move to loop, inside _scan?
+		// TODO: compare performance with entire data cache invalidate
+		// cache_invalidate(scratch_base, sizeof(slot_s)*MAX_PSL*n);
+		tget(tD);
+		// status_base[0] = 0;
+// #if defined(DIRECT) && defined(__arm__)
+		// mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select L1 Data cache in CSSR */
+// #endif
+		// while (idx < n) {
+			// if (!_scan(&scratch_base[idx*MAX_PSL], topsearch, key_base[idx], bptr[idx])) {
+				// status_base[++status_base[0]] = idx;
+			// }
+			// idx++;
+		// }
+		tget(tE);
+#if !defined(__microblaze__)
+		tinc(tcacheA, tdiff(tB,tA) + tdiff(tD,tC));
+		tinc(taccel, tdiff(tC,tB));
+		tinc(tscan, tdiff(tE,tD));
+#endif
 	}
 
 #else // USE_HASH
 
-	/* fill buffer from store based on keys */
+	/* fill buffer starting from view offset */
 
-	void fill(void *buf, size_t len, const void *key, size_t stride)
+	void fill(void *buf, size_t buf_sz, void *key, size_t stride) // NOTE: key and stride args
 	{
-		mapped_type *bptr = (mapped_type*)buf; /* pointer to current buffer element */
+		size_t idx = 0; // offset / elem_sz;
+		mapped_type *bptr = (mapped_type*)buf; /* pointer to current view element */
 		unsigned char *kptr = (unsigned char *)key; /* pointer to current key */
+		unsigned n = buf_sz/elem_sz;
 
-		while (len--) {
-			_get(*(const key_type *)kptr, *bptr++);
+		// if (n > key_len) n = key_len;
+		status_base[0] = 0;
+		while (idx < n) {
+			if (!_get(*(const key_type *)kptr, bptr[idx])) {
+				status_base[++status_base[0]] = idx;
+			}
 			kptr += stride;
+			idx++;
 		}
 	}
 
 #endif // USE_HASH
 
-	/* drain buffer to store based on keys */
+	/* drain buffer starting from view offset */
 
-	void drain(void *buf, size_t len, const void *key, size_t stride)
+	void drain(void *buf, size_t buf_sz, void *key, size_t stride) // NOTE: key and stride args
 	{
-		mapped_type *bptr = (mapped_type*)buf; /* pointer to current buffer element */
+		size_t idx = 0; // offset / elem_sz;
+		mapped_type *bptr = (mapped_type*)buf; /* pointer to current view element */
 		unsigned char *kptr = (unsigned char *)key; /* pointer to current key */
+		unsigned n = buf_sz/elem_sz;
 
-		while (len--) {
-			_put(*(const key_type *)kptr, *bptr++);
+		// if (n > key_len) n = key_len;
+		status_base[0] = 0;
+		while (idx < n) {
+			if (!_put(*(const key_type *)kptr, bptr[idx])) {
+				status_base[++status_base[0]] = idx;
+			}
 			kptr += stride;
+			idx++;
 		}
 	}
 
@@ -564,13 +631,14 @@ class KVstore
 
 	typedef struct {
 		void *data; size_t dlen;
+		const void *key; size_t klen; size_t ksize;
+		void *status; void *scratch;
 	} setup_args;
 
 	typedef struct {
 		void *buf;
-		size_t len;
-		void *key;
-		size_t stride;
+		size_t buf_sz;
+		size_t offset;
 	} buf_args;
 
 	typedef struct {
@@ -593,10 +661,8 @@ public:
 		// direct with LSU support
 		// client, start remote server - separate process, doesn't share memory
 		// client, start thread server
-#if defined(USE_LSU)
+#if defined(USE_LSU) || defined(USE_STREAM)
 		lsu_setport(&port, LSU0_PN, THIS_PN);
-#elif defined(USE_STREAM)
-		aport_set(&port);
 #endif
 #if defined(USE_DMAC)
 		dmac_init(XPAR_XDMAPS_1_DEVICE_ID);
@@ -611,22 +677,22 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		size_t reg[7];
 
 		for (;;) {
 			getfsl_interruptible(*(unsigned *)&hdr, 0); getfsl(hdr.cmd, 0);
 			switch (hdr.cmd) {
 			case C_SETUP:
-				getfsl(reg[0], 0); cgetfsl(reg[1], 0);
-				_KVstore<K,V>::_setup((void *)reg[0], reg[1]);
+				getfsl(reg[0], 0); getfsl(reg[1], 0); getfsl(reg[2], 0); getfsl(reg[3], 0); getfsl(reg[4], 0); getfsl(reg[5], 0); cgetfsl(reg[6], 0);
+				_KVstore<K,V>::_setup((void *)reg[0], reg[1], (const void *)reg[2], reg[3], reg[4], (void *)reg[5], (void *)reg[6]);
 				break;
 			case C_FILL:
-				getfsl(reg[0], 0); getfsl(reg[1], 0); getfsl(reg[2], 0); cgetfsl(reg[3], 0);
-				_KVstore<K,V>::fill((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
+				getfsl(reg[0], 0); getfsl(reg[1], 0); cgetfsl(reg[2], 0);
+				_KVstore<K,V>::fill((void *)reg[0], reg[1], reg[2]);
 				break;
 			case C_DRAIN:
-				getfsl(reg[0], 0); getfsl(reg[1], 0); getfsl(reg[2], 0); cgetfsl(reg[3], 0);
-				_KVstore<K,V>::drain((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
+				getfsl(reg[0], 0); getfsl(reg[1], 0); cgetfsl(reg[2], 0);
+				_KVstore<K,V>::drain((void *)reg[0], reg[1], reg[2]);
 				break;
 			case C_WAIT:
 				cgetfsl(reg[0], 0);
@@ -662,22 +728,22 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		size_t reg[7];
 
 		for (;;) {
 			stream_recv(&port, &hdr, sizeof(hdr), F_BEGP);
 			switch (hdr.cmd) {
 			case C_SETUP:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
-				_KVstore<K,V>::_setup((void *)reg[0], reg[1]);
+				stream_recv(&port, reg, sizeof(size_t)*7, F_ENDP);
+				_KVstore<K,V>::_setup((void *)reg[0], reg[1], (const void *)reg[2], reg[3], reg[4], (void *)reg[5], (void *)reg[6]);
 				break;
 			case C_FILL:
-				stream_recv(&port, reg, sizeof(size_t)*4, F_ENDP);
-				_KVstore<K,V>::fill((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
+				stream_recv(&port, reg, sizeof(size_t)*3, F_ENDP);
+				_KVstore<K,V>::fill((void *)reg[0], reg[1], reg[2]);
 				break;
 			case C_DRAIN:
-				stream_recv(&port, reg, sizeof(size_t)*4, F_ENDP);
-				_KVstore<K,V>::drain((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
+				stream_recv(&port, reg, sizeof(size_t)*3, F_ENDP);
+				_KVstore<K,V>::drain((void *)reg[0], reg[1], reg[2]);
 				break;
 			case C_WAIT:
 				stream_recv(&port, reg, sizeof(size_t)*1, F_ENDP);
@@ -717,13 +783,17 @@ public:
 
 	/* setup key/value store */
 
-	void setup(size_t elements)
+	void setup(
+		size_t elements,
+		const void *key, size_t klen, size_t ksize,
+		void *status
+		)
 	{
 		header hdr;
 		header res;
 		setup_args args;
 
-		_KVstore<K,V>::setup(elements);
+		_KVstore<K,V>::setup(elements, key, klen, ksize, status);
 		hdr.tdest = MCU0_ID;
 		hdr.tid = THIS_ID;
 		hdr.tuser = 0;
@@ -732,14 +802,19 @@ public:
 
 		args.data = _KVstore<K,V>::data_base;
 		args.dlen = _KVstore<K,V>::data_len;
+		args.key = key;
+		args.klen = klen;
+		args.ksize = ksize;
+		args.status = status;
+		args.scratch = _KVstore<K,V>::scratch_base;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
 		stream_recv(&port, &res, sizeof(res), F_BEGP|F_ENDP);
 	}
 
-	/* fill buffer from store based on keys */
+	/* fill buffer starting from view offset */
 
-	void fill(void *buf, size_t len, void *key, size_t stride)
+	void fill(void *buf, size_t buf_sz, size_t offset)
 	{
 		header hdr;
 		header res;
@@ -752,17 +827,16 @@ public:
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
 		args.buf = buf;
-		args.len = len;
-		args.key = key;
-		args.stride = stride;
+		args.buf_sz = buf_sz;
+		args.offset = offset;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
 		stream_recv(&port, &res, sizeof(res), F_BEGP|F_ENDP);
 	}
 
-	/* drain buffer to store based on keys */
+	/* drain buffer starting from view offset */
 
-	void drain(void *buf, size_t len, void *key, size_t stride)
+	void drain(void *buf, size_t buf_sz, size_t offset)
 	{
 		header hdr;
 		header res;
@@ -776,9 +850,8 @@ public:
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
 		args.buf = buf;
-		args.len = len;
-		args.key = key;
-		args.stride = stride;
+		args.buf_sz = buf_sz;
+		args.offset = offset;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
 		stream_recv(&port, &res, sizeof(res), F_BEGP);

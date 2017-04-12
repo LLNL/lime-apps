@@ -8,10 +8,8 @@
 #include "stream.h"
 #include "xstatus.h"
 
+
 #ifdef __microblaze__
-
-#include "fsl.h"
-
 
 int stream_init(stream_t *port, unsigned id)
 {
