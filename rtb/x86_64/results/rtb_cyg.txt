@@ -457,3 +457,39 @@ lookups:109653270 hits:36118031 32.94%
 
 # # # # # # # # # # Uses STL # # # # # # # # # #
 
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+
+lloyd23@OUREA /cygdrive/c/Users/lloyd23/xwork/apps/rtb/x86_64
+$ ./rtb -p -e32Mi -l.19 -r$HOME/bio/SRR000550.fa -w8Mi -h.90 -z.99
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+read.......
+Insert count: 7184442
+Insert  rate: 3236270.121839 ops/sec
+Bases   rate: 1751762.744900 bp/sec
+Run     time: 4.399956 sec
+Oper.   time: 2.179980 sec
+Insert  time: 2.219976 sec
+gather stats...
+size: 6405649
+load_factor (elem): 0.190007
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.549995 sec
+calc zeta... 17.544100
+generate misses...
+generate hits...
+shuffle keys...
+workload...
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  rate: 15252153.201393 ops/sec
+Run     time: 0.569994 sec
+Oper.   time: 0.019999 sec
+Lookup  time: 0.549995 sec

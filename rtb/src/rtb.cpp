@@ -8,10 +8,13 @@ $Log: $
 
 #define ALIGN_SZ 256
 #define _FILE_OFFSET_BITS 64
+//#define NDEBUG
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free, exit, rand, atoi, atof, strtoul */
 #include <ctype.h> /* toupper, tolower, isalpha, isspace, isdigit, isgraph */
 #include <string.h> /* strcmp, strlen, memset, memcmp */
+#include <math.h> /* pow, ceil */
+#include <assert.h> /* assert */
 
 #include "fasta.h"
 #include "path.h"
@@ -26,18 +29,23 @@ $Log: $
 #include "block_map.h"
 
 // Arguments when STANDALONE
-// #define ARGS (char*)"-ab"
+#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.05", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
+// #define ARGS (char*)"-cdp", (char*)"-e32Mi", (char*)"-l.20"
 // #define ARGS (char*)"-e1K", (char*)"-k16", (char*)"-rtestdb.fa", (char*)"-qtestqr.fa"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.60", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
-#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.19", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-a", (char*)"-qsrr_sh.fa"
 // #define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qamr_cur.fa"
 // #define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qsrr_sh1.fa"
 
 #define DEFAULT_ENT 100000
-#define DEFAULT_KLEN 18
 #define DEFAULT_LOAD 0.95
-#define DEFAULT_BLOCK_LSZ 10 // log 2 size
+#define DEFAULT_BLOCK_LSZ 10 /* log 2 size */
+#define DEFAULT_KLEN 18
+#define DEFAULT_HITR 0.98
+#define DEFAULT_SKEW 0.0
+#define DEFAULT_WORK 0
 
 #define CFLAG 0x01
 #define DFLAG 0x02
@@ -60,17 +68,26 @@ typedef unsigned int sid_t;
 typedef unsigned long ulong_t;
 
 int flags; /* argument flags */
+unsigned earg = DEFAULT_ENT; /* maximum entries (keys) */
 float larg = DEFAULT_LOAD; /* load factor */
-unsigned int earg = DEFAULT_ENT; /* maximum entries (keys) */
-int karg = DEFAULT_KLEN; /* k-mer length */
 unsigned barg = 1U<<DEFAULT_BLOCK_LSZ; /* buffer block length */
+int karg = DEFAULT_KLEN; /* k-mer length */
+float harg = DEFAULT_HITR; /* hit ratio */
+float zarg = DEFAULT_SKEW; /* zipf skew */
 char *qarg = NULL; /* query file name (in) */
 char *rarg = NULL; /* reference file name (in) */
+char *sarg = NULL; /* saved workload file name (out) */
+unsigned warg = DEFAULT_WORK; /* workload length */
 #if defined(ENABLE_PLOT)
 int xarg = 0; /* plot x range */
 char *garg = NULL; /* plot command file name (out) */
 char *targ = NULL; /* plot terminal file name (out) */
 #endif // ENABLE_PLOT
+
+/* these are global to avoid overhead at runtime on the stack */
+tick_t t0, t1;
+tick_t start, finish;
+unsigned long long tinsert, tlookup, toper, trun;
 
 // TODO: find a better place for these globals
 
@@ -78,85 +95,142 @@ char *targ = NULL; /* plot terminal file name (out) */
 XAxiPmon apm;
 #endif // STATS || TRACE
 
+// TODO: consider using std::conditional<>::type for result type
+#if defined(MULTIMAP)
 typedef block_multimap<kmer_t,sid_t> kdb_t;
+#if defined(USE_ACC)
+typedef typename kdb_t::mapped_type* result_type;
+inline bool is_valid(const result_type &v) {return v != nullptr;}
+#else // USE_ACC
+typedef std::pair<typename kdb_t::iterator, typename kdb_t::iterator> result_type;
+inline bool is_valid(const result_type &v) {return v.first != typename kdb_t::iterator(nullptr);}
+#endif // USE_ACC
+
+#else // MULTIMAP
+typedef block_map<kmer_t,sid_t> kdb_t;
+#if 1 || defined(USE_ACC)
+typedef typename kdb_t::mapped_type result_type;
+inline bool is_valid(const result_type &v) {return v != 0;}
+#else // USE_ACC
+typedef typename kdb_t::iterator result_type;
+inline bool is_valid(const result_type &v) {return v != typename kdb_t::iterator(nullptr);}
+#endif // USE_ACC
+
+#endif // MULTIMAP
+
+typedef typename kdb_t::key_type key_type;
+typedef typename kdb_t::mapped_type mapped_type;
+typedef typename kdb_t::value_type value_type;
 typedef typename kdb_t::size_type size_type;
+typedef typename kdb_t::const_local_iterator const_local_iterator;
+typedef std::pair<key_type, mapped_type> kvpair_type;
+
 kdb_t kdb;
 
 #define LOAD_COUNT kdb.size()
+#define LOAD_MAX (kdb.bucket_count() * larg + 0.5)
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+
+#if 0
+
+#define RAND_VAR \
+	key_type mask = (~(key_type)0 >> (sizeof(key_type)*8-karg*2))
+
+#define RAND_SEED(n) \
+	srand(n)
+
+#define RAND_GEN \
+	((((key_type)rand() << sizeof(int)*8) ^ rand()) & mask)
+
+#else
+
+#include <random>
+
+#define RAND_VAR \
+	std::mt19937_64 generator; \
+	std::uniform_int_distribution<key_type> \
+	distribution(0,~(key_type)0 >> (sizeof(key_type)*8-karg*2))
+
+#define RAND_SEED(n) \
+	generator.seed(n)
+
+#define RAND_GEN \
+	distribution(generator)
+
+#endif
 
 struct {
-	size_t length; /* length of buffers */
-	size_t lcount; /* count of items in lookup buffers */
-	size_t acount; /* count of items in add buffer */
+	size_type length; /* length of buffers */
+	size_type lcount; /* count of items in lookup buffers */
+	size_type acount; /* count of items in add buffer */
 
-	ulong_t lookups; /* number of lookups */
 	ulong_t hits; /* number of search hits */
 
-	typedef typename kdb_t::key_type key_t;
-#if defined(USE_ACC)
-	typedef typename kdb_t::mapped_type* value_t;
-	inline bool is_valid_value(const value_t &v) {return v != nullptr;}
-#else // USE_ACC
-	typedef std::pair<typename kdb_t::iterator, typename kdb_t::iterator> value_t;
-	inline bool is_valid_value(const value_t &v) {return v.first != kdb.end();}
-#endif // USE_ACC
-	typedef std::pair<typename kdb_t::key_type, typename kdb_t::mapped_type> kvpair_t;
-	// typedef typename kdb_t::value_type kvpair_t; // has const key_type
-
-	key_t* key;
-	value_t* value;
-	kvpair_t* kvpair;
+	key_type *keys;
+	result_type *result;
+	kvpair_type *kvpair;
 
 	void clear_counts(void)
 	{
-		lookups = 0;
 		hits = 0;
 	}
 
-	void init(size_t buf_len)
+	void init(size_type buf_len)
 	{
 		length = buf_len;
 		acount = 0;
 		lcount = 0;
 
-		key = SP_NALLOC(key_t, length); // used on lookup
-		chk_alloc(key, sizeof(key_t)*length, "SP_NALLOC key in init()");
+		keys = SP_NALLOC(key_type, length); /* used on lookup */
+		chk_alloc(keys, sizeof(key_type)*length, "SP_NALLOC keys in init()");
 
-		value = SP_NALLOC(value_t, length); // used on lookup
-		chk_alloc(value, sizeof(value_t)*length, "SP_NALLOC value in init()");
+		result = SP_NALLOC(result_type, length); /* used on lookup */
+		chk_alloc(result, sizeof(result_type)*length, "SP_NALLOC result in init()");
 
-		kvpair = SP_NALLOC(kvpair_t, length); // used on add
-		chk_alloc(kvpair, sizeof(kvpair_t)*length, "SP_NALLOC kvpair in init()");
+		kvpair = SP_NALLOC(kvpair_type, length); /* used on add */
+		chk_alloc(kvpair, sizeof(kvpair_type)*length, "SP_NALLOC kvpair in init()");
 
 	}
 
 #if defined(NO_BUFFER)
 
-	inline void lookup(kmer_t kmer)
+	inline void lookup(key_type key)
 	{
-		lookups++;
-		if (kdb.equal_range(kmer).first != kdb.end()) hits++;
+		tget(t0);
+#if defined(MULTIMAP)
+		result_type res = kdb.equal_range(key);
+#else
+		result_type res = kdb.find(key);
+#endif
+		tget(t1);
+		tinc(tlookup, tdiff(t1,t0));
+#if 1 // TODO: time without
+		if (is_valid(res)) hits++;
+#endif
 	}
 
-	inline void add(kmer_t kmer, sid_t sid)
+	inline void add(key_type key, mapped_type mval)
 	{
-		kdb.insert({kmer, sid});
+		tget(t0);
+		kdb.insert({key, mval});
+		tget(t1);
+		tinc(tinsert, tdiff(t1,t0));
 	}
 
 #else
 
 	// TODO: use std::container to emplace
-	inline void lookup(kmer_t kmer)
+	inline void lookup(key_type key)
 	{
 		if (lcount == length) flush_lookup();
-		key[lcount++] = kmer;
+		keys[lcount++] = key;
 	}
 
 	// TODO: use std::container to emplace
-	inline void add(kmer_t kmer, sid_t sid)
+	inline void add(key_type key, mapped_type mval)
 	{
 		if (acount == length) flush_add();
-		kvpair[acount++] = {kmer, sid};
+		kvpair[acount++] = {key, mval};
 	}
 
 #endif // NO_BUFFER
@@ -164,11 +238,17 @@ struct {
 	void flush_lookup(void)
 	{
 		if (lcount == 0) return;
-		kdb.equal_range(value, key, lcount);
-		lookups += lcount;
+		tget(t0);
+#if defined(MULTIMAP)
+		kdb.equal_range(result, keys, lcount);
+#else
+		kdb.find(result, keys, lcount);
+#endif
+		tget(t1);
+		tinc(tlookup, tdiff(t1,t0));
 #if 1 // TODO: time without
-		for (size_t i = 0; i < lcount; i++) {
-			if (is_valid_value(value[i])) hits++;
+		for (size_type i = 0; i < lcount; i++) {
+			if (is_valid(result[i])) hits++;
 		}
 #endif
 		lcount = 0;
@@ -177,8 +257,31 @@ struct {
 	void flush_add(void)
 	{
 		if (acount == 0) return;
+		tget(t0);
 		kdb.insert(reinterpret_cast<typename kdb_t::const_pointer>(kvpair), acount);
+		tget(t1);
+		tinc(tinsert, tdiff(t1,t0));
 		acount = 0;
+	}
+
+	void block_lookup(key_type *keys, size_type blen)
+	{
+		for (size_type i = 0; i < blen; i += length) {
+			size_type count = MIN(length, blen-i);
+			tget(t0);
+#if defined(MULTIMAP)
+			kdb.equal_range(result, keys+i, count);
+#else
+			kdb.find(result, keys+i, count);
+#endif
+			tget(t1);
+			tinc(tlookup, tdiff(t1,t0));
+#if 1 // TODO: time without
+			for (size_type j = 0; j < count; j++) {
+				if (is_valid(result[j])) hits++;
+			}
+#endif
+		}
 	}
 
 } kbuf;
@@ -194,7 +297,9 @@ void ktob(kmer_t kmer, int klen, char *buf)
 		kmer >>= 1;
 	}
 	buf[e] = '\0';
+	assert(kmer == 0);
 }
+#endif
 
 static
 void kton(kmer_t kmer, int klen, char *buf)
@@ -207,6 +312,16 @@ void kton(kmer_t kmer, int klen, char *buf)
 		kmer >>= 2;
 	}
 	buf[klen] = '\0';
+	assert(kmer == 0);
+}
+
+#if 0
+static
+void kputs(kmer_t kmer, int klen)
+{
+	char buf[64];
+	kton(kmer, klen, buf);
+	puts(buf);
 }
 #endif
 
@@ -238,12 +353,12 @@ int seq_lookup(char *str, int slen, int klen)
 	int j; /* position of last nucleotide in sequence */
 	int k = 0; /* count of contiguous valid characters */
 	int highbits = (klen-1)*2; /* shift needed to reach highest k-mer bits */
-	kmer_t mask = ((kmer_t)1 << klen*2)-1; /* bits covering encoded k-mer */
+	kmer_t mask = (~(kmer_t)0 >> (sizeof(kmer_t)*8-klen*2)); /* bits covering encoded k-mer */
 	kmer_t forward = 0; /* forward k-mer */
 	kmer_t reverse = 0; /* reverse k-mer */
 	kmer_t kmer; /* canonical k-mer */
 
-	// fprintf(stderr, "str:%s\n", str);
+	// fprintf(stderr, "str: %s\n", str);
 	for (j = 0; j < slen; j++) {
 		register int t;
 		ENCODE(t, str[j], k);
@@ -255,9 +370,9 @@ int seq_lookup(char *str, int slen, int klen)
 			{
 				char buf[64];
 				kton(forward, klen, buf);
-				fprintf(stderr, "forward:%s pos:%d\n", buf, j-klen+1);
+				fprintf(stderr, "forward: %s pos: %d\n", buf, j-klen+1);
 				kton(reverse, klen, buf);
-				fprintf(stderr, "reverse:%s pos:%d\n", buf, slen-j-1);
+				fprintf(stderr, "reverse: %s pos: %d\n", buf, slen-j-1);
 			}
 #endif
 			kmer = (forward < reverse) ? forward : reverse;
@@ -277,12 +392,12 @@ int seq_add(char *str, int slen, int klen, int sid)
 	int j; /* position of last nucleotide in sequence */
 	int k = 0; /* count of contiguous valid characters */
 	int highbits = (klen-1)*2; /* shift needed to reach highest k-mer bits */
-	kmer_t mask = ((kmer_t)1 << klen*2)-1; /* bits covering encoded k-mer */
+	kmer_t mask = (~(kmer_t)0 >> (sizeof(kmer_t)*8-klen*2)); /* bits covering encoded k-mer */
 	kmer_t forward = 0; /* forward k-mer */
 	kmer_t reverse = 0; /* reverse k-mer */
 	kmer_t kmer; /* canonical k-mer */
 
-	// fprintf(stderr, "str:%s\n", str);
+	// fprintf(stderr, "str: %s\n", str);
 	for (j = 0; j < slen; j++) {
 		register int t;
 		ENCODE(t, str[j], k);
@@ -294,9 +409,9 @@ int seq_add(char *str, int slen, int klen, int sid)
 			{
 				char buf[64];
 				kton(forward, klen, buf);
-				fprintf(stderr, "forward:%s pos:%d\n", buf, j-klen+1);
+				fprintf(stderr, "forward: %s pos: %d\n", buf, j-klen+1);
 				kton(reverse, klen, buf);
-				fprintf(stderr, "reverse:%s pos:%d\n", buf, slen-j-1);
+				fprintf(stderr, "reverse: %s pos: %d\n", buf, slen-j-1);
 			}
 #endif
 			kmer = (forward < reverse) ? forward : reverse;
@@ -307,6 +422,19 @@ int seq_add(char *str, int slen, int klen, int sid)
 		}
 	}
 	return kcnt;
+}
+
+static unsigned long atoulk(const char *s)
+{
+	char *kptr;
+	unsigned long num = strtoul(s, &kptr, 0);
+	unsigned int k = (isalpha(kptr[0]) && toupper(kptr[1]) == 'I') ? 1024 : 1000;
+	switch (toupper(*kptr)) {
+	case 'K': num *= k; break;
+	case 'M': num *= k*k; break;
+	case 'G': num *= k*k*k; break;
+	}
+	return num;
 }
 
 
@@ -324,24 +452,15 @@ int main(int argc, char *argv[])
 	host::cache_init();
 	MONITOR_INIT
 #if defined(USE_ACC)
-	kdb.acc.wait(); // wait for accelerator initialization
+	kdb.acc.wait(); /* wait for accelerator initialization */
 #endif // USE_ACC
 	while (--argc > 0 && (*++argv)[0] == '-')
 		for (s = argv[0]+1; *s; s++)
 			switch (*s) {
-			/* * * * * storage options * * * * */
+			/* * * * * parameters * * * * */
 			case 'e':
-				if (isdigit(s[1])) {
-					char *eptr;
-					unsigned int k;
-					earg = strtoul(s+1, &eptr, 0);
-					k = (isalpha(eptr[0]) && toupper(eptr[1]) == 'I') ? 1024 : 1000;
-					switch (toupper(*eptr)) {
-					case 'K': earg *= k; break;
-					case 'M': earg *= k*k; break;
-					case 'G': earg *= k*k*k; break;
-					}
-				} else nok = 1;
+				if (isdigit(s[1])) earg = atoulk(s+1);
+				else nok = 1;
 				s += strlen(s+1);
 				break;
 			case 'l':
@@ -349,27 +468,34 @@ int main(int argc, char *argv[])
 				else nok = 1;
 				s += strlen(s+1);
 				break;
-			case 'v':
-				barg = (1U << atoi(s+1));
-				if (barg < 2) {
-					fprintf(stderr, "block size must be 2 or greater.\n");
-					nok = true;
-				}
-				break;
-			case 'p':
-				flags |= PFLAG;
-				break;
-			/* * * * * input options * * * * */
-			case 'c':
-				flags |= CFLAG;
-				break;
-			case 'd':
-				flags |= DFLAG;
+			case 'b':
+				if (isdigit(s[1])) barg = (1U << atoi(s+1));
+				else nok = 1;
 				break;
 			case 'k':
 				if (isdigit(s[1])) karg = atoi(s+1);
 				else nok = 1;
 				s += strlen(s+1);
+				break;
+			case 'h':
+				if (s[1] == '.' || isdigit(s[1])) harg = atof(s+1);
+				else nok = 1;
+				s += strlen(s+1);
+				break;
+			case 'z':
+				if (s[1] == '.' || isdigit(s[1])) zarg = atof(s+1);
+				else nok = 1;
+				s += strlen(s+1);
+				break;
+			case 'p':
+				flags |= PFLAG;
+				break;
+			/* * * * * operations * * * * */
+			case 'c':
+				flags |= CFLAG;
+				break;
+			case 'd':
+				flags |= DFLAG;
 				break;
 			case 'q':
 				qarg = s+1;
@@ -377,6 +503,15 @@ int main(int argc, char *argv[])
 				break;
 			case 'r':
 				rarg = s+1;
+				s += strlen(s+1);
+				break;
+			case 's':
+				sarg = s+1;
+				s += strlen(s+1);
+				break;
+			case 'w':
+				if (isdigit(s[1])) warg = atoulk(s+1);
+				else nok = 1;
 				s += strlen(s+1);
 				break;
 			/* * * * * output options * * * * */
@@ -402,19 +537,33 @@ int main(int argc, char *argv[])
 				break;
 			}
 
+	if (barg < 2) {
+		fprintf(stderr, " -- block length must be 2 or greater.\n");
+		nok = 1;
+	}
+	if ((unsigned)karg*2 > sizeof(kmer_t)*8) {
+		fprintf(stderr, " -- k-mer length must be %lu or less.\n", (ulong_t)sizeof(kmer_t)*4);
+		nok = 1;
+	}
+	// TODO: bounds check larg and harg
 	if (nok || argc > 0) { // (argc > 0 && *argv[0] == '?')
-		fprintf(stderr, "Usage: rtb -cdp -e<int> -l<float> -b<int> -k<int> -r<in_file> -q<in_file>\n");
+		fprintf(stderr, "Usage: rtb {-flag} {-option<arg>} (example: rtb -cp -e16Mi -l.20)\n");
+		fprintf(stderr, "      ---------- parameters ----------\n");
 		fprintf(stderr, "  -e  max entries (keys) <int>, default %u\n", DEFAULT_ENT);
 		fprintf(stderr, "  -l  load factor <float>, default %.4f\n", DEFAULT_LOAD);
-		fprintf(stderr, "  -b  block length 2^n, default: n=%u\n", DEFAULT_BLOCK_LSZ);
+		fprintf(stderr, "  -b  block length 2^n <int>, default: n=%u\n", DEFAULT_BLOCK_LSZ);
+		fprintf(stderr, "  -k  k-mer length <int>, default %d\n", DEFAULT_KLEN);
+		fprintf(stderr, "  -h  hit ratio <float>, default %.4f\n", DEFAULT_HITR);
+		fprintf(stderr, "  -z  zipf skew <float>, default %.4f\n", DEFAULT_SKEW);
 		fprintf(stderr, "  -p  show progress\n");
-		fprintf(stderr, "      ----------\n");
+		fprintf(stderr, "      ---------- operations ----------\n");
 		fprintf(stderr, "  -c  add random keys\n");
 		fprintf(stderr, "  -d  lookup random keys\n");
-		fprintf(stderr, "  -k  k-mer length <int>, default %d\n", DEFAULT_KLEN);
 		fprintf(stderr, "  -q  query with FASTA file <in_file>\n");
 		fprintf(stderr, "  -r  read FASTA reference <in_file>\n");
-		fprintf(stderr, "      ----------\n");
+		fprintf(stderr, "  -s  save workload to FASTA file <out_file>\n");
+		fprintf(stderr, "  -w  workload length <int>, default %u\n", DEFAULT_WORK);
+		fprintf(stderr, "      --------------------------------\n");
 #if defined(ENABLE_PLOT)
 		fprintf(stderr, "  -g  plot command <out_file>\n");
 		fprintf(stderr, "  -t  plot terminal <out_file>\n");
@@ -422,35 +571,58 @@ int main(int argc, char *argv[])
 #endif // ENABLE_PLOT
 		exit(EXIT_FAILURE);
 	}
+	printf("########## RTB ##########\n");
 #if defined(USE_SP)
 	if (barg > SP_SIZE/sizeof(unsigned)/8) barg = SP_SIZE/sizeof(unsigned)/8; /* up to 1/8th of scratchpad */
 #endif
-	printf("block length:%u\n", barg);
-	printf("k-mer length:%d\n", karg);
-	printf("max entries:%u\n", earg);
-	printf("key size:%lu data size:%lu\n", (ulong_t)KEY_SZ, (ulong_t)DAT_SZ);
+	printf("block length: %u\n", barg);
+	printf("k-mer length: %d\n", karg);
+	printf("max entries: %u\n", earg);
+	printf("key size: %lu data size: %lu\n", (ulong_t)KEY_SZ, (ulong_t)DAT_SZ);
+#if defined(USE_ACC)
+	printf("slot size: %lu\n", (ulong_t)sizeof(kdb_t::slot_s));
+#endif // USE_ACC
 
 	/* * * * * * * * * * Start Up * * * * * * * * * */
+	tget(start);
 	kdb.reserve(earg);
 	kbuf.init(barg);
+	tget(finish);
+	printf("Startup time: %f sec\n", tsec(finish, start));
+
+	if (flags & CFLAG || rarg != NULL) {
+		int klim = ceil(log(LOAD_MAX)/log(4));
+		/* test for k-mer length too small for specified load factor */
+		/* if k-mer length is too small, there are not enough permutations */
+		if (karg < klim) { /* 4^karg < LOAD_MAX */
+			fprintf(stderr, " -- k-mer length must be %u or greater.\n", klim);
+			exit(EXIT_FAILURE);
+		}
+	}
 
 	/* * * * * * * * * * Add Random Keys * * * * * * * * * */
 	if (flags & CFLAG) {
 		size_type pcount = PROGRESS_COUNT;
-		size_type acount = 0; // add count
-		size_type tcount = 0; // total bases count
-		size_type maxl = earg * larg; // max load count
-		kmer_t mask = ((kmer_t)1 << karg*2) - 1;
-		tick_t start, finish;
+		size_type acount = 0; /* add count */
+		size_type maxl = LOAD_MAX; /* max load count */
+		RAND_VAR;
 
-		srand(42);
 		if (flags & PFLAG) fprintf(stderr, "add");
+		RAND_SEED(42);
+		tinsert = tlookup = 0;
+		kbuf.clear_counts();
+		kdb.clear_time();
+		// CLOCKS_EMULATE
+		// CACHE_BARRIER(kdb.acc)
+		// TRACE_START
+		// STATS_START
 
 		tget(start);
-		while (LOAD_COUNT < maxl) { /* reach load factor? */
-			kmer_t kmer = (((kmer_t)rand() << sizeof(int)*8) ^ rand()) & mask;
+		/* Add k-mers until the specified load factor is reached */
+		/* The first test is faster, the second is more accurate. */
+		while (LOAD_COUNT < maxl || kdb.load_factor() < larg) {
+			kmer_t kmer = RAND_GEN;
 			sid_t sid = ++acount;
-			tcount += karg;
 			kbuf.add(kmer, sid);
 			if ((flags & PFLAG) && acount >= pcount) {
 				fputc('.', stderr);
@@ -458,13 +630,24 @@ int main(int argc, char *argv[])
 			}
 		}
 		kbuf.flush_add();
-		// CACHE_SEND_ALL(kdb.acc)
+		CACHE_SEND_ALL(kdb.acc)
 		tget(finish);
 
+		// CACHE_BARRIER(kdb.acc)
+		// STATS_STOP
+		// TRACE_STOP
+		// CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
-		printf("bases per second:%f\n", tcount/tsec(finish, start));
-		printf("add time in seconds:%f\n", tsec(finish, start));
-		printf("adds per second:%f\n", acount/tsec(finish, start));
+
+		trun = tdiff(finish, start);
+		toper = trun-tinsert-tlookup;
+		printf("Insert count: %lu\n", (ulong_t)acount);
+		printf("Insert  rate: %f ops/sec\n", acount/tvesec(tinsert));
+		printf("Run     time: %f sec\n", tvesec(trun));
+		printf("Oper.   time: %f sec\n", tvesec(toper));
+		printf("Insert  time: %f sec\n", tvesec(tinsert));
+		kdb.print_time();
+		// STATS_PRINT
 	}
 
 	/* * * * * * * * * * Read FASTA Reference * * * * * * * * * */
@@ -473,10 +656,9 @@ int main(int argc, char *argv[])
 		sequence entry;
 		int i, len;
 		size_type pcount = PROGRESS_COUNT;
-		size_type acount = 0; // add count
-		size_type tcount = 0; // total bases count
-		size_type maxl = earg * larg; // max load count
-		tick_t start, finish;
+		size_type acount = 0; /* add count */
+		size_type tcount = 0; /* total bases count */
+		size_type maxl = LOAD_MAX; /* max load count */
 
 		if ((fin = fopen(rarg, "r")) == NULL) {
 			fprintf(stderr, " -- can't open file: %s\n", rarg);
@@ -484,11 +666,13 @@ int main(int argc, char *argv[])
 		}
 
 		if (flags & PFLAG) fprintf(stderr, "read");
+		tinsert = tlookup = 0;
+		kbuf.clear_counts();
 		kdb.clear_time();
-		CLOCKS_EMULATE
-		CACHE_BARRIER(kdb.acc)
+		// CLOCKS_EMULATE
+		// CACHE_BARRIER(kdb.acc)
 		// TRACE_START
-		STATS_START
+		// STATS_START
 
 		tget(start);
 		for (i = 1; (len = Fasta_Read_Entry(fin, &entry)) > 0; i++) {
@@ -500,58 +684,68 @@ int main(int argc, char *argv[])
 			}
 			free(entry.hdr);
 			free(entry.str);
-			if (LOAD_COUNT >= maxl) break; /* reach load factor? */
+			/* Add k-mers until the specified load factor is reached */
+			/* The first test is faster, the second is more accurate. */
+			if (LOAD_COUNT >= maxl && kdb.load_factor() >= larg) break;
 		}
 		kbuf.flush_add();
-		// CACHE_SEND_ALL(kdb.acc)
+		CACHE_SEND_ALL(kdb.acc)
 		tget(finish);
 
-		CACHE_BARRIER(kdb.acc)
-		STATS_STOP
+		// CACHE_BARRIER(kdb.acc)
+		// STATS_STOP
 		// TRACE_STOP
-		CLOCKS_NORMAL
+		// CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
-		printf("bases per second:%f\n", tcount/tesec(finish, start));
-		printf("add time in seconds:%f\n", tesec(finish, start));
-		printf("adds per second:%f\n", acount/tesec(finish, start));
-		kdb.print_time(tdiff(finish,start));
-		STATS_PRINT
+
+		trun = tdiff(finish, start);
+		toper = trun-tinsert-tlookup;
+		printf("Insert count: %lu\n", (ulong_t)acount);
+		printf("Insert  rate: %f ops/sec\n", acount/tvesec(tinsert));
+		printf("Bases   rate: %f bp/sec\n", tcount/tvesec(trun));
+		printf("Run     time: %f sec\n", tvesec(trun));
+		printf("Oper.   time: %f sec\n", tvesec(toper));
+		printf("Insert  time: %f sec\n", tvesec(tinsert));
+		kdb.print_time();
+		// STATS_PRINT
 		fclose(fin);
+		if (kdb.load_factor() < larg) {
+			fprintf(stderr, " -- warning: did not reach load factor: %.4f\n", larg);
+		}
 	}
 
 	/* * * * * * * * * * Display Database Stats * * * * * * * * * */
 	if (flags & CFLAG || rarg != NULL) {
-		tick_t start, finish;
-
 		if (flags & PFLAG) fprintf(stderr, "gather stats...\n");
 
 		tget(start);
 		kdb.print_stats();
-		SHOW_HEAP
 		tget(finish);
-		printf("stats time in seconds:%f\n", tsec(finish, start));
+		SHOW_HEAP
+		printf("Stats   time: %f sec\n", tsec(finish, start));
 	}
-
-	/* * * * * * * * * * Lookup & Query Init * * * * * * * * * */
-	kbuf.clear_counts();
 
 	/* * * * * * * * * * Lookup Random Keys * * * * * * * * * */
 	if (flags & DFLAG) {
 		size_type pcount = PROGRESS_COUNT;
-		size_type lcount = 0; // lookup count
-		size_type tcount = 0; // total bases count
-		kmer_t mask = ((kmer_t)1 << karg*2) - 1;
-		tick_t start, finish;
+		size_type lcount = 0; /* lookup count */
+		RAND_VAR;
 
-		srand(42);
 		if (flags & PFLAG) fprintf(stderr, "lookup");
+		RAND_SEED(42);
+		tinsert = tlookup = 0;
+		kbuf.clear_counts();
+		kdb.clear_time();
+		CLOCKS_EMULATE
+		CACHE_BARRIER(kdb.acc)
+		TRACE_START
+		STATS_START
 
 		tget(start);
 		while (lcount < kdb.size()) {
-			kmer_t kmer = (((kmer_t)rand() << sizeof(int)*8) ^ rand()) & mask;
+			kmer_t kmer = RAND_GEN;
 			kbuf.lookup(kmer);
 			lcount++;
-			tcount += karg;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
@@ -560,10 +754,22 @@ int main(int argc, char *argv[])
 		kbuf.flush_lookup();
 		tget(finish);
 
+		CACHE_BARRIER(kdb.acc)
+		STATS_STOP
+		TRACE_STOP
+		CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
-		printf("bases per second:%f\n", tcount/tsec(finish, start));
-		printf("lookup time in seconds:%f\n", tsec(finish, start));
-		printf("lookups per second:%f\n", lcount/tsec(finish, start));
+
+		trun = tdiff(finish, start);
+		toper = trun-tinsert-tlookup;
+		printf("Lookup count: %lu\n", (ulong_t)lcount);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
+		printf("Run     time: %f sec\n", tvesec(trun));
+		printf("Oper.   time: %f sec\n", tvesec(toper));
+		printf("Lookup  time: %f sec\n", tvesec(tlookup));
+		kdb.print_time();
+		STATS_PRINT
 	}
 
 	/* * * * * * * * * * Query Database * * * * * * * * * */
@@ -572,9 +778,8 @@ int main(int argc, char *argv[])
 		sequence entry;
 		int len;
 		size_type pcount = PROGRESS_COUNT;
-		size_type lcount = 0; // lookup count
-		size_type tcount = 0; // total bases count
-		tick_t start, finish;
+		size_type lcount = 0; /* lookup count */
+		size_type tcount = 0; /* total bases count */
 
 		if ((fin = fopen(qarg, "r")) == NULL) {
 			fprintf(stderr, " -- can't open file: %s\n", qarg);
@@ -582,6 +787,8 @@ int main(int argc, char *argv[])
 		}
 
 		if (flags & PFLAG) fprintf(stderr, "query");
+		tinsert = tlookup = 0;
+		kbuf.clear_counts();
 		kdb.clear_time();
 		CLOCKS_EMULATE
 		CACHE_BARRIER(kdb.acc)
@@ -607,19 +814,186 @@ int main(int argc, char *argv[])
 		TRACE_STOP
 		CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
-		printf("bases per second:%f\n", tcount/tesec(finish, start));
-		printf("query time in seconds:%f\n", tesec(finish, start));
-		printf("lookups per second:%f\n", lcount/tesec(finish, start));
-		kdb.print_time(tdiff(finish,start));
+
+		trun = tdiff(finish, start);
+		toper = trun-tinsert-tlookup;
+		printf("Lookup count: %lu\n", (ulong_t)lcount);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
+		printf("Bases   rate: %f bp/sec\n", tcount/tvesec(trun));
+		printf("Run     time: %f sec\n", tvesec(trun));
+		printf("Oper.   time: %f sec\n", tvesec(toper));
+		printf("Lookup  time: %f sec\n", tvesec(tlookup));
+		kdb.print_time();
 		STATS_PRINT
 		fclose(fin);
 	}
 
-	/* * * * * * * * * * Display Query Stats * * * * * * * * * */
-	if (flags & DFLAG || qarg != NULL) {
-		printf("lookups:%lu hits:%lu %.2f%%\n",
-			(ulong_t)kbuf.lookups, (ulong_t)kbuf.hits,
-			(double)kbuf.hits/kbuf.lookups*100.0);
+	/* * * * * * * * * * Workload * * * * * * * * * */
+	if (warg && kdb.size()) {
+		double zeta = 0.0;
+		size_type i, j, rank, samples;
+		key_type *wptr;
+		key_type temp;
+		size_type pcount = PROGRESS_COUNT;
+		size_type lcount = 0; /* lookup count */
+		RAND_VAR;
+		// TODO: optionally allocate from scratchpad
+		key_type *wload = NALLOC(key_type, warg);
+		chk_alloc(wload, sizeof(key_type)*warg, "NALLOC workload array");
+
+		RAND_SEED(43);
+
+		/* calculate zeta */
+		if (zarg != 0.0) {
+			// FIXME: for multimap, use key count
+			size_type zN = kdb.size(); /* Zipf N, dictionary size  */
+			if (zN > 10000000U) zN = 10000000U;
+			if (flags & PFLAG) fprintf(stderr, "calc zeta... ");
+			for (i = 1; i <= zN; i++) zeta += 1.0/pow((double)i, zarg);
+			if (flags & PFLAG) fprintf(stderr, "%f\n", zeta);
+		}
+
+		/* generate misses by checking if random keys are in kdb */
+		if (flags & PFLAG) fprintf(stderr, "generate misses...\n");
+		wptr = wload;
+		samples = (1.0-harg)*warg+0.5;
+		if (samples > warg) samples = warg;
+		rank = 1;
+		for (i = 0; i < samples; i++) {
+			/* generate a random item */
+			do {
+				temp = RAND_GEN;
+			} while (kdb.count(temp));
+			wptr[i] = temp;
+#if 0 // this creates discontinuities in the Zipf distribution
+			/* repeat item */
+			if (zarg != 0.0) {
+				size_type count = ceil((1.0/(pow((double)rank, zarg)*zeta)) * samples);
+				if (samples-i < count) count = samples-i;
+				while (count > 1) {
+					wptr[++i] = temp;
+					count--;
+				}
+				rank++;
+			}
+#endif
+		}
+
+		/* generate hits by randomly selecting items from kdb */
+		if (flags & PFLAG) fprintf(stderr, "generate hits...\n");
+		wptr = wload + i;
+		samples = warg - i;
+		rank = 1;
+		for (i = 0; i < samples; i++) {
+			size_type bucket, steps;
+			const_local_iterator clit;
+			/* pick a random bucket until a non-empty one is found */
+			do {
+				bucket = rand() % kdb.bucket_count();
+				clit = kdb.cbegin(bucket);
+			} while (clit == kdb.cend(bucket));
+			/* pick a random item from the bucket */
+			for (steps = rand() % kdb.bucket_size(bucket); steps; steps--) clit++;
+			wptr[i] = clit->first;
+			/* repeat item */
+			if (zarg != 0.0) {
+				size_type count = ceil((1.0/(pow((double)rank, zarg)*zeta)) * samples);
+				if (samples-i < count) count = samples-i;
+				while (count > 1) {
+					wptr[++i] = clit->first;
+					count--;
+				}
+				rank++;
+			}
+		}
+
+		/* shuffle keys */
+		if (flags & PFLAG) fprintf(stderr, "shuffle keys...\n");
+		/* Fisher-Yates shuffle or Knuth shuffle */
+		for (i = warg-1; i > 0; --i) {
+			j = rand() % (i+1);
+			temp = wload[i]; /* swap */
+			wload[i] = wload[j];
+			wload[j] = temp;
+		}
+
+		/* save workload */
+		if (sarg != NULL) {
+			FILE *fout;
+			char hdr[32];
+			char str[48];
+			sequence entry = {hdr, str};
+			size_type pcount = PROGRESS_COUNT;
+			size_type scount; /* save count */
+
+			if ((fout = fopen(sarg, "w")) == NULL) {
+				fprintf(stderr, " -- can't open file: %s\n", sarg);
+				exit(EXIT_FAILURE);
+			}
+
+			if (flags & PFLAG) fprintf(stderr, "save workload");
+			for (scount = 0; scount < warg; scount++) {
+				sprintf(entry.hdr, "%lu", (ulong_t)scount);
+				kton(wload[scount], karg, entry.str);
+				Fasta_Write_File(fout, &entry, 1, karg);
+				if ((flags & PFLAG) && scount >= pcount) {
+					fputc('.', stderr);
+					pcount += PROGRESS_COUNT;
+				}
+			}
+			if (flags & PFLAG) fputc('\n', stderr);
+
+			fclose(fout);
+		}
+
+		/* do lookup */
+		if (flags & PFLAG) fprintf(stderr, "workload");
+		tinsert = tlookup = 0;
+		kbuf.clear_counts();
+		kdb.clear_time();
+		CLOCKS_EMULATE
+		CACHE_BARRIER(kdb.acc)
+		TRACE_START
+		STATS_START
+
+#if 1
+		if (flags & PFLAG) fprintf(stderr, "...");
+		pcount++; /* silence warning */
+		tget(start);
+		kbuf.block_lookup(wload, warg);
+		lcount = warg;
+		tget(finish);
+#else
+		tget(start);
+		while (lcount < warg) {
+			kbuf.lookup(wload[lcount]);
+			lcount++;
+			if ((flags & PFLAG) && lcount >= pcount) {
+				fputc('.', stderr);
+				pcount += PROGRESS_COUNT;
+			}
+		}
+		kbuf.flush_lookup();
+		tget(finish);
+#endif
+
+		CACHE_BARRIER(kdb.acc)
+		STATS_STOP
+		TRACE_STOP
+		CLOCKS_NORMAL
+		if (flags & PFLAG) fputc('\n', stderr);
+
+		trun = tdiff(finish, start);
+		toper = trun-tinsert-tlookup;
+		printf("Lookup count: %lu\n", (ulong_t)lcount);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
+		printf("Run     time: %f sec\n", tvesec(trun));
+		printf("Oper.   time: %f sec\n", tvesec(toper));
+		printf("Lookup  time: %f sec\n", tvesec(tlookup));
+		kdb.print_time();
+		STATS_PRINT
 	}
 
 	/* * * * * * * * * * Wrap Up * * * * * * * * * */
@@ -629,6 +1003,8 @@ int main(int argc, char *argv[])
 }
 
 /* TODO:
+ * Fix reaching load factor
+ * Verify uniform and Zipf distributions
 */
 
 /* DONE:

@@ -29,62 +29,6 @@ unsigned long long tsetup, tfill, tdrain, tcache;
 
 /* * * * * * * * * * Map, Accelerator * * * * * * * * * */
 
-// See C:\cygwin\lib\gcc\i686-pc-cygwin\5.4.0\include\c++\bits\hashtable_policy.h:300,1420
-
-template<class _Key, class _Tp>
-struct clocal_iterator {
-	typedef _Key key_type;
-	typedef _Tp mapped_type;
-	typedef std::pair<const key_type, mapped_type> value_type;
-	typedef const value_type* const_pointer;
-
-	typedef typename KVstore<key_type, mapped_type>::slot_s slot_s;
-
-	slot_s *slot;
-	std::pair<_Key, _Tp> val;
-
-	inline void update_val(void)
-	{
-		if (slot == nullptr) return;
-		if (slot->probes == 0) { slot = nullptr; return; }
-		val.first = slot->key;
-		val.second = slot->value;
-	}
-
-	clocal_iterator() noexcept
-	: slot(nullptr) { }
-
-	explicit
-	clocal_iterator(slot_s *__p) noexcept
-	: slot(__p) { update_val(); }
-
-	const_pointer
-	operator->() const noexcept
-	{
-		if (slot == nullptr) return nullptr;
-		return reinterpret_cast<const_pointer>(&val);
-	}
-
-	clocal_iterator
-	operator++(int) noexcept
-	{
-		clocal_iterator __tmp(*this);
-		slot = nullptr;
-		return __tmp;
-	}
-
-};
-
-// See C:\cygwin\lib\gcc\i686-pc-cygwin\5.4.0\include\c++\bits\hashtable_policy.h:315,1497
-template<class _Key, class _Tp>
-inline bool
-operator==(
-	const clocal_iterator<_Key, _Tp>& __x,
-	const clocal_iterator<_Key, _Tp>& __y)
-{
-	return __x.slot == __y.slot;
-}
-
 template<class _Key, class _Tp> //,
 	// class _Hash = hash<_Key>,
 	// class _Pred = std::equal_to<_Key>,
@@ -108,34 +52,64 @@ public:
 	typedef const value_type* const_iterator;
 	typedef value_type* local_iterator;
 	// typedef const value_type* const_local_iterator;
-	// See C:\cygwin\lib\gcc\i686-pc-cygwin\5.4.0\include\c++\bits\hashtable_policy.h:1679
-	using const_local_iterator = clocal_iterator<key_type, mapped_type>;
 
 	typedef size_t size_type;
 	typedef ptrdiff_t difference_type;
 
 	KVstore<key_type, mapped_type> acc; // Key-Value Accelerator
-	typedef typename KVstore<key_type, mapped_type>::slot_s slot_s;
+
+	// TODO: move up and make template based on value like in hashtable_policy.h:300
+	// C:\cygwin\lib\gcc\i686-pc-cygwin\5.4.0\include\c++\bits\hashtable_policy.h
+	struct const_local_iterator {
+
+		std::pair<key_type, mapped_type> val;
+		void *slot; // TODO: change to slot_s pointer
+
+		const_local_iterator() noexcept
+		: slot(nullptr) { }
+
+		explicit
+		const_local_iterator(void* __p) noexcept
+		: slot(__p) { }
+
+		const_pointer
+		operator->() const noexcept
+		{
+			return reinterpret_cast<const_pointer>(&this->val);
+		}
+
+		const_local_iterator
+		operator++(int) noexcept
+		{
+			const_local_iterator __tmp(*this);
+			// this->_M_incr();
+			return __tmp;
+		}
+
+		// template<class _Key1, class _Tp1>
+		// friend bool
+		// operator==(
+			// const typename block_map<_Key1, _Tp1>::const_local_iterator& __x,
+			// const typename block_map<_Key1, _Tp1>::const_local_iterator& __y)
+		// noexcept;
+	};
 
 	size_type
-	count(const key_type& __x) // const
+	count(const key_type& __x) const
 	{
-		slot_s *slot = acc._search(__x);
-		return (slot) ? 1 : 0;
+		return 0; // TODO:
 	}
 
 	size_type
 	bucket_size(size_type __n) const
 	{
-		slot_s *slot = acc.data_base + __n;
-		return (slot->probes) ? 1 : 0;
+		return 0; // TODO:
 	}
 
 	const_local_iterator
 	cbegin(size_type __n) const
 	{
-		slot_s *slot = acc.data_base + __n;
-		return const_local_iterator(slot);
+		return const_local_iterator(nullptr); // TODO:
 	}
 
 	const_local_iterator
@@ -164,11 +138,11 @@ public:
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if defined(USE_STREAM) && defined(__arm__)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
 #endif
 		while (__n--) insert(*__arr++);
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if defined(USE_STREAM) && defined(__arm__)
 		dsb();
 		// tget(tA);
 		// acc.cache_flush();
@@ -178,8 +152,6 @@ public:
 	}
 #else
 	// TODO: version with drain only, modify args to drain(kvpair)?
-	// NOTE: Be careful of overlapping probes even when keys are sorted.
-	// Probes will need to be tested for overlap to prevent a hazard.
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
@@ -246,20 +218,19 @@ public:
 		return 0; /* TODO: */
 	}
 
-	inline size_type
+	size_type
 	size() const noexcept
 	{
 		return acc.elements;
 	}
 
-	inline size_type
+	size_type
 	bucket_count() const noexcept
 	{
-		// acc.topsearch needed to iterate through all buckets
-		return acc.data_len + acc.topsearch - 1;
+		return acc.data_len; // acc.data_len + acc.topsearch?
 	}
 
-	inline float
+	float
 	load_factor() const noexcept
 	{
 		return static_cast<float>(size()) /
@@ -277,10 +248,10 @@ public:
 	void print_stats(void)
 	{
 		typedef unsigned long ul_t;
-		printf("size: %lu\n", (ul_t)size());
-		printf("load_factor (elem): %f\n", load_factor());
-		printf("bucket_count: %lu\n", (ul_t)bucket_count());
-		printf("max_psl: %lu\n", (ul_t)acc.topsearch);
+		printf("size:%lu\n", (ul_t)size());
+		printf("load_factor (elem):%f\n", load_factor());
+		printf("bucket_count:%lu\n", (ul_t)bucket_count());
+		printf("max_psl:%lu\n", (ul_t)acc.topsearch);
 	}
 
 	void clear_time(void)
@@ -297,66 +268,19 @@ public:
 
 }; // class block_map
 
-/* * * * * * * * * * MultiMap, Accelerator * * * * * * * * * */
-
-template<class _Key, class _Tp>
-struct clocal_iterator_mm {
-	typedef _Key key_type;
-	typedef _Tp mapped_type;
-	typedef std::pair<const key_type, mapped_type> value_type;
-	typedef const value_type* const_pointer;
-
-	typedef typename KVstore<key_type, mapped_type*>::slot_s slot_s;
-
-	slot_s *slot;
-	unsigned idx;
-	std::pair<_Key, _Tp> val;
-
-	inline void update_val(void)
-	{
-		if (slot == nullptr) return;
-		if (slot->probes == 0 ||
-		    slot->value == nullptr ||
-		    idx > slot->value[0]) { slot = nullptr; return; }
-		val.first = slot->key;
-		val.second = slot->value[idx];
-	}
-
-	clocal_iterator_mm() noexcept
-	: slot(nullptr), idx(0) { }
-
-	explicit
-	clocal_iterator_mm(slot_s *__p) noexcept
-	: slot(__p), idx(1) { update_val(); }
-
-	const_pointer
-	operator->() const noexcept
-	{
-		if (slot == nullptr) return nullptr;
-		return reinterpret_cast<const_pointer>(&val);
-	}
-
-	clocal_iterator_mm
-	operator++(int) noexcept
-	{
-		clocal_iterator_mm __tmp(*this);
-		if (slot != nullptr) {
-			idx++;
-			update_val();
-		}
-		return __tmp;
-	}
-
-};
-
-template<class _Key, class _Tp>
+// TODO: move up and make like hashtable_policy.h:315
+// C:\cygwin\lib\gcc\i686-pc-cygwin\5.4.0\include\c++\bits\hashtable_policy.h
+template<class _Key1, class _Tp1>
 inline bool
 operator==(
-	const clocal_iterator_mm<_Key, _Tp>& __x,
-	const clocal_iterator_mm<_Key, _Tp>& __y)
+	const typename block_map<_Key1, _Tp1>::const_local_iterator& __x,
+	const typename block_map<_Key1, _Tp1>::const_local_iterator& __y)
+noexcept
 {
 	return __x.slot == __y.slot;
 }
+
+/* * * * * * * * * * MultiMap, Accelerator * * * * * * * * * */
 
 template<class _Key, class _Tp> //,
 	// class _Hash = hash<_Key>,
@@ -380,8 +304,7 @@ public:
 	typedef value_type* iterator;
 	typedef const value_type* const_iterator;
 	typedef value_type* local_iterator;
-	// typedef const value_type* const_local_iterator;
-	using const_local_iterator = clocal_iterator_mm<key_type, mapped_type>;
+	typedef const value_type* const_local_iterator;
 
 	typedef size_t size_type;
 	typedef ptrdiff_t difference_type;
@@ -390,34 +313,6 @@ public:
 	size_type maxelem; // maximum number of elements per key
 
 	KVstore<key_type, mapped_type*> acc; // Key-Value Accelerator
-	typedef typename KVstore<key_type, mapped_type*>::slot_s slot_s;
-
-	size_type
-	count(const key_type& __x) // const
-	{
-		slot_s *slot = acc._search(__x);
-		return (slot && slot->value) ? slot->value[0] : 0;
-	}
-
-	size_type
-	bucket_size(size_type __n) const
-	{
-		slot_s *slot = acc.data_base + __n;
-		return (slot->probes && slot->value) ? slot->value[0] : 0;
-	}
-
-	const_local_iterator
-	cbegin(size_type __n) const
-	{
-		slot_s *slot = acc.data_base + __n;
-		return const_local_iterator(slot);
-	}
-
-	const_local_iterator
-	cend(size_type __n) const
-	{
-		return const_local_iterator(nullptr);
-	}
 
 	iterator
 	end() noexcept
@@ -429,7 +324,7 @@ public:
 	insert(const value_type& __x) // returns no indication if new
 	{
 		mapped_type *mptr = nullptr;
-		slot_s *slot;
+		typename KVstore<key_type, mapped_type*>::slot_s *slot;
 
 		slot = acc._update1(__x.first, mptr);
 		// tget(tA);
@@ -464,11 +359,11 @@ public:
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if defined(USE_STREAM) && defined(__arm__)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
 #endif
 		while (__n--) insert(*__arr++);
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if defined(USE_STREAM) && defined(__arm__)
 		dsb();
 		// tget(tA);
 		// acc.cache_flush();
@@ -477,8 +372,6 @@ public:
 #endif
 	}
 #else
-	// NOTE: Be careful of overlapping probes even when keys are sorted.
-	// Probes will need to be tested for overlap to prevent a hazard.
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
@@ -489,7 +382,7 @@ public:
 		tget(tC);
 		acc.fill(value, __n, __arr, sizeof(value_type));
 		tget(tD);
-		CACHE_RECV(acc, value, sizeof(mapped_type*)*__n);
+		CACHE_RECV(acc, value, sizeof(mapped_type*)*co__nunt);
 		tget(tE);
 	}
 #endif
@@ -548,20 +441,19 @@ public:
 		return 0; /* TODO: */
 	}
 
-	inline size_type
+	size_type
 	size() const noexcept
 	{
 		return element_count;
 	}
 
-	inline size_type
+	size_type
 	bucket_count() const noexcept
 	{
-		// acc.topsearch needed to iterate through all buckets
-		return acc.data_len + acc.topsearch - 1;
+		return acc.data_len; // acc.data_len + acc.topsearch?
 	}
 
-	inline float
+	float
 	load_factor() const noexcept
 	{
 		return static_cast<float>(size()) /
@@ -579,14 +471,14 @@ public:
 	void print_stats(void)
 	{
 		typedef unsigned long ul_t;
-		printf("size: %lu unique: %lu duplicates: %lu %.2f%%\n",
+		printf("size:%lu unique:%lu duplicates:%lu %.2f%%\n",
 			(ul_t)size(), (ul_t)acc.elements, (ul_t)(size()-acc.elements),
 			(double)(size()-acc.elements)/size()*100.0);
-		printf("load_factor (elem): %f\n", load_factor());
-		printf("load_factor (keys): %f\n", (double)acc.elements/bucket_count());
-		printf("bucket_count: %lu\n", (ul_t)bucket_count());
-		printf("max_elem_per_key: %lu\n", (ul_t)maxelem);
-		printf("max_psl: %lu\n", (ul_t)acc.topsearch);
+		printf("load_factor (elem):%f\n", load_factor());
+		printf("load_factor (keys):%f\n", (double)acc.elements/bucket_count());
+		printf("bucket_count:%lu\n", (ul_t)bucket_count());
+		printf("max_elem_per_key:%lu\n", (ul_t)maxelem);
+		printf("max_psl:%lu\n", (ul_t)acc.topsearch);
 	}
 
 	void clear_time(void)
@@ -695,13 +587,13 @@ public:
 
 		// gather stats in one pass through table
 		for (size_type i = 0; i < this->bucket_count(); ++i) {
-			size_type bkt_sz = this->bucket_size(i);
-			if (bkt_sz > max_elem_per_bucket) max_elem_per_bucket = bkt_sz;
+			if (this->bucket_size(i) > max_elem_per_bucket)
+				max_elem_per_bucket = this->bucket_size(i);
 		}
-		printf("size: %lu\n", (ul_t)this->size());
-		printf("load_factor (elem): %f\n", this->load_factor());
-		printf("bucket_count: %lu\n", (ul_t)this->bucket_count());
-		printf("max_elem_per_bucket: %lu\n", (ul_t)max_elem_per_bucket);
+		printf("size:%lu\n", (ul_t)this->size());
+		printf("load_factor (elem):%f\n", this->load_factor());
+		printf("bucket_count:%lu\n", (ul_t)this->bucket_count());
+		printf("max_elem_per_bucket:%lu\n", (ul_t)max_elem_per_bucket);
 	}
 
 	void clear_time(void)
@@ -826,8 +718,6 @@ public:
 		std::unordered_map<key_type,size_type> epkcnt; // elem per key count
 		for (size_type i = 0; i < this->bucket_count(); ++i) {
 			size_type psl = 0; // probe sequence length
-			size_type bkt_sz = this->bucket_size(i);
-			if (bkt_sz > max_elem_per_bucket) max_elem_per_bucket = bkt_sz;
 			epkcnt.clear();
 			for (auto local_it = this->cbegin(i); local_it != this->cend(i); ++local_it) {
 				psl++;
@@ -839,16 +729,18 @@ public:
 				}
 			}
 			keycnt += epkcnt.size();
+			if (this->bucket_size(i) > max_elem_per_bucket)
+				max_elem_per_bucket = this->bucket_size(i);
 		}
-		printf("size: %lu unique: %lu duplicates: %lu %.2f%%\n",
+		printf("size:%lu unique:%lu duplicates:%lu %.2f%%\n",
 			(ul_t)this->size(), (ul_t)keycnt, (ul_t)(this->size()-keycnt),
 			(double)(this->size()-keycnt)/this->size()*100.0);
-		printf("load_factor (elem): %f\n", this->load_factor());
-		printf("load_factor (keys): %f\n", (double)keycnt/this->bucket_count());
-		printf("bucket_count: %lu\n", (ul_t)this->bucket_count());
-		printf("max_elem_per_bucket: %lu\n", (ul_t)max_elem_per_bucket);
-		printf("max_elem_per_key: %lu\n", (ul_t)max_elem_per_key);
-		printf("max_psl: %lu\n", (ul_t)max_psl);
+		printf("load_factor (elem):%f\n", this->load_factor());
+		printf("load_factor (keys):%f\n", (double)keycnt/this->bucket_count());
+		printf("bucket_count:%lu\n", (ul_t)this->bucket_count());
+		printf("max_elem_per_bucket:%lu\n", (ul_t)max_elem_per_bucket);
+		printf("max_elem_per_key:%lu\n", (ul_t)max_elem_per_key);
+		printf("max_psl:%lu\n", (ul_t)max_psl);
 	}
 
 	void clear_time(void)

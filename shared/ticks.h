@@ -115,5 +115,6 @@ typedef clock_t tick_t;
 #define tdec(a,b) ((a) -= (b))
 #define tdiff(f,s) (tval(f)-tval(s))
 #define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
+#define tvsec(v) ((us long long)(v)/(double)TICKS_SEC)
 
 #endif /* _TICKS_H */

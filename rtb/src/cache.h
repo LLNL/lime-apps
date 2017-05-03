@@ -44,6 +44,9 @@
 #include "xpseudo_asm.h" // mtcp, dsb
 #include "xreg_cortexa9.h" // XREG_CP15_*
 #include "xil_mmu.h" // Xil_SetTlbAttributes
+// Differentiate between scratchpad (SP) with only L1 enabled (Xil_L1DCache*)
+// and DRAM space with both L1 and L2 enabled (Xil_DCache*).
+#define IS_SP(ptr) ((char*)(ptr) >= (char*)0x40000000 && (char*)(ptr) < (char*)0x40200000)
 /* 0x15de6: Shareable, Domain:1111, Outer & Inner Cacheable: Write-Back, Write-Allocate */
 /* 0x14de6: Shareable, Domain:1111, Inner Cacheable: Write-Back, Write-Allocate */
 /* 0x04c06: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, Write-Allocate */
@@ -53,17 +56,29 @@ inline void cache_init(void) {
 	char *ptr;
 	// Xil_ICacheEnable();
 	// Xil_DCacheEnable();
-	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x4c06); /* Inner Cacheable */
-	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x4c06); /* Inner Cacheable */
+	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x04c06); /* Inner Cacheable */
+	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x04c06); /* Inner Cacheable */
 	for (ptr = (char*)0x40200000; ptr < (char*)0x7fffffff; ptr += 0x100000)
 		Xil_SetTlbAttributes((INTPTR)ptr, 0x15de6); /* Cacheable */
 }
 inline void cache_flush(void) {Xil_DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size)
+{
+	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+	else Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+}
 inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size)
+{
+	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+	else Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+}
 inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size)
+{
+	if (IS_SP(ptr)) Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);
+	else Xil_DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);
+}
 } // namespace host
 
 #else

@@ -9,6 +9,7 @@
 #define CLOCKS_H_
 
 #define tesec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_ESEC)
+#define tvesec(v) ((us long long)(v)/(double)TICKS_ESEC)
 
 #if defined(CLOCKS) && defined(ZYNQ)
 

@@ -16,6 +16,7 @@
 #define LSU1_PN 3 /* LSU 1 port number */
 #define HSU0_PN 4 /* HSU 0 port number */
 #define LSU2_PN 5 /* LSU 2 port number */
+#define PRU0_PN 6 /* PRU 0 port number */
 #define getID(pn) ((pn)<<1)
 
 #define AP_HEAD(go,wr,sel,len,tid,tdest) \
@@ -35,6 +36,7 @@ enum {
 	LSU_move,
 	LSU_smove,
 	LSU_index,
+	LSU_index2,
 	LSU_flush = 7,
 };
 
@@ -85,7 +87,22 @@ extern void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned
 //   2 | address:32   |
 //   3 | size:30      |
 //   4 | inc/index:30 |
-//   5 | rep:30       |
+//   5 | rep/trans:30 |
 //   6 | ignore:32    |
 //   7 | ignore:32    |
 //     |--------------|
+
+//      probe unit
+//      register map
+// reg   31 bits  0
+//     |------------|
+//   0 | status:32  |
+//   1 | plen:10    | minus 1
+//   2 | ignore:32  |
+//   3 | ignore:32  |
+//   4 | ignore:32  |
+//   5 | ignore:32  |
+//   6 | ignore:32  |
+//   7 | ignore:32  |
+//     |------------|
+

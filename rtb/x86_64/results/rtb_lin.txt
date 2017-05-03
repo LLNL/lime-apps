@@ -385,3 +385,38 @@ Insert  time: 0.000000 sec
 Lookup  time: 6.128818 sec
 Oper.   time: 2.101991 sec
 lookups:109653270 hits:36118031 32.94%
+
+[lloyd23@nome x86_64]$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.19 -r$HOME/bio/SRR000550.fa -w8Mi -h.90 -z.99
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.051980 sec
+read.......
+Insert count: 7184442
+Insert  rate: 8022504.957925 ops/sec
+Bases   rate: 7278687.704096 bp/sec
+Run     time: 1.058938 sec
+Oper.   time: 0.163402 sec
+Insert  time: 0.895536 sec
+gather stats...
+size: 6405649
+load_factor (elem): 0.190007
+bucket_count: 33712729
+max_elem_per_bucket: 7
+Stats   time: 0.479185 sec
+calc zeta... 17.544100
+generate misses...
+generate hits...
+shuffle keys...
+workload...
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  rate: 20045948.445405 ops/sec
+Run     time: 0.424323 sec
+Oper.   time: 0.005854 sec
+Lookup  time: 0.418469 sec

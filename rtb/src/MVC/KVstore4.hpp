@@ -2,9 +2,8 @@
 #define _KV_STORE_HPP
 
 #include <cstddef> // size_t
-#include <cstdlib> // exit
-#include <cstdint> // uintXX_t
-#include <cstdio> // printf
+#include <algorithm> // min
+#include <stdint.h> // uintXX_t
 #define SOFT 1
 #include "short.h" // shortNN_hash
 #include "alloc.h"
@@ -89,7 +88,7 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #if defined(__microblaze__)
 #define cprint(s)
 #else
-#define cprint(s) fprintf(stderr,s)
+#define cprint(s) print(s)
 #endif
 
 // NOTE: no cycle counters are available on the MicroBlaze
@@ -122,13 +121,11 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #define LSU1_ID getID(LSU1_PN)
 #define HSU0_ID getID(HSU0_PN)
 #define LSU2_ID getID(LSU2_PN)
-#define PRU0_ID getID(PRU0_PN)
 
 #if defined(__arm__)
 inline void dump_reg(void)
 {
 	for (int i = 0; i < 8; i++) xil_printf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
-	for (int i = 0; i < 2; i++) xil_printf(" PRU0   [%d]:%x\r\n", i, aport_read(PRU0_ID, THIS_ID, i));
 	for (int i = 0; i < 6; i++) xil_printf(" LSU1_RD[%d]:%x\r\n", i, aport_read(LSU1_ID+READ_CH, THIS_ID, i));
 	for (int i = 0; i < 6; i++) xil_printf(" LSU2_RD[%d]:%x\r\n", i, aport_read(LSU2_ID+READ_CH, THIS_ID, i));
 	for (int i = 0; i < 6; i++) xil_printf(" LSU2_WR[%d]:%x\r\n", i, aport_read(LSU2_ID+WRITE_CH, THIS_ID, i));
@@ -160,13 +157,9 @@ public:
 // Then derive server and client classes from the base class.
 // Override base functions and call explicitly when needed.
 
-// Load vs. maximum probe sequence length (Max_PSL or MAX_SEARCH)
-// with short32_hash():
-// LINEAR (load,Max_PSL): (20%,13) (60%,95) (80%,529) (85%,600) (90%,1266) (95%,5141)
-// RHOOD  (load,Max_PSL): (20%,7) (60%,19) (80%,36) (85%,49) (90%,76) (95%,133) (98%,268) (99%,425)
-#define MAX_SEARCH (512)
-//#define BLOCK_HASH 1
-#define BLOCK_HASH_LEN 16
+#define MAX_SEARCH (4*1024)
+#define MAX_PSL 16
+#define BLOCK_HASH 1
 
 template<typename _Key, typename _Tp>
 class _KVstore
@@ -183,8 +176,8 @@ public:
 	// } slot_s;
 	typedef struct {
 		key_type key;
-		mapped_type value;
 		psl_t probes;
+		mapped_type value;
 	} slot_s;
 
 	slot_s *data_base; // data array base address
@@ -213,7 +206,7 @@ public:
 		data_len = dlen;
 		elements = 0;
 #if defined(BLOCK_HASH)
-		hash_mask = (dlen/BLOCK_HASH_LEN)-1;
+		hash_mask = (dlen/MAX_PSL)-1;
 #else
 		hash_mask = dlen-1;
 #endif
@@ -232,17 +225,46 @@ public:
 		uint32_t hash;
 
 		short32_hash(&key, key_sz, 0xD, &hash);
-		/* these overflow MAX_SEARCH when hashing real k-mers (e.g. SRR033549.fa) */
-		// hash = key;
-		// hash = std::hash<key_type>{}(key); // #include <functional> 
 #if defined(BLOCK_HASH)
-		return (hash & hash_mask) * BLOCK_HASH_LEN;
+		return (hash & hash_mask) * MAX_PSL;
 #else
 		return hash & hash_mask;
 #endif
 	}
 
-	/* search: search for key, return pointer to slot if found */
+	/* scan: return pointer to element if found */ // FIXME: comment
+
+	bool _scan(slot_s *slot, size_t imax, const key_type key, mapped_type &value)
+	{
+		size_t idx = 0;
+		/* search for key */
+#if defined(USE_STREAM) && defined(__microblaze__)
+		wdcc(&slot[idx]);
+#elif defined(USE_STREAM) && defined(__arm__)
+		mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
+		// dsb();
+#endif
+		while (slot[idx].probes && idx < imax) {
+			if (slot[idx].key == key) {
+				value = slot[idx].value;
+				return true; /* found */
+			}
+			idx++;
+#if defined(USE_STREAM) && defined(__microblaze__)
+			wdcc(&slot[idx]);
+#elif defined(USE_STREAM) && defined(__arm__)
+			// two slots (16 bytes) per cache line (32 bytes)
+			if ((idx & 1) == 0) {
+				mtcp(XREG_CP15_INVAL_DC_LINE_MVA_POC, ((unsigned int)&slot[idx])); // L1 invalidate
+				// dsb();
+			}
+#endif
+		}
+		value = null_value;
+		return false;
+	}
+
+	/* search: return pointer to slot if key found */
 
 	slot_s* _search(const key_type key)
 	{
@@ -258,7 +280,7 @@ public:
 		return nullptr;
 	}
 
-	/* get: search for key, return mapped value if found */
+	/* get: return pointer to element if found */ // FIXME: comment
 
 	bool _get(const key_type key, mapped_type &value)
 	{
@@ -276,9 +298,7 @@ public:
 		return false;
 	}
 
-#if defined(LINEAR)
-
-	/* put: add key and mapped value, find new slot if needed */
+	/* put: return pointer to element, allocate new slot if needed */ // FIXME: comment
 
 	bool _put(const key_type key, const mapped_type &value)
 	{
@@ -289,7 +309,7 @@ public:
 		while (data_base[idx].probes && idx < imax) {
 			if (data_base[idx].key == key) {
 				data_base[idx].value = value;
-#if 0 && defined(USE_STREAM)
+#if defined(USE_STREAM)
 				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line? - no
 				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
 #endif // USE_STREAM
@@ -302,20 +322,46 @@ public:
 			data_base[idx].key = key;
 			data_base[idx].probes = 1;
 			data_base[idx].value = value;
-#if 0 && defined(USE_STREAM)
+#if defined(USE_STREAM)
 			Xil_DCacheFlushRange((unsigned int)&data_base[idx], (unsigned)sizeof(slot_s));
 #endif // USE_STREAM
 			elements++;
 			if (++idx > itop) topsearch += idx-itop;
 			return false; /* not found, but added */
 		}
-		cprint(" -- error: _put: spill");
-		exit(EXIT_FAILURE);
-		return false; // spill
+		/* spill */
+		return false;
 	}
 
-	/* update1: return mapped value and pointer to slot, find new slot if needed */
-
+	/* update1: return element and pointer to slot, allocate new slot if needed */
+#if 0
+	// TODO: improve performance if possible. This pointer version is not faster.
+	slot_s* _update1(const key_type key, mapped_type &value)
+	{
+		slot_s *slot = data_base + hash_idx(key);
+		slot_s *tops = slot + topsearch;
+		slot_s *maxs = slot + MAX_SEARCH;
+		/* search for key */
+		while (slot->probes && slot < maxs) {
+			if (slot->key == key) {
+				value = slot->value;
+				return slot; /* found */
+			}
+			slot++;
+		}
+		/* add key */
+		if (slot < maxs) {
+			slot->key = key;
+			slot->probes = 1;
+			value = slot->value;
+			elements++;
+			if (slot >= tops) topsearch += (slot-tops)+1;
+			return slot; /* not found, but added */
+		}
+		/* spill */
+		return nullptr;
+	}
+#else
 	slot_s* _update1(const key_type key, mapped_type &value)
 	{
 		size_t idx = hash_idx(key);
@@ -333,125 +379,26 @@ public:
 		if (idx < imax) {
 			data_base[idx].key = key;
 			data_base[idx].probes = 1;
-			value = data_base[idx].value = null_value;
+			value = data_base[idx].value;
 			elements++;
 			if (idx >= itop) topsearch += idx-itop+1;
 			return &data_base[idx]; /* not found, but added */
 		}
-		cprint(" -- error: _update1: spill");
-		exit(EXIT_FAILURE);
-		return nullptr; // spill
+		/* spill */
+		return nullptr;
 	}
+#endif
 
-#else // LINEAR - Robin Hood insertion
-
-	/* put: add key and mapped value, find new slot if needed */
-
-	bool _put(const key_type key, const mapped_type &value)
-	{
-		size_t idx = hash_idx(key);
-		size_t itop = idx + topsearch;
-		size_t irh = idx;
-		slot_s current, tmp;
-
-		/* search for key */
-		while (data_base[idx].probes && idx < itop) {
-			if (data_base[idx].key == key) {
-				data_base[idx].value = value;
-#if 0 && defined(USE_STREAM)
-				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line? - no
-				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
-#endif // USE_STREAM
-				return true; /* found */
-			}
-			idx++;
-		}
-
-		/* find a new slot */
-		current.key = key;
-		current.value = value;
-		current.probes = 0;
-		for (;;) {
-			current.probes++;
-			if (current.probes > MAX_SEARCH) {
-				cprint(" -- error: _put: spill");
-				exit(EXIT_FAILURE);
-				return false; // spill
-			}
-			/* swap entries */
-			if (current.probes > data_base[irh].probes) {
-				if (current.probes > topsearch) topsearch = current.probes;
-				tmp = data_base[irh];
-				data_base[irh] = current;
-#if 0 && defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[irh], (unsigned)sizeof(slot_s));
-#endif // USE_STREAM
-				if (!tmp.probes) {elements++; return false;} // added
-				current = tmp;
-			}
-			irh++;
-		}
-	}
-
-	/* update1: return mapped value and pointer to slot, find new slot if needed */
-
-	slot_s* _update1(const key_type key, mapped_type &value)
-	{
-		size_t idx = hash_idx(key);
-		size_t itop = idx + topsearch;
-		size_t irh = idx;
-		slot_s current, tmp, *slot = nullptr;
-
-		/* search for key */
-		while (data_base[idx].probes && idx < itop) {
-			if (data_base[idx].key == key) {
-				value = data_base[idx].value;
-				return &data_base[idx]; /* found */
-			}
-			idx++;
-		}
-
-		/* find a new slot */
-		current.key = key;
-		value = current.value = null_value;
-		current.probes = 0;
-		for (;;) {
-			current.probes++;
-			if (current.probes > MAX_SEARCH) {
-				cprint(" -- error: _update1: spill");
-				exit(EXIT_FAILURE);
-				return nullptr; // spill
-			}
-			/* swap entries */
-			if (current.probes > data_base[irh].probes) {
-				if (current.probes > topsearch) topsearch = current.probes;
-				tmp = data_base[irh];
-				data_base[irh] = current;
-				if (slot == nullptr) {slot = &data_base[irh];}
-				else {
-#if 0 && defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[irh], (unsigned)sizeof(slot_s));
-#endif // USE_STREAM
-				}
-				if (!tmp.probes) {elements++; return slot;} // added
-				current = tmp;
-			}
-			irh++;
-		}
-	}
-
-#endif // LINEAR
-
-	/* update2: update mapped value in specified slot */
+	/* update2: update element in specified slot */
 	// If flush done by caller, slot_s needs to be exposed.
 
 	inline void _update2(slot_s *slot, const mapped_type &value)
 	{
-		if (slot->value != value || slot->value == 0) {
+		if (slot->value != value || slot->probes == 1) {
 			slot->value = value;
-#if 0 && defined(USE_STREAM) && defined(__microblaze__)
+#if defined(USE_STREAM) && defined(__microblaze__)
 			// TODO: 
-#elif 0 && defined(USE_STREAM) && defined(__arm__)
+#elif defined(USE_STREAM) && defined(__arm__)
 			// Xil_DCacheFlushLine((unsigned int)slot); // doesn't straddle cache line
 			// Xil_DCacheFlushRange((unsigned int)slot, (unsigned)sizeof(slot_s));
 			mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
@@ -498,7 +445,7 @@ public:
 		// constraint: table length must be power of 2
 		for (dlen = 1; dlen < elements; dlen <<= 1);
 		slots = dlen+MAX_SEARCH-1;
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if defined(USE_STREAM) && defined(__arm__)
 		{
 			char *ptr;
 			size_t size = CEIL((slots)*sizeof(slot_s), (1U<<20));
@@ -538,7 +485,7 @@ public:
 #if defined(USE_HASH)
 
 	/* fill buffer from store based on keys */
-	/* TODO: make getfsl(), putfsl() version of fill() for MCU */
+	/* TODO: make getfsl(), putfsl() version of fill() */
 
 	void fill(void *buf, size_t len, const void *key, size_t stride)
 	{
@@ -554,19 +501,13 @@ public:
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 6); // go
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 6); // debug
 
-		/* LSU2 index2 load */
-		reg[1] = 0x00000000;               /* clear status */
-		reg[2] = LSU_CMD(0,LSU_index2);    /* reqstat=0, command=index2 */
-		reg[3] = (unsigned)data_base;      /* base address */
-		reg[4] = sizeof(slot_s);           /* size */
-		reg[5] = 0x00000000;               /* index (spacer) */
-		reg[6] = sizeof(slot_s)*topsearch; /* transfer size */
-		aport_nwrite(LSU2_ID+READ_CH, THIS_ID, 0, 0, reg, 6);
-
-		/* PRU0 configuration */
-		reg[1] = 0x00000000;     /* clear status */
-		reg[2] = topsearch-1;    /* plen, minus 1 */
-		aport_nwrite(PRU0_ID, THIS_ID, 0, 0, reg, 2);
+		/* LSU2 indexed load */
+		reg[1] = 0x00000000;             /* clear status */
+		reg[2] = LSU_CMD(0,LSU_index);   /* reqstat=0, command=index */
+		reg[3] = (unsigned)data_base;    /* base address */
+		reg[4] = sizeof(slot_s)*MAX_PSL; /* size */ /* TODO: */
+		/*reg[?] = sizeof(slot_s)*MAX_PSL;*/ /* trans size, repetitions */ /* TODO: reg 4 is index */
+		aport_nwrite(LSU2_ID+READ_CH, THIS_ID, 0, 0, reg, 4);
 
 		/* start streaming keys */
 		/* LSU1 contiguous load (with strided move) */
