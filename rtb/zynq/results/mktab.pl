@@ -21,7 +21,7 @@ sub scan {
 	my $mtime; # memory channel timing, <read latency ns:write latency ns>
 	my $load; # load factor
 	my $hit; # hit ratio
-	my $dist = 0; # distribution, 0 = uniform, 1 = Zipf .99 skew
+	my $zipf; # distribution, 0 = uniform, !0 = Zipf skew
 	while (<$fhi>) {
 		# print $_;
 		if (/V_W:(\d+) V_R:(\d+)/) {
@@ -29,18 +29,19 @@ sub scan {
 			next;
 		}
 		if (/load_factor \(elem\): (\d+\.\d+)/) {
-			# $load = $1;
 			$load = sprintf "%.2f", $1;
 			next;
 		}
 		if (/Lookup  hits: \d+ (\d+\.\d+)/) {
-			$hit = $1;
+			$hit = sprintf "%.0f", $1;
+			next;
+		}
+		if (/Lookup  zipf: (\d+\.\d+)/) {
+			$zipf = $1;
 			next;
 		}
 		if (/Lookup  rate: (\d+\.\d+)/) {
-			# print join(',', $mtime, $dist, $load, $hit, $1), "\n";
-			$tref->{$mtime}{$dist}{$load}{$hit}{LRATE} = $1;
-			$dist ^= 1;
+			$tref->{$mtime}{$zipf}{$load}{$hit}{LRATE} = $1;
 			next;
 		}
 	}
@@ -59,20 +60,20 @@ print "\n";
 print "\"RTB Lookup rate (ops/sec) - $ARGV[0]\"\n";
 
 my $tref = \%{$tab{_A}};
-foreach my $_i (sort keys %{$tref}) {
-	foreach my $_j (sort keys %{$tref->{$_i}}) {
+foreach my $_i (sort keys %{$tref}) { # mtime
+	foreach my $_j (sort keys %{$tref->{$_i}}) { # zipf
 
-		my $str = ($_j eq "0") ? "Uniform" : "Zipf=0.99";
+		my $str = ($_j == 0.0) ? "Uniform" : "Zipf=$_j";
 		print "\n\"Memory Latency: $_i Distribution: $str\"\n";
-		print "\"Load Factor / Hit Rate %\"";
+		print "\"Load Factor / Hit Rate\"";
 		my $ref = \%{$tref->{$_i}{$_j}};
-		foreach my $_y (sort keys %{$ref->{(sort keys %{$ref})[0]}}) {
-			print ", ", $_y;
+		foreach my $_y (sort keys %{$ref->{(sort keys %{$ref})[0]}}) { # hit
+			print ", hit $_y%";
 		}
 		print "\n";
-		foreach my $_x (sort keys %{$ref}) {
+		foreach my $_x (sort keys %{$ref}) { # load
 			print $_x;
-			foreach my $_y (sort keys %{$ref->{$_x}}) {
+			foreach my $_y (sort keys %{$ref->{$_x}}) { # hit
 				print ", ", $ref->{$_x}{$_y}{LRATE};
 			}
 			print "\n";
