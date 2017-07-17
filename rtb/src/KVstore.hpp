@@ -164,9 +164,15 @@ public:
 // with short32_hash():
 // LINEAR (load,Max_PSL): (20%,13) (60%,95) (80%,529) (85%,600) (90%,1266) (95%,5141)
 // RHOOD  (load,Max_PSL): (20%,7) (60%,19) (80%,36) (85%,49) (90%,76) (95%,133) (98%,268) (99%,425)
+#if !defined(MAX_SEARCH)
 #define MAX_SEARCH (512)
+#endif
 //#define BLOCK_HASH 1
 #define BLOCK_HASH_LEN 16
+
+#if defined(SPILL)
+#include <unordered_map>
+#endif
 
 template<typename _Key, typename _Tp>
 class _KVstore
@@ -196,6 +202,10 @@ public:
 	size_t elements;
 	size_t hash_mask;
 	size_t topsearch;
+
+#if defined(SPILL)
+	std::unordered_map<_Key, _Tp> spill;
+#endif
 
 	_KVstore()
 	: key_sz(sizeof(key_type)),
@@ -309,8 +319,12 @@ public:
 			if (++idx > itop) topsearch += idx-itop;
 			return false; /* not found, but added */
 		}
+#if defined(SPILL)
+		spill.insert({key, value});
+#else
 		cprint(" -- error: _put: spill");
 		exit(EXIT_FAILURE);
+#endif
 		return false; // spill
 	}
 
@@ -338,8 +352,12 @@ public:
 			if (idx >= itop) topsearch += idx-itop+1;
 			return &data_base[idx]; /* not found, but added */
 		}
+#if defined(SPILL)
+		spill.insert({key, value});
+#else
 		cprint(" -- error: _update1: spill");
 		exit(EXIT_FAILURE);
+#endif
 		return nullptr; // spill
 	}
 
@@ -374,8 +392,12 @@ public:
 		for (;;) {
 			current.probes++;
 			if (current.probes > MAX_SEARCH) {
+#if defined(SPILL)
+				spill.insert({current.key, current.value});
+#else
 				cprint(" -- error: _put: spill");
 				exit(EXIT_FAILURE);
+#endif
 				return false; // spill
 			}
 			/* swap entries */
@@ -418,8 +440,12 @@ public:
 		for (;;) {
 			current.probes++;
 			if (current.probes > MAX_SEARCH) {
+#if defined(SPILL)
+				spill.insert({current.key, current.value});
+#else
 				cprint(" -- error: _update1: spill");
 				exit(EXIT_FAILURE);
+#endif
 				return nullptr; // spill
 			}
 			/* swap entries */
@@ -447,6 +473,9 @@ public:
 
 	inline void _update2(slot_s *slot, const mapped_type &value)
 	{
+#if defined(SPILL)
+		if (slot == nullptr) return;
+#endif
 		if (slot->value != value || slot->value == 0) {
 			slot->value = value;
 #if 0 && defined(USE_STREAM) && defined(__microblaze__)
@@ -461,6 +490,21 @@ public:
 	}
 
 public:
+
+	/* hbin assumed to be topsearch in length */
+	void psl_histo(unsigned *hbin)
+	{
+		size_t idx;
+		size_t tslot = data_len + topsearch - 1;
+
+		memset(hbin, 0, sizeof(unsigned)*topsearch);
+		for (idx = 0; idx < tslot; idx++) {
+			unsigned psl; /* psl minus 1 */
+			if (data_base[idx].probes == 0) continue;
+			psl = idx - hash_idx(data_base[idx].key);
+			if (psl < topsearch) hbin[psl]++;
+		}
+	}
 
 #if defined(USE_HASH)
 

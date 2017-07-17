@@ -281,6 +281,21 @@ public:
 		printf("load_factor (elem): %f\n", load_factor());
 		printf("bucket_count: %lu\n", (ul_t)bucket_count());
 		printf("max_psl: %lu\n", (ul_t)acc.topsearch);
+#if defined(PSL_HISTO)
+		{
+			unsigned *hbin = (unsigned *)malloc(sizeof(unsigned)*acc.topsearch);
+			acc.psl_histo(hbin);
+			printf("PSL Count\n");
+			for (unsigned i = 0; i < acc.topsearch; i++) {
+				printf("%u %u\n", i+1, hbin[i]);
+			}
+			printf("PSL End\n");
+			free(hbin);
+		}
+#endif
+#if defined(SPILL)
+		printf("spill size: %lu\n", (ul_t)acc.spill.size());
+#endif
 	}
 
 	void clear_time(void)

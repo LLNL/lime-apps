@@ -29,15 +29,13 @@ $Log: $
 #include "block_map.h"
 
 // Arguments when STANDALONE
-#define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.05", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
-// #define ARGS (char*)"-cdp", (char*)"-e32Mi", (char*)"-l.20"
-// #define ARGS (char*)"-e1K", (char*)"-k16", (char*)"-rtestdb.fa", (char*)"-qtestqr.fa"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.60", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
+#define ARGS (char*)"-e32Mi", (char*)"-l.90", (char*)"-rsrr550.fa", (char*)"-w256Ki", (char*)"-h.90", (char*)"-z.99"
+// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.50", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.19", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-a", (char*)"-qsrr_sh.fa"
+// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-cd"
+// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-c", (char*)"-qsrr_sh.fa"
 // #define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qamr_cur.fa"
-// #define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qsrr_sh1.fa"
+// #define ARGS (char*)"-e1K", (char*)"-k16", (char*)"-rtestdb.fa", (char*)"-qtestqr.fa"
 
 #define DEFAULT_ENT 100000
 #define DEFAULT_LOAD 0.95
@@ -844,6 +842,12 @@ int main(int argc, char *argv[])
 
 		RAND_SEED(43);
 
+		// When Zipf is active, the miss distribution is independent
+		// of the hit distribution. If a single distribution is wanted,
+		// random ranks could be selected until the required number of
+		// misses are generated. These ranks could be skipped during
+		// hit generation. Also a fully random approach could be used.
+
 		/* calculate zeta */
 		if (zarg != 0.0) {
 			// FIXME: for multimap, use key count
@@ -866,7 +870,7 @@ int main(int argc, char *argv[])
 				temp = RAND_GEN;
 			} while (kdb.count(temp));
 			wptr[i] = temp;
-#if 0 // this creates discontinuities in the Zipf distribution
+#if 1
 			/* repeat item */
 			if (zarg != 0.0) {
 				size_type count = ceil((1.0/(pow((double)rank, zarg)*zeta)) * samples);
@@ -988,6 +992,7 @@ int main(int argc, char *argv[])
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
 		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  zipf: %.2f\n", zarg);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
