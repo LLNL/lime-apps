@@ -29,7 +29,7 @@ $Log: $
 #include "block_map.h"
 
 // Arguments when STANDALONE
-#define ARGS (char*)"-e32Mi", (char*)"-l.90", (char*)"-rsrr550.fa", (char*)"-w256Ki", (char*)"-h.90", (char*)"-z.99"
+#define ARGS (char*)"-e32Mi", (char*)"-l.90", (char*)"-rsrr550.fa", (char*)"-w1Mi", (char*)"-h.90", (char*)"-z.99"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.50", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
 // #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-cd"
