@@ -9,7 +9,7 @@ static inline uint64_t Rot64(uint64_t x, int k)
 
 #define INIT_VAL 0xDEADBEEFDEADBEEFLL
 
-#if defined(SOFT)
+#if !defined(DEMO_HARD)
 
 /* software version */
 

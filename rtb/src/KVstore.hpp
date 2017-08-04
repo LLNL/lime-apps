@@ -5,7 +5,6 @@
 #include <cstdlib> // exit
 #include <cstdint> // uintXX_t
 #include <cstdio> // printf
-#define SOFT 1
 #include "short.h" // shortNN_hash
 #include "alloc.h"
 
