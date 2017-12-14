@@ -34,21 +34,42 @@
 #endif
 
 #if defined(ZYNQ)
-#include "xil_cache.h"
+#include "xpseudo_asm.h" // mtcp*, dsb
+#include "xil_cache.h" // Xil_D*
+#include "xil_mmu.h" // Xil_SetTlbAttributes
+#if defined(__aarch64__)
+#define Xil_L1DCacheFlush Xil_DCacheFlush
+#define Xil_L1DCacheInvalidateRange Xil_DCacheInvalidateRange
+#define dc_CVAC(va) mtcpdc(CVAC,(INTPTR)(va))
+#define dc_CIVAC(va) mtcpdc(CIVAC,(INTPTR)(va))
+#else
 #include "xil_cache_l.h" // Xil_L1D*
-#include "xpseudo_asm.h" // mtcp, dsb
-#include "xreg_cortexa9.h" // XREG_CP15_*
+#define dc_CVAC(va) mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC,(INTPTR)(va))
+#define dc_CIVAC(va) mtcp(XREG_CP15_CLEAN_INVAL_DC_LINE_MVA_POC,(INTPTR)(va))
+#endif
 namespace host {
+inline void cache_init(void) {
+#if !defined(__aarch64__)
+	char *ptr;
+	// Xil_ICacheEnable();
+	// Xil_DCacheEnable();
+	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x04c06); /* Inner Cacheable */
+	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x04c06); /* Inner Cacheable */
+	for (ptr = (char*)0x40200000; ptr < (char*)0x7fffffff; ptr += 0x100000)
+		Xil_SetTlbAttributes((INTPTR)ptr, 0x15de6); /* Cacheable */
+#endif
+}
 inline void cache_flush(void) {Xil_DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size) {Xil_DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_DCacheInvalidateRange((INTPTR)ptr, size);}
 } // namespace host
 
 #else
 namespace host {
+inline void cache_init(void) {}
 inline void cache_flush(void) {}
 inline void cache_flush(const void *ptr, size_t size) {}
 inline void cache_flush_invalidate(void) {}
@@ -57,8 +78,10 @@ inline void cache_invalidate(void) {}
 inline void cache_invalidate(const void *ptr, size_t size) {}
 } // namespace host
 
-/* ARM CP15 operations with mcr instruction */
-#define mtcp(reg,val)
+/* ARM cache line management */
+#define dc_CVAC(va)
+#define dc_CIVAC(va)
+
 /* Data Synchronization Barrier */
 #define dsb()
 

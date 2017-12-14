@@ -1,7 +1,7 @@
 #ifndef _INDEX_ARRAY_HPP
 #define _INDEX_ARRAY_HPP
 
-#if defined (SERVER)
+#if defined(SERVER)
 #define USE_LSU 1
 #endif
 #if defined(CLIENT) || defined(SERVER) || defined(USE_LSU)
@@ -14,9 +14,6 @@
 #include <cstddef> // size_t
 #include <algorithm> // min
 
-#define CEIL(n,s) ((((n)+((s)-1)) / s) * s)
-#define FLOOR(n,s) (((n) / s) * s)
-
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
 #if defined(USE_DMAC)
@@ -28,6 +25,7 @@
 
 #elif defined(USE_LSU)
 #include <cstring> // memcpy, memset
+// TODO: don't need lsu_cmd if USE_INDEX defined
 #include "lsu_cmd.h"
 #define smemcpy lsu_smemcpy
 #define memcpy lsu_memcpy
@@ -61,11 +59,11 @@ void *smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, size_
 class cache {
 public:
 inline void cache_flush(void) {Xil_L1DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_flush_invalidate(void) {Xil_L1DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_invalidate(void) {Xil_L1DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((INTPTR)ptr, size);}
 };
 
 #else
@@ -89,7 +87,7 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
 #ifdef USE_STREAM
-#include "stream.h"
+#include "aport.h"
 
 #define FWD_ID 2
 
@@ -186,24 +184,24 @@ public:
 		/* indexed load */
 		/* go=0, write=1, select=0, length=4, tid=gret_id, tdest=gfwd_id */
 		putfslx(1 << 22 | 0 << 19 | 4 << 16 | gret_id << 8 | (gfwd_id+READ_CH), 0, FSL_DEFAULT);
-		putfslx(0x00000000, 0, FSL_DEFAULT);            /* clear status */
-		putfslx(CMD_index, 0, FSL_DEFAULT);             /* index command */
-		putfslx((unsigned)ref_base, 0, FSL_DEFAULT);    /* base address */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_CONTROL); /* size */
+		putfslx(0x00000000, 0, FSL_DEFAULT);  /* clear status */
+		putfslx(LSU_index, 0, FSL_DEFAULT);   /* index command */
+		putfslx(ref_base, 0, FSL_DEFAULT);    /* base address */
+		putfslx(ref_elem_sz, 0, FSL_CONTROL); /* size */
 
 		/* contiguous store (with stride command) */
 		/* go=1, write=1, select=0, length=6, tid=gret_id, tdest=gfwd_id */
 		putfslx(1 << 23 | 1 << 22 | 0 << 19 | 6 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH), 0, FSL_DEFAULT);
-		putfslx(0x00000000, 0, FSL_DEFAULT);            /* clear status */
-		putfslx(0x80 | CMD_smove, 0, FSL_DEFAULT);      /* request status, smove command */
-		putfslx((unsigned)vptr, 0, FSL_DEFAULT);        /* address */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_DEFAULT); /* size */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_DEFAULT); /* increment */
-		putfslx((unsigned)n, 0, FSL_CONTROL);           /* repetitions */
+		putfslx(0x00000000, 0, FSL_DEFAULT);       /* clear status */
+		putfslx(0x80 | LSU_smove, 0, FSL_DEFAULT); /* request status, smove command */
+		putfslx(vptr, 0, FSL_DEFAULT);             /* address */
+		putfslx(ref_elem_sz, 0, FSL_DEFAULT);      /* size */
+		putfslx(ref_elem_sz, 0, FSL_DEFAULT);      /* increment */
+		putfslx(n, 0, FSL_CONTROL);                /* repetitions */
 
 		/* feed indexes */
 		/* go=1, write=1, select=4, length=1, tid=gret_id, tdest=gfwd_id */
-		register unsigned header = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+READ_CH);
+		register flit_t header = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+READ_CH);
 		register const index_t *ptr = &idx_base[idx];
 		register const index_t *end = ptr + n;
 		while (end-ptr >= 8) {
@@ -242,7 +240,7 @@ public:
 			putfslx(header, 0, FSL_DEFAULT);
 			putfslx(*ptr++, 0, FSL_CONTROL);
 			RIDX_DELAY
-//			if (((size_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
+//			if (((uintptr_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
 		}
 
 		/* receive store status */
@@ -250,28 +248,7 @@ public:
 		getfslx(header, 0, FSL_CONTROL);
 	}
 
-	/*
-	   The load-store unit (LSU) version 2.1 appears to have a bug in the
-	   back-pressure for store commands. A workaround is to pace store commands
-	   going to the LSU with delays or nops so that its throughput is not
-	   exceeded, otherwise the system will lock up.
-	*/
-	/* with normal clocks (ARM:600MHz-4:2:1, DRE:166MHz, delay:0) 0 nops: hang, 2&4 nops same time, 8 nops: time increase */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:12-452) 19 nops:hang, 20 nops:1.77x20, 24 nops:1.87x20, 28 nops:1.97x20 sec */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:8) 4 nops:hang, 5 nops:0.167 sec, 6 nops:0.167 sec, 8 nops:0.170 sec, 12 nops:0.184 sec, 16 nops:0.198 sec */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, delay:0-455, pipe:16) 0 nops:0.139, 1 nop:0.140, 2 nops:0.144, 3 nops:0.147, 4 nops:0.150, 5 nops:0.154 sec */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:683, pipe:16) 6 nops:hang, 7 nops:0.161580, 8 nops:0.162386, 16 nops:0.188441 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:1483, pipe:16) 22 nops:hang, 23 nops:0.266660, 24 nops:0.268247, 32 nops:0.295191 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:3083, pipe:16) 53 nops:hang, 54 nops:0.477753, 56 nops:0.481692, 64 nops:0.508615 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:7883, pipe:16) 145 nops:hang, 146 nops:1.111478, 148 nops:1.111570, 152 nops:1.123122, 160 nops:1.150022 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:15883, pipe:16) 59 loops:hang, 60 loops:2.168174, 70 loops:2.316196, 90 loops:2.651352, 180 loops:4.159924 */
-	/* with emulation clocks (ARM:133MHz-4:2:1, DRE:62MHz, ACC_DRAM_B:31883, pipe:16) 120 loops:hang, 121 loops:4.279794, 123 loops:4.280244, 125 loops:4.303539, 130 loops:4.387349 */
 #define WIDX_DELAY //__asm__ __volatile__("nop\n\tnop");
-#if 0
-#define WIDX_DELAY \
-for (int i = 0; i < 121; i++) \
-__asm__ __volatile__("nop");
-#endif
 
 	/* drain buffer starting from view offset */
 
@@ -286,24 +263,24 @@ __asm__ __volatile__("nop");
 		/* indexed store */
 		/* go=0, write=1, select=0, length=4, tid=gret_id, tdest=gfwd_id */
 		putfslx(1 << 22 | 0 << 19 | 4 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH), 0, FSL_DEFAULT);
-		putfslx(0x00000000, 0, FSL_DEFAULT);            /* clear status */
-		putfslx(CMD_index, 0, FSL_DEFAULT);             /* index command */
-		putfslx((unsigned)ref_base, 0, FSL_DEFAULT);    /* base address */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_CONTROL); /* size */
+		putfslx(0x00000000, 0, FSL_DEFAULT);  /* clear status */
+		putfslx(LSU_index, 0, FSL_DEFAULT);   /* index command */
+		putfslx(ref_base, 0, FSL_DEFAULT);    /* base address */
+		putfslx(ref_elem_sz, 0, FSL_CONTROL); /* size */
 
 		/* contiguous load (with stride command) */
 		/* go=1, write=1, select=0, length=6, tid=gret_id, tdest=gfwd_id */
 		putfslx(1 << 23 | 1 << 22 | 0 << 19 | 6 << 16 | gret_id << 8 | (gfwd_id+READ_CH), 0, FSL_DEFAULT);
-		putfslx(0x00000000, 0, FSL_DEFAULT);            /* clear status */
-		putfslx(CMD_smove, 0, FSL_DEFAULT);             /* smove command */
-		putfslx((unsigned)vptr, 0, FSL_DEFAULT);        /* address */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_DEFAULT); /* size */
-		putfslx((unsigned)ref_elem_sz, 0, FSL_DEFAULT); /* increment */
-		putfslx((unsigned)n, 0, FSL_CONTROL);           /* repetitions */
+		putfslx(0x00000000, 0, FSL_DEFAULT);  /* clear status */
+		putfslx(LSU_smove, 0, FSL_DEFAULT);   /* smove command */
+		putfslx(vptr, 0, FSL_DEFAULT);        /* address */
+		putfslx(ref_elem_sz, 0, FSL_DEFAULT); /* size */
+		putfslx(ref_elem_sz, 0, FSL_DEFAULT); /* increment */
+		putfslx(n, 0, FSL_CONTROL);           /* repetitions */
 
 		/* feed indexes */
 		/* go=1, write=1, select=4, length=1, tid=gret_id, tdest=gfwd_id */
-		register unsigned header = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH);
+		register flit_t header = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH);
 		register const index_t *ptr = &idx_base[idx];
 		register const index_t *end = ptr + (n-1);
 		while (end-ptr >= 8) {
@@ -342,16 +319,16 @@ __asm__ __volatile__("nop");
 			putfslx(header, 0, FSL_DEFAULT);
 			putfslx(*ptr++, 0, FSL_CONTROL);
 			WIDX_DELAY
-			if (((size_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
+			if (((uintptr_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
 		}
 		/* request response after last index */
 		/* go=0, write=1, select=1, length=1, tid=gret_id, tdest=gfwd_id */
 		putfslx(1 << 22 | 1 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH), 0, FSL_DEFAULT);
-		putfslx(0x80|CMD_index, 0, FSL_CONTROL);
+		putfslx(0x80|LSU_index, 0, FSL_CONTROL);
 		/* last index */
 		putfslx(header, 0, FSL_DEFAULT);
 		putfslx(*ptr++, 0, FSL_CONTROL);
-		if (((size_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
+		if (((uintptr_t)ptr & 0xF) == 0) wdcc(&ptr[-4]);
 
 		/* receive store status */
 		getfslx(header, 0, FSL_DEFAULT);
@@ -367,22 +344,22 @@ __asm__ __volatile__("nop");
 		size_t idx = 0; // offset / ref_elem_sz;
 		char *vptr = (char*)buf; /* pointer to current view element */
 		unsigned n = buf_sz/ref_elem_sz;
-		unsigned reg[7];
+		flit_t reg[7];
 
 		/* indexed load */
-		reg[1] = 0x00000000;            /* clear status */
-		reg[2] = CMD_index;             /* index command */
-		reg[3] = (unsigned)ref_base;    /* base address */
-		reg[4] = (unsigned)ref_elem_sz; /* size */
+		reg[1] = 0x00000000;      /* clear status */
+		reg[2] = LSU_index;       /* index command */
+		reg[3] = ATRAN(ref_base); /* base address */
+		reg[4] = ref_elem_sz;     /* size */
 		aport_nwrite(gfwd_id+READ_CH, gret_id, 0, 0, reg, 4);
 
 		/* contiguous store (with stride command) */
-		reg[1] = 0x00000000;            /* clear status */
-		reg[2] = 0x80 | CMD_smove;      /* request status, smove command */
-		reg[3] = (unsigned)vptr;        /* address */
-		reg[4] = (unsigned)ref_elem_sz; /* size */
-		reg[5] = (unsigned)ref_elem_sz; /* increment */
-		reg[6] = (unsigned)n;           /* repetitions */
+		reg[1] = 0x00000000;       /* clear status */
+		reg[2] = 0x80 | LSU_smove; /* request status, smove command */
+		reg[3] = ATRAN(vptr);      /* address */
+		reg[4] = ref_elem_sz;      /* size */
+		reg[5] = ref_elem_sz;      /* increment */
+		reg[6] = n;                /* repetitions */
 		aport_nwrite(gfwd_id+WRITE_CH, gret_id, 1, 0, reg, 6);
 
 		/* feed indexes */
@@ -390,11 +367,11 @@ __asm__ __volatile__("nop");
 		reg[0] = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+READ_CH);
 		for (size_t i = 0; i < n; i++) {
 			reg[1] = idx_base[idx++];
-			stream_send(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
+			stream_send(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
 		}
 
 		/* receive store status */
-		stream_recv(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
+		stream_recv(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
 	}
 
 	/* drain buffer starting from view offset */
@@ -404,22 +381,22 @@ __asm__ __volatile__("nop");
 		size_t idx = 0; // offset / ref_elem_sz;
 		char *vptr = (char*)buf; /* pointer to current view element */
 		unsigned n = buf_sz/ref_elem_sz;
-		unsigned reg[7];
+		flit_t reg[7];
 
 		/* indexed store */
-		reg[1] = 0x00000000;            /* clear status */
-		reg[2] = CMD_index;             /* index command */
-		reg[3] = (unsigned)ref_base;    /* base address */
-		reg[4] = (unsigned)ref_elem_sz; /* size */
+		reg[1] = 0x00000000;      /* clear status */
+		reg[2] = LSU_index;       /* index command */
+		reg[3] = ATRAN(ref_base); /* base address */
+		reg[4] = ref_elem_sz;     /* size */
 		aport_nwrite(gfwd_id+WRITE_CH, gret_id, 0, 0, reg, 4);
 
 		/* contiguous load (with stride command) */
-		reg[1] = 0x00000000;            /* clear status */
-		reg[2] = CMD_smove;             /* smove command */
-		reg[3] = (unsigned)vptr;        /* address */
-		reg[4] = (unsigned)ref_elem_sz; /* size */
-		reg[5] = (unsigned)ref_elem_sz; /* increment */
-		reg[6] = (unsigned)n;           /* repetitions */
+		reg[1] = 0x00000000;  /* clear status */
+		reg[2] = LSU_smove;   /* smove command */
+		reg[3] = ATRAN(vptr); /* address */
+		reg[4] = ref_elem_sz; /* size */
+		reg[5] = ref_elem_sz; /* increment */
+		reg[6] = n;           /* repetitions */
 		aport_nwrite(gfwd_id+READ_CH, gret_id, 1, 0, reg, 6);
 
 		/* feed indexes */
@@ -429,11 +406,11 @@ __asm__ __volatile__("nop");
 			reg[1] = idx_base[idx++];
 			/* request response after last index */
 			if (i == n-1) aport_write(gfwd_id+WRITE_CH, gret_id, 0, 1, 0x80|CMD_index);
-			stream_send(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
+			stream_send(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
 		}
 
 		/* receive store status */
-		stream_recv(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
+		stream_recv(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
 	}
 
 #endif // __microblaze__
@@ -498,7 +475,7 @@ class IndexArray
 #endif
 {
 
-#if defined(CLIENT) || defined (SERVER)
+#if defined(CLIENT) || defined(SERVER)
 
 	typedef struct {
 		unsigned int tdest :  8; /* forward route id */
@@ -509,26 +486,26 @@ class IndexArray
 	} header;
 
 	typedef struct {
-		void *ref;
-		size_t elem_sz;
-		const void *index;
-		size_t len;
+		flit_t ref;
+		flit_t elem_sz;
+		flit_t index;
+		flit_t len;
 	} setup_args;
 
 	typedef struct {
-		void *buf;
-		size_t buf_sz;
-		size_t offset;
+		flit_t buf;
+		flit_t buf_sz;
+		flit_t offset;
 	} buf_args;
 
 	typedef struct {
-		const void *buf;
-		size_t buf_sz;
+		flit_t buf;
+		flit_t buf_sz;
 	} cache_args;
 
 	enum {C_NOP, C_SETUP, C_FILL, C_DRAIN, C_WAIT, C_CFLUSH, C_CINVAL};
 
-#endif // defined(CLIENT) || defined (SERVER)
+#endif // defined(CLIENT) || defined(SERVER)
 
 public:
 
@@ -543,6 +520,8 @@ public:
 		// client, start thread server
 #ifdef USE_LSU
 		lsu_setport(&port, FWD_ID, RET_ID);
+#elif defined(USE_STREAM)
+		aport_set(&port);
 #endif
 #ifdef USE_DMAC
 		dmac_init(XPAR_XDMAPS_1_DEVICE_ID);
@@ -557,10 +536,10 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		flit_t reg[4];
 
 		for (;;) {
-			getfsl_interruptible(*(unsigned *)&hdr, 0); getfsl(hdr.cmd, 0);
+			getfsl_interruptible(*(flit_t *)&hdr, 0); getfsl(hdr.cmd, 0);
 			switch (hdr.cmd) {
 			case C_SETUP:
 				getfsl(reg[0], 0); getfsl(reg[1], 0); getfsl(reg[2], 0); cgetfsl(reg[3], 0);
@@ -598,7 +577,7 @@ public:
 			register unsigned int tmp = hdr.tid;
 			hdr.tid = hdr.tdest;
 			hdr.tdest = tmp;
-			putfsl(*(unsigned *)&hdr, 0); cputfsl(hdr.cmd, 0);
+			putfsl(*(flit_t *)&hdr, 0); cputfsl(hdr.cmd, 0);
 		}
 	}
 
@@ -607,38 +586,38 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		flit_t reg[4];
 
 		for (;;) {
 			stream_recv(&port, &hdr, sizeof(hdr), F_BEGP);
 			switch (hdr.cmd) {
 			case C_SETUP:
-				stream_recv(&port, reg, sizeof(size_t)*4, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*4, F_ENDP);
 				// Consider keeping a history of reference images, invalidate
 				// if haven't seen or let client call invalidate explicitly.
 				//cache_invalidate((void *)reg[0], reg[1]*reg[3]);
 				_IndexArray<T>::setup((void *)reg[0], reg[1], (const void *)reg[2], reg[3]);
 				break;
 			case C_FILL:
-				stream_recv(&port, reg, sizeof(size_t)*3, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*3, F_ENDP);
 				_IndexArray<T>::fill((void *)reg[0], reg[1], reg[2]);
 				//cache_flush((void *)reg[0], reg[1]);
 				break;
 			case C_DRAIN:
-				stream_recv(&port, reg, sizeof(size_t)*3, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*3, F_ENDP);
 				//cache_invalidate((void *)reg[0], reg[1]);
 				_IndexArray<T>::drain((void *)reg[0], reg[1], reg[2]);
 				break;
 			case C_WAIT:
-				stream_recv(&port, reg, sizeof(size_t)*1, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*1, F_ENDP);
 				break;
 			case C_CFLUSH:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) _IndexArray<T>::cache_flush();
 				else _IndexArray<T>::cache_flush((void *)reg[0], reg[1]);
 				break;
 			case C_CINVAL:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) _IndexArray<T>::cache_flush_invalidate(); // include flush
 				else _IndexArray<T>::cache_invalidate((void *)reg[0], reg[1]);
 				break;
@@ -684,9 +663,9 @@ public:
 		hdr.cmd = C_SETUP;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.ref = ref;
+		args.ref = ATRAN(ref);
 		args.elem_sz = elem_sz;
-		args.index = index;
+		args.index = ATRAN(index);
 		args.len = len;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -720,7 +699,7 @@ public:
 		hdr.cmd = C_FILL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = buf;
+		args.buf = ATRAN(buf);
 		args.buf_sz = buf_sz;
 		args.offset = offset;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
@@ -745,7 +724,7 @@ public:
 		hdr.cmd = C_DRAIN;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = buf;
+		args.buf = ATRAN(buf);
 		args.buf_sz = buf_sz;
 		args.offset = offset;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
@@ -760,7 +739,7 @@ public:
 	{
 		header hdr;
 		header res;
-		size_t args;
+		flit_t args;
 
 		hdr.tdest = MCU_ID << 1;
 		hdr.tid = HST_ID << 1;
@@ -784,7 +763,7 @@ public:
 		hdr.cmd = C_CFLUSH;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -803,7 +782,7 @@ public:
 		hdr.cmd = C_CINVAL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 

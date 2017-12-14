@@ -1,0 +1,3130 @@
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=4 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=4 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=4 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=4 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=4 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+psl: 4 entries: 32 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 3726356
+Insert  rate: 5035616.216216 ops/sec
+Bases   rate: 2074219.170984 bp/sec
+Run     time: 1.930000 sec
+Oper.   time: 1.190000 sec
+Insert  time: 0.740000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355972
+load_factor (elem): 0.100016
+bucket_count: 33554435
+max_psl: 4
+spill size: 6
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.160000 sec
+Insert count: 7529492
+Insert  rate: 4765501.265823 ops/sec
+Bases   rate: 2092502.072539 bp/sec
+Run     time: 3.860000 sec
+Oper.   time: 2.280000 sec
+Insert  time: 1.580000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711418
+load_factor (elem): 0.200016
+bucket_count: 33554435
+max_psl: 4
+spill size: 255
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 11384914
+Insert  rate: 4590691.129032 ops/sec
+Bases   rate: 2076306.632653 bp/sec
+Run     time: 5.880000 sec
+Oper.   time: 3.400000 sec
+Insert  time: 2.480000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067044
+load_factor (elem): 0.300021
+bucket_count: 33554435
+max_psl: 4
+spill size: 3170
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 15280260
+Insert  rate: 4775081.250000 ops/sec
+Bases   rate: 2079403.045685 bp/sec
+Run     time: 7.880000 sec
+Oper.   time: 4.680000 sec
+Insert  time: 3.200000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422458
+load_factor (elem): 0.400020
+bucket_count: 33554435
+max_psl: 4
+spill size: 18532
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 19258625
+Insert  rate: 4270205.099778 ops/sec
+Bases   rate: 2062257.584830 bp/sec
+Run     time: 10.020000 sec
+Oper.   time: 5.510000 sec
+Insert  time: 4.510000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777546
+load_factor (elem): 0.500010
+bucket_count: 33554435
+max_psl: 4
+spill size: 75411
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 23496722
+Insert  rate: 4279912.932605 ops/sec
+Bases   rate: 2028917.604502 bp/sec
+Run     time: 12.440000 sec
+Oper.   time: 6.950000 sec
+Insert  time: 5.490000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20133137
+load_factor (elem): 0.600014
+bucket_count: 33554435
+max_psl: 4
+spill size: 243156
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 28093630
+Insert  rate: 4057427.787406 ops/sec
+Bases   rate: 1958721.233766 bp/sec
+Run     time: 15.400000 sec
+Oper.   time: 8.476000 sec
+Insert  time: 6.924000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488977
+load_factor (elem): 0.700026
+bucket_count: 33554435
+max_psl: 4
+spill size: 673020
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.180000 sec
+Insert count: 33396740
+Insert  rate: 3821137.299771 ops/sec
+Bases   rate: 1911701.600000 bp/sec
+Run     time: 18.750000 sec
+Oper.   time: 10.010000 sec
+Insert  time: 8.740000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26843556
+load_factor (elem): 0.800000
+bucket_count: 33554435
+max_psl: 4
+spill size: 1726929
+Stats   time: 0.000000 sec
+psl: 4 entries: 32 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 40890504
+Insert  rate: 3107181.155015 ops/sec
+Bases   rate: 1757448.698438 bp/sec
+Run     time: 24.970000 sec
+Oper.   time: 11.810000 sec
+Insert  time: 13.160000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199257
+load_factor (elem): 0.900008
+bucket_count: 33554435
+max_psl: 4
+spill size: 4539842
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 1846512
+Insert  rate: 5430917.647059 ops/sec
+Bases   rate: 2137041.935484 bp/sec
+Run     time: 0.930000 sec
+Oper.   time: 0.590000 sec
+Insert  time: 0.340000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678707
+load_factor (elem): 0.100059
+bucket_count: 16777219
+max_psl: 4
+spill size: 3
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 3726356
+Insert  rate: 4544336.585366 ops/sec
+Bases   rate: 2129384.574468 bp/sec
+Run     time: 1.880000 sec
+Oper.   time: 1.060000 sec
+Insert  time: 0.820000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355826
+load_factor (elem): 0.200023
+bucket_count: 16777219
+max_psl: 4
+spill size: 152
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 5630093
+Insert  rate: 4812045.299145 ops/sec
+Bases   rate: 2083537.586207 bp/sec
+Run     time: 2.900000 sec
+Oper.   time: 1.730000 sec
+Insert  time: 1.170000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5034081
+load_factor (elem): 0.300055
+bucket_count: 16777219
+max_psl: 4
+spill size: 1512
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 7539935
+Insert  rate: 4833291.666667 ops/sec
+Bases   rate: 2111805.483029 bp/sec
+Run     time: 3.830000 sec
+Oper.   time: 2.270000 sec
+Insert  time: 1.560000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711395
+load_factor (elem): 0.400030
+bucket_count: 16777219
+max_psl: 4
+spill size: 9253
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 9492634
+Insert  rate: 4893110.309278 ops/sec
+Bases   rate: 2099115.257732 bp/sec
+Run     time: 4.850000 sec
+Oper.   time: 2.910000 sec
+Insert  time: 1.940000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 8389445
+load_factor (elem): 0.500050
+bucket_count: 16777219
+max_psl: 4
+spill size: 37655
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 11520014
+Insert  rate: 4760336.363636 ops/sec
+Bases   rate: 2072714.261745 bp/sec
+Run     time: 5.960000 sec
+Oper.   time: 3.540000 sec
+Insert  time: 2.420000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10066596
+load_factor (elem): 0.600016
+bucket_count: 16777219
+max_psl: 4
+spill size: 121742
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 13698195
+Insert  rate: 4227837.962963 ops/sec
+Bases   rate: 2031513.969571 bp/sec
+Run     time: 7.230000 sec
+Oper.   time: 3.990000 sec
+Insert  time: 3.240000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 11744773
+load_factor (elem): 0.700043
+bucket_count: 16777219
+max_psl: 4
+spill size: 337114
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 16266449
+Insert  rate: 3957773.479319 ops/sec
+Bases   rate: 1953470.100784 bp/sec
+Run     time: 8.930000 sec
+Oper.   time: 4.820000 sec
+Insert  time: 4.110000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422334
+load_factor (elem): 0.800033
+bucket_count: 16777219
+max_psl: 4
+spill size: 862170
+Stats   time: 0.000000 sec
+psl: 4 entries: 16 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 19854419
+Insert  rate: 3166574.003190 ops/sec
+Bases   rate: 1792005.130362 bp/sec
+Run     time: 11.890000 sec
+Oper.   time: 5.620000 sec
+Insert  time: 6.270000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 15099711
+load_factor (elem): 0.900013
+bucket_count: 16777219
+max_psl: 4
+spill size: 2268110
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 911519
+Insert  rate: 5063994.444444 ops/sec
+Bases   rate: 2138139.130435 bp/sec
+Run     time: 0.460000 sec
+Oper.   time: 0.280000 sec
+Insert  time: 0.180000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 839810
+load_factor (elem): 0.100113
+bucket_count: 8388611
+max_psl: 4
+spill size: 1
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 1846512
+Insert  rate: 4396457.142857 ops/sec
+Bases   rate: 2160270.652174 bp/sec
+Run     time: 0.920000 sec
+Oper.   time: 0.500000 sec
+Insert  time: 0.420000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678641
+load_factor (elem): 0.200110
+bucket_count: 8388611
+max_psl: 4
+spill size: 69
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 2785520
+Insert  rate: 5064581.818182 ops/sec
+Bases   rate: 2170183.333333 bp/sec
+Run     time: 1.380000 sec
+Oper.   time: 0.830000 sec
+Insert  time: 0.550000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 2517708
+load_factor (elem): 0.300134
+bucket_count: 8388611
+max_psl: 4
+spill size: 760
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 3731501
+Insert  rate: 4664376.250000 ops/sec
+Bases   rate: 2143723.529412 bp/sec
+Run     time: 1.870000 sec
+Oper.   time: 1.070000 sec
+Insert  time: 0.800000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355959
+load_factor (elem): 0.400061
+bucket_count: 8388611
+max_psl: 4
+spill size: 4517
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 4695165
+Insert  rate: 4890796.875000 ops/sec
+Bases   rate: 2135986.016949 bp/sec
+Run     time: 2.360000 sec
+Oper.   time: 1.400000 sec
+Insert  time: 0.960000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 4194772
+load_factor (elem): 0.500056
+bucket_count: 8388611
+max_psl: 4
+spill size: 18453
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 5696689
+Insert  rate: 4594104.032258 ops/sec
+Bases   rate: 2115426.643599 bp/sec
+Run     time: 2.890000 sec
+Oper.   time: 1.650000 sec
+Insert  time: 1.240000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033619
+load_factor (elem): 0.600054
+bucket_count: 8388611
+max_psl: 4
+spill size: 60350
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 6770751
+Insert  rate: 4103485.454545 ops/sec
+Bases   rate: 2023587.743733 bp/sec
+Run     time: 3.590000 sec
+Oper.   time: 1.940000 sec
+Insert  time: 1.650000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5872795
+load_factor (elem): 0.700091
+bucket_count: 8388611
+max_psl: 4
+spill size: 168141
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 8023108
+Insert  rate: 4031712.562814 ops/sec
+Bases   rate: 2006071.561772 bp/sec
+Run     time: 4.290000 sec
+Oper.   time: 2.300000 sec
+Insert  time: 1.990000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711333
+load_factor (elem): 0.800053
+bucket_count: 8388611
+max_psl: 4
+spill size: 431514
+Stats   time: 0.000000 sec
+psl: 4 entries: 8 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 9789692
+Insert  rate: 3434979.649123 ops/sec
+Bases   rate: 1848452.112676 bp/sec
+Run     time: 5.680000 sec
+Oper.   time: 2.830000 sec
+Insert  time: 2.850000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 7550213
+load_factor (elem): 0.900055
+bucket_count: 8388611
+max_psl: 4
+spill size: 1134172
+Stats   time: 0.000000 sec
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=8 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=8 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=8 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=8 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=8 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+psl: 8 entries: 32 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 3726356
+Insert  rate: 5175494.444444 ops/sec
+Bases   rate: 2085022.395833 bp/sec
+Run     time: 1.920000 sec
+Oper.   time: 1.200000 sec
+Insert  time: 0.720000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 7529492
+Insert  rate: 4889280.519481 ops/sec
+Bases   rate: 2081715.979381 bp/sec
+Run     time: 3.880000 sec
+Oper.   time: 2.340000 sec
+Insert  time: 1.540000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.200023
+bucket_count: 33554438
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 11381979
+Insert  rate: 4498805.928854 ops/sec
+Bases   rate: 2086417.777778 bp/sec
+Run     time: 5.850000 sec
+Oper.   time: 3.320000 sec
+Insert  time: 2.530000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067486
+load_factor (elem): 0.300034
+bucket_count: 33554439
+max_psl: 8
+spill size: 1
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 15257707
+Insert  rate: 4214836.187845 ops/sec
+Bases   rate: 2073706.970849 bp/sec
+Run     time: 7.890000 sec
+Oper.   time: 4.270000 sec
+Insert  time: 3.620000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422618
+load_factor (elem): 0.400025
+bucket_count: 33554439
+max_psl: 8
+spill size: 28
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 19171557
+Insert  rate: 4241494.911504 ops/sec
+Bases   rate: 2046776.218905 bp/sec
+Run     time: 10.050000 sec
+Oper.   time: 5.530000 sec
+Insert  time: 4.520000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777876
+load_factor (elem): 0.500020
+bucket_count: 33554439
+max_psl: 8
+spill size: 506
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 23214330
+Insert  rate: 4507636.893204 ops/sec
+Bases   rate: 2038992.068684 bp/sec
+Run     time: 12.230000 sec
+Oper.   time: 7.080000 sec
+Insert  time: 5.150000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20133492
+load_factor (elem): 0.600025
+bucket_count: 33554439
+max_psl: 8
+spill size: 5189
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 27318391
+Insert  rate: 4261839.469579 ops/sec
+Bases   rate: 2003677.937158 bp/sec
+Run     time: 14.640000 sec
+Oper.   time: 8.230000 sec
+Insert  time: 6.410000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488874
+load_factor (elem): 0.700023
+bucket_count: 33554439
+max_psl: 8
+spill size: 37125
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 31562775
+Insert  rate: 4041328.425096 ops/sec
+Bases   rate: 1992936.411765 bp/sec
+Run     time: 17.000000 sec
+Oper.   time: 9.190000 sec
+Insert  time: 7.810000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26844037
+load_factor (elem): 0.800014
+bucket_count: 33554439
+max_psl: 8
+spill size: 210016
+Stats   time: 0.000000 sec
+psl: 8 entries: 32 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.180000 sec
+Insert count: 36605168
+Insert  rate: 3777623.116615 ops/sec
+Bases   rate: 1911614.014599 bp/sec
+Run     time: 20.550000 sec
+Oper.   time: 10.860000 sec
+Insert  time: 9.690000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199150
+load_factor (elem): 0.900005
+bucket_count: 33554439
+max_psl: 8
+spill size: 1030369
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 1846512
+Insert  rate: 5275748.571429 ops/sec
+Bases   rate: 2137041.935484 bp/sec
+Run     time: 0.930000 sec
+Oper.   time: 0.580000 sec
+Insert  time: 0.350000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.100059
+bucket_count: 16777220
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 3726356
+Insert  rate: 4716906.329114 ops/sec
+Bases   rate: 2140771.657754 bp/sec
+Run     time: 1.870000 sec
+Oper.   time: 1.080000 sec
+Insert  time: 0.790000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.200032
+bucket_count: 16777222
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 5628029
+Insert  rate: 4502423.200000 ops/sec
+Bases   rate: 2111908.741259 bp/sec
+Run     time: 2.860000 sec
+Oper.   time: 1.610000 sec
+Insert  time: 1.250000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033845
+load_factor (elem): 0.300040
+bucket_count: 16777223
+max_psl: 8
+spill size: 1
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 7529492
+Insert  rate: 4735529.559748 ops/sec
+Bases   rate: 2097937.142857 bp/sec
+Run     time: 3.850000 sec
+Oper.   time: 2.260000 sec
+Insert  time: 1.590000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711661
+load_factor (elem): 0.400046
+bucket_count: 16777223
+max_psl: 8
+spill size: 12
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 9449519
+Insert  rate: 4677979.702970 ops/sec
+Bases   rate: 2089584.329897 bp/sec
+Run     time: 4.850000 sec
+Oper.   time: 2.830000 sec
+Insert  time: 2.020000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 8389251
+load_factor (elem): 0.500038
+bucket_count: 16777223
+max_psl: 8
+spill size: 250
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 11383873
+Insert  rate: 4154698.175182 ops/sec
+Bases   rate: 2027836.212625 bp/sec
+Run     time: 6.020000 sec
+Oper.   time: 3.280000 sec
+Insert  time: 2.740000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10066735
+load_factor (elem): 0.600024
+bucket_count: 16777223
+max_psl: 8
+spill size: 2583
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 13336670
+Insert  rate: 4344192.182410 ops/sec
+Bases   rate: 2048774.212034 bp/sec
+Run     time: 6.980000 sec
+Oper.   time: 3.910000 sec
+Insert  time: 3.070000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 11744161
+load_factor (elem): 0.700006
+bucket_count: 16777223
+max_psl: 8
+spill size: 18857
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 15382637
+Insert  rate: 4395039.142857 ops/sec
+Bases   rate: 2036501.234568 bp/sec
+Run     time: 8.100000 sec
+Oper.   time: 4.600000 sec
+Insert  time: 3.500000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422427
+load_factor (elem): 0.800039
+bucket_count: 16777223
+max_psl: 8
+spill size: 105680
+Stats   time: 0.000000 sec
+psl: 8 entries: 16 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 17818691
+Insert  rate: 4124696.990741 ops/sec
+Bases   rate: 1968407.415036 bp/sec
+Run     time: 9.710000 sec
+Oper.   time: 5.390000 sec
+Insert  time: 4.320000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 15100190
+load_factor (elem): 0.900041
+bucket_count: 16777223
+max_psl: 8
+spill size: 513887
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 911519
+Insert  rate: 5696993.750000 ops/sec
+Bases   rate: 2185653.333333 bp/sec
+Run     time: 0.450000 sec
+Oper.   time: 0.290000 sec
+Insert  time: 0.160000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 839811
+load_factor (elem): 0.100113
+bucket_count: 8388612
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 1846512
+Insert  rate: 5770350.000000 ops/sec
+Bases   rate: 2184009.890110 bp/sec
+Run     time: 0.910000 sec
+Oper.   time: 0.590000 sec
+Insert  time: 0.320000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.200118
+bucket_count: 8388614
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 2784484
+Insert  rate: 5568968.000000 ops/sec
+Bases   rate: 2153776.258993 bp/sec
+Run     time: 1.390000 sec
+Oper.   time: 0.890000 sec
+Insert  time: 0.500000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 2517475
+load_factor (elem): 0.300106
+bucket_count: 8388615
+max_psl: 8
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 3726356
+Insert  rate: 4839423.376623 ops/sec
+Bases   rate: 2152281.182796 bp/sec
+Run     time: 1.860000 sec
+Oper.   time: 1.090000 sec
+Insert  time: 0.770000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355969
+load_factor (elem): 0.400062
+bucket_count: 8388615
+max_psl: 8
+spill size: 9
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 4674564
+Insert  rate: 4869337.500000 ops/sec
+Bases   rate: 2144829.487179 bp/sec
+Run     time: 2.340000 sec
+Oper.   time: 1.380000 sec
+Insert  time: 0.960000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 4195116
+load_factor (elem): 0.500096
+bucket_count: 8388615
+max_psl: 8
+spill size: 110
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 5629041
+Insert  rate: 4652100.000000 ops/sec
+Bases   rate: 2134678.091873 bp/sec
+Run     time: 2.830000 sec
+Oper.   time: 1.620000 sec
+Insert  time: 1.210000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033389
+load_factor (elem): 0.600026
+bucket_count: 8388615
+max_psl: 8
+spill size: 1172
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 6588575
+Insert  rate: 4739982.014388 ops/sec
+Bases   rate: 2110283.880597 bp/sec
+Run     time: 3.350000 sec
+Oper.   time: 1.960000 sec
+Insert  time: 1.390000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5872650
+load_factor (elem): 0.700074
+bucket_count: 8388615
+max_psl: 8
+spill size: 9314
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 7589948
+Insert  rate: 4743717.500000 ops/sec
+Bases   rate: 2082309.718670 bp/sec
+Run     time: 3.910000 sec
+Oper.   time: 2.310000 sec
+Insert  time: 1.600000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711472
+load_factor (elem): 0.800069
+bucket_count: 8388615
+max_psl: 8
+spill size: 52546
+Stats   time: 0.000000 sec
+psl: 8 entries: 8 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 8781831
+Insert  rate: 4028362.844037 ops/sec
+Bases   rate: 1995533.686441 bp/sec
+Run     time: 4.720000 sec
+Oper.   time: 2.540000 sec
+Insert  time: 2.180000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 7550261
+load_factor (elem): 0.900060
+bucket_count: 8388615
+max_psl: 8
+spill size: 256641
+Stats   time: 0.000000 sec
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=12 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=12 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=12 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=12 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=12 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+psl: 12 entries: 32 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 3726356
+Insert  rate: 4234495.454545 ops/sec
+Bases   rate: 2063527.319588 bp/sec
+Run     time: 1.940000 sec
+Oper.   time: 1.060000 sec
+Insert  time: 0.880000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 7529492
+Insert  rate: 4857736.774194 ops/sec
+Bases   rate: 2081715.979381 bp/sec
+Run     time: 3.880000 sec
+Oper.   time: 2.330000 sec
+Insert  time: 1.550000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.200023
+bucket_count: 33554438
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.190000 sec
+Insert count: 11381979
+Insert  rate: 4215547.777778 ops/sec
+Bases   rate: 2041060.869565 bp/sec
+Run     time: 5.980000 sec
+Oper.   time: 3.280000 sec
+Insert  time: 2.700000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067487
+load_factor (elem): 0.300034
+bucket_count: 33554440
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 15257707
+Insert  rate: 4527509.495549 ops/sec
+Bases   rate: 2073706.970849 bp/sec
+Run     time: 7.890000 sec
+Oper.   time: 4.520000 sec
+Insert  time: 3.370000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422646
+load_factor (elem): 0.400026
+bucket_count: 33554442
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 19170321
+Insert  rate: 4890388.010204 ops/sec
+Bases   rate: 2058936.936937 bp/sec
+Run     time: 9.990000 sec
+Oper.   time: 6.070000 sec
+Insert  time: 3.920000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777579
+load_factor (elem): 0.500011
+bucket_count: 33554443
+max_psl: 12
+spill size: 4
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 23208047
+Insert  rate: 4321796.461825 ops/sec
+Bases   rate: 2017003.640777 bp/sec
+Run     time: 12.360000 sec
+Oper.   time: 6.990000 sec
+Insert  time: 5.370000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20133181
+load_factor (elem): 0.600015
+bucket_count: 33554443
+max_psl: 12
+spill size: 117
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 27276360
+Insert  rate: 4248654.205607 ops/sec
+Bases   rate: 2018526.533425 bp/sec
+Run     time: 14.510000 sec
+Oper.   time: 8.090000 sec
+Insert  time: 6.420000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488563
+load_factor (elem): 0.700013
+bucket_count: 33554443
+max_psl: 12
+spill size: 2436
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 31349769
+Insert  rate: 4098009.019608 ops/sec
+Bases   rate: 1987688.009451 bp/sec
+Run     time: 16.930000 sec
+Oper.   time: 9.280000 sec
+Insert  time: 7.650000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26844341
+load_factor (elem): 0.800023
+bucket_count: 33554443
+max_psl: 12
+spill size: 34692
+Stats   time: 0.000000 sec
+psl: 12 entries: 32 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 35776678
+Insert  rate: 3842822.556391 ops/sec
+Bases   rate: 1922653.079619 bp/sec
+Run     time: 19.970000 sec
+Oper.   time: 10.660000 sec
+Insert  time: 9.310000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199386
+load_factor (elem): 0.900012
+bucket_count: 33554443
+max_psl: 12
+spill size: 342192
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 1846512
+Insert  rate: 4503687.804878 ops/sec
+Bases   rate: 2114307.446809 bp/sec
+Run     time: 0.940000 sec
+Oper.   time: 0.530000 sec
+Insert  time: 0.410000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.100059
+bucket_count: 16777220
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 3726356
+Insert  rate: 5323365.714286 ops/sec
+Bases   rate: 2140771.657754 bp/sec
+Run     time: 1.870000 sec
+Oper.   time: 1.170000 sec
+Insert  time: 0.700000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.200032
+bucket_count: 16777222
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 5628029
+Insert  rate: 4769516.101695 ops/sec
+Bases   rate: 2134296.466431 bp/sec
+Run     time: 2.830000 sec
+Oper.   time: 1.650000 sec
+Insert  time: 1.180000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033846
+load_factor (elem): 0.300040
+bucket_count: 16777224
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 7529492
+Insert  rate: 4857736.774194 ops/sec
+Bases   rate: 2125541.578947 bp/sec
+Run     time: 3.800000 sec
+Oper.   time: 2.250000 sec
+Insert  time: 1.550000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.400047
+bucket_count: 16777225
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 9448461
+Insert  rate: 4724230.500000 ops/sec
+Bases   rate: 2111116.250000 bp/sec
+Run     time: 4.800000 sec
+Oper.   time: 2.800000 sec
+Insert  time: 2.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 8388764
+load_factor (elem): 0.500009
+bucket_count: 16777227
+max_psl: 12
+spill size: 5
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 11381979
+Insert  rate: 4664745.491803 ops/sec
+Bases   rate: 2065235.871404 bp/sec
+Run     time: 5.910000 sec
+Oper.   time: 3.470000 sec
+Insert  time: 2.440000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067413
+load_factor (elem): 0.600064
+bucket_count: 16777227
+max_psl: 12
+spill size: 74
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 13317137
+Insert  rate: 4366274.426230 ops/sec
+Bases   rate: 2051658.908046 bp/sec
+Run     time: 6.960000 sec
+Oper.   time: 3.910000 sec
+Insert  time: 3.050000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 11744551
+load_factor (elem): 0.700029
+bucket_count: 16777227
+max_psl: 12
+spill size: 1302
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 15279287
+Insert  rate: 4543350.282486 ops/sec
+Bases   rate: 2030819.905801 bp/sec
+Run     time: 8.068000 sec
+Oper.   time: 4.705000 sec
+Insert  time: 3.363000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422402
+load_factor (elem): 0.800037
+bucket_count: 16777227
+max_psl: 12
+spill size: 17846
+Stats   time: 0.000000 sec
+psl: 12 entries: 16 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 17415351
+Insert  rate: 4136662.945368 ops/sec
+Bases   rate: 1985049.415515 bp/sec
+Run     time: 9.410000 sec
+Oper.   time: 5.200000 sec
+Insert  time: 4.210000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 15099699
+load_factor (elem): 0.900012
+bucket_count: 16777227
+max_psl: 12
+spill size: 171314
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 911519
+Insert  rate: 4340566.666667 ops/sec
+Bases   rate: 2138139.130435 bp/sec
+Run     time: 0.460000 sec
+Oper.   time: 0.250000 sec
+Insert  time: 0.210000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 839811
+load_factor (elem): 0.100113
+bucket_count: 8388612
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 1846512
+Insert  rate: 4196618.181818 ops/sec
+Bases   rate: 2184009.890110 bp/sec
+Run     time: 0.910000 sec
+Oper.   time: 0.470000 sec
+Insert  time: 0.440000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.200118
+bucket_count: 8388614
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 2784484
+Insert  rate: 4719464.406780 ops/sec
+Bases   rate: 2153776.258993 bp/sec
+Run     time: 1.390000 sec
+Oper.   time: 0.800000 sec
+Insert  time: 0.590000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 2517475
+load_factor (elem): 0.300106
+bucket_count: 8388615
+max_psl: 8
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 3726356
+Insert  rate: 4839423.376623 ops/sec
+Bases   rate: 2152281.182796 bp/sec
+Run     time: 1.860000 sec
+Oper.   time: 1.090000 sec
+Insert  time: 0.770000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.400063
+bucket_count: 8388617
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 4674564
+Insert  rate: 4721781.818182 ops/sec
+Bases   rate: 2126652.966102 bp/sec
+Run     time: 2.360000 sec
+Oper.   time: 1.370000 sec
+Insert  time: 0.990000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 4195226
+load_factor (elem): 0.500109
+bucket_count: 8388618
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 5628029
+Insert  rate: 4613138.524590 ops/sec
+Bases   rate: 2075621.649485 bp/sec
+Run     time: 2.910000 sec
+Oper.   time: 1.690000 sec
+Insert  time: 1.220000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033826
+load_factor (elem): 0.600078
+bucket_count: 8388619
+max_psl: 12
+spill size: 20
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.026000 sec
+Insert count: 6579383
+Insert  rate: 4442527.346388 ops/sec
+Bases   rate: 2061802.570093 bp/sec
+Run     time: 3.424000 sec
+Oper.   time: 1.943000 sec
+Insert  time: 1.481000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5872808
+load_factor (elem): 0.700092
+bucket_count: 8388619
+max_psl: 12
+spill size: 576
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.031000 sec
+Insert count: 7539935
+Insert  rate: 4662915.893630 ops/sec
+Bases   rate: 2043510.611420 bp/sec
+Run     time: 3.958000 sec
+Oper.   time: 2.341000 sec
+Insert  time: 1.617000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711840
+load_factor (elem): 0.800113
+bucket_count: 8388619
+max_psl: 12
+spill size: 8808
+Stats   time: 0.000000 sec
+psl: 12 entries: 8 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 8588421
+Insert  rate: 4427021.134021 ops/sec
+Bases   rate: 2006926.143791 bp/sec
+Run     time: 4.590000 sec
+Oper.   time: 2.650000 sec
+Insert  time: 1.940000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 7550197
+load_factor (elem): 0.900052
+bucket_count: 8388619
+max_psl: 12
+spill size: 85681
+Stats   time: 0.000000 sec
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=16 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=16 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=16 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=16 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=16 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+psl: 16 entries: 32 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.200000 sec
+Insert count: 3726356
+Insert  rate: 3922480.000000 ops/sec
+Bases   rate: 1972040.886700 bp/sec
+Run     time: 2.030000 sec
+Oper.   time: 1.080000 sec
+Insert  time: 0.950000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 7529492
+Insert  rate: 4921236.601307 ops/sec
+Bases   rate: 2081715.979381 bp/sec
+Run     time: 3.880000 sec
+Oper.   time: 2.350000 sec
+Insert  time: 1.530000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.200023
+bucket_count: 33554438
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 11381979
+Insert  rate: 4278939.473684 ops/sec
+Bases   rate: 2065235.871404 bp/sec
+Run     time: 5.910000 sec
+Oper.   time: 3.250000 sec
+Insert  time: 2.660000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067487
+load_factor (elem): 0.300034
+bucket_count: 33554440
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 15257707
+Insert  rate: 4461317.836257 ops/sec
+Bases   rate: 2068463.716814 bp/sec
+Run     time: 7.910000 sec
+Oper.   time: 4.490000 sec
+Insert  time: 3.420000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422646
+load_factor (elem): 0.400026
+bucket_count: 33554442
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 19170321
+Insert  rate: 4447870.301624 ops/sec
+Bases   rate: 2061000.000000 bp/sec
+Run     time: 9.980000 sec
+Oper.   time: 5.670000 sec
+Insert  time: 4.310000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 23208047
+Insert  rate: 4274041.804788 ops/sec
+Bases   rate: 2050178.042763 bp/sec
+Run     time: 12.160000 sec
+Oper.   time: 6.730000 sec
+Insert  time: 5.430000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20133298
+load_factor (elem): 0.600019
+bucket_count: 33554447
+max_psl: 16
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.180000 sec
+Insert count: 27273385
+Insert  rate: 4288268.081761 ops/sec
+Bases   rate: 2018306.202619 bp/sec
+Run     time: 14.510000 sec
+Oper.   time: 8.150000 sec
+Insert  time: 6.360000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488705
+load_factor (elem): 0.700018
+bucket_count: 33554447
+max_psl: 16
+spill size: 152
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.180000 sec
+Insert count: 31314123
+Insert  rate: 4114865.045992 ops/sec
+Bases   rate: 1992491.227030 bp/sec
+Run     time: 16.870000 sec
+Oper.   time: 9.260000 sec
+Insert  time: 7.610000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26844043
+load_factor (elem): 0.800014
+bucket_count: 33554447
+max_psl: 16
+spill size: 6164
+Stats   time: 0.000000 sec
+psl: 16 entries: 32 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 35521608
+Insert  rate: 3916384.564498 ops/sec
+Bases   rate: 1932166.497719 bp/sec
+Run     time: 19.730000 sec
+Oper.   time: 10.660000 sec
+Insert  time: 9.070000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199670
+load_factor (elem): 0.900020
+bucket_count: 33554447
+max_psl: 16
+spill size: 131109
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 1846512
+Insert  rate: 4990572.972973 ops/sec
+Bases   rate: 2028009.183673 bp/sec
+Run     time: 0.980000 sec
+Oper.   time: 0.610000 sec
+Insert  time: 0.370000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.100059
+bucket_count: 16777220
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 3726356
+Insert  rate: 4777379.487179 ops/sec
+Bases   rate: 2118117.989418 bp/sec
+Run     time: 1.890000 sec
+Oper.   time: 1.110000 sec
+Insert  time: 0.780000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.200032
+bucket_count: 16777222
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 5628029
+Insert  rate: 5116390.000000 ops/sec
+Bases   rate: 2119318.947368 bp/sec
+Run     time: 2.850000 sec
+Oper.   time: 1.750000 sec
+Insert  time: 1.100000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033846
+load_factor (elem): 0.300040
+bucket_count: 16777224
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 7529492
+Insert  rate: 5228813.888889 ops/sec
+Bases   rate: 2114413.089005 bp/sec
+Run     time: 3.820000 sec
+Oper.   time: 2.380000 sec
+Insert  time: 1.440000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.400047
+bucket_count: 16777225
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 9448461
+Insert  rate: 4586631.553398 ops/sec
+Bases   rate: 2115523.590814 bp/sec
+Run     time: 4.790000 sec
+Oper.   time: 2.730000 sec
+Insert  time: 2.060000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 8388769
+load_factor (elem): 0.500009
+bucket_count: 16777229
+max_psl: 14
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 11381979
+Insert  rate: 4722812.863071 ops/sec
+Bases   rate: 2100782.099828 bp/sec
+Run     time: 5.810000 sec
+Oper.   time: 3.400000 sec
+Insert  time: 2.410000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067483
+load_factor (elem): 0.600068
+bucket_count: 16777231
+max_psl: 16
+spill size: 4
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 13315128
+Insert  rate: 4309102.912621 ops/sec
+Bases   rate: 2069186.086957 bp/sec
+Run     time: 6.900000 sec
+Oper.   time: 3.810000 sec
+Insert  time: 3.090000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 11744178
+load_factor (elem): 0.700007
+bucket_count: 16777231
+max_psl: 16
+spill size: 115
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 15260783
+Insert  rate: 4475302.932551 ops/sec
+Bases   rate: 2050730.325815 bp/sec
+Run     time: 7.980000 sec
+Oper.   time: 4.570000 sec
+Insert  time: 3.410000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422358
+load_factor (elem): 0.800034
+bucket_count: 16777231
+max_psl: 16
+spill size: 3107
+Stats   time: 0.000000 sec
+psl: 16 entries: 16 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 17294358
+Insert  rate: 4088500.709220 ops/sec
+Bases   rate: 1983855.828877 bp/sec
+Run     time: 9.350000 sec
+Oper.   time: 5.120000 sec
+Insert  time: 4.230000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 15100159
+load_factor (elem): 0.900039
+bucket_count: 16777231
+max_psl: 16
+spill size: 66115
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 911519
+Insert  rate: 4797468.421053 ops/sec
+Bases   rate: 2185653.333333 bp/sec
+Run     time: 0.450000 sec
+Oper.   time: 0.260000 sec
+Insert  time: 0.190000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 839811
+load_factor (elem): 0.100113
+bucket_count: 8388612
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 1846512
+Insert  rate: 5129200.000000 ops/sec
+Bases   rate: 2137041.935484 bp/sec
+Run     time: 0.930000 sec
+Oper.   time: 0.570000 sec
+Insert  time: 0.360000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.200118
+bucket_count: 8388614
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 2784484
+Insert  rate: 5253743.396226 ops/sec
+Bases   rate: 2138392.142857 bp/sec
+Run     time: 1.400000 sec
+Oper.   time: 0.870000 sec
+Insert  time: 0.530000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 2517475
+load_factor (elem): 0.300106
+bucket_count: 8388615
+max_psl: 8
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 3726356
+Insert  rate: 5175494.444444 ops/sec
+Bases   rate: 2152281.182796 bp/sec
+Run     time: 1.860000 sec
+Oper.   time: 1.140000 sec
+Insert  time: 0.720000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.400063
+bucket_count: 8388617
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 4674564
+Insert  rate: 4582905.882353 ops/sec
+Bases   rate: 2117679.746835 bp/sec
+Run     time: 2.370000 sec
+Oper.   time: 1.350000 sec
+Insert  time: 1.020000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 4195226
+load_factor (elem): 0.500109
+bucket_count: 8388618
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 5628029
+Insert  rate: 4296205.343511 ops/sec
+Bases   rate: 2126781.338028 bp/sec
+Run     time: 2.840000 sec
+Oper.   time: 1.530000 sec
+Insert  time: 1.310000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033846
+load_factor (elem): 0.600080
+bucket_count: 8388622
+max_psl: 15
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 6578370
+Insert  rate: 4356536.423841 ops/sec
+Bases   rate: 2088322.781065 bp/sec
+Run     time: 3.380000 sec
+Oper.   time: 1.870000 sec
+Insert  time: 1.510000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5872395
+load_factor (elem): 0.700043
+bucket_count: 8388623
+max_psl: 16
+spill size: 22
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 7530571
+Insert  rate: 4207022.905028 ops/sec
+Bases   rate: 2087391.472868 bp/sec
+Run     time: 3.870000 sec
+Oper.   time: 2.080000 sec
+Insert  time: 1.790000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711197
+load_factor (elem): 0.800036
+bucket_count: 8388623
+max_psl: 16
+spill size: 1539
+Stats   time: 0.000000 sec
+psl: 16 entries: 8 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 8528027
+Insert  rate: 4100012.980769 ops/sec
+Bases   rate: 1992827.015251 bp/sec
+Run     time: 4.590000 sec
+Oper.   time: 2.510000 sec
+Insert  time: 2.080000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 7550421
+load_factor (elem): 0.900079
+bucket_count: 8388623
+max_psl: 16
+spill size: 33188
+Stats   time: 0.000000 sec
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=20 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=20 -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=20 -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=20 -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DDIRECT -DSPILL -DMAX_SEARCH=20 -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+psl: 20 entries: 32 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 3726356
+Insert  rate: 4716906.329114 ops/sec
+Bases   rate: 2042470.918367 bp/sec
+Run     time: 1.960000 sec
+Oper.   time: 1.170000 sec
+Insert  time: 0.790000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 7529492
+Insert  rate: 4795854.777070 ops/sec
+Bases   rate: 2087095.090439 bp/sec
+Run     time: 3.870000 sec
+Oper.   time: 2.300000 sec
+Insert  time: 1.570000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.200023
+bucket_count: 33554438
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 11381979
+Insert  rate: 4762334.309623 ops/sec
+Bases   rate: 2075772.789116 bp/sec
+Run     time: 5.880000 sec
+Oper.   time: 3.490000 sec
+Insert  time: 2.390000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067487
+load_factor (elem): 0.300034
+bucket_count: 33554440
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 15257707
+Insert  rate: 4651739.939024 ops/sec
+Bases   rate: 2073706.970849 bp/sec
+Run     time: 7.890000 sec
+Oper.   time: 4.610000 sec
+Insert  time: 3.280000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422646
+load_factor (elem): 0.400026
+bucket_count: 33554442
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 19170321
+Insert  rate: 4479046.962617 ops/sec
+Bases   rate: 2067214.070352 bp/sec
+Run     time: 9.950000 sec
+Oper.   time: 5.670000 sec
+Insert  time: 4.280000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 23208047
+Insert  rate: 4144294.107143 ops/sec
+Bases   rate: 2048493.426459 bp/sec
+Run     time: 12.170000 sec
+Oper.   time: 6.570000 sec
+Insert  time: 5.600000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20133298
+load_factor (elem): 0.600019
+bucket_count: 33554447
+max_psl: 16
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 27273385
+Insert  rate: 4301795.741325 ops/sec
+Bases   rate: 2019698.137931 bp/sec
+Run     time: 14.500000 sec
+Oper.   time: 8.160000 sec
+Insert  time: 6.340000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488849
+load_factor (elem): 0.700022
+bucket_count: 33554451
+max_psl: 20
+spill size: 8
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 31307911
+Insert  rate: 4146743.178808 ops/sec
+Bases   rate: 1987382.436428 bp/sec
+Run     time: 16.910000 sec
+Oper.   time: 9.360000 sec
+Insert  time: 7.550000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26843731
+load_factor (elem): 0.800005
+bucket_count: 33554451
+max_psl: 20
+spill size: 1082
+Stats   time: 0.000000 sec
+psl: 20 entries: 32 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.170000 sec
+Insert count: 35428451
+Insert  rate: 3713674.109015 ops/sec
+Bases   rate: 1924177.682186 bp/sec
+Run     time: 19.760000 sec
+Oper.   time: 10.220000 sec
+Insert  time: 9.540000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199401
+load_factor (elem): 0.900012
+bucket_count: 33554451
+max_psl: 20
+spill size: 53874
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 1846512
+Insert  rate: 4859242.105263 ops/sec
+Bases   rate: 2137041.935484 bp/sec
+Run     time: 0.930000 sec
+Oper.   time: 0.550000 sec
+Insert  time: 0.380000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.100059
+bucket_count: 16777220
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 3726356
+Insert  rate: 4544336.585366 ops/sec
+Bases   rate: 2118117.989418 bp/sec
+Run     time: 1.890000 sec
+Oper.   time: 1.070000 sec
+Insert  time: 0.820000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.200032
+bucket_count: 16777222
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 5628029
+Insert  rate: 4613138.524590 ops/sec
+Bases   rate: 2126781.338028 bp/sec
+Run     time: 2.840000 sec
+Oper.   time: 1.620000 sec
+Insert  time: 1.220000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033846
+load_factor (elem): 0.300040
+bucket_count: 16777224
+max_psl: 9
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 7529492
+Insert  rate: 4857736.774194 ops/sec
+Bases   rate: 2103400.520833 bp/sec
+Run     time: 3.840000 sec
+Oper.   time: 2.290000 sec
+Insert  time: 1.550000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711673
+load_factor (elem): 0.400047
+bucket_count: 16777225
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.100000 sec
+Insert count: 9448461
+Insert  rate: 4999185.714286 ops/sec
+Bases   rate: 2072261.349693 bp/sec
+Run     time: 4.890000 sec
+Oper.   time: 3.000000 sec
+Insert  time: 1.890000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 8388769
+load_factor (elem): 0.500009
+bucket_count: 16777229
+max_psl: 14
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 11381979
+Insert  rate: 4589507.661290 ops/sec
+Bases   rate: 2072248.556876 bp/sec
+Run     time: 5.890000 sec
+Oper.   time: 3.410000 sec
+Insert  time: 2.480000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067487
+load_factor (elem): 0.600068
+bucket_count: 16777234
+max_psl: 19
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 13315128
+Insert  rate: 4254034.504792 ops/sec
+Bases   rate: 2063205.780347 bp/sec
+Run     time: 6.920000 sec
+Oper.   time: 3.790000 sec
+Insert  time: 3.130000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 11744282
+load_factor (elem): 0.700013
+bucket_count: 16777235
+max_psl: 20
+spill size: 11
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.080000 sec
+Insert count: 15257707
+Insert  rate: 4435379.941860 ops/sec
+Bases   rate: 2045193.500000 bp/sec
+Run     time: 8.000000 sec
+Oper.   time: 4.560000 sec
+Insert  time: 3.440000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422054
+load_factor (elem): 0.800016
+bucket_count: 16777235
+max_psl: 20
+spill size: 592
+Stats   time: 0.000000 sec
+psl: 20 entries: 16 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 16777216
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.090000 sec
+Insert count: 17250515
+Insert  rate: 3993174.768519 ops/sec
+Bases   rate: 1974592.209178 bp/sec
+Run     time: 9.370000 sec
+Oper.   time: 5.050000 sec
+Insert  time: 4.320000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 15100110
+load_factor (elem): 0.900036
+bucket_count: 16777235
+max_psl: 20
+spill size: 27467
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .10
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 911519
+Insert  rate: 4557595.000000 ops/sec
+Bases   rate: 2185653.333333 bp/sec
+Run     time: 0.450000 sec
+Oper.   time: 0.250000 sec
+Insert  time: 0.200000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 839811
+load_factor (elem): 0.100113
+bucket_count: 8388612
+max_psl: 5
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .20
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 1846512
+Insert  rate: 5275748.571429 ops/sec
+Bases   rate: 2160270.652174 bp/sec
+Run     time: 0.920000 sec
+Oper.   time: 0.570000 sec
+Insert  time: 0.350000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 1678710
+load_factor (elem): 0.200118
+bucket_count: 8388614
+max_psl: 7
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .30
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 2784484
+Insert  rate: 5156451.851852 ops/sec
+Bases   rate: 2153776.258993 bp/sec
+Run     time: 1.390000 sec
+Oper.   time: 0.850000 sec
+Insert  time: 0.540000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 2517475
+load_factor (elem): 0.300106
+bucket_count: 8388615
+max_psl: 8
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .40
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 3726356
+Insert  rate: 4839423.376623 ops/sec
+Bases   rate: 2140771.657754 bp/sec
+Run     time: 1.870000 sec
+Oper.   time: 1.100000 sec
+Insert  time: 0.770000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.400063
+bucket_count: 8388617
+max_psl: 10
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .50
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 4674564
+Insert  rate: 4582905.882353 ops/sec
+Bases   rate: 2126652.966102 bp/sec
+Run     time: 2.360000 sec
+Oper.   time: 1.340000 sec
+Insert  time: 1.020000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 4195226
+load_factor (elem): 0.500109
+bucket_count: 8388618
+max_psl: 11
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .60
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 5628029
+Insert  rate: 4362813.178295 ops/sec
+Bases   rate: 2111908.741259 bp/sec
+Run     time: 2.860000 sec
+Oper.   time: 1.570000 sec
+Insert  time: 1.290000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5033846
+load_factor (elem): 0.600080
+bucket_count: 8388622
+max_psl: 15
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .70
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 6578370
+Insert  rate: 4475081.632653 ops/sec
+Bases   rate: 2113332.634731 bp/sec
+Run     time: 3.340000 sec
+Oper.   time: 1.870000 sec
+Insert  time: 1.470000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 5872417
+load_factor (elem): 0.700045
+bucket_count: 8388626
+max_psl: 19
+spill size: 0
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .80
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.040000 sec
+Insert count: 7529492
+Insert  rate: 4481840.476190 ops/sec
+Bases   rate: 2081715.979381 bp/sec
+Run     time: 3.880000 sec
+Oper.   time: 2.200000 sec
+Insert  time: 1.680000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6711429
+load_factor (elem): 0.800063
+bucket_count: 8388627
+max_psl: 20
+spill size: 244
+Stats   time: 0.000000 sec
+psl: 20 entries: 8 load: .90
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 8388608
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.050000 sec
+Insert count: 8506414
+Insert  rate: 3938154.629630 ops/sec
+Bases   rate: 2014116.114790 bp/sec
+Run     time: 4.530000 sec
+Oper.   time: 2.370000 sec
+Insert  time: 2.160000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 7550183
+load_factor (elem): 0.900050
+bucket_count: 8388627
+max_psl: 20
+spill size: 13777
+Stats   time: 0.000000 sec

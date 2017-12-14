@@ -1,7 +1,7 @@
 #ifndef _DECIMATE_2D_HPP
 #define _DECIMATE_2D_HPP
 
-#if defined (SERVER)
+#if defined(SERVER)
 #define USE_LSU 1
 #endif
 #if defined(CLIENT) || defined(SERVER) || defined(USE_LSU)
@@ -10,9 +10,7 @@
 
 #include <cstddef> // size_t
 #include <algorithm> // min
-
-#define CEIL(n,s) ((((n)+((s)-1)) / s) * s)
-#define FLOOR(n,s) (((n) / s) * s)
+#include "alloc.h" // FLOOR
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
 
@@ -55,11 +53,11 @@ void *smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, size_
 class cache {
 public:
 inline void cache_flush(void) {Xil_L1DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_flush_invalidate(void) {Xil_L1DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_invalidate(void) {Xil_L1DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((INTPTR)ptr, size);}
 };
 
 #else
@@ -77,7 +75,7 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
 #ifdef USE_STREAM
-#include "stream.h"
+#include "aport.h"
 
 #define FWD_ID 2
 
@@ -200,25 +198,25 @@ public:
 			/* strided load */
 			/* go=1, write=1, select=0, length=6, tid=gret_id, tdest=gfwd_id */
 			putfslx(1 << 23 | 1 << 22 | 0 << 19 | 6 << 16 | gret_id << 8 | (gfwd_id+READ_CH), 0, FSL_DEFAULT);
-			putfslx(0x00000000, 0, FSL_DEFAULT);         /* clear status */
-			putfslx(CMD_smove, 0, FSL_DEFAULT);          /* smove command */
-			putfslx((unsigned)rptr, 0, FSL_DEFAULT);     /* address */
-			putfslx((unsigned)view_inc, 0, FSL_DEFAULT); /* size */
-			putfslx((unsigned)ref_inc, 0, FSL_DEFAULT);  /* increment */
-			putfslx((unsigned)n, 0, FSL_CONTROL);        /* repetitions */
+			putfslx(0x00000000, 0, FSL_DEFAULT); /* clear status */
+			putfslx(LSU_smove, 0, FSL_DEFAULT);  /* smove command */
+			putfslx(rptr, 0, FSL_DEFAULT);       /* address */
+			putfslx(view_inc, 0, FSL_DEFAULT);   /* size */
+			putfslx(ref_inc, 0, FSL_DEFAULT);    /* increment */
+			putfslx(n, 0, FSL_CONTROL);          /* repetitions */
 
 			/* contiguous store (with stride command) */
 			/* go=1, write=1, select=0, length=6, tid=gret_id, tdest=gfwd_id */
 			putfslx(1 << 23 | 1 << 22 | 0 << 19 | 6 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH), 0, FSL_DEFAULT);
-			putfslx(0x00000000, 0, FSL_DEFAULT);         /* clear status */
-			putfslx(0x80 | CMD_smove, 0, FSL_DEFAULT);   /* request status, smove command */
-			putfslx((unsigned)vptr, 0, FSL_DEFAULT);     /* address */
-			putfslx((unsigned)view_inc, 0, FSL_DEFAULT); /* size */
-			putfslx((unsigned)view_inc, 0, FSL_DEFAULT); /* increment */
-			putfslx((unsigned)n, 0, FSL_CONTROL);        /* repetitions */
+			putfslx(0x00000000, 0, FSL_DEFAULT);       /* clear status */
+			putfslx(0x80 | LSU_smove, 0, FSL_DEFAULT); /* request status, smove command */
+			putfslx(vptr, 0, FSL_DEFAULT);             /* address */
+			putfslx(view_inc, 0, FSL_DEFAULT);         /* size */
+			putfslx(view_inc, 0, FSL_DEFAULT);         /* increment */
+			putfslx(n, 0, FSL_CONTROL);                /* repetitions */
 
 			/* receive store status */
-			unsigned int tmp;
+			flit_t tmp;
 			getfslx(tmp, 0, FSL_DEFAULT);
 			getfslx(tmp, 0, FSL_CONTROL);
 
@@ -331,7 +329,7 @@ class Decimate2D
 #endif
 {
 
-#if defined(CLIENT) || defined (SERVER)
+#if defined(CLIENT) || defined(SERVER)
 
 	typedef struct {
 		unsigned int tdest :  8; /* forward route id */
@@ -342,27 +340,27 @@ class Decimate2D
 	} header;
 
 	typedef struct {
-		void *ref;
-		size_t ref_width;
-		size_t ref_height;
-		size_t elem_sz;
-		size_t decimate;
+		flit_t ref;
+		flit_t ref_width;
+		flit_t ref_height;
+		flit_t elem_sz;
+		flit_t decimate;
 	} setup_args;
 
 	typedef struct {
-		void *buf;
-		size_t buf_sz;
-		size_t offset;
+		flit_t buf;
+		flit_t buf_sz;
+		flit_t offset;
 	} fill_args;
 
 	typedef struct {
-		const void *buf;
-		size_t buf_sz;
+		flit_t buf;
+		flit_t buf_sz;
 	} cache_args;
 
 	enum {C_NOP, C_SETUP, C_FILL, C_WAIT, C_CFLUSH, C_CINVAL};
 
-#endif // defined(CLIENT) || defined (SERVER)
+#endif // defined(CLIENT) || defined(SERVER)
 
 public:
 
@@ -377,6 +375,8 @@ public:
 		// client, start thread server
 #ifdef USE_LSU
 		lsu_setport(&port, FWD_ID, RET_ID);
+#elif defined(USE_STREAM)
+		aport_set(&port);
 #endif
 #ifdef USE_DMAC
 		dmac_init(XPAR_XDMAPS_1_DEVICE_ID);
@@ -391,10 +391,10 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[5];
+		flit_t reg[5];
 
 		for (;;) {
-			getfsl_interruptible(*(unsigned *)&hdr, 0); getfsl(hdr.cmd, 0);
+			getfsl_interruptible(*(flit_t *)&hdr, 0); getfsl(hdr.cmd, 0);
 			switch (hdr.cmd) {
 			case C_SETUP:
 				getfsl(reg[0], 0); getfsl(reg[1], 0); getfsl(reg[2], 0); getfsl(reg[3], 0); cgetfsl(reg[4], 0);
@@ -427,7 +427,7 @@ public:
 			register unsigned int tmp = hdr.tid;
 			hdr.tid = hdr.tdest;
 			hdr.tdest = tmp;
-			putfsl(*(unsigned *)&hdr, 0); cputfsl(hdr.cmd, 0);
+			putfsl(*(flit_t *)&hdr, 0); cputfsl(hdr.cmd, 0);
 		}
 	}
 
@@ -436,33 +436,33 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[5];
+		flit_t reg[5];
 
 		for (;;) {
 			stream_recv(&port, &hdr, sizeof(hdr), F_BEGP);
 			switch (hdr.cmd) {
 			case C_SETUP:
-				stream_recv(&port, reg, sizeof(size_t)*5, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*5, F_ENDP);
 				// Consider keeping a history of reference images, invalidate
 				// if haven't seen or let client call invalidate explicitly.
 				//cache_invalidate((void *)reg[0], reg[1]*reg[2]*reg[3]);
 				setup((void *)reg[0], reg[1], reg[2], reg[3], reg[4]);
 				break;
 			case C_FILL:
-				stream_recv(&port, reg, sizeof(size_t)*3, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*3, F_ENDP);
 				fill((void *)reg[0], reg[1], reg[2]);
 				//cache_flush((void *)reg[0], reg[1]);
 				break;
 			case C_WAIT:
-				stream_recv(&port, reg, sizeof(size_t)*1, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*1, F_ENDP);
 				break;
 			case C_CFLUSH:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) cache_flush();
 				else cache_flush((void *)reg[0], reg[1]);
 				break;
 			case C_CINVAL:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) cache_flush_invalidate(); // include flush
 				else cache_invalidate((void *)reg[0], reg[1]);
 				break;
@@ -502,7 +502,7 @@ public:
 		hdr.cmd = C_SETUP;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.ref = ref;
+		args.ref = ATRAN(ref);
 		args.ref_width = ref_width;
 		args.ref_height = ref_height;
 		args.elem_sz = elem_sz;
@@ -539,7 +539,7 @@ public:
 		hdr.cmd = C_FILL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = buf;
+		args.buf = ATRAN(buf);
 		args.buf_sz = buf_sz;
 		args.offset = offset;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
@@ -554,7 +554,7 @@ public:
 	{
 		header hdr;
 		header res;
-		size_t args;
+		flit_t args;
 
 		hdr.tdest = MCU_ID << 1;
 		hdr.tid = HST_ID << 1;
@@ -578,7 +578,7 @@ public:
 		hdr.cmd = C_CFLUSH;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -597,7 +597,7 @@ public:
 		hdr.cmd = C_CINVAL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 

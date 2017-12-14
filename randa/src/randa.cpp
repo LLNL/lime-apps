@@ -29,6 +29,7 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 
 int main()
 {
+	host::cache_init();
 	HPCC_Params params;
 
 	MONITOR_INIT

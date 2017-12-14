@@ -24,21 +24,23 @@ sub scan {
 	my $run; # run number
 	while (<$fhi>) {
 		# print $_;
-		if (/zipf: (\d*\.\d+) run: (\d+)/) {
-			$zipf = $1; $run = $2;
+		if (/run: (\d+)/) {
+			$run = $1;
 			next;
 		}
 		if (/load_factor \(elem\): (\d+\.\d+)/) {
-			# $load = $1;
 			$load = sprintf "%.2f", $1;
 			next;
 		}
 		if (/Lookup  hits: \d+ (\d+\.\d+)/) {
-			$hit = $1;
+			$hit = sprintf "%.0f", $1;
+			next;
+		}
+		if (/Lookup  zipf: (\d+\.\d+)/) {
+			$zipf = $1;
 			next;
 		}
 		if (/Lookup  rate: (\d+\.\d+)/) {
-			# print join(',', $dist, $load, $hit, $1), "\n";
 			$tref->{$zipf}{$load}{$hit}{LRATE}{$run} = $1;
 			next;
 		}
@@ -62,17 +64,17 @@ foreach my $_i (sort keys %{$tref}) { # zipf
 
 	my $str = ($_i == 0.0) ? "Uniform" : "Zipf=$_i";
 	print "\n\"Distribution: $str\"\n";
-	print "\"Load Factor / Hit Rate %\"";
+	print "\"Load Factor / Hit Rate\"";
 	my $ref = \%{$tref->{$_i}};
-	foreach my $_y (sort keys %{$ref->{(sort keys %{$ref})[0]}}) {
-		print ", ", $_y;
+	foreach my $_y (sort keys %{$ref->{(sort keys %{$ref})[0]}}) { # hit
+		print ", hit $_y%";
 	}
 	print "\n";
 	foreach my $_x (sort keys %{$ref}) { # load
 		print $_x;
-		foreach my $_y (sort keys %{$ref->{$_x}}) { # hits
+		foreach my $_y (sort keys %{$ref->{$_x}}) { # hit
 			my $tmp = 0.0;
-			foreach my $_z (keys %{$ref->{$_x}{$_y}{LRATE}}) { # runs
+			foreach my $_z (keys %{$ref->{$_x}{$_y}{LRATE}}) { # run
 				$tmp += $ref->{$_x}{$_y}{LRATE}{$_z};
 			}
 			$tmp /= keys %{$ref->{$_x}{$_y}{LRATE}};

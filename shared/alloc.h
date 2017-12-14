@@ -12,10 +12,14 @@
 
 /* Since cache management is done explicitly, allocations must be */
 /* aligned to the cache line size which is 32 bytes for the ARM A9 */
-/* and 64 bytes for the x86. */
+/* and 64 bytes for the x86 and AArch64. */
 
 #if !defined(ALIGN_SZ)
+#if defined(__aarch64__)
+#define ALIGN_SZ 64
+#else
 #define ALIGN_SZ 32
+#endif
 #endif
 #define CEIL(n,s) ((((n)+((s)-1)) / (s)) * (s))
 #define FLOOR(n,s) (((n) / (s)) * (s))
@@ -64,24 +68,24 @@
 
 #if defined(USE_SP)
 /* This feature is currently only supported on the emulator */
-/* Scratch Pad (SP) memory must not have L2 cache enabled. */
+/* ARMv7-A only: Scratch Pad (SP) memory must not have L2 cache enabled. */
 /* This means the ARM page table attribute must be outer non-cacheable. */
-//#include "xparameters.h" // XPAR_PS7_RAM_0_S_AXI_BASEADDR
+#include <stdint.h> // uintptr_t
 extern unsigned char _heap_start[];
 
 #if defined(USE_OCM)
 /* SRAM */
-//#define SP_BEG (((unsigned)&_heap_start) & 0xC0000000U)
-//#define SP_END ((((unsigned)&_heap_start) & 0xC0000000U) + 0x030000)
+//#define SP_BEG (((unsigned)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL)
+//#define SP_END ((((unsigned)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x030000)
 //#define SP_SIZE 0x030000
 /* DRAM in SRAM address space, ADDR < 0x00100000 */
-#define SP_BEG ((((unsigned)&_heap_start) & 0xC0000000U) + 0x080000)
-#define SP_END ((((unsigned)&_heap_start) & 0xC0000000U) + 0x100000)
+#define SP_BEG ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x080000)
+#define SP_END ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x100000)
 #define SP_SIZE 0x080000
 #else /* USE_OCM */
 /* DRAM in DRAM address space, ADDR >= 0x00100000 */
-#define SP_BEG ((((unsigned)&_heap_start) & 0xC0000000U) + 0x100000)
-#define SP_END ((((unsigned)&_heap_start) & 0xC0000000U) + 0x200000)
+#define SP_BEG ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x100000)
+#define SP_END ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x200000)
 #define SP_SIZE 0x100000
 #endif /* USE_OCM */
 
@@ -90,7 +94,7 @@ inline void *spalloc(size_t nbytes)
 	static unsigned char *top = (unsigned char *)SP_BEG;
 	unsigned char *ptr = top;
 
-	if ((unsigned)ptr + nbytes > SP_END) return NULL;
+	if ((uintptr_t)ptr + nbytes > SP_END) return NULL;
 	top += CEIL(nbytes, ALIGN_SZ);
 	return ptr;
 }
@@ -109,9 +113,11 @@ inline void spfree(void *aptr)
 
 #if defined(ZYNQ)
 #ifdef __cplusplus
+#include <cstdio> // printf
 #include <cstdint> // uintXX_t
 extern "C" {void *_sbrk(intptr_t increment); void *sbrk(intptr_t increment);}
 #else
+#include <stdio.h> // printf
 #include <stdint.h> // uintXX_t
 extern void *_sbrk(intptr_t increment); extern void *sbrk(intptr_t increment);
 #endif
@@ -121,11 +127,11 @@ inline void show_heap(void)
 {
 	unsigned char *_ptr = (unsigned char *)_sbrk(0);
 	unsigned char *ptr = (unsigned char *)sbrk(0);
-	printf("heap start:%p top:%p end:%p\ntotal:%u used:%u\n",
+	printf("heap start:%p top:%p end:%p\ntotal:%tu used:%tu\n",
 	_heap_start, _ptr, _heap_end, _heap_end - _heap_start, _ptr - _heap_start);
 	if (ptr != _heap_start) {
 		printf(" -- warning: sbrk has been called!\n");
-		printf("heap start:%p top:%p end:%p\ntotal:%u used:%u\n",
+		printf("heap start:%p top:%p end:%p\ntotal:%tu used:%tu\n",
 		_heap_start, ptr, _heap_end, _heap_end - _heap_start, ptr - _heap_start);
 	}
 }

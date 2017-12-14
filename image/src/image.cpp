@@ -110,6 +110,7 @@ bool check(void *buf, size_t buf_sz)
 
 int main(int argc, char *argv[])
 {
+	host::cache_init();
 	/* get arguments */
 	int opt;
 	bool nok = false;
@@ -506,8 +507,8 @@ int main(int argc, char *argv[])
 				tget(t4);
 				//CACHE_RECV(dre1, block1, block_end)
 				//CACHE_RECV(dre2, block2, block_end)
-				Xil_L1DCacheInvalidateRange((unsigned int)block1, block_end);
-				Xil_L1DCacheInvalidateRange((unsigned int)block2, block_end);
+				Xil_L1DCacheInvalidateRange((INTPTR)block1, block_end);
+				Xil_L1DCacheInvalidateRange((INTPTR)block2, block_end);
 				tget(t5);
 //				check(block1, block_end);
 //				check(block2, block_end);
@@ -553,7 +554,7 @@ int main(int argc, char *argv[])
 
 		tget(t0);
 		// not needed when memory has been invalidated before entry.
-		// Xil_L1DCacheInvalidateRange((unsigned int)view[M].blockN, block_sz);
+		// Xil_L1DCacheInvalidateRange((INTPTR)view[M].blockN, block_sz);
 		tget(t1);
 		/* set up view of images */
 		dre1.setup(ref_a1, ref_w, ref_h, elem_sz, decimate);
@@ -576,10 +577,10 @@ int main(int argc, char *argv[])
 		host::cache_flush(davg, davg_sz*sizeof(uchar_t));
 		/* make sure to invalidate cache before delete */
 #ifdef USE_SP
-		Xil_L1DCacheInvalidateRange((unsigned int)view[0].block1, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((unsigned int)view[0].block2, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((unsigned int)view[1].block1, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((unsigned int)view[1].block2, block_sz*sizeof(uchar_t));
+		Xil_L1DCacheInvalidateRange((INTPTR)view[0].block1, block_sz*sizeof(uchar_t));
+		Xil_L1DCacheInvalidateRange((INTPTR)view[0].block2, block_sz*sizeof(uchar_t));
+		Xil_L1DCacheInvalidateRange((INTPTR)view[1].block1, block_sz*sizeof(uchar_t));
+		Xil_L1DCacheInvalidateRange((INTPTR)view[1].block2, block_sz*sizeof(uchar_t));
 #else
 		CACHE_DISPOSE(view[1].block2, block_sz*sizeof(uchar_t));
 		CACHE_DISPOSE(view[1].block1, block_sz*sizeof(uchar_t));

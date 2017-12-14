@@ -15,10 +15,10 @@ void aport_set(stream_t *port)
 	gport = port;
 }
 
-unsigned aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel)
+flit_t aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel)
 {
-	unsigned command[2];
-	unsigned response[2];
+	flit_t command[2];
+	flit_t response[2];
 
 	/* go=0, write=0, select=sel, length=1, tid=ret_id, tdest=fwd_id */
 	command[0] = sel << 19 | 1 << 16 | ret_id << 8 | fwd_id;
@@ -28,9 +28,9 @@ unsigned aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel)
 	return response[1];
 }
 
-void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, unsigned val)
+void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, flit_t val)
 {
-	unsigned command[2];
+	flit_t command[2];
 
 	/* go=go, write=1, select=sel, length=1, tid=ret_id, tdest=fwd_id */
 	command[0] = go << 23 | 1 << 22 | sel << 19 | 1 << 16 | ret_id << 8 | fwd_id;
@@ -42,7 +42,7 @@ void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, un
  * is implemented, then the header can be implemented as a separate variable.
  */
 
-void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, unsigned *val, unsigned n)
+void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, flit_t *val, unsigned n)
 {
 	/* go=0, write=0, select=sel, length=n, tid=ret_id, tdest=fwd_id */
 	val[0] = sel << 19 | n << 16 | ret_id << 8 | fwd_id;
@@ -50,7 +50,7 @@ void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, unsigned *val, 
 	stream_recv(gport, val, (n+1)*sizeof(unsigned), F_BEGP|F_ENDP);
 }
 
-void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, unsigned *val, unsigned n)
+void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, flit_t *val, unsigned n)
 {
 	/* go=go, write=1, select=sel, length=n, tid=ret_id, tdest=fwd_id */
 	val[0] = go << 23 | 1 << 22 | sel << 19 | n << 16 | ret_id << 8 | fwd_id;

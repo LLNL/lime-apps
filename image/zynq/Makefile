@@ -18,9 +18,9 @@ APPS_DIR ?= $(WORKSPACE_LOC)/apps
 DEFS += -DZYNQ -DXILTIME -DSTANDALONE -DENTIRE
 
 # ARM Processor
-CC = arm-xilinx-eabi-gcc
-CXX = arm-xilinx-eabi-g++
-SIZE = arm-xilinx-eabi-size
+CC = arm-none-eabi-gcc
+CXX = arm-none-eabi-g++
+SIZE = arm-none-eabi-size
 
 SRC = $(APPS_DIR)/shared $(APPS_DIR)/image/src
 HEADERS = config.h alloc.h cache.h monitor.h ColorImage.hpp ticks.h clocks.h
@@ -45,8 +45,8 @@ endif
 ifneq (,$(findstring CLIENT,$(DEFS)))
   # Must use scratch pad because code expects inner (L1) cacheable only
   DEFS += -DUSE_SP -DUSE_OCM
-  HEADERS += stream.h
-  MODULES += stream
+  HEADERS += lsu_cmd.h aport.h stream.h
+  MODULES += lsu_cmd aport stream
 endif
 
 OBJECTS = $(addsuffix .o,$(TARGET) $(MODULES))
@@ -55,14 +55,15 @@ VPATH = $(subst ' ',:,$(SRC))
 
 OPT = -O3 -ffast-math
 # Zynq-7000 SoC: ARM v7-A architecture, Cortex-A9 processor, VFPv3 floating point, NEON co-processor
-MACH = -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
+#MACH = -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
+MACH = -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard
 # -mneon-for-64bits (gcc v4.9.x)
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CPPFLAGS += -I$(BSP)/ps7_cortexa9_0/include
 CFLAGS = $(MACH) $(OPT) -Wall
 CXXFLAGS = $(CFLAGS)
-LDFLAGS += -Wl,-T -Wl,cpu_lscript.ld -L$(BSP)/ps7_cortexa9_0/lib
+LDFLAGS += -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,cpu_lscript.ld -L$(BSP)/ps7_cortexa9_0/lib
 LDLIBS = -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group
 
 #VAR = $(if $(findstring CYGWIN,$(shell uname -s)),CYG_TRUE,CYG_FALSE)
@@ -101,5 +102,7 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # module.o: module.h
 $(TARGET).o: $(HEADERS)
 ColorImage.o: ColorImage.hpp
+lsu_cmd.o: lsu_cmd.h aport.h stream.h
+aport.o: aport.h stream.h
 stream.o: stream.h
 $(M5OP).o: m5op.h m5ops.h

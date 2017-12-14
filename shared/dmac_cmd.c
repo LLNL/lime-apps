@@ -323,7 +323,7 @@ void *dmac_smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, 
 	DmaProgBuf += XDmaPs_Instr_DMAEND(DmaProgBuf);
 
 	DmaProgLen = DmaProgBuf - DmaProgStart;
-	Xil_DCacheFlushRange((u32)DmaProgStart, DmaProgLen);
+	Xil_DCacheFlushRange((INTPTR)DmaProgStart, DmaProgLen);
 	DmaCmd.GeneratedDmaProgLength = DmaProgLen;
 
 	} /* Generate DMAC code: end */

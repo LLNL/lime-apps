@@ -151,7 +151,7 @@ void bfs(
 //------------------ Main ------------------//
 
 
-int main(int argc, char** argv)
+int main(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;

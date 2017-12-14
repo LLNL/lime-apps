@@ -105,7 +105,7 @@ void page_rank_itr(
 
 	tget(t0);
 	// receive block, not needed when memory has been invalidated before entry.
-	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
+	// Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
 	tget(t1);
 
 	// Accumulate PRs for each vertex
@@ -138,7 +138,7 @@ void page_rank_itr(
 				dre.wait();
 				tget(t5);
 				// receive block
-				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
+				Xil_L1DCacheInvalidateRange((INTPTR)block, view_sz);
 				tget(t6);
 				unsigned view_n = view_sz / sizeof(double);
 				for (j = 0; j < view_n; ++j) {
@@ -165,7 +165,7 @@ void page_rank_itr(
 	host::cache_flush(next_pr, num_vertices*sizeof(double));
 	// make sure to invalidate cache before delete
 #ifdef USE_SP
-	Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
+	Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
 #else
 	CACHE_DISPOSE(block, block_sz)
 #endif
@@ -279,8 +279,9 @@ void page_rank_itr_check(
 //------------------ Main ------------------//
 
 
-int main(int argc, char** argv)
+int main(int argc, char *argv[])
 {
+	host::cache_init();
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;

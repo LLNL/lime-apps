@@ -68,13 +68,13 @@ void *lsu_memcpy(void *dst, const void *src, size_t n)
 	/* send load command */
 	command.cmd = LSU_CMD(0,LSU_move); /* reqstat=0, command=move */
 	command.tdest = gfwd_id+READ_CH;
-	command.addr = (unsigned)src;
+	command.addr = ATRAN(src);
 	stream_send(gport, &command, sizeof(command), F_BEGP|F_ENDP);
 
 	/* send store command */
 	command.cmd = LSU_CMD(1,LSU_move); /* reqstat=1, command=move */
 	command.tdest = gfwd_id+WRITE_CH;
-	command.addr = (unsigned)dst;
+	command.addr = ATRAN(dst);
 	stream_send(gport, &command, sizeof(command), F_BEGP|F_ENDP);
 
 	/* receive store status */
@@ -97,14 +97,14 @@ void *lsu_smemcpy(void *dst, const void *src, size_t block_sz, size_t dst_inc, s
 	/* send load command */
 	command.cmd = LSU_CMD(0,LSU_smove); /* reqstat=0, command=smove */
 	command.tdest = gfwd_id+READ_CH;
-	command.addr = (unsigned)src;
+	command.addr = ATRAN(src);
 	command.inc = src_inc;
 	stream_send(gport, &command, sizeof(command), F_BEGP|F_ENDP);
 
 	/* send store command */
 	command.cmd = LSU_CMD(1,LSU_smove); /* reqstat=1, command=smove */
 	command.tdest = gfwd_id+WRITE_CH;
-	command.addr = (unsigned)dst;
+	command.addr = ATRAN(dst);
 	command.inc = dst_inc;
 	stream_send(gport, &command, sizeof(command), F_BEGP|F_ENDP);
 

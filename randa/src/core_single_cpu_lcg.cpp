@@ -120,7 +120,7 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 	//printf("Table:%p tidx:%p block:%p\n", Table, tidx, block); fflush(stdout);
 	tget(t0);
 	// receive block, not needed when memory has been invalidated before entry.
-	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
+	// Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
 	tget(t1);
 	/* Set up view of Table */
 	dre.setup(Table, sizeof(table_t), tidx, VECT_LEN);
@@ -140,9 +140,15 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 		 * Bad:  cache management instructions are often privileged
 		 * Ugly: loop unrolling is dependent on the size of a cache line and an array element
 		 */
-		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
-		for (j=0; j<VECT_LEN; j+=8) {
-			tidx[j] = (ran[j] = LCG_MUL64 * ran[j] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+		// TODO: test if needed? mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
+		for (j=0; j<VECT_LEN;
+#if defined(__aarch64__)
+			j+=16
+#else
+			j+=8
+#endif
+		) {
+			tidx[j  ] = (ran[j  ] = LCG_MUL64 * ran[j  ] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
 			tidx[j+1] = (ran[j+1] = LCG_MUL64 * ran[j+1] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
 			tidx[j+2] = (ran[j+2] = LCG_MUL64 * ran[j+2] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
 			tidx[j+3] = (ran[j+3] = LCG_MUL64 * ran[j+3] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
@@ -150,9 +156,19 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 			tidx[j+5] = (ran[j+5] = LCG_MUL64 * ran[j+5] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
 			tidx[j+6] = (ran[j+6] = LCG_MUL64 * ran[j+6] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
 			tidx[j+7] = (ran[j+7] = LCG_MUL64 * ran[j+7] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
-			mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, ((unsigned int)&tidx[j]));
+#if defined(__aarch64__)
+			tidx[j+ 8] = (ran[j+ 8] = LCG_MUL64 * ran[j+ 8] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+ 9] = (ran[j+ 9] = LCG_MUL64 * ran[j+ 9] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+10] = (ran[j+10] = LCG_MUL64 * ran[j+10] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+11] = (ran[j+11] = LCG_MUL64 * ran[j+11] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+12] = (ran[j+12] = LCG_MUL64 * ran[j+12] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+13] = (ran[j+13] = LCG_MUL64 * ran[j+13] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+14] = (ran[j+14] = LCG_MUL64 * ran[j+14] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+			tidx[j+15] = (ran[j+15] = LCG_MUL64 * ran[j+15] + LCG_ADD64) >> (sizeof(uran_t)*8 - logTableSize);
+#endif
+			dc_CVAC(&tidx[j]);
 		}
-		dsb(); /* Wait for L1 flush to complete */
+		dsb(); /* Wait for cache operation to complete */
 #if 0
 		for (j=0; j<VECT_LEN; j++) {
 #ifdef RAND_SERIAL
@@ -171,24 +187,36 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 #endif
 		// tget(t3);
 		// send tidx
-		// Xil_L1DCacheFlushRange((unsigned int)tidx, VECT_LEN*sizeof(index_t)); // done in tidx loop
+		// Xil_L1DCacheFlushRange((INTPTR)tidx, VECT_LEN*sizeof(index_t)); // done in tidx loop
 		// dre.cache_invalidate(tidx, VECT_LEN*sizeof(index_t)); // done on MB in drain loop
 		tget(t4);
 		dre.fill(block, block_sz, 0); /* fill block -- gather */
 		dre.wait();
 		tget(t5);
-		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
-		for (j=0; j<VECT_LEN; j+=4) {
-			block[j] ^= ran[j];
+		// TODO: test if needed? mtcp(XREG_CP15_CACHE_SIZE_SEL, 0); /* Select cache L0 D-cache in CSSR */
+		for (j=0; j<VECT_LEN;
+#if defined(__aarch64__)
+			j+=8
+#else
+			j+=4
+#endif
+		) {
+			block[j  ] ^= ran[j  ];
 			block[j+1] ^= ran[j+1];
 			block[j+2] ^= ran[j+2];
 			block[j+3] ^= ran[j+3];
-			mtcp(XREG_CP15_CLEAN_INVAL_DC_LINE_MVA_POC, ((unsigned int)&block[j]));
+#if defined(__aarch64__)
+			block[j+4] ^= ran[j+4];
+			block[j+5] ^= ran[j+5];
+			block[j+6] ^= ran[j+6];
+			block[j+7] ^= ran[j+7];
+#endif
+			dc_CIVAC(&block[j]);
 		}
-		dsb(); /* Wait for L1 flush to complete */
+		dsb(); /* Wait for cache operation to complete */
 		// tget(t6);
 		// send & receive block
-		// Xil_L1DCacheFlushRange((unsigned int)block, block_sz); /* this also invalidates */ // done in block loop
+		// Xil_L1DCacheFlushRange((INTPTR)block, block_sz); /* this also invalidates */ // done in block loop
 		tget(t7);
 		dre.drain(block, block_sz, 0); /* drain block -- scatter */
 		dre.wait();

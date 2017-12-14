@@ -73,7 +73,7 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 
 	tget(t0);
 	// receive block: not needed when block has been invalidated before entry
-	// Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
+	// Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
 	tget(t1);
 	// Set up view of src
 	dre.setup((double*)src, sizeof(double), col_idx, col_len);
@@ -108,7 +108,7 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 				dre.wait();
 				tget(t5);
 #ifndef ENTIRE
-				Xil_L1DCacheInvalidateRange((unsigned int)block, view_sz);
+				Xil_L1DCacheInvalidateRange((INTPTR)block, view_sz);
 				tget(t6);
 #endif
 				// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector
@@ -136,7 +136,7 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 	host::cache_flush(dest+start_row, (end_row-start_row+1)*sizeof(double));
 	// make sure to invalidate cache before delete
 #ifdef USE_SP
-	Xil_L1DCacheInvalidateRange((unsigned int)block, block_sz);
+	Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
 #else
 	CACHE_DISPOSE(block, block_sz)
 #endif

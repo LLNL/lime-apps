@@ -45,8 +45,9 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif
 
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
+	host::cache_init();
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;

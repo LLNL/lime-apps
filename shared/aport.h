@@ -8,6 +8,7 @@
 #ifndef APORT_H_
 #define APORT_H_
 
+#include <stdint.h>
 #include "stream.h"
 
 #define ARM0_PN 0 /* ARM 0 port number */
@@ -40,6 +41,15 @@ enum {
 	LSU_flush = 7,
 };
 
+typedef uint32_t flit_t;
+
+// Address translation: takes low bits, limited to 4G
+#ifdef __cplusplus
+#define ATRAN(addr) static_cast<flit_t>(reinterpret_cast<uintptr_t>(addr))
+#else
+#define ATRAN(addr) ((uintptr_t)addr)
+#endif
+
 extern stream_t *gport;
 
 #ifdef __cplusplus
@@ -47,10 +57,10 @@ extern "C" {
 #endif
 
 extern void aport_set(stream_t *port);
-extern unsigned aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel);
-extern void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, unsigned val);
-extern void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, unsigned *val, unsigned n);
-extern void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, unsigned *val, unsigned n);
+extern flit_t aport_read(unsigned fwd_id, unsigned ret_id, unsigned sel);
+extern void aport_write(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, flit_t val);
+extern void aport_nread(unsigned fwd_id, unsigned ret_id, unsigned sel, flit_t *val, unsigned n);
+extern void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned sel, flit_t *val, unsigned n);
 
 #ifdef __cplusplus
 }

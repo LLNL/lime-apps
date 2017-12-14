@@ -1,0 +1,86 @@
+# DCACHE: 8KB, writethru, victims: 0
+# MicroBlaze - SDK 2016.1, gcc 5.2.0
+# ARM A9 - SDK 2016.1, gcc 4.9.2
+# BSP - SDK 2016.1
+# arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard
+# -O3 -ffast-math -Wall -DZYNQ -DXILTIME -DSTANDALONE -DSTATS -DCLOCKS -DCLIENT -DUSE_SP -DUSE_OCM
+# mb-g++ -mcpu=v9.6 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x4021c960
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Real time used = 0.140854 seconds
+0.029777734 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.072508 sec
+Oper. time: 0.068293 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573145 1053201 50340640 33702464 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+# DCACHE: 8KB, writethru, victims: 0
+# MicroBlaze - SDK 2014.1, gcc 4.8.3
+# ARM A9 - SDK 2014.1, gcc 4.8.1
+# BSP - SDK 2016.1
+# arm-xilinx-eabi-g++ -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mvectorize-with-neon-quad -mfloat-abi=softfp
+#   -O3 -ffast-math -Wall -DZYNQ -DXILTIME -DSTANDALONE -DSTATS -DCLOCKS -DCLIENT -DUSE_SP -DUSE_OCM
+# mb-g++ -mcpu=v9.6 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x402186e0
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Real time used = 0.131400 seconds
+0.031920138 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.072553 sec
+Oper. time: 0.058794 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573147 1053097 50340704 33699104 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+# DCACHE: 16KB, writeback, victims: 4
+# MicroBlaze - SDK 2016.1, gcc 5.2.0
+# ARM A9 - SDK 2016.1, gcc 4.9.2
+# BSP - SDK 2016.1
+# arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard
+# -O3 -ffast-math -Wall -DZYNQ -DXILTIME -DSTANDALONE -DSTATS -DCLOCKS -DCLIENT -DUSE_SP -DUSE_OCM
+# mb-g++ -mcpu=v9.6 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x4021c960
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Real time used = 0.141397 seconds
+0.029663276 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.073134 sec
+Oper. time: 0.068210 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573145 1053197 50340640 33702272 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.

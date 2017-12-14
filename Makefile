@@ -6,7 +6,7 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.4
+PACKAGE = apps-1.5
 build=x86_64
 
 .PHONY: all
@@ -16,6 +16,8 @@ all:
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
+	cd rtb/$(build) && $(MAKE) $@
+	cd sort/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
 
@@ -39,6 +41,14 @@ pager:
 randa:
 	cd randa/$(build) && $(MAKE) all
 
+.PHONY: rtb
+rtb:
+	cd rtb/$(build) && $(MAKE) all
+
+.PHONY: sort
+sort:
+	cd sort/$(build) && $(MAKE) all
+
 .PHONY: spmv
 spmv:
 	cd spmv/$(build) && $(MAKE) all
@@ -54,6 +64,10 @@ dist: distclean
 .PHONY: distclean
 distclean:
 	$(RM) ../$(PACKAGE).tgz
+	$(MAKE) build=arm_64 clean
+	$(MAKE) build=x86_64 clean
+	$(MAKE) build=zup clean
+	$(MAKE) build=zynq clean
 
 .DEFAULT:
 	cd bfs/$(build) && $(MAKE) $@
@@ -61,5 +75,7 @@ distclean:
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
+	cd rtb/$(build) && $(MAKE) $@
+	cd sort/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@

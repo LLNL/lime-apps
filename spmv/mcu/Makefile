@@ -22,8 +22,8 @@ CXX = mb-g++
 SIZE = mb-size
 
 SRC = $(addprefix $(APPS_DIR)/,shared spmv/src)
-HEADERS = IndexArray.hpp lsu_cmd.h stream.h
-MODULES += mcu_main lsu_cmd stream
+HEADERS = IndexArray.hpp lsu_cmd.h aport.h stream.h
+MODULES += mcu_main lsu_cmd aport stream
 
 # comma separated list of defines
 ifdef D
@@ -36,7 +36,7 @@ OBJECTS = $(addsuffix .o,$(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
 
 OPTM = -O2
-MACH = -mcpu=v9.3 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
+MACH = -mcpu=v9.6 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
 CPPFLAGS = $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CPPFLAGS += -I$(BSP)/engine_0_mcu_0_microblaze_0/include
@@ -75,4 +75,5 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILE changes
 # module.o: module.h
 mcu_main.o: $(HEADERS)
 lsu_cmd.o: lsu_cmd.h stream.h
+aport.o: aport.h stream.h
 stream.o: stream.h

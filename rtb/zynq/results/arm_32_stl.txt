@@ -1,0 +1,1225 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2017.05.03 13:28:55 =~=~=~=~=~=~=~=~=~=~=~=
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5170812.495080 ops/sec
+Bases   rate: 3254366.454470 bp/sec
+Run     time: 2.493716 sec
+Oper.   time: 1.030634 sec
+Insert  time: 1.463082 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.805495 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 5024779.527561 ops/sec
+Run     time: 1.692619 sec
+Oper.   time: 0.023171 sec
+Lookup  time: 1.669448 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 207868 27610806 6651776 883545920 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 7565324
+Insert  rate: 5158849.600590 ops/sec
+Bases   rate: 3249800.488227 bp/sec
+Run     time: 2.497219 sec
+Oper.   time: 1.030744 sec
+Insert  time: 1.466475 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.820173 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 6957071.175364 ops/sec
+Run     time: 1.226976 sec
+Oper.   time: 0.021209 sec
+Lookup  time: 1.205767 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 141755 18399280 4536160 588777088 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 7565324
+Insert  rate: 5158485.655081 ops/sec
+Bases   rate: 3250145.928584 bp/sec
+Run     time: 2.496954 sec
+Oper.   time: 1.030376 sec
+Insert  time: 1.466578 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.817838 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 3923151.864803 ops/sec
+Run     time: 2.163279 sec
+Oper.   time: 0.025047 sec
+Lookup  time: 2.138232 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 258551 35288288 8273632 1129225344 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 7565324
+Insert  rate: 5158429.004308 ops/sec
+Bases   rate: 3249265.819962 bp/sec
+Run     time: 2.497630 sec
+Oper.   time: 1.031036 sec
+Insert  time: 1.466595 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.819775 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5385600.015903 ops/sec
+Run     time: 1.580230 sec
+Oper.   time: 0.022630 sec
+Lookup  time: 1.557600 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 182123 24297696 5827936 777526272 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5158689.491071 ops/sec
+Bases   rate: 3249717.062872 bp/sec
+Run     time: 2.497284 sec
+Oper.   time: 1.030763 sec
+Insert  time: 1.466521 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.817864 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 3271539.960522 ops/sec
+Run     time: 2.591232 sec
+Oper.   time: 0.027116 sec
+Lookup  time: 2.564116 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 306870 42946181 9819840 1374277888 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5171265.198642 ops/sec
+Bases   rate: 3254908.060335 bp/sec
+Run     time: 2.493301 sec
+Oper.   time: 1.030347 sec
+Insert  time: 1.462954 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.806779 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4645759.937333 ops/sec
+Run     time: 1.829950 sec
+Oper.   time: 0.024302 sec
+Lookup  time: 1.805648 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 212894 28642457 6812608 916558656 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 23320745
+Insert  rate: 4076587.577631 ops/sec
+Bases   rate: 2674064.411624 bp/sec
+Run     time: 9.368121 sec
+Oper.   time: 3.647468 sec
+Insert  time: 5.720654 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.110764 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 3370416.230975 ops/sec
+Run     time: 2.514749 sec
+Oper.   time: 0.025855 sec
+Lookup  time: 2.488894 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 291391 40479165 9324512 1295333344 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 23320745
+Insert  rate: 4096878.834559 ops/sec
+Bases   rate: 2683863.715032 bp/sec
+Run     time: 9.333916 sec
+Oper.   time: 3.641596 sec
+Insert  time: 5.692320 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.123768 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4476380.499514 ops/sec
+Run     time: 1.897232 sec
+Oper.   time: 0.023260 sec
+Lookup  time: 1.873971 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 208772 27808928 6680704 889885728 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 23320745
+Insert  rate: 4076092.259707 ops/sec
+Bases   rate: 2673828.058290 bp/sec
+Run     time: 9.368949 sec
+Oper.   time: 3.647600 sec
+Insert  time: 5.721349 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.103828 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 3093157.830203 ops/sec
+Run     time: 2.738637 sec
+Oper.   time: 0.026649 sec
+Lookup  time: 2.711988 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 317544 44978748 10161408 1439319936 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168123 sec
+Insert count: 23320745
+Insert  rate: 4095456.023515 ops/sec
+Bases   rate: 2683539.477388 bp/sec
+Run     time: 9.335044 sec
+Oper.   time: 3.640746 sec
+Insert  time: 5.694298 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.137420 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4075946.399094 ops/sec
+Run     time: 2.082590 sec
+Oper.   time: 0.024514 sec
+Lookup  time: 2.058076 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 234981 32030199 7519392 1024966432 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 23320745
+Insert  rate: 4076159.635853 ops/sec
+Bases   rate: 2673921.323509 bp/sec
+Run     time: 9.368622 sec
+Oper.   time: 3.647368 sec
+Insert  time: 5.721254 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.125903 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 2942148.676089 ops/sec
+Run     time: 2.878607 sec
+Oper.   time: 0.027423 sec
+Lookup  time: 2.851184 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 340629 48848523 10900128 1563152736 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168123 sec
+Insert count: 23320745
+Insert  rate: 4095620.782805 ops/sec
+Bases   rate: 2683610.525926 bp/sec
+Run     time: 9.334797 sec
+Oper.   time: 3.640728 sec
+Insert  time: 5.694068 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.107560 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4037811.431251 ops/sec
+Run     time: 2.101797 sec
+Oper.   time: 0.024283 sec
+Lookup  time: 2.077514 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 245388 33712396 7852416 1078796672 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 29442149
+Insert  rate: 3808225.764001 ops/sec
+Bases   rate: 2531691.785176 bp/sec
+Run     time: 12.485074 sec
+Oper.   time: 4.753875 sec
+Insert  time: 7.731198 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.039689 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 3013155.530215 ops/sec
+Run     time: 2.812047 sec
+Oper.   time: 0.028052 sec
+Lookup  time: 2.783994 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 318779 45193170 10200928 1446181440 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3828494.092236 ops/sec
+Bases   rate: 2541308.187592 bp/sec
+Run     time: 12.437830 sec
+Oper.   time: 4.747561 sec
+Insert  time: 7.690269 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.055600 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4043661.912841 ops/sec
+Run     time: 2.100004 sec
+Oper.   time: 0.025496 sec
+Lookup  time: 2.074508 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 228880 31097919 7324160 995133472 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168123 sec
+Insert count: 29442149
+Insert  rate: 3806493.218716 ops/sec
+Bases   rate: 2531222.974363 bp/sec
+Run     time: 12.487386 sec
+Oper.   time: 4.752669 sec
+Insert  time: 7.734717 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.054099 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 2880184.795787 ops/sec
+Run     time: 2.940825 sec
+Oper.   time: 0.028300 sec
+Lookup  time: 2.912524 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 337937 48478895 10813984 1551324768 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3808313.881413 ops/sec
+Bases   rate: 2532004.106065 bp/sec
+Run     time: 12.483534 sec
+Oper.   time: 4.752514 sec
+Insert  time: 7.731020 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.074724 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 3789921.573907 ops/sec
+Run     time: 2.239884 sec
+Oper.   time: 0.026485 sec
+Lookup  time: 2.213399 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 252616 34634473 8083712 1108303136 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3828228.310086 ops/sec
+Bases   rate: 2541855.671018 bp/sec
+Run     time: 12.435151 sec
+Oper.   time: 4.744348 sec
+Insert  time: 7.690803 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.037789 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 2824456.355610 ops/sec
+Run     time: 2.998755 sec
+Oper.   time: 0.028765 sec
+Lookup  time: 2.969990 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 351819 50989939 11258208 1631678144 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 29442149
+Insert  rate: 3819974.303299 ops/sec
+Bases   rate: 2537670.260606 bp/sec
+Run     time: 12.455660 sec
+Oper.   time: 4.748240 sec
+Insert  time: 7.707421 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.129571 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 3877992.366299 ops/sec
+Run     time: 2.189808 sec
+Oper.   time: 0.026677 sec
+Lookup  time: 2.163132 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 258061 35356256 8257952 1131400320 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5159212.976273 ops/sec
+Bases   rate: 3250915.557561 bp/sec
+Run     time: 2.496363 sec
+Oper.   time: 1.029991 sec
+Insert  time: 1.466372 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.817785 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 2574573.809242 ops/sec
+Run     time: 3.287207 sec
+Oper.   time: 0.028956 sec
+Lookup  time: 3.258251 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 208786 27614618 6681152 883667872 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5159331.034175 ops/sec
+Bases   rate: 3250869.795747 bp/sec
+Run     time: 2.496398 sec
+Oper.   time: 1.030060 sec
+Insert  time: 1.466338 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.815711 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 3786091.261630 ops/sec
+Run     time: 2.240643 sec
+Oper.   time: 0.025005 sec
+Lookup  time: 2.215638 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 142025 18401863 4544800 588859712 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5147093.370597 ops/sec
+Bases   rate: 3245857.867281 bp/sec
+Run     time: 2.500253 sec
+Oper.   time: 1.030428 sec
+Insert  time: 1.469825 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.831872 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1970569.909533 ops/sec
+Run     time: 4.289502 sec
+Oper.   time: 0.032557 sec
+Lookup  time: 4.256945 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 259420 35270417 8301440 1128653408 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5159086.772136 ops/sec
+Bases   rate: 3250680.188790 bp/sec
+Run     time: 2.496544 sec
+Oper.   time: 1.030136 sec
+Insert  time: 1.466408 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.807370 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2821495.004929 ops/sec
+Run     time: 3.001007 sec
+Oper.   time: 0.027900 sec
+Lookup  time: 2.973108 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 182350 24311805 5835200 777977824 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5159210.108426 ops/sec
+Bases   rate: 3249909.890800 bp/sec
+Run     time: 2.497135 sec
+Oper.   time: 1.030763 sec
+Insert  time: 1.466373 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.817856 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1616425.640638 ops/sec
+Run     time: 5.226156 sec
+Oper.   time: 0.036553 sec
+Lookup  time: 5.189603 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 306349 42945241 9803168 1374247808 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 7565324
+Insert  rate: 5158347.638706 ops/sec
+Bases   rate: 3250201.347758 bp/sec
+Run     time: 2.496911 sec
+Oper.   time: 1.030294 sec
+Insert  time: 1.466618 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c9090 top:0x55138000 end:0x7f2c9090
+total:1056964608 used:350678896
+Stats   time: 6.804392 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2388894.265794 ops/sec
+Run     time: 3.542191 sec
+Oper.   time: 0.030688 sec
+Lookup  time: 3.511502 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 212351 28663211 6795232 917222816 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 23320745
+Insert  rate: 4076172.960624 ops/sec
+Bases   rate: 2674369.392346 bp/sec
+Run     time: 9.367053 sec
+Oper.   time: 3.645817 sec
+Insert  time: 5.721235 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.131943 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1697709.464089 ops/sec
+Run     time: 4.974649 sec
+Oper.   time: 0.033516 sec
+Lookup  time: 4.941133 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 290724 40466425 9303168 1294925664 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 23320745
+Insert  rate: 4096335.259315 ops/sec
+Bases   rate: 2684401.853894 bp/sec
+Run     time: 9.332045 sec
+Oper.   time: 3.638970 sec
+Insert  time: 5.693075 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.132673 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2395098.531228 ops/sec
+Run     time: 3.531506 sec
+Oper.   time: 0.029100 sec
+Lookup  time: 3.502406 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 208798 27800334 6681536 889610752 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 23320745
+Insert  rate: 4096735.953368 ops/sec
+Bases   rate: 2684692.714502 bp/sec
+Run     time: 9.331034 sec
+Oper.   time: 3.638516 sec
+Insert  time: 5.692518 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.123180 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1556344.461132 ops/sec
+Run     time: 5.425708 sec
+Oper.   time: 0.035765 sec
+Lookup  time: 5.389943 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 318591 44999888 10194912 1439996480 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 23320745
+Insert  rate: 4086266.254495 ops/sec
+Bases   rate: 2679478.074909 bp/sec
+Run     time: 9.349193 sec
+Oper.   time: 3.642090 sec
+Insert  time: 5.707104 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.141608 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2143443.309767 ops/sec
+Run     time: 3.944849 sec
+Oper.   time: 0.031236 sec
+Lookup  time: 3.913613 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 236046 32055985 7553472 1025791584 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 23320745
+Insert  rate: 4067849.726541 ops/sec
+Bases   rate: 2670258.405244 bp/sec
+Run     time: 9.381474 sec
+Oper.   time: 3.648532 sec
+Insert  time: 5.732942 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.129414 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1454971.660202 ops/sec
+Run     time: 5.803433 sec
+Oper.   time: 0.037955 sec
+Lookup  time: 5.765479 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 340889 48858256 10908448 1563464224 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 23320745
+Insert  rate: 4076153.142511 ops/sec
+Bases   rate: 2674055.557846 bp/sec
+Run     time: 9.368152 sec
+Oper.   time: 3.646889 sec
+Insert  time: 5.721263 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c9090 top:0x6eccb000 end:0x7f2c9090
+total:1056964608 used:782245744
+Stats   time: 18.085162 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2072540.724347 ops/sec
+Run     time: 4.079428 sec
+Oper.   time: 0.031928 sec
+Lookup  time: 4.047500 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 245681 33709032 7861792 1078689064 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 29442149
+Insert  rate: 3799965.520436 ops/sec
+Bases   rate: 2527915.938938 bp/sec
+Run     time: 12.503722 sec
+Oper.   time: 4.755718 sec
+Insert  time: 7.748004 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.132635 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1527198.573190 ops/sec
+Run     time: 5.531047 sec
+Oper.   time: 0.038240 sec
+Lookup  time: 5.492808 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 318656 45189797 10196992 1446073568 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3806129.208567 ops/sec
+Bases   rate: 2531124.528706 bp/sec
+Run     time: 12.487872 sec
+Oper.   time: 4.752415 sec
+Insert  time: 7.735457 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.039934 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2149198.479249 ops/sec
+Run     time: 3.936057 sec
+Oper.   time: 0.032924 sec
+Lookup  time: 3.903133 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 229627 31099979 7348064 995199392 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3820039.385369 ops/sec
+Bases   rate: 2537373.503915 bp/sec
+Run     time: 12.457117 sec
+Oper.   time: 4.749828 sec
+Insert  time: 7.707289 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.126976 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1455382.697206 ops/sec
+Run     time: 5.803919 sec
+Oper.   time: 0.040069 sec
+Lookup  time: 5.763850 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 338281 48456856 10824992 1550619424 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 29442149
+Insert  rate: 3827600.632621 ops/sec
+Bases   rate: 2541432.183104 bp/sec
+Run     time: 12.437223 sec
+Oper.   time: 4.745159 sec
+Insert  time: 7.692064 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.042520 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1997974.615375 ops/sec
+Run     time: 4.232378 sec
+Oper.   time: 0.033822 sec
+Lookup  time: 4.198556 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 253466 34645988 8110912 1108671680 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 29442149
+Insert  rate: 3826926.057432 ops/sec
+Bases   rate: 2540809.013451 bp/sec
+Run     time: 12.440273 sec
+Oper.   time: 4.746854 sec
+Insert  time: 7.693420 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.083265 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 1406138.639763 ops/sec
+Run     time: 6.006575 sec
+Oper.   time: 0.040870 sec
+Lookup  time: 5.965705 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 351352 50972080 11243264 1631106656 0
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 29442149
+Insert  rate: 3828040.979805 ops/sec
+Bases   rate: 2541507.414399 bp/sec
+Run     time: 12.436855 sec
+Oper.   time: 4.745676 sec
+Insert  time: 7.691179 sec
+size: 25284968
+load_factor (elem): 0.750013
+bucket_count: 33712729
+max_elem_per_bucket: 19
+heap start:0x402c9090 top:0x7871c000 end:0x7f2c9090
+total:1056964608 used:944058224
+Stats   time: 22.069210 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1993109.267834 ops/sec
+Run     time: 4.243160 sec
+Oper.   time: 0.034355 sec
+Lookup  time: 4.208805 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 257521 35364724 8240672 1131671200 0

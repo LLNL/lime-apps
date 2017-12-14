@@ -28,7 +28,7 @@
 // used for cache coherency between DRE and HOST
 #if defined(ZYNQ)
 #include "xil_cache.h"
-#define CACHE_DISPOSE(p,n) {/*dre's?*/ Xil_DCacheInvalidateRange((unsigned int)p,(unsigned)n);}
+#define CACHE_DISPOSE(p,n) {/*dre's?*/ Xil_DCacheInvalidateRange((INTPTR)p,n);}
 #else
 #define CACHE_DISPOSE(p,n)
 #endif

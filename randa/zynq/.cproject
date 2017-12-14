@@ -25,16 +25,42 @@
 								</option>
 								<inputType id="xilinx.gnu.assembler.input.1184758009" superClass="xilinx.gnu.assembler.input"/>
 							</tool>
-							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1887527882" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.compiler.1887527882" name="ARM gcc compiler" superClass="xilinx.gnu.arm.c.toolchain.compiler">
+								<option id="xilinx.gnu.compiler.inferred.swplatform.includes.1185996641" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+									<listOptionValue builtIn="false" value="C:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include"/>
+								</option>
+								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.125886468" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value=" " valueType="string"/>
+							</tool>
 							<tool id="xilinx.gnu.arm.cxx.toolchain.compiler.187187231" name="ARM g++ compiler" superClass="xilinx.gnu.arm.cxx.toolchain.compiler">
 								<option id="xilinx.gnu.compiler.dircategory.includes.314825957" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/standalone_bsp_a9/ps7_cortexa9_0/include}&quot;"/>
 								</option>
+								<option id="xilinx.gnu.compiler.inferred.swplatform.includes.1184438974" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+									<listOptionValue builtIn="false" value="C:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/include"/>
+								</option>
+								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.768050894" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value=" " valueType="string"/>
 								<inputType id="xilinx.gnu.arm.cxx.compiler.input.126787675" name="C++ source files" superClass="xilinx.gnu.arm.cxx.compiler.input"/>
 							</tool>
 							<tool id="xilinx.gnu.arm.toolchain.archiver.1785301071" name="ARM archiver" superClass="xilinx.gnu.arm.toolchain.archiver"/>
-							<tool id="xilinx.gnu.arm.c.toolchain.linker.1326051975" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker"/>
+							<tool id="xilinx.gnu.arm.c.toolchain.linker.1326051975" name="ARM gcc linker" superClass="xilinx.gnu.arm.c.toolchain.linker">
+								<option id="xilinx.gnu.linker.inferred.swplatform.lpath.8126537" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+									<listOptionValue builtIn="false" value="C:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/lib"/>
+								</option>
+								<option id="xilinx.gnu.linker.inferred.swplatform.flags.70747023" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+									<listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group"/>
+									<listOptionValue builtIn="false" value="-Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group"/>
+								</option>
+								<option id="xilinx.gnu.c.linker.option.lscript.1480756649" superClass="xilinx.gnu.c.linker.option.lscript" value="../cpu_ldscript1.ld" valueType="string"/>
+							</tool>
 							<tool id="xilinx.gnu.arm.cxx.toolchain.linker.464906485" name="ARM g++ linker" superClass="xilinx.gnu.arm.cxx.toolchain.linker">
+								<option id="xilinx.gnu.linker.inferred.swplatform.lpath.2068726041" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+									<listOptionValue builtIn="false" value="C:/Users/lloyd23/xwork/standalone_bsp_a9/ps7_cortexa9_0/lib"/>
+								</option>
+								<option id="xilinx.gnu.linker.inferred.swplatform.flags.250837391" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+									<listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group"/>
+									<listOptionValue builtIn="false" value="-Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group"/>
+								</option>
+								<option id="xilinx.gnu.c.linker.option.lscript.1600743139" superClass="xilinx.gnu.c.linker.option.lscript" value="../cpu_ldscript1.ld" valueType="string"/>
 								<inputType id="xilinx.gnu.linker.input.1968900274" superClass="xilinx.gnu.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

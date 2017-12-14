@@ -11,10 +11,11 @@
 /*******************************************************************/
 
 _STACK_SIZE = DEFINED(_STACK_SIZE) ? _STACK_SIZE : 0x4000;
-_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x00100000;
+_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x3F000000;
 
 _ABORT_STACK_SIZE = DEFINED(_ABORT_STACK_SIZE) ? _ABORT_STACK_SIZE : 1024;
 _SUPERVISOR_STACK_SIZE = DEFINED(_SUPERVISOR_STACK_SIZE) ? _SUPERVISOR_STACK_SIZE : 2048;
+_IRQ_STACK_SIZE = DEFINED(_IRQ_STACK_SIZE) ? _IRQ_STACK_SIZE : 1024;
 _FIQ_STACK_SIZE = DEFINED(_FIQ_STACK_SIZE) ? _FIQ_STACK_SIZE : 1024;
 _UNDEF_STACK_SIZE = DEFINED(_UNDEF_STACK_SIZE) ? _UNDEF_STACK_SIZE : 1024;
 
@@ -22,10 +23,11 @@ _UNDEF_STACK_SIZE = DEFINED(_UNDEF_STACK_SIZE) ? _UNDEF_STACK_SIZE : 1024;
 
 MEMORY
 {
-   ps7_ddr_0_S_AXI_BASEADDR : ORIGIN = 0x3FF00000, LENGTH = 0x00100000
-   ps7_ram_0_S_AXI_BASEADDR : ORIGIN = 0x00000000, LENGTH = 0x00030000
-   ps7_ram_1_S_AXI_BASEADDR : ORIGIN = 0xFFFF0000, LENGTH = 0x0000FE00
-   axi_shim_0 : ORIGIN = 0x40200000, LENGTH = 0x3FD00000
+   axi_shim_0 : ORIGIN = 0x40200000, LENGTH = 0x3FE00000
+   ps7_ddr_0_S_AXI_BASEADDR : ORIGIN = 0x100000, LENGTH = 0x3FF00000
+   ps7_qspi_linear_0_S_AXI_BASEADDR : ORIGIN = 0xFC000000, LENGTH = 0x1000000
+   ps7_ram_0_S_AXI_BASEADDR : ORIGIN = 0x0, LENGTH = 0x30000
+   ps7_ram_1_S_AXI_BASEADDR : ORIGIN = 0xFFFF0000, LENGTH = 0xFE00
 }
 
 /* Specify the default entry point to the program */
@@ -37,7 +39,7 @@ ENTRY(_vector_table)
 SECTIONS
 {
 .text : {
-   *(.vectors)
+   KEEP (*(.vectors))
    *(.boot)
    *(.text)
    *(.text.*)
@@ -256,11 +258,13 @@ _SDA2_BASE_ = __sdata2_start + ((__sbss2_end - __sdata2_start) / 2 );
    . = ALIGN(16);
    _stack_end = .;
    . += _STACK_SIZE;
+   . = ALIGN(16);
    _stack = .;
    __stack = _stack;
    . = ALIGN(16);
    _irq_stack_end = .;
-   . += _STACK_SIZE;
+   . += _IRQ_STACK_SIZE;
+   . = ALIGN(16);
    __irq_stack = .;
    _supervisor_stack_end = .;
    . += _SUPERVISOR_STACK_SIZE;

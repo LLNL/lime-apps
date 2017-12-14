@@ -13,7 +13,8 @@ static inline uint64_t Rot64(uint64_t x, int k)
 
 /* software version */
 
-#define EMIX(y,x,r) y = (y ^ x) + (x = Rot64(x,r));
+//#define EMIX(y,x,r) y = (y ^ x) + (x = Rot64(x,r)); // gives [-Wsequence-point] warning
+#define EMIX(y,x,r) {register uint64_t t = Rot64(x,r); y = (y ^ x) + t; x = t;}
 
 void short128_hash(const void *key, int len, int seed, void *out) {
 	uint64_t a, b, c, d;

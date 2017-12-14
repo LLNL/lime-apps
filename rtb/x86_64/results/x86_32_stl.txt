@@ -1,0 +1,1355 @@
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DSTL -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -DSTL -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -DSTL -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -DSTL -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -DSTL -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+load: .20 hit: .10 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.049999 sec
+Insert count: 7565324
+Insert  rate: 3219315.576863 ops/sec
+Bases   rate: 1827825.546019 bp/sec
+Run     time: 4.439956 sec
+Oper.   time: 2.089977 sec
+Insert  time: 2.349979 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569994 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 16448444.491504 ops/sec
+Run     time: 0.559994 sec
+Oper.   time: 0.050000 sec
+Lookup  time: 0.509994 sec
+load: .20 hit: .10 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 7565324
+Insert  rate: 3289305.627537 ops/sec
+Bases   rate: 1823718.442097 bp/sec
+Run     time: 4.449955 sec
+Oper.   time: 2.149979 sec
+Insert  time: 2.299976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569995 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 15534603.098177 ops/sec
+Run     time: 0.549995 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.539995 sec
+load: .20 hit: .10 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3690450.557154 ops/sec
+Bases   rate: 1811505.919144 bp/sec
+Run     time: 4.479955 sec
+Oper.   time: 2.429982 sec
+Insert  time: 2.049973 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569995 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 16448412.239336 ops/sec
+Run     time: 0.579994 sec
+Oper.   time: 0.069999 sec
+Lookup  time: 0.509995 sec
+load: .20 hit: .10 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3275068.896879 ops/sec
+Bases   rate: 1807471.344368 bp/sec
+Run     time: 4.489955 sec
+Oper.   time: 2.179981 sec
+Insert  time: 2.309974 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.579995 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 19508572.172764 ops/sec
+Run     time: 0.459996 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 0.429996 sec
+load: .20 hit: .10 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3246953.616690 ops/sec
+Bases   rate: 1807471.344368 bp/sec
+Run     time: 4.489955 sec
+Oper.   time: 2.159979 sec
+Insert  time: 2.329976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569995 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 19508617.542064 ops/sec
+Run     time: 0.459995 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 0.429995 sec
+load: .20 hit: .10 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.049999 sec
+Insert count: 7565324
+Insert  rate: 3246950.829579 ops/sec
+Bases   rate: 1791511.173952 bp/sec
+Run     time: 4.529955 sec
+Oper.   time: 2.199977 sec
+Insert  time: 2.329978 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.589994 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 19973113.965642 ops/sec
+Run     time: 0.459995 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 0.419995 sec
+load: .20 hit: .50 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3745243.274445 ops/sec
+Bases   rate: 1844442.308059 bp/sec
+Run     time: 4.399956 sec
+Oper.   time: 2.379974 sec
+Insert  time: 2.019982 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.559995 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 13315377.606771 ops/sec
+Run     time: 0.699993 sec
+Oper.   time: 0.069999 sec
+Lookup  time: 0.629994 sec
+load: .20 hit: .50 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 7565324
+Insert  rate: 2990282.098207 ops/sec
+Bases   rate: 1840260.274765 bp/sec
+Run     time: 4.409955 sec
+Oper.   time: 1.879985 sec
+Insert  time: 2.529970 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.559995 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 13315398.742526 ops/sec
+Run     time: 0.689993 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 0.629993 sec
+load: .20 hit: .50 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 7565324
+Insert  rate: 3362397.604600 ops/sec
+Bases   rate: 1831951.604034 bp/sec
+Run     time: 4.429956 sec
+Oper.   time: 2.179977 sec
+Insert  time: 2.249979 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.579994 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 12336297.084974 ops/sec
+Run     time: 0.729993 sec
+Oper.   time: 0.049999 sec
+Lookup  time: 0.679994 sec
+load: .20 hit: .50 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3275066.061292 ops/sec
+Bases   rate: 1791511.173952 bp/sec
+Run     time: 4.529955 sec
+Oper.   time: 2.219979 sec
+Insert  time: 2.309976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.579994 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 14717036.875891 ops/sec
+Run     time: 0.629993 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 0.569993 sec
+load: .20 hit: .50 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.049999 sec
+Insert count: 7565324
+Insert  rate: 3535237.778368 ops/sec
+Bases   rate: 1791511.173952 bp/sec
+Run     time: 4.529955 sec
+Oper.   time: 2.389979 sec
+Insert  time: 2.139976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.659993 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 15534631.866280 ops/sec
+Run     time: 0.599994 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 0.539994 sec
+load: .20 hit: .50 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 7565324
+Insert  rate: 3672523.034204 ops/sec
+Bases   rate: 1844442.308059 bp/sec
+Run     time: 4.399956 sec
+Oper.   time: 2.339976 sec
+Insert  time: 2.059980 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.559994 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 14463266.861381 ops/sec
+Run     time: 0.609994 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 0.579994 sec
+load: .20 hit: .90 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 7565324
+Insert  rate: 3303658.016825 ops/sec
+Bases   rate: 1819629.346036 bp/sec
+Run     time: 4.459955 sec
+Oper.   time: 2.169971 sec
+Insert  time: 2.289984 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.589994 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 12520441.258342 ops/sec
+Run     time: 0.679993 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.669993 sec
+load: .20 hit: .90 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 7565324
+Insert  rate: 3219316.946797 ops/sec
+Bases   rate: 1827825.957696 bp/sec
+Run     time: 4.439955 sec
+Oper.   time: 2.089977 sec
+Insert  time: 2.349978 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.559995 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 12336315.226774 ops/sec
+Run     time: 0.689993 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.679993 sec
+load: .20 hit: .90 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 7565324
+Insert  rate: 3486354.949652 ops/sec
+Bases   rate: 1815558.545891 bp/sec
+Run     time: 4.469955 sec
+Oper.   time: 2.299974 sec
+Insert  time: 2.169981 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569994 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 12336297.084974 ops/sec
+Run     time: 0.679994 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.679994 sec
+load: .20 hit: .90 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.059999 sec
+Insert count: 7565324
+Insert  rate: 3518794.628405 ops/sec
+Bases   rate: 1819628.938043 bp/sec
+Run     time: 4.459956 sec
+Oper.   time: 2.309980 sec
+Insert  time: 2.149976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.549994 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 14717011.056257 ops/sec
+Run     time: 0.569994 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.569994 sec
+load: .20 hit: .90 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3708517.607474 ops/sec
+Bases   rate: 1848643.813287 bp/sec
+Run     time: 4.389956 sec
+Oper.   time: 2.349970 sec
+Insert  time: 2.039986 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.569995 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 14716985.236713 ops/sec
+Run     time: 0.569995 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.569995 sec
+load: .20 hit: .90 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 7565324
+Insert  rate: 3470370.316003 ops/sec
+Bases   rate: 1848643.813287 bp/sec
+Run     time: 4.389956 sec
+Oper.   time: 2.209980 sec
+Insert  time: 2.179976 sec
+size: 6743138
+load_factor (elem): 0.200018
+bucket_count: 33712729
+max_elem_per_bucket: 15
+Stats   time: 0.559995 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 15534603.098177 ops/sec
+Run     time: 0.569995 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 0.539995 sec
+load: .60 hit: .10 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 23320745
+Insert  rate: 2933459.515024 ops/sec
+Bases   rate: 1657922.524573 bp/sec
+Run     time: 15.109849 sec
+Oper.   time: 7.159937 sec
+Insert  time: 7.949912 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.479985 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 8924146.001553 ops/sec
+Run     time: 0.979990 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 0.939990 sec
+load: .60 hit: .10 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 23320745
+Insert  rate: 2840560.371551 ops/sec
+Bases   rate: 1680161.592493 bp/sec
+Run     time: 14.909851 sec
+Oper.   time: 6.699941 sec
+Insert  time: 8.209910 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.429985 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 8924146.001553 ops/sec
+Run     time: 0.979990 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 0.939990 sec
+load: .60 hit: .10 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2872040.873304 ops/sec
+Bases   rate: 1689225.152078 bp/sec
+Run     time: 14.829852 sec
+Oper.   time: 6.709931 sec
+Insert  time: 8.119921 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.449985 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 9118141.373122 ops/sec
+Run     time: 0.979990 sec
+Oper.   time: 0.059999 sec
+Lookup  time: 0.919991 sec
+load: .60 hit: .10 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2864987.713011 ops/sec
+Bases   rate: 1679035.580116 bp/sec
+Run     time: 14.919850 sec
+Oper.   time: 6.779939 sec
+Insert  time: 8.139911 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.449986 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 10230109.562045 ops/sec
+Run     time: 0.859991 sec
+Oper.   time: 0.039999 sec
+Lookup  time: 0.819992 sec
+load: .60 hit: .10 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 23320745
+Insert  rate: 2830213.603912 ops/sec
+Bases   rate: 1673427.522654 bp/sec
+Run     time: 14.969850 sec
+Oper.   time: 6.729926 sec
+Insert  time: 8.239924 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.439986 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 10106854.041967 ops/sec
+Run     time: 0.839992 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.829992 sec
+load: .60 hit: .10 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 23320745
+Insert  rate: 2840557.949611 ops/sec
+Bases   rate: 1680161.592493 bp/sec
+Run     time: 14.909851 sec
+Oper.   time: 6.699934 sec
+Insert  time: 8.209917 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.419985 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 10230109.562045 ops/sec
+Run     time: 0.839992 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.819992 sec
+load: .60 hit: .50 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2782933.027014 ops/sec
+Bases   rate: 1679035.467579 bp/sec
+Run     time: 14.919851 sec
+Oper.   time: 6.539935 sec
+Insert  time: 8.379916 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.419986 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 7913863.257072 ops/sec
+Run     time: 1.089989 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 1.059989 sec
+load: .60 hit: .50 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.049999 sec
+Insert count: 23320745
+Insert  rate: 2886257.607589 ops/sec
+Bases   rate: 1659020.497490 bp/sec
+Run     time: 15.099849 sec
+Oper.   time: 7.019924 sec
+Insert  time: 8.079925 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.429986 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 7839901.157862 ops/sec
+Run     time: 1.109989 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 1.069989 sec
+load: .60 hit: .50 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2753362.992040 ops/sec
+Bases   rate: 1663426.970616 bp/sec
+Run     time: 15.059849 sec
+Oper.   time: 6.589936 sec
+Insert  time: 8.469913 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.449985 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 8224214.182702 ops/sec
+Run     time: 1.099989 sec
+Oper.   time: 0.080000 sec
+Lookup  time: 1.019989 sec
+load: .60 hit: .50 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.039999 sec
+Insert count: 23320745
+Insert  rate: 2922432.082567 ops/sec
+Bases   rate: 1686950.078694 bp/sec
+Run     time: 14.849852 sec
+Oper.   time: 6.869942 sec
+Insert  time: 7.979910 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.439985 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 9532606.583476 ops/sec
+Run     time: 0.929991 sec
+Oper.   time: 0.050000 sec
+Lookup  time: 0.879991 sec
+load: .60 hit: .50 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2854465.700749 ops/sec
+Bases   rate: 1681289.229000 bp/sec
+Run     time: 14.899851 sec
+Oper.   time: 6.729935 sec
+Insert  time: 8.169916 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.439985 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 9642177.907588 ops/sec
+Run     time: 0.919991 sec
+Oper.   time: 0.050000 sec
+Lookup  time: 0.869991 sec
+load: .60 hit: .50 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 23320745
+Insert  rate: 2840556.565648 ops/sec
+Bases   rate: 1679035.467579 bp/sec
+Run     time: 14.919851 sec
+Oper.   time: 6.709930 sec
+Insert  time: 8.209921 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.429985 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 9218341.719863 ops/sec
+Run     time: 0.929991 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.909991 sec
+load: .60 hit: .90 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2699175.296344 ops/sec
+Bases   rate: 1661211.999075 bp/sec
+Run     time: 15.079929 sec
+Oper.   time: 6.439977 sec
+Insert  time: 8.639952 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.460000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 9320675.555556 ops/sec
+Run     time: 0.920000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.900000 sec
+load: .60 hit: .90 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2900590.174129 ops/sec
+Bases   rate: 1671178.052035 bp/sec
+Run     time: 14.990000 sec
+Oper.   time: 6.950000 sec
+Insert  time: 8.040000 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.450000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 9020008.602151 ops/sec
+Run     time: 0.950000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.930000 sec
+load: .60 hit: .90 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2967015.903308 ops/sec
+Bases   rate: 1689208.293999 bp/sec
+Run     time: 14.830000 sec
+Oper.   time: 6.970000 sec
+Insert  time: 7.860000 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.430000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 9218250.549451 ops/sec
+Run     time: 0.920000 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.910000 sec
+load: .60 hit: .90 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2769684.679335 ops/sec
+Bases   rate: 1673410.754843 bp/sec
+Run     time: 14.970000 sec
+Oper.   time: 6.550000 sec
+Insert  time: 8.420000 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.450000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 11335956.756757 ops/sec
+Run     time: 0.780000 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 0.740000 sec
+load: .60 hit: .90 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2711714.534884 ops/sec
+Bases   rate: 1649174.391047 bp/sec
+Run     time: 15.190000 sec
+Oper.   time: 6.590000 sec
+Insert  time: 8.600000 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.430000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 11037642.105263 ops/sec
+Run     time: 0.780000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.760000 sec
+load: .60 hit: .90 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 23320745
+Insert  rate: 2879104.320988 ops/sec
+Bases   rate: 1653528.646865 bp/sec
+Run     time: 15.150000 sec
+Oper.   time: 7.050000 sec
+Insert  time: 8.100000 sec
+size: 20228603
+load_factor (elem): 0.600029
+bucket_count: 33712729
+max_elem_per_bucket: 17
+Stats   time: 1.480000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 11037642.105263 ops/sec
+Run     time: 0.770000 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.760000 sec
+load: .90 hit: .10 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2474590.111421 ops/sec
+Bases   rate: 1554041.279544 bp/sec
+Run     time: 24.540000 sec
+Oper.   time: 10.180000 sec
+Insert  time: 14.360000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.340000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 6168094.117647 ops/sec
+Run     time: 1.400000 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 1.360000 sec
+load: .90 hit: .10 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2552809.913793 ops/sec
+Bases   rate: 1589669.570654 bp/sec
+Run     time: 23.990000 sec
+Oper.   time: 10.070000 sec
+Insert  time: 13.920000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.320000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 5949367.375887 ops/sec
+Run     time: 1.430000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 1.410000 sec
+load: .90 hit: .10 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2545495.272206 ops/sec
+Bases   rate: 1554041.279544 bp/sec
+Run     time: 24.540000 sec
+Oper.   time: 10.580000 sec
+Insert  time: 13.960000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.330000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.00
+Lookup  rate: 6213783.703704 ops/sec
+Run     time: 1.400000 sec
+Oper.   time: 0.050000 sec
+Lookup  time: 1.350000 sec
+load: .90 hit: .10 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 35535114
+Insert  rate: 2573143.664012 ops/sec
+Bases   rate: 1588345.397751 bp/sec
+Run     time: 24.010000 sec
+Oper.   time: 10.200000 sec
+Insert  time: 13.810000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.390000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 7913781.132075 ops/sec
+Run     time: 1.100000 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 1.060000 sec
+load: .90 hit: .10 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 35535114
+Insert  rate: 2560166.714697 ops/sec
+Bases   rate: 1560399.877250 bp/sec
+Run     time: 24.440000 sec
+Oper.   time: 10.560000 sec
+Insert  time: 13.880000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.350000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 7358428.070175 ops/sec
+Run     time: 1.140000 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 1.140000 sec
+load: .90 hit: .10 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2557218.911917 ops/sec
+Bases   rate: 1576526.374535 bp/sec
+Run     time: 24.190000 sec
+Oper.   time: 10.294000 sec
+Insert  time: 13.896000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.320000 sec
+Lookup count: 8388608
+Lookup  hits: 838861 10.00%
+Lookup  zipf: 0.99
+Lookup  rate: 7913781.132075 ops/sec
+Run     time: 1.110000 sec
+Oper.   time: 0.050000 sec
+Lookup  time: 1.060000 sec
+load: .90 hit: .50 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2552809.913793 ops/sec
+Bases   rate: 1545852.168626 bp/sec
+Run     time: 24.670000 sec
+Oper.   time: 10.750000 sec
+Insert  time: 13.920000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.350000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 5629938.255034 ops/sec
+Run     time: 1.520000 sec
+Oper.   time: 0.030000 sec
+Lookup  time: 1.490000 sec
+load: .90 hit: .50 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2588136.489439 ops/sec
+Bases   rate: 1589007.208333 bp/sec
+Run     time: 24.000000 sec
+Oper.   time: 10.270000 sec
+Insert  time: 13.730000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.290000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 5825422.222222 ops/sec
+Run     time: 1.520000 sec
+Oper.   time: 0.080000 sec
+Lookup  time: 1.440000 sec
+load: .90 hit: .50 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2449008.545830 ops/sec
+Bases   rate: 1573923.772183 bp/sec
+Run     time: 24.230000 sec
+Oper.   time: 9.720000 sec
+Insert  time: 14.510000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.390000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.00
+Lookup  rate: 5555369.536424 ops/sec
+Run     time: 1.570000 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 1.510000 sec
+load: .90 hit: .50 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 35535114
+Insert  rate: 2502472.816901 ops/sec
+Bases   rate: 1565524.343186 bp/sec
+Run     time: 24.360000 sec
+Oper.   time: 10.160000 sec
+Insert  time: 14.200000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.330000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5949367.375887 ops/sec
+Run     time: 1.450000 sec
+Oper.   time: 0.040000 sec
+Lookup  time: 1.410000 sec
+load: .90 hit: .50 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2454082.458564 ops/sec
+Bases   rate: 1551512.327095 bp/sec
+Run     time: 24.580000 sec
+Oper.   time: 10.100000 sec
+Insert  time: 14.480000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.330000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 6820006.504065 ops/sec
+Run     time: 1.290000 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 1.230000 sec
+load: .90 hit: .50 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2574821.679588 ops/sec
+Bases   rate: 1573144.666282 bp/sec
+Run     time: 24.242000 sec
+Oper.   time: 10.441000 sec
+Insert  time: 13.801000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.380000 sec
+Lookup count: 8388608
+Lookup  hits: 4194304 50.00%
+Lookup  zipf: 0.99
+Lookup  rate: 7169750.427350 ops/sec
+Run     time: 1.240000 sec
+Oper.   time: 0.070000 sec
+Lookup  time: 1.170000 sec
+load: .90 hit: .90 zipf: .00 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2442275.876289 ops/sec
+Bases   rate: 1538990.032284 bp/sec
+Run     time: 24.780000 sec
+Oper.   time: 10.230000 sec
+Insert  time: 14.550000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.710000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 6452775.384615 ops/sec
+Run     time: 1.320000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 1.300000 sec
+load: .90 hit: .90 zipf: .00 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2471148.400556 ops/sec
+Bases   rate: 1559123.998365 bp/sec
+Run     time: 24.460000 sec
+Oper.   time: 10.080000 sec
+Insert  time: 14.380000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.370000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 7489828.571429 ops/sec
+Run     time: 1.140000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 1.120000 sec
+load: .90 hit: .90 zipf: .00 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2486711.966410 ops/sec
+Bases   rate: 1555308.849918 bp/sec
+Run     time: 24.520000 sec
+Oper.   time: 10.230000 sec
+Insert  time: 14.290000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.320000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.00
+Lookup  rate: 7839820.560748 ops/sec
+Run     time: 1.130000 sec
+Oper.   time: 0.060000 sec
+Lookup  time: 1.070000 sec
+load: .90 hit: .90 zipf: .99 run: 1
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.050000 sec
+Insert count: 35535114
+Insert  rate: 2417354.693878 ops/sec
+Bases   rate: 1546479.034874 bp/sec
+Run     time: 24.660000 sec
+Oper.   time: 9.960000 sec
+Insert  time: 14.700000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.310000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 8738133.333333 ops/sec
+Run     time: 0.970000 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.960000 sec
+load: .90 hit: .90 zipf: .99 run: 2
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2514870.063694 ops/sec
+Bases   rate: 1536509.790492 bp/sec
+Run     time: 24.820000 sec
+Oper.   time: 10.690000 sec
+Insert  time: 14.130000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.320000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 9218250.549451 ops/sec
+Run     time: 0.930000 sec
+Oper.   time: 0.020000 sec
+Lookup  time: 0.910000 sec
+load: .90 hit: .90 zipf: .99 run: 3
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.040000 sec
+Insert count: 35535114
+Insert  rate: 2586252.838428 ops/sec
+Bases   rate: 1554041.279544 bp/sec
+Run     time: 24.540000 sec
+Oper.   time: 10.800000 sec
+Insert  time: 13.740000 sec
+size: 30342064
+load_factor (elem): 0.900018
+bucket_count: 33712729
+max_elem_per_bucket: 20
+Stats   time: 2.370000 sec
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 8924051.063830 ops/sec
+Run     time: 0.950000 sec
+Oper.   time: 0.010000 sec
+Lookup  time: 0.940000 sec

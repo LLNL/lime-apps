@@ -17,7 +17,7 @@ _HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x400;
 
 MEMORY
 {
-   engine_0_mcu_0_microblaze_0_local_memory_ilmb_bram_if_cntlr_engine_0_mcu_0_microblaze_0_local_memory_dlmb_bram_if_cntlr : ORIGIN = 0xD0000050, LENGTH = 0x00003FB0
+   engine_0_mcu_0_microblaze_0_local_memory_ilmb_bram_if_cntlr_engine_0_mcu_0_microblaze_0_local_memory_dlmb_bram_if_cntlr : ORIGIN = 0xD0000050, LENGTH = 0x0000FFB0
    axi_shim_1 : ORIGIN = 0x40000000, LENGTH = 0x40000000
 }
 
