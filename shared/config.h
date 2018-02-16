@@ -11,12 +11,18 @@
 //------------------ Configurations ------------------//
 
 // defined(STATS)  : print memory access statistics
-// defined(TRACE)  : enable trace capture
+#define _TADDR_ 1 // R/W address AXI events
+#define _TALL_  2 // all AXI events
+// defined(TRACE)  : enable trace capture, =TADDR_, =TALL_
 // defined(CLOCKS) : enable clock scaling for emulation
 // defined(ENTIRE) : flush/invalidate entire cache
 // defined(USE_SP) : use scratch pad memory
 // defined(USE_OCM) : use on-chip memory (SRAM) for scratch pad, otherwise use special DRAM section
 // defined(USE_SD)  : use SD card for trace capture
+#define _Z7_ 2 // Zynq-7000
+#define _ZU_ 3 // Zynq UltraScale+
+// defined(ZYNQ)     : target the Zynq platform, =_Z7_, =_ZU_
+// defined(USE_MARG) : get arguments from MARGS macro (string)
 
 //----- Accelerator Options -----//
 // no defines      : host executes stock algorithm with no accelerator
@@ -34,4 +40,8 @@
 #if defined(CLIENT) || defined(SERVER) || defined(USE_LSU) || defined(USE_HASH)
 #define USE_STREAM 1 // use stream communication and aport protocols
 #endif
+#if defined(USE_LSU)
+#define USE_INDEX 1 // use index command in LSU
+#endif
+
 #endif /* CONFIG_H_ */

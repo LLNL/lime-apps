@@ -6,20 +6,25 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.5
+PACKAGE = apps-1.6
 build=x86_64
+HWP = $(WORKSPACE_LOC)/hw_platform_0
+XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
+#XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 
 .PHONY: all
 all:
+ifeq (,$(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))))
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
+	cd sort/$(build) && $(MAKE) $@
+	cd strm/$(build) && $(MAKE) $@
+endif
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
 	cd rtb/$(build) && $(MAKE) $@
-	cd sort/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
-	cd strm/$(build) && $(MAKE) $@
 
 .PHONY: bfs
 bfs:
@@ -59,7 +64,7 @@ strm:
 
 .PHONY: dist
 dist: distclean
-	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs --exclude='*.o' --exclude='*.log' .project *
+	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs .project *
 
 .PHONY: distclean
 distclean:
@@ -69,13 +74,19 @@ distclean:
 	$(MAKE) build=zup clean
 	$(MAKE) build=zynq clean
 
+.PHONY: fpga
+fpga:
+	$(XSDB) misc/sdk/fpga_config.tcl $(HWP)
+
 .DEFAULT:
+ifeq (,$(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))))
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
+	cd sort/$(build) && $(MAKE) $@
+	cd strm/$(build) && $(MAKE) $@
+endif
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
 	cd rtb/$(build) && $(MAKE) $@
-	cd sort/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
-	cd strm/$(build) && $(MAKE) $@

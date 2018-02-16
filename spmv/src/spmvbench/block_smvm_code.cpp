@@ -108,7 +108,7 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 				dre.wait();
 				tget(t5);
 #ifndef ENTIRE
-				Xil_L1DCacheInvalidateRange((INTPTR)block, view_sz);
+				Xil_L1DCacheInvalidateRange((INTPTR)block, CEIL(view_sz,ALIGN_SZ));
 				tget(t6);
 #endif
 				// Iterates over each row in batch, fills corresponding entry in result vector with sum of products from DRE block and CSR vector

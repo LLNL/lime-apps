@@ -14,18 +14,19 @@ using namespace std;
 
 #include "hash_nbits.hpp"
 
+// Example main arguments
+// #define MARGS "-s16 -v15"
+// #define MARGS "-s18 -v15" *
+// #define MARGS "-s19 -v15"
+// #define MARGS "-s22 -v15"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
-
-// Arguments when STANDALONE
-//#define ARGS (char*)"-s16", (char*)"-v15"
-#define ARGS (char*)"-s18", (char*)"-v15"
-//#define ARGS (char*)"-s19", (char*)"-v15"
-//#define ARGS (char*)"-s22", (char*)"-v15"
+#include "sysinit.h"
 
 #define DEFAULT_RMAT_SCALE 16U // log 2 size
 #define DEFAULT_BLOCK_LSZ 12 // log 2 size
@@ -138,7 +139,7 @@ void page_rank_itr(
 				dre.wait();
 				tget(t5);
 				// receive block
-				Xil_L1DCacheInvalidateRange((INTPTR)block, view_sz);
+				Xil_L1DCacheInvalidateRange((INTPTR)block, CEIL(view_sz,ALIGN_SZ));
 				tget(t6);
 				unsigned view_n = view_sz / sizeof(double);
 				for (j = 0; j < view_n; ++j) {
@@ -279,20 +280,12 @@ void page_rank_itr_check(
 //------------------ Main ------------------//
 
 
-int main(int argc, char *argv[])
+MAIN
 {
-	host::cache_init();
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;
 
-#ifdef STANDALONE
-	char *args[] = {(char*)__FILE__, ARGS, 0};
-	argc = sizeof(args)/sizeof(char *)-1;
-	argv = args;
-#endif
-
-	MONITOR_INIT
 #if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
 #endif

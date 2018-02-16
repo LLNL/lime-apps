@@ -14,22 +14,21 @@
 /* NOTE: if invalidate is used on non-cache aligned and sized allocations, */
 /* it can corrupt the heap. */
 
-#if defined(USE_STREAM)
-#define CACHE_INVALIDATE(a,p,n) {a.cache_invalidate(p,n); host::cache_invalidate(p,n);}
+#if defined(CLIENT)
 #define CACHE_BARRIER(a) {a.cache_flush(); a.cache_invalidate(); host::cache_flush_invalidate();}
+#define CACHE_DISPOSE(a,p,n) {a.cache_invalidate(p,n); host::cache_invalidate(p,n);}
 
 #else
-#define CACHE_INVALIDATE(a,p,n) {/*host::cache_invalidate(p,n);*/}
 #define CACHE_BARRIER(a) {host::cache_flush_invalidate();}
+#define CACHE_DISPOSE(a,p,n) {host::cache_invalidate(p,n);}
 #endif
 
 #if defined(USE_STREAM)
+/* Not enabled with defined(DIRECT) */
 #define CACHE_SEND_ALL(a) {host::cache_flush(); /*a.cache_flush(); a.cache_invalidate();*/}
 #define CACHE_RECV_ALL(a) {/*a.cache_flush();*/ host::cache_flush_invalidate();}
 #define CACHE_SEND(a,p,n) {host::cache_flush(p,n); /*a.cache_invalidate(p,n);*/}
 #define CACHE_RECV(a,p,n) {/*a.cache_flush(p,n);*/ host::cache_invalidate(p,n);}
-// #define CACHE_SEND(a,p,n) {host::cache_flush(p,n); a.cache_invalidate(p,n);}
-// #define CACHE_RECV(a,p,n) {a.cache_flush(p,n); host::cache_invalidate(p,n);}
 
 #else
 #define CACHE_SEND_ALL(a)
@@ -39,76 +38,79 @@
 #endif
 
 #if defined(ZYNQ)
+#include "xpseudo_asm.h" // mtcp*, dsb
 #include "xil_cache.h" // Xil_D*
+
+#if defined(__aarch64__)
+#define Xil_L1DCacheFlush Xil_DCacheFlush
+#define Xil_L1DCacheFlushRange Xil_DCacheFlushRange
+#define Xil_L1DCacheInvalidateRange Xil_DCacheInvalidateRange
+#define dc_CVAC(va) mtcpdc(CVAC,(INTPTR)(va))
+#define dc_CIVAC(va) mtcpdc(CIVAC,(INTPTR)(va))
+#else // __aarch64__
 #include "xil_cache_l.h" // Xil_L1D*
-#include "xpseudo_asm.h" // mtcp, dsb
-#include "xreg_cortexa9.h" // XREG_CP15_*
-#include "xil_mmu.h" // Xil_SetTlbAttributes
+#define dc_CVAC(va) mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC,(INTPTR)(va))
+#define dc_CIVAC(va) mtcp(XREG_CP15_CLEAN_INVAL_DC_LINE_MVA_POC,(INTPTR)(va))
+#endif // __aarch64__
+
+#else // ZYNQ
+/* Data Synchronization Barrier */
+#define dsb()
+/* flush & invalidate entire L1 data cache */
+#define Xil_L1DCacheFlush()
+/* invalidate range of L1 data cache */
+#define Xil_L1DCacheInvalidateRange(addr, size)
+/* ARM cache line management */
+#define dc_CVAC(va)
+#define dc_CIVAC(va)
+#endif // ZYNQ
+
+#ifdef __cplusplus
+namespace host {
+
+#if defined(ZYNQ)
+#if defined(__aarch64__)
+inline void cache_flush(void) {Xil_DCacheFlush();}
+inline void cache_flush(const void *ptr, size_t size) {Xil_DCacheFlushRange((INTPTR)ptr, size);}
+inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_DCacheFlushRange((INTPTR)ptr, size);}
+inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_DCacheInvalidateRange((INTPTR)ptr, size);}
+
+#else // __aarch64__
 // Differentiate between scratchpad (SP) with only L1 enabled (Xil_L1DCache*)
 // and DRAM space with both L1 and L2 enabled (Xil_DCache*).
 #define IS_SP(ptr) ((char*)(ptr) >= (char*)0x40000000 && (char*)(ptr) < (char*)0x40200000)
-/* 0x15de6: Shareable, Domain:1111, Outer & Inner Cacheable: Write-Back, Write-Allocate */
-/* 0x14de6: Shareable, Domain:1111, Inner Cacheable: Write-Back, Write-Allocate */
-/* 0x04c06: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, Write-Allocate */
-/* 0x04c0e: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, no Write-Allocate */
-namespace host {
-inline void cache_init(void) {
-	char *ptr;
-	// Xil_ICacheEnable();
-	// Xil_DCacheEnable();
-	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x04c06); /* Inner Cacheable */
-	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x04c06); /* Inner Cacheable */
-	for (ptr = (char*)0x40200000; ptr < (char*)0x7fffffff; ptr += 0x100000)
-		Xil_SetTlbAttributes((INTPTR)ptr, 0x15de6); /* Cacheable */
-}
 inline void cache_flush(void) {Xil_DCacheFlush();}
 inline void cache_flush(const void *ptr, size_t size)
 {
-	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);
-	else Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((INTPTR)ptr, size);
+	else Xil_DCacheFlushRange((INTPTR)ptr, size);
 }
 inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
 inline void cache_flush_invalidate(const void *ptr, size_t size)
 {
-	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);
-	else Xil_DCacheFlushRange((unsigned int)ptr, (unsigned)size);
+	if (IS_SP(ptr)) Xil_L1DCacheFlushRange((INTPTR)ptr, size);
+	else Xil_DCacheFlushRange((INTPTR)ptr, size);
 }
 inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
 inline void cache_invalidate(const void *ptr, size_t size)
 {
-	if (IS_SP(ptr)) Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);
-	else Xil_DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);
+	if (IS_SP(ptr)) Xil_L1DCacheInvalidateRange((INTPTR)ptr, size);
+	else Xil_DCacheInvalidateRange((INTPTR)ptr, size);
 }
-} // namespace host
+#endif // __aarch64__
 
-#else
-namespace host {
-inline void cache_init(void) {}
+#else // ZYNQ
 inline void cache_flush(void) {}
 inline void cache_flush(const void *ptr, size_t size) {}
 inline void cache_flush_invalidate(void) {}
 inline void cache_flush_invalidate(const void *ptr, size_t size) {}
 inline void cache_invalidate(void) {}
 inline void cache_invalidate(const void *ptr, size_t size) {}
+#endif // ZYNQ
+
 } // namespace host
-
-/* ARM CP15 operations with mcr instruction */
-#define mtcp(reg,val)
-/* Data Synchronization Barrier */
-#define dsb()
-
-/* flush range of L1 & L2 data cache */
-#define Xil_DCacheFlushRange(addr, size)
-
-/* invalidate range of L1 & L2 data cache */
-#define Xil_DCacheInvalidateRange(addr, size)
-
-/* flush & invalidate entire L1 data cache */
-#define Xil_L1DCacheFlush()
-
-/* invalidate range of L1 data cache */
-#define Xil_L1DCacheInvalidateRange(addr, size)
-
-#endif
+#endif // __cplusplus
 
 #endif /* CACHE_H_ */

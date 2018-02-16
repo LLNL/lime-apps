@@ -16,19 +16,20 @@ using namespace std;
 
 #include "hash_nbits.hpp"
 
+// Example main arguments
+// #define MARGS "-s16 -v15"
+// #define MARGS "-s18 -v15" *
+// #define MARGS "-s19 -v15"
+// #define MARGS "-s20 -v15"
+// #define MARGS "-s22 -v15"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
-
-// Arguments when STANDALONE
-//#define ARGS (char*)"-s16", (char*)"-v15"
-#define ARGS (char*)"-s18", (char*)"-v15"
-//#define ARGS (char*)"-s19", (char*)"-v15"
-//#define ARGS (char*)"-s20", (char*)"-v15"
-//#define ARGS (char*)"-s22", (char*)"-v15"
+#include "sysinit.h"
 
 #define DEFAULT_RMAT_SCALE 16U // log 2 size
 #define DEFAULT_BLOCK_LSZ 12 // log 2 size
@@ -151,19 +152,12 @@ void bfs(
 //------------------ Main ------------------//
 
 
-int main(int argc, char *argv[])
+MAIN
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;
 
-#ifdef STANDALONE
-	char *args[] = {(char*)__FILE__, ARGS, 0};
-	argc = sizeof(args)/sizeof(char *)-1;
-	argv = args;
-#endif
-
-	MONITOR_INIT
 #if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
 #endif

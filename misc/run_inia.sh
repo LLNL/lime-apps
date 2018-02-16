@@ -1,10 +1,11 @@
 #!/bin/sh
 
-config_l=STATS,CLOCKS
-#cm2x_l="1 2 4 8 16 32 64"
-vault_rns_l="45 70 100 200 400 800 2000 4000 8000"
-vault_wf_l="1"
-#apps_l="kbtree khash"
+config=STATS,CLOCKS
+#cm2x_="1 2 4 8 16 32 64"
+lat_ns_="45 70 100 200 400 800 2000 4000 8000"
+wf_="1"
+#apps_="kbtree khash"
+
 adir=$WORKSPACE_LOC/apps
 echo $adir
 
@@ -15,9 +16,9 @@ cd $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/khash/zynq
 make clean
 
 # configure FPGA
-xmd.bat -tcl $adir/misc/sdk-2014_1/fpga_config.tcl $WORKSPACE_LOC/hw_platform_0
+xmd.bat -tcl $adir/misc/sdk/fpga_config.tcl $WORKSPACE_LOC/hw_platform_0
 
-#for cm2x in $cm2x_l ; do
+#for cm2x in $cm2x_ ; do
 #  let "nkmers=524288*cm2x/16/2"
 #  let "hsize=nkmers/9"
 #  echo "cm2x:$cm2x nkmers:$nkmers hsize:$hsize"
@@ -27,31 +28,26 @@ xmd.bat -tcl $adir/misc/sdk-2014_1/fpga_config.tcl $WORKSPACE_LOC/hw_platform_0
 #    -e '/HASHMAP/,/endif/ s/-s [0-9][0-9]*/-s '$hsize'/' \
 #    $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/src/kmerbench.cpp
 
-for v_rns in $vault_rns_l ; do
-  for v_wf in $vault_wf_l ; do
-    let "v_wns=v_rns*v_wf"
-    echo "v_rns:$v_rns v_wns:$v_wns"
-
-    # update timing in clocks.h
-    sed -i -e 's/#define T_V_W [0-9][0-9]*/#define T_V_W '$v_wns'/' \
-           -e 's/#define T_V_R [0-9][0-9]*/#define T_V_R '$v_rns'/' \
-           $adir/shared/clocks.h
+for r_ns in $lat_ns_ ; do
+  for wf in $wf_ ; do
+    let "w_ns=r_ns*wf"
+    echo "r_ns: $r_ns w_ns: $w_ns"
 
 if ((1)) ; then
     # make and run kbtree
     cd $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/kbtree/zynq; rm -f *.o *.elf
-    make D=$config_l
+    make D=$config,T_R=$r_ns,T_W=$w_ns
     #read -n1 -p "Press [Enter] to continue..."
-    xmd.bat -tcl $adir/misc/sdk-2014_1/a9_run.tcl \
+    xmd.bat -tcl $adir/misc/sdk/a9_run.tcl \
       $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/kbtree/zynq/kmerbench.elf
 fi
 
 if ((1)) ; then
     # make and run khash
     cd $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/khash/zynq; rm -f *.o *.elf
-    make D=$config_l
+    make D=$config,T_R=$r_ns,T_W=$w_ns
     #read -n1 -p "Press [Enter] to continue..."
-    xmd.bat -tcl $adir/misc/sdk-2014_1/a9_run.tcl \
+    xmd.bat -tcl $adir/misc/sdk/a9_run.tcl \
       $WORKSPACE_LOC/inia-benchmarks/invertedindex/kmerbench/khash/zynq/kmerbench.elf
 fi
 

@@ -15,16 +15,17 @@ extern "C" {
 }
 #endif
 
+// Example main arguments
+// #define MARGS "-c -s18 -n34 -v15" *
+// #define MARGS "-c -s21 -n34 -v15"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
-
-// Arguments when STANDALONE
-#define ARGS (char*)"-c", (char*)"-s18", (char*)"-n34", (char*)"-v15"
-//#define ARGS (char*)"-c", (char*)"-s21", (char*)"-n34", (char*)"-v15"
+#include "sysinit.h"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -45,9 +46,8 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif
 
 
-int main(int argc, char *argv[])
+MAIN
 {
-	host::cache_init();
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;
@@ -57,13 +57,6 @@ int main(int argc, char *argv[])
 	struct SMVM_parameters spmv_params;
 	FILE *fout = stdout;
 
-#ifdef STANDALONE
-	char *args[] = {(char*)__FILE__, ARGS, 0};
-	argc = sizeof(args)/sizeof(char *)-1;
-	argv = args;
-#endif
-
-	MONITOR_INIT
 	//smvm_set_debug_level_from_environment();
 	spmv_params.m = 1 << DEFAULT_MATRIX_LSZ;
 	spmv_params.n = 1 << DEFAULT_MATRIX_LSZ;

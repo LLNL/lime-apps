@@ -22,7 +22,7 @@ extern "C" {
 void parse_path(int dirc, char *path, char **dir, char **base, char **ext);
 char *build_path(int dirc, char *dir, char *base, char *ext);
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 }
 #endif
 

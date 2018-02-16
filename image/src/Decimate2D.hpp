@@ -1,15 +1,9 @@
 #ifndef _DECIMATE_2D_HPP
 #define _DECIMATE_2D_HPP
 
-#if defined(SERVER)
-#define USE_LSU 1
-#endif
-#if defined(CLIENT) || defined(SERVER) || defined(USE_LSU)
-#define USE_STREAM 1
-#endif
-
 #include <cstddef> // size_t
 #include <algorithm> // min
+#include "config.h"
 #include "alloc.h" // FLOOR
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
@@ -77,16 +71,16 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #ifdef USE_STREAM
 #include "aport.h"
 
-#define FWD_ID 2
+#define FWD_PN 2
 
 #ifdef __microblaze__
 #include "fsl.h"
 #define DEVICE_ID 0
-#define RET_ID 1
+#define RET_PN 1
 #else
 #include "xparameters.h"
 #define DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
-#define RET_ID 0
+#define RET_PN 0
 #endif
 
 class stream_port {
@@ -311,10 +305,12 @@ public:
 
 #ifdef CLIENT
 
-class Decimate2D;
-
 /* minimal resource management for DRE hardware */
 #define MAX_DRE 1
+#define HST_PN ARM0_PN
+#define MCU_PN MCU0_PN
+
+class Decimate2D;
 
 // associate DRE with client application class
 Decimate2D *dre_client[MAX_DRE];
@@ -366,15 +362,13 @@ public:
 
 	Decimate2D(void)
 	{
-		// TODO: assign a load-store unit and control unit (port IDs)
-
 		// options:
 		// direct
 		// direct with LSU support
 		// client, start remote server - separate process, doesn't share memory
 		// client, start thread server
 #ifdef USE_LSU
-		lsu_setport(&port, FWD_ID, RET_ID);
+		lsu_setport(&port, FWD_PN, RET_PN);
 #elif defined(USE_STREAM)
 		aport_set(&port);
 #endif
@@ -482,9 +476,6 @@ public:
 
 #ifdef CLIENT
 
-#define MCU_ID 1
-#define HST_ID 0
-
 	/* setup data reorg engine */
 
 	void _setup(
@@ -496,8 +487,8 @@ public:
 		header res;
 		setup_args args;
 
-		hdr.tdest = MCU_ID << 1;
-		hdr.tid = HST_ID << 1;
+		hdr.tdest = getID(MCU_PN);
+		hdr.tid = getID(HST_PN);
 		hdr.tuser = 0;
 		hdr.cmd = C_SETUP;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
@@ -533,8 +524,8 @@ public:
 		if (dre_client[0] != this)
 			_setup(ref_base, ref_w, ref_h, view_inc, factor);
 
-		hdr.tdest = MCU_ID << 1;
-		hdr.tid = HST_ID << 1;
+		hdr.tdest = getID(MCU_PN);
+		hdr.tid = getID(HST_PN);
 		hdr.tuser = 0;
 		hdr.cmd = C_FILL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
@@ -556,8 +547,8 @@ public:
 		header res;
 		flit_t args;
 
-		hdr.tdest = MCU_ID << 1;
-		hdr.tid = HST_ID << 1;
+		hdr.tdest = getID(MCU_PN);
+		hdr.tid = getID(HST_PN);
 		hdr.tuser = 0;
 		hdr.cmd = C_WAIT;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
@@ -572,8 +563,8 @@ public:
 		header res;
 		cache_args args;
 
-		hdr.tdest = MCU_ID << 1;
-		hdr.tid = HST_ID << 1;
+		hdr.tdest = getID(MCU_PN);
+		hdr.tid = getID(HST_PN);
 		hdr.tuser = 0;
 		hdr.cmd = C_CFLUSH;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
@@ -591,8 +582,8 @@ public:
 		header res;
 		cache_args args;
 
-		hdr.tdest = MCU_ID << 1;
-		hdr.tid = HST_ID << 1;
+		hdr.tdest = getID(MCU_PN);
+		hdr.tid = getID(HST_PN);
 		hdr.tuser = 0;
 		hdr.cmd = C_CINVAL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);

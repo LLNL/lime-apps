@@ -6,6 +6,7 @@
 #include <cstdint> // uintXX_t
 #include <cstdio> // printf
 #include "short.h" // shortNN_hash
+#include "config.h"
 #include "alloc.h"
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
@@ -47,24 +48,24 @@
 class cache {
 public:
 inline void cache_flush(void) {Xil_L1DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_flush_invalidate(void) {Xil_L1DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_invalidate(void) {Xil_L1DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((INTPTR)ptr, size);}
 };
 
-#elif defined(USE_STREAM) && defined(__arm__)
-#include "xl2cc.h" // XPS_L2CC_*
+#elif defined(USE_STREAM) && defined(__ARM_ARCH)
+//#include "xl2cc.h" // XPS_L2CC_*
 #include "xil_cache.h"
 class cache {
 public:
 inline void cache_flush(void) {Xil_DCacheFlush();}
-inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_flush_invalidate(void) {Xil_DCacheFlush();}
-inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {Xil_L1DCacheFlushRange((INTPTR)ptr, size);}
 inline void cache_invalidate(void) {Xil_DCacheInvalidate();}
-inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((unsigned int)ptr, (unsigned)size);}
+inline void cache_invalidate(const void *ptr, size_t size) {Xil_L1DCacheInvalidateRange((INTPTR)ptr, size);}
 };
 
 #else
@@ -109,7 +110,7 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #if defined(__microblaze__)
 #define THIS_PN MCU0_PN
 #define STREAM_DEVICE_ID 0
-#elif defined(__arm__)
+#elif defined(__ARM_ARCH) && defined(ZYNQ)
 #include "xparameters.h"
 #define THIS_PN ARM0_PN
 #define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
@@ -123,7 +124,7 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #define LSU2_ID getID(LSU2_PN)
 #define PRU0_ID getID(PRU0_PN)
 
-#if defined(__arm__)
+#if defined(__ARM_ARCH)
 inline void dump_reg(void)
 {
 	for (int i = 0; i < 8; i++) xil_printf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
@@ -299,8 +300,8 @@ public:
 			if (data_base[idx].key == key) {
 				data_base[idx].value = value;
 #if 0 && defined(USE_STREAM)
-				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line? - no
-				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
+				// TODO: use Xil_DCacheFlushLine((INTPTR)&data_base[idx].value); straddle cache line? - no
+				Xil_DCacheFlushRange((INTPTR)&data_base[idx].value, sizeof(mapped_type));
 #endif // USE_STREAM
 				return true; /* found */
 			}
@@ -312,7 +313,7 @@ public:
 			data_base[idx].probes = 1;
 			data_base[idx].value = value;
 #if 0 && defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[idx], (unsigned)sizeof(slot_s));
+			Xil_DCacheFlushRange((INTPTR)&data_base[idx], sizeof(slot_s));
 #endif // USE_STREAM
 			elements++;
 			if (++idx > itop) topsearch += idx-itop;
@@ -376,8 +377,8 @@ public:
 			if (data_base[idx].key == key) {
 				data_base[idx].value = value;
 #if 0 && defined(USE_STREAM)
-				// TODO: use Xil_DCacheFlushLine((unsigned int)&data_base[idx].value); straddle cache line? - no
-				Xil_DCacheFlushRange((unsigned int)&data_base[idx].value, (unsigned)sizeof(mapped_type));
+				// TODO: use Xil_DCacheFlushLine((INTPTR)&data_base[idx].value); straddle cache line? - no
+				Xil_DCacheFlushRange((INTPTR)&data_base[idx].value, sizeof(mapped_type));
 #endif // USE_STREAM
 				return true; /* found */
 			}
@@ -405,7 +406,7 @@ public:
 				tmp = data_base[irh];
 				data_base[irh] = current;
 #if 0 && defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[irh], (unsigned)sizeof(slot_s));
+			Xil_DCacheFlushRange((INTPTR)&data_base[irh], sizeof(slot_s));
 #endif // USE_STREAM
 				if (!tmp.probes) {elements++; return false;} // added
 				current = tmp;
@@ -455,7 +456,7 @@ public:
 				if (slot == nullptr) {slot = &data_base[irh];}
 				else {
 #if 0 && defined(USE_STREAM)
-			Xil_DCacheFlushRange((unsigned int)&data_base[irh], (unsigned)sizeof(slot_s));
+			Xil_DCacheFlushRange((INTPTR)&data_base[irh], sizeof(slot_s));
 #endif // USE_STREAM
 				}
 				if (!tmp.probes) {elements++; return slot;} // added
@@ -479,11 +480,11 @@ public:
 			slot->value = value;
 #if 0 && defined(USE_STREAM) && defined(__microblaze__)
 			// TODO: 
-#elif 0 && defined(USE_STREAM) && defined(__arm__)
-			// Xil_DCacheFlushLine((unsigned int)slot); // doesn't straddle cache line
-			// Xil_DCacheFlushRange((unsigned int)slot, (unsigned)sizeof(slot_s));
-			mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (unsigned int)slot);
-			// dsb(); Xil_Out32(XPS_L2CC_BASEADDR + XPS_L2CC_CACHE_CLEAN_PA_OFFSET, (unsigned int)slot);
+#elif 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
+			// Xil_DCacheFlushLine((INTPTR)slot); // doesn't straddle cache line
+			// Xil_DCacheFlushRange((INTPTR)slot, sizeof(slot_s));
+			mtcp(XREG_CP15_CLEAN_DC_LINE_MVA_POC, (INTPTR)slot);
+			// dsb(); Xil_Out32(XPS_L2CC_BASEADDR + XPS_L2CC_CACHE_CLEAN_PA_OFFSET, (INTPTR)slot);
 #endif // USE_STREAM
 		}
 	}
@@ -511,14 +512,14 @@ public:
 
 	void hash_config(void)
 	{
-		unsigned int reg[5];
+		flit_t reg[5];
 
 		/* hash unit setup */
 		reg[1] = 0x00000000; /* clear status */
 		reg[2] = hash_mask;  /* tlen_lo (mask_lo) */
 		reg[3] = 0x00000000; /* tlen_hi (mask_hi) */
-		/* seldi=1 seldo=0 seed=0xD tdest=LSU2_ID+READ_CH tid=HSU0_ID hlen=sizeof(size_t) klen=key_sz */
-		reg[4] = HSU_CMD(1,0,0xD,LSU2_ID+READ_CH,HSU0_ID,sizeof(size_t),key_sz);
+		/* seldi=1 seldo=0 seed=0xD tdest=LSU2_ID+READ_CH tid=HSU0_ID hlen=sizeof(flit_t) klen=key_sz */
+		reg[4] = HSU_CMD(1,0,0xD,LSU2_ID+READ_CH,HSU0_ID,sizeof(flit_t),key_sz);
 		aport_nwrite(HSU0_ID, THIS_ID, 0, 0, reg, 4);
 
 		/* load-store unit setup */
@@ -541,12 +542,12 @@ public:
 		// constraint: table length must be power of 2
 		for (dlen = 1; dlen < elements; dlen <<= 1);
 		slots = dlen+MAX_SEARCH-1;
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		{
 			char *ptr;
 			size_t size = CEIL((slots)*sizeof(slot_s), (1U<<20));
 			data = (slot_s*)memalign((1U<<20), size);
-			if ((size_t)data & ((1U<<20)-1)) fprintf(stderr, " -- error: table not aligned\n");
+			if ((uintptr_t)data & ((1U<<20)-1)) fprintf(stderr, " -- error: table not aligned\n");
 			ptr = (char*)data;
 			while (size) {
 				Xil_SetTlbAttributes((INTPTR)ptr, 0x04de6);
@@ -562,7 +563,7 @@ public:
 #if defined(USE_STREAM)
 		// flush all caches on host for data range
 		// FIXME: can't use cache_flush(ptr, size) because it uses L1D variant
-		Xil_DCacheFlushRange((unsigned int)data, (unsigned)sizeof(slot_s)*slots);
+		Xil_DCacheFlushRange((INTPTR)data, sizeof(slot_s)*slots);
 #endif // USE_STREAM
 
 		_setup(data, dlen);
@@ -585,12 +586,12 @@ public:
 
 	void fill(void *buf, size_t len, const void *key, size_t stride)
 	{
-		unsigned reg[7];
+		flit_t reg[7];
 
 		/* LSU2 contiguous store (with stride command) */
 		reg[1] = 0x00000000;           /* clear status */
 		reg[2] = LSU_CMD(1,LSU_smove); /* reqstat=1, command=smove */
-		reg[3] = (unsigned)buf;        /* address */
+		reg[3] = ATRAN(buf);           /* address */
 		reg[4] = sizeof(mapped_type);  /* size */
 		reg[5] = sizeof(mapped_type);  /* increment */
 		reg[6] = len;                  /* repetitions */
@@ -600,7 +601,7 @@ public:
 		/* LSU2 index2 load */
 		reg[1] = 0x00000000;               /* clear status */
 		reg[2] = LSU_CMD(0,LSU_index2);    /* reqstat=0, command=index2 */
-		reg[3] = (unsigned)data_base;      /* base address */
+		reg[3] = ATRAN(data_base);         /* base address */
 		reg[4] = sizeof(slot_s);           /* size */
 		reg[5] = 0x00000000;               /* index (spacer) */
 		reg[6] = sizeof(slot_s)*topsearch; /* transfer size */
@@ -615,7 +616,7 @@ public:
 		/* LSU1 contiguous load (with strided move) */
 		reg[1] = 0x00000000;           /* clear status */
 		reg[2] = LSU_CMD(0,LSU_smove); /* reqstat=0, command=smove */
-		reg[3] = (unsigned)key;        /* address */
+		reg[3] = ATRAN(key);           /* address */
 		reg[4] = sizeof(key_type);     /* size */
 		reg[5] = stride;               /* increment */
 		reg[6] = len;                  /* repetitions */
@@ -675,7 +676,7 @@ class KVstore
 #endif
 {
 
-#if defined(CLIENT) || defined (SERVER)
+#if defined(CLIENT) || defined(SERVER)
 
 	typedef struct {
 		unsigned int tdest :  8; /* forward route id */
@@ -686,31 +687,30 @@ class KVstore
 	} header;
 
 	typedef struct {
-		void *data; size_t dlen;
+		flit_t data;
+		flit_t dlen;
 	} setup_args;
 
 	typedef struct {
-		void *buf;
-		size_t len;
-		void *key;
-		size_t stride;
+		flit_t buf;
+		flit_t len;
+		flit_t key;
+		flit_t stride;
 	} buf_args;
 
 	typedef struct {
-		const void *buf;
-		size_t buf_sz;
+		flit_t buf;
+		flit_t buf_sz;
 	} cache_args;
 
 	enum {C_NOP, C_SETUP, C_FILL, C_DRAIN, C_WAIT, C_CFLUSH, C_CINVAL};
 
-#endif // defined(CLIENT) || defined (SERVER)
+#endif // defined(CLIENT) || defined(SERVER)
 
 public:
 
 	KVstore(void)
 	{
-		// TODO: assign a load-store unit and control unit (port IDs)
-
 		// options:
 		// direct
 		// direct with LSU support
@@ -734,10 +734,10 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		flit_t reg[4];
 
 		for (;;) {
-			getfsl_interruptible(*(unsigned *)&hdr, 0); getfsl(hdr.cmd, 0);
+			getfsl_interruptible(*(flit_t *)&hdr, 0); getfsl(hdr.cmd, 0);
 			switch (hdr.cmd) {
 			case C_SETUP:
 				getfsl(reg[0], 0); cgetfsl(reg[1], 0);
@@ -772,10 +772,10 @@ public:
 			hdr.tdest = tmp;
 			if (hdr.cmd == C_DRAIN) {
 				typedef _KVstore<K,V> kvstore_c;
-				putfsl(*(unsigned *)&hdr, 0); putfsl(hdr.cmd, 0);
+				putfsl(*(flit_t *)&hdr, 0); putfsl(hdr.cmd, 0);
 				putfsl(kvstore_c::elements, 0); cputfsl(kvstore_c::topsearch, 0);
 			} else {
-				putfsl(*(unsigned *)&hdr, 0); cputfsl(hdr.cmd, 0);
+				putfsl(*(flit_t *)&hdr, 0); cputfsl(hdr.cmd, 0);
 			}
 		}
 	}
@@ -785,33 +785,33 @@ public:
 	void command_server(void)
 	{
 		header hdr;
-		size_t reg[4];
+		flit_t reg[4];
 
 		for (;;) {
 			stream_recv(&port, &hdr, sizeof(hdr), F_BEGP);
 			switch (hdr.cmd) {
 			case C_SETUP:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				_KVstore<K,V>::_setup((void *)reg[0], reg[1]);
 				break;
 			case C_FILL:
-				stream_recv(&port, reg, sizeof(size_t)*4, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*4, F_ENDP);
 				_KVstore<K,V>::fill((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
 				break;
 			case C_DRAIN:
-				stream_recv(&port, reg, sizeof(size_t)*4, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*4, F_ENDP);
 				_KVstore<K,V>::drain((void *)reg[0], reg[1], (void *)reg[2], reg[3]);
 				break;
 			case C_WAIT:
-				stream_recv(&port, reg, sizeof(size_t)*1, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*1, F_ENDP);
 				break;
 			case C_CFLUSH:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) _KVstore<K,V>::cache_flush();
 				else _KVstore<K,V>::cache_flush((void *)reg[0], reg[1]);
 				break;
 			case C_CINVAL:
-				stream_recv(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_recv(&port, reg, sizeof(flit_t)*2, F_ENDP);
 				if ((void *)reg[0] == NULL) _KVstore<K,V>::cache_flush_invalidate(); // include flush
 				else _KVstore<K,V>::cache_invalidate((void *)reg[0], reg[1]);
 				break;
@@ -825,7 +825,7 @@ public:
 				reg[0] = _KVstore<K,V>::elements;
 				reg[1] = _KVstore<K,V>::topsearch;
 				stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
-				stream_send(&port, reg, sizeof(size_t)*2, F_ENDP);
+				stream_send(&port, reg, sizeof(flit_t)*2, F_ENDP);
 			} else {
 				stream_send(&port, &hdr, sizeof(hdr), F_BEGP|F_ENDP);
 			}
@@ -853,7 +853,7 @@ public:
 		hdr.cmd = C_SETUP;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.data = _KVstore<K,V>::data_base;
+		args.data = ATRAN((_KVstore<K,V>::data_base));
 		args.dlen = _KVstore<K,V>::data_len;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -862,7 +862,7 @@ public:
 
 	/* fill buffer from store based on keys */
 
-	void fill(void *buf, size_t len, void *key, size_t stride)
+	void fill(void *buf, size_t len, const void *key, size_t stride)
 	{
 		header hdr;
 		header res;
@@ -874,9 +874,9 @@ public:
 		hdr.cmd = C_FILL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = buf;
+		args.buf = ATRAN(buf);
 		args.len = len;
-		args.key = key;
+		args.key = ATRAN(key);
 		args.stride = stride;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -885,12 +885,12 @@ public:
 
 	/* drain buffer to store based on keys */
 
-	void drain(void *buf, size_t len, void *key, size_t stride)
+	void drain(void *buf, size_t len, const void *key, size_t stride)
 	{
 		header hdr;
 		header res;
 		buf_args args;
-		size_t reg[2];
+		flit_t reg[2];
 
 		hdr.tdest = MCU0_ID;
 		hdr.tid = THIS_ID;
@@ -898,9 +898,9 @@ public:
 		hdr.cmd = C_DRAIN;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = buf;
+		args.buf = ATRAN(buf);
 		args.len = len;
-		args.key = key;
+		args.key = ATRAN(key);
 		args.stride = stride;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -917,7 +917,7 @@ public:
 	{
 		header hdr;
 		header res;
-		size_t args;
+		flit_t args;
 
 		hdr.tdest = MCU0_ID;
 		hdr.tid = THIS_ID;
@@ -941,7 +941,7 @@ public:
 		hdr.cmd = C_CFLUSH;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 
@@ -960,7 +960,7 @@ public:
 		hdr.cmd = C_CINVAL;
 		stream_send(&port, &hdr, sizeof(hdr), F_BEGP);
 
-		args.buf = ptr;
+		args.buf = ATRAN(ptr);
 		args.buf_sz = size;
 		stream_send(&port, &args, sizeof(args), F_ENDP);
 

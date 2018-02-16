@@ -19,23 +19,25 @@ $Log: $
 #include "fasta.h"
 #include "path.h"
 
+// Example main arguments
+// #define MARGS "-e32Mi -l.60 -rsrr550.fa -w1Mi -h.90 -z.99"
+// #define MARGS "-e32Mi -l.60 -c -w1Mi -h.90 -z.99" *
+// #define MARGS "-p -e32Mi -l.50 -rsrr550.fa -w8Mi -h.90 -z.99"
+// #define MARGS "-p -e32Mi -l.20 -rsrr_nr.fa -qsrr_sh.fa"
+// #define MARGS "-p -e32Mi -l.20 -cd"
+// #define MARGS "-p -e32Mi -l.20 -c -qsrr_sh.fa"
+// #define MARGS "-e8Mi -ramr_cur.fa -qamr_cur.fa"
+// #define MARGS "-e1K -k16 -rtestdb.fa -qtestqr.fa"
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
+#include "sysinit.h"
 
 #include "block_map.h"
-
-// Arguments when STANDALONE
-#define ARGS (char*)"-e32Mi", (char*)"-l.60", (char*)"-rsrr550.fa", (char*)"-w1Mi", (char*)"-h.90", (char*)"-z.99"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.50", (char*)"-rsrr550.fa", (char*)"-w8Mi", (char*)"-h.90", (char*)"-z.99"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-rsrr_nr.fa", (char*)"-qsrr_sh.fa"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-cd"
-// #define ARGS (char*)"-p", (char*)"-e32Mi", (char*)"-l.20", (char*)"-c", (char*)"-qsrr_sh.fa"
-// #define ARGS (char*)"-e8Mi", (char*)"-ramr_cur.fa", (char*)"-qamr_cur.fa"
-// #define ARGS (char*)"-e1K", (char*)"-k16", (char*)"-rtestdb.fa", (char*)"-qtestqr.fa"
 
 #define DEFAULT_ENT 100000
 #define DEFAULT_LOAD 0.95
@@ -436,19 +438,11 @@ static unsigned long atoulk(const char *s)
 }
 
 
-int main(int argc, char *argv[])
+MAIN
 {
 	int nok = 0;
 	char *s;
 
-#ifdef STANDALONE
-	char *args[] = {(char*)__FILE__, ARGS, 0};
-	argc = sizeof(args)/sizeof(char *)-1;
-	argv = args;
-#endif
-
-	host::cache_init();
-	MONITOR_INIT
 #if defined(USE_ACC)
 	kdb.acc.wait(); /* wait for accelerator initialization */
 #endif // USE_ACC

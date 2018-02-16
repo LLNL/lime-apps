@@ -8,12 +8,16 @@
 #include "hpcc.h"
 #include "RandomAccess.h"
 
+// Example main arguments
+// #define MARGS ""
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
+#include "sysinit.h"
 
 // TODO: find a better place for these globals
 
@@ -27,12 +31,10 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif // USE_ACC
 
 
-int main()
+MAIN
 {
-	host::cache_init();
 	HPCC_Params params;
 
-	MONITOR_INIT
 #if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
 #if 0

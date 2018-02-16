@@ -75,8 +75,8 @@ extern unsigned char _heap_start[];
 
 #if defined(USE_OCM)
 /* SRAM */
-//#define SP_BEG (((unsigned)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL)
-//#define SP_END ((((unsigned)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x030000)
+//#define SP_BEG (((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL)
+//#define SP_END ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x030000)
 //#define SP_SIZE 0x030000
 /* DRAM in SRAM address space, ADDR < 0x00100000 */
 #define SP_BEG ((((uintptr_t)&_heap_start) & ~(uintptr_t)0x3FFFFFFFUL) + 0x080000)

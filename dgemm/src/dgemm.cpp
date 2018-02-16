@@ -15,12 +15,16 @@ extern "C" {
 }
 #endif
 
+// Example main arguments
+// #define MARGS ""
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
+#include "sysinit.h"
 
 // TODO: find a better place for these globals
 
@@ -29,11 +33,9 @@ XAxiPmon apm;
 #endif // STATS || TRACE
 
 
-int main()
+MAIN
 {
 	HPCC_Params params;
-
-	MONITOR_INIT
 
 	//for (unsigned i = 18; i <= 24; i++) {printf("\nMax Mem: 2^%u\n", i);
 	params.outFname[0] = '\0'; /* use stdout */
@@ -47,6 +49,7 @@ int main()
 	if (params.RunSingleDGEMM) {
 		printf("Begin of SingleDGEMM section.\n");
 		HPCC_TestDGEMM(&params, 1, &params.SingleDGEMMGflops, &params.DGEMM_N, &params.Failure);
+		if (params.Failure) printf(" -- DGEMM Failure\n");
 		printf("End of SingleDGEMM section.\n");
 	}
 	//}

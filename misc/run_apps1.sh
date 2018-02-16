@@ -1,42 +1,40 @@
 #!/bin/sh
 
-config_l=STATS,CLOCKS
-vault_rns_l="40 400 4000"
-vault_wf_l="1"
-scale_l="15 16 17 18 19 20"
-apps_l="sort"
+lat_ns_="45 70 100 200 400 800"
+wf_="1 2 4 8"
+# apps_="image strm"
+# config_="STOCK"
+apps_="strm"
+config_="STOCK"
+
+build=zynq
 adir=$WORKSPACE_LOC/apps
 echo $adir
 
 # start with clean build
-make build=zynq clean
+cd $adir
+make build=$build clean
 
 # configure FPGA
-xmd.bat -tcl $adir/misc/sdk-2014_1/fpga_config.tcl $WORKSPACE_LOC/hw_platform_0
+cd $adir
+make build=$build fpga
 
-for v_rns in $vault_rns_l ; do
-  for v_wf in $vault_wf_l ; do
-    let v_wns=v_rns*v_wf
-    echo "v_rns:$v_rns v_wns:$v_wns"
+for r_ns in $lat_ns_ ; do
+for wf in $wf_ ; do
+  let w_ns=r_ns*wf
+  echo "r_ns: $r_ns w_ns: $w_ns"
+  for app in $apps_ ; do
+    for conf in $config_ ; do
+      echo "app: $app config: $conf"
 
-    # update timing in clocks.h
-    sed -i -e 's/#define T_V_W [0-9][0-9]*/#define T_V_W '$v_wns'/' \
-           -e 's/#define T_V_R [0-9][0-9]*/#define T_V_R '$v_rns'/' \
-           $adir/shared/clocks.h
+      # make and run application
+      cd $adir/$app/$build
+      # use default RUN_ARGS from sources.mak
+      # make D=$conf,CLOCKS,STATS,T_R=$r_ns,T_W=$w_ns run
+      # make D=$conf,CLOCKS,STATS,T_R=$r_ns,T_W=$w_ns RUN_ARGS="-d32 -v15 -w16000 -h8000 pat pat" run
+      make D=$conf,CLOCKS,STATS,T_R=$r_ns,T_W=$w_ns OPT=-O2 run
 
-for sc in $scale_l ; do
-  echo "scale:$sc"
-
-  # update working data set size (-s option)
-  sed -i -e '/Arguments beg/,/Arguments end/ s/-s[0-9][0-9]*/-s'$sc'/' \
-    $adir/sort/src/sort.cpp
-
-    # make and run sort
-    cd $adir/sort/zynq; rm -f *.o *.elf
-    make D=$config_l
-    xmd.bat -tcl $adir/misc/sdk-2014_1/a9_run.tcl $adir/sort/zynq/sort.elf
-
-done
-
+    done
   done
+done
 done

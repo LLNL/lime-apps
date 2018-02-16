@@ -47,12 +47,16 @@
 #include <limits.h>
 /*#include <sys/time.h>*/
 
+// Example main arguments
+// #define MARGS ""
+
 #include "config.h"
 #include "alloc.h"
-//#include "cache.h" /* does not need cache barrier */
+#include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
+#include "sysinit.h"
 
 /*-----------------------------------------------------------------------
  * INSTRUCTIONS:
@@ -225,7 +229,7 @@ XAxiPmon apm;
 #endif // STATS || TRACE
 
 
-int main()
+MAIN
 {
 	int         BytesPerWord;
 	int         k;
@@ -235,7 +239,6 @@ int main()
 
 	/* --- SETUP --- determine precision and check timing --- */
 
-	MONITOR_INIT
 	printf(HLINE);
 	printf("STREAM version $Revision: 5.10 $\n");
 	printf(HLINE);

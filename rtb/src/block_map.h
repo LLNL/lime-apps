@@ -164,11 +164,11 @@ public:
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
 #endif
 		while (__n--) insert(*__arr++);
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		dsb();
 		// tget(tA);
 		// acc.cache_flush();
@@ -479,11 +479,11 @@ public:
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
 #endif
 		while (__n--) insert(*__arr++);
-#if 0 && defined(USE_STREAM) && defined(__arm__)
+#if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		dsb();
 		// tget(tA);
 		// acc.cache_flush();

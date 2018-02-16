@@ -9,19 +9,20 @@ using namespace std;
 
 #include "ColorImage.hpp"
 
+// Example main arguments
+// #define MARGS "-d1 -v15 -w12800 -h6400 pat pat"
+// #define MARGS "-d4:16 -v2:12 -b -l1000"
+// #define MARGS "-d4:16 -w10800 -h5400 pat"
+// #define MARGS "-d4:16 -v12:15 -w16000 -h8000 pat pat"
+// #define MARGS "-d16 -v15 -w16000 -h8000 pat pat" *
+
 #include "config.h"
 #include "alloc.h"
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
 #include "clocks.h"
-
-// Arguments when STANDALONE
-//#define ARGS (char*)"-d1", (char*)"-v15", (char*)"-w12800", (char*)"-h6400", (char*)"pat", (char*)"pat"
-//#define ARGS (char*)"-d4:16", (char*)"-v2:12", (char*)"-b", (char*)"-l1000"
-//#define ARGS (char*)"-d4:16", (char*)"-w10800", (char*)"-h5400", (char*)"pat"
-//#define ARGS (char*)"-d4:16", (char*)"-v12:15", (char*)"-w16000", (char*)"-h8000", (char*)"pat", (char*)"pat"
-#define ARGS (char*)"-d16", (char*)"-v15", (char*)"-w16000", (char*)"-h8000", (char*)"pat", (char*)"pat"
+#include "sysinit.h"
 
 #define DEFAULT_LOOP_COUNT 10000
 #define DEFAULT_DECIMATE_MIN 4
@@ -108,9 +109,8 @@ bool check(void *buf, size_t buf_sz)
 //------------------  ------------------//
 
 
-int main(int argc, char *argv[])
+MAIN
 {
-	host::cache_init();
 	/* get arguments */
 	int opt;
 	bool nok = false;
@@ -125,13 +125,6 @@ int main(int argc, char *argv[])
 	char *oname = NULL;
 	bool sflag = false;
 
-#ifdef STANDALONE
-	char *args[] = {(char*)__FILE__, ARGS, 0};
-	argc = sizeof(args)/sizeof(char *)-1;
-	argv = args;
-#endif
-
-	MONITOR_INIT
 #if defined(USE_ACC)
 	dre1.wait(); // wait for DRE initialization
 	dre2.wait();
@@ -507,8 +500,8 @@ int main(int argc, char *argv[])
 				tget(t4);
 				//CACHE_RECV(dre1, block1, block_end)
 				//CACHE_RECV(dre2, block2, block_end)
-				Xil_L1DCacheInvalidateRange((INTPTR)block1, block_end);
-				Xil_L1DCacheInvalidateRange((INTPTR)block2, block_end);
+				Xil_L1DCacheInvalidateRange((INTPTR)block1, CEIL(block_end,ALIGN_SZ));
+				Xil_L1DCacheInvalidateRange((INTPTR)block2, CEIL(block_end,ALIGN_SZ));
 				tget(t5);
 //				check(block1, block_end);
 //				check(block2, block_end);

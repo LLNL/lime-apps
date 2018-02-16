@@ -9,16 +9,9 @@
 
 #include "ColorImage.hpp"
 
-//------------------ Allocation ------------------//
-#if 1 // defined(USE_LSU) || defined(USE_DMAC)
-// FIXME: only works for simple types
-#include <malloc.h> // memalign
-#define NEWA(t,n) (t *)memalign(32,sizeof(t)*(n))
-#define DELETEA(p) free(p)
-#else
-#define NEWA(t,n) new t [n]
-#define DELETEA(p) delete[] p
-#endif
+#include "config.h"
+#include "alloc.h" // NEWA, DELETEA
+//#include "cache.h" // CACHE_DISPOSE
 
 //------------------ Access ------------------//
 #include <cstring> // memcpy
@@ -26,23 +19,23 @@
 
 //------------------ Cache ------------------//
 // used for cache coherency between DRE and HOST
-#if defined(ZYNQ)
+#if defined(CLIENT) && defined(ZYNQ)
 #include "xil_cache.h"
-#define CACHE_DISPOSE(p,n) {/*dre's?*/ Xil_DCacheInvalidateRange((INTPTR)p,n);}
+#define CACHE_DISPOSE(p,n) {/* no dre's */ Xil_DCacheInvalidateRange((INTPTR)p,n);}
 #else
 #define CACHE_DISPOSE(p,n)
 #endif
 
 //--------------------------------------------------------------------------//
 
-inline static void packColor(unsigned char *buf, pixel_t rgba)
+static inline void packColor(unsigned char *buf, pixel_t rgba)
 {
 	buf[0] = (unsigned char)(rgba);     // R
 	buf[1] = (unsigned char)(rgba>>8);  // G
 	buf[2] = (unsigned char)(rgba>>16); // B
 }
 
-inline static pixel_t unpackColor(unsigned char *buf)
+static inline pixel_t unpackColor(unsigned char *buf)
 {
 	return (pixel_t)(buf[0] | buf[1]<<8 | buf[2]<<16);
 }

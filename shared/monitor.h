@@ -16,8 +16,6 @@
 #include "xaxipmon.h" /* XAxiPmon_* */
 #include "xil_printf.h" /* print, xil_printf */
 
-#define MONITOR_INIT monitor_init();
-
 extern XAxiPmon apm;
 
 inline void monitor_init(void)
@@ -27,6 +25,9 @@ inline void monitor_init(void)
 	if (apm_config != NULL) apm_status = XAxiPmon_CfgInitialize(&apm, apm_config, apm_config->BaseAddress);
 	if (apm_status != XST_SUCCESS) print(" -- error: failed to init AXI Performance Monitor\r\n");
 }
+
+#define MONITOR_INIT monitor_init();
+#define _MONITOR_INIT
 
 #else
 
@@ -58,7 +59,7 @@ inline void monitor_init(void)
 #define STATS_STOP  stats_stop();
 #define STATS_PRINT stats_print();
 
-inline void stats_start(void)
+static inline void stats_start(void)
 {
 	XAxiPmon_SetMetrics(&apm, 0, XAPM_METRIC_SET_0, XAPM_METRIC_COUNTER_0); /* Slot 0 Write Transaction Count */
 	XAxiPmon_SetMetrics(&apm, 0, XAPM_METRIC_SET_1, XAPM_METRIC_COUNTER_1); /* Slot 0 Read Transaction Count */
@@ -77,7 +78,7 @@ inline void stats_start(void)
 	XAxiPmon_EnableMetricsCounter(&apm);
 }
 
-inline void stats_stop(void)
+static inline void stats_stop(void)
 {
 	XAxiPmon_DisableMetricsCounter(&apm);
 #if defined(USE_ACC)
@@ -88,7 +89,7 @@ inline void stats_stop(void)
 #undef XAxiPmon_IntrGetStatus
 #define XAxiPmon_IntrGetStatus(InstancePtr) XAxiPmon_ReadReg((InstancePtr)->Config.BaseAddress, XAPM_IS_OFFSET)
 
-inline void stats_print(void)
+static inline void stats_print(void)
 {
 	xil_printf("Slot TranW TranR ByteW ByteR StrobeLW\r\n");
 	xil_printf("CPU %s%d %s%d %s%d %s%d %d\r\n",
@@ -121,6 +122,7 @@ inline void stats_print(void)
 
 #if defined(TRACE) && defined(ZYNQ)
 
+#include <stdint.h> /* uintptr_t */
 #include <unistd.h> /* _exit */
 #include "xil_cache.h" /* Xil_DCacheFlush */
 #include <xtime_l.h> /* XTime, XTime_GetTime, COUNTS_PER_SECOND */
@@ -132,7 +134,7 @@ inline void stats_print(void)
 
 inline void trace_start(void)
 {
-#if 0
+#if TRACE == _TALL_
 	XAxiPmon_StartEventLog(&apm,
 		XAPM_FLAG_WRADDR|
 		XAPM_FLAG_FIRSTWR|
@@ -161,7 +163,11 @@ inline void trace_stop(void)
 	XAxiPmon_StopEventLog(&apm);
 }
 
+#if ZYNQ == _Z7_
 #define ENTRY_SZ 32U   /* 32 bytes, 256 bits */
+#else
+#define ENTRY_SZ 64U   /* 64 bytes, 512 bits */
+#endif
 #define BLK_SZ (1U<<17) /* 128 Kbytes */
 
 #if defined(USE_SD)
@@ -180,8 +186,8 @@ inline void trace_stop(void)
 inline void trace_capture(void)
 {
 	typedef int tcd_t;
-	tcd_t *buf_beg = (tcd_t*)0x00000000; /* copy buffer */
-	tcd_t *buf_end = (tcd_t*)((size_t)buf_beg + BLK_SZ);
+	tcd_t *buf_beg = (tcd_t*)0x00000000U; /* copy buffer */
+	tcd_t *buf_end = (tcd_t*)((uintptr_t)buf_beg + BLK_SZ);
 	volatile tcd_t *tcd = (tcd_t*)XPAR_AXI_TCD_0_BASEADDR;
 	register tcd_t *bptr = buf_beg;
 	register tcd_t tmp;
@@ -283,8 +289,8 @@ inline void trace_capture(void)
 	extern unsigned char _heap_start[];
 	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
-	elem_t *mem_beg = (elem_t*)(((size_t)&_heap_start) & 0x3FFFFFFF);
-	elem_t *mem_end = (elem_t*)(((size_t)&_heap_end) & 0x3FFFFFFF);
+	elem_t *mem_beg = (elem_t*)(((uintptr_t)&_heap_start) & 0x3FFFFFFFU);
+	elem_t *mem_end = (elem_t*)(((uintptr_t)&_heap_end) & 0x3FFFFFFFU);
 	volatile elem_t *tcd = (elem_t*)XPAR_AXI_TCD_0_BASEADDR;
 	register elem_t *dst = mem_beg;
 	register elem_t tmp;
@@ -356,7 +362,7 @@ tc:
 	XTime_GetTime(&finish);
 	time = (finish-start)/COUNTS_PER_SECOND;
 	if (tmp) print(" -- error: ran out of heap for trace\r\n");
-	xil_printf("trace address:0x%x length:0x%x\r\n", (int)mem_beg, tot);
+	xil_printf("trace address:0x%lx length:0x%lx\r\n", (long)mem_beg, tot);
 	xil_printf("capture time:%ld sec\r\n", time);
 	xil_printf("capture bandwidth:%ld bytes/sec\r\n", tot/time);
 
@@ -375,8 +381,8 @@ inline void trace_capture(void)
 	extern unsigned char _heap_start[];
 	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
-	elem_t *mem_beg = (elem_t*)(((size_t)&_heap_start) & 0x3FFFFFFF);
-	elem_t *mem_end = (elem_t*)(((size_t)&_heap_end) & 0x3FFFFFFF);
+	elem_t *mem_beg = (elem_t*)(((uintptr_t)&_heap_start) & 0x3FFFFFFFU);
+	elem_t *mem_end = (elem_t*)(((uintptr_t)&_heap_end) & 0x3FFFFFFFU);
 	volatile elem_t *tcd = (elem_t*)XPAR_AXI_TCD_0_BASEADDR;
 	elem_t *dst = mem_beg;
 	register elem_t tmp;
@@ -391,7 +397,7 @@ inline void trace_capture(void)
 	} while (tmp && dst < mem_end);
 	Xil_DCacheFlush();
 	if (tmp) print(" -- error: ran out of heap for trace\r\n");
-	xil_printf("trace address:0x%x length:0x%x\r\n", (int)mem_beg, tot);
+	xil_printf("trace address:0x%lx length:0x%lx\r\n", (long)mem_beg, tot);
 	_exit(0); /* avoid destructors, type XMD% stop to terminate */
 	/* if needed run "hw_server -s tcp::3121" before "Dump/Restore Data File" tool */
 }
