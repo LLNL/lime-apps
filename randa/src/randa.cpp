@@ -21,7 +21,7 @@
 
 // TODO: find a better place for these globals
 
-#if defined(STATS) || defined(TRACE) 
+#if defined(STATS) || defined(TRACE)
 XAxiPmon apm;
 #endif // STATS || TRACE
 
@@ -56,6 +56,7 @@ MAIN
 #endif // USE_ACC
 
 	params.outFname[0] = '\0'; /* use stdout */
+//	params.HPLMaxProcMem = (size_t)1 << 26; /* 64MBytes, use for ZC706 Linux*/
 	params.HPLMaxProcMem = (size_t)1 << 29; /* half-gig */
 	params.RunSingleRandomAccess_LCG = 1;
 
