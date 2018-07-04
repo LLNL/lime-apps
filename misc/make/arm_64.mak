@@ -1,20 +1,32 @@
 LABEL = V$(subst .,_,$(VERSION))
 
 #DEFS += -DVERSION=$(VERSION)
+DEFS += -DTIMEOFDAY
 
-ifneq (,$(findstring USE_MARGS,$(DEFS)))
+ifneq ($(findstring USE_MARGS,$(DEFS)),)
   DEFS += -DMARGS='"$(RUN_ARGS)"'
 endif
 
-ifneq (,$(findstring M5,$(DEFS)))
+ifneq ($(findstring M5,$(DEFS)),)
   SRC += ../../m5
   MODULES += m5op_arm_A64
+endif
+
+ifneq ($(findstring CLOCKS,$(DEFS)),)
+  MODULES += clocks_ln
+endif
+
+ifneq ($(filter %STATS %TRACE,$(DEFS)),)
+  MODULES += monitor_ln
 endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
 
-OPT = -O3
+OPT ?= -O3
+ifdef OMP
+  OPT += -fopenmp
+endif
 MACH = -march=armv8-a
 CPPFLAGS += -MMD $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
@@ -39,7 +51,11 @@ all: $(TARGET)
 
 .PHONY: run
 run: $(TARGET)
+ifdef OMP
+	OMP_NUM_THREADS=$(OMP) ./$(TARGET) $(RUN_ARGS)
+else
 	./$(TARGET) $(RUN_ARGS)
+endif
 
 .PHONY: clean
 clean:
@@ -61,7 +77,7 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 
 $(OBJECTS): makeflags # rebuild if MAKEFLAGS change
 # Select only command line variables
-cvars = {$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))}
+cvars = _$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))_
 makeflags: FORCE
 	@[ "$(if $(wildcard $@),$(shell cat $@),)" = "$(cvars)" ] || echo $(cvars)> $@
 FORCE: ;

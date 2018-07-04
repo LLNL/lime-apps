@@ -14,14 +14,27 @@
 #define F_ENDP 0x02
 #define F_NOWA 0x04
 
-#ifdef __microblaze__
+#if defined(SYSTEMC)
+
+typedef struct {
+	unsigned int tdest :  8; /* forward route id */
+	unsigned int tid   :  8; /* return route id */
+	unsigned int tuser : 16; /* zero */
+} hdr_t;
+
+typedef struct {
+	unsigned id;
+	hdr_t s_hdr, m_hdr;
+} stream_t;
+
+#elif defined(__microblaze__)
 
 #include "fsl.h"
 
 typedef struct {
 } stream_t;
 
-#else /* __microblaze__ */
+#else /* ARM */
 
 #include "xllfifo.h"
 
@@ -43,7 +56,7 @@ extern int XLlFifo_iRead_Aligned(XLlFifo *InstancePtr, void *BufPtr, unsigned Wo
 }
 #endif
 
-#endif /* __microblaze__ */
+#endif /* ARM */
 
 
 #ifdef __cplusplus

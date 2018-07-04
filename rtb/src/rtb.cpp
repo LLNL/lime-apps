@@ -15,6 +15,9 @@ $Log: $
 #include <string.h> /* strcmp, strlen, memset, memcmp */
 #include <math.h> /* pow, ceil */
 #include <assert.h> /* assert */
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include "fasta.h"
 #include "path.h"
@@ -84,16 +87,11 @@ char *garg = NULL; /* plot command file name (out) */
 char *targ = NULL; /* plot terminal file name (out) */
 #endif // ENABLE_PLOT
 
+// TODO: find a better place for these globals
 /* these are global to avoid overhead at runtime on the stack */
 tick_t t0, t1;
 tick_t start, finish;
 unsigned long long tinsert, tlookup, toper, trun;
-
-// TODO: find a better place for these globals
-
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
 
 // TODO: consider using std::conditional<>::type for result type
 #if defined(MULTIMAP)
@@ -463,6 +461,7 @@ MAIN
 			case 'b':
 				if (isdigit(s[1])) barg = (1U << atoi(s+1));
 				else nok = 1;
+				s += strlen(s+1);
 				break;
 			case 'k':
 				if (isdigit(s[1])) karg = atoi(s+1);
@@ -564,6 +563,10 @@ MAIN
 		exit(EXIT_FAILURE);
 	}
 	printf("########## RTB ##########\n");
+#if defined(_OPENMP)
+	// to control the number of threads use: export OMP_NUM_THREADS=N
+	printf("threads: %d\n", omp_get_max_threads());
+#endif
 #if defined(USE_SP)
 	if (barg > SP_SIZE/sizeof(unsigned)/8) barg = SP_SIZE/sizeof(unsigned)/8; /* up to 1/8th of scratchpad */
 #endif
@@ -922,7 +925,7 @@ MAIN
 			char hdr[32];
 			char str[48];
 			sequence entry = {hdr, str};
-			size_type pcount = PROGRESS_COUNT;
+			size_type pcount = PROGRESS_COUNT-1;
 			size_type scount; /* save count */
 
 			if ((fout = fopen(sarg, "w")) == NULL) {
@@ -956,9 +959,9 @@ MAIN
 		STATS_START
 
 #if 1
-		if (flags & PFLAG) fprintf(stderr, "...");
-		pcount++; /* silence warning */
+		(void)pcount; /* silence warning */
 		tget(start);
+		if (flags & PFLAG) fprintf(stderr, "...");
 		kbuf.block_lookup(wload, warg);
 		lcount = warg;
 		tget(finish);

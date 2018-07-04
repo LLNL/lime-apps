@@ -1,7 +1,7 @@
 TARGET = spmv
 VERSION = 1.1
 SRC = ../src $(addprefix ../src/,bebop_util matrix_generator spmvbench) ../../shared
-ifneq (,$(filter %SERVER,$(DEFS)))
+ifneq ($(filter %SERVER,$(DEFS)),)
   DEFS += -DUSE_LSU
   MODULES = server
 else
@@ -10,11 +10,15 @@ else
   MODULES += bcoo_matrix bcsr_matrix create_rand
   MODULES += __complex mt19937ar random_number smvm_malloc smvm_util sort_joint_arrays
 endif
-ifneq (,$(filter %CLIENT %SERVER %USE_LSU,$(DEFS)))
+ifneq ($(filter %CLIENT %SERVER %USE_LSU,$(DEFS)),)
   DEFS += -DUSE_SP -DUSE_OCM
   MODULES += lsu_cmd aport stream
 endif
-RUN_ARGS = -c -s18 -n34 -v15
+ifeq ($(ARG),1)
+  RUN_ARGS = -c -s23 -n34 -v15
+else
+  RUN_ARGS = -c -s18 -n34 -v15
+endif
 # CXXFLAGS += -std=c++11
 # LDFLAGS += 
 # LDLIBS += -lstdc++

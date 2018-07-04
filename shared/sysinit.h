@@ -17,7 +17,7 @@
 /* 0x04c0e: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, no Write-Allocate */
 #if defined(ZYNQ) && ZYNQ == _Z7_
 #include "xil_mmu.h" // Xil_SetTlbAttributes
-inline void mmu_setup(void) {
+static inline void mmu_setup(void) {
 	char *ptr;
 	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x04c06); /* Inner Cacheable */
 	Xil_SetTlbAttributes((INTPTR)0x40100000, 0x04c06); /* Inner Cacheable */
@@ -38,7 +38,7 @@ inline void mmu_setup(void) {
 #define MARGS ""
 // #include "margs.h"
 #endif
-inline void get_args(const char *arg0, int *argc, char **argv[]) {
+static inline void get_args(const char *arg0, int *argc, char **argv[]) {
 	int i, n;
 	char *str, *ptr, *end, **args;
 	str = (char*)malloc(strlen(MARGS)+1);
@@ -80,12 +80,17 @@ inline void get_args(const char *arg0, int *argc, char **argv[]) {
 static int _sub_main(int argc, char *argv[]); \
 int main(int argc, char *argv[]) \
 { \
+	int ret; \
 	MMU_SETUP \
 	GET_ARGS(__FILE__) \
 	MONITOR_INIT \
-	return _sub_main(argc, argv); \
+	ret = _sub_main(argc, argv); \
+	MONITOR_FINISH \
+	return ret; \
 } \
 static int _sub_main(int argc, char *argv[])
+#elif defined(SYSTEMC)
+#define MAIN int _sub_main(int argc, char *argv[])
 #else
 #define MAIN int main(int argc, char *argv[])
 #endif

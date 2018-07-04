@@ -4,15 +4,23 @@ EXE = .elf
 WORKSPACE_LOC ?= ../../..
 BSP = $(WORKSPACE_LOC)/standalone_bsp_a9
 HWP = $(WORKSPACE_LOC)/hw_platform_0
-XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
-#XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
+#XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
+XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DZYNQ=_Z7_ -DXILTIME -DUSE_MARGS -DMARGS='"$(RUN_ARGS)"'
 
-ifneq (,$(findstring M5,$(DEFS)))
+ifneq ($(findstring M5,$(DEFS)),)
   SRC += ../../m5
   MODULES += m5op_arm
+endif
+
+ifneq ($(findstring CLOCKS,$(DEFS)),)
+  MODULES += clocks_sa
+endif
+
+ifneq ($(filter %STATS %TRACE,$(DEFS)),)
+  MODULES += monitor_sa
 endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
@@ -49,17 +57,17 @@ LDLIBS += -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group
 
 .PHONY: all
 all: $(TARGET)$(EXE)
-ifneq (,$(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)))
+ifneq ($(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)),)
 	cd ../mcu && $(MAKE) build=mcu D=SERVER all
 endif
 
 .PHONY: fpga
 fpga:
-	$(XSDB) ../../misc/sdk/fpga_config.tcl $(HWP)
+	$(XSDB) ../../misc/sdk/fpga_config_z7.tcl $(HWP)
 
 .PHONY: run
 run: all
-ifneq (,$(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)))
+ifneq ($(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)),)
 	$(XSDB) ../../misc/sdk/mb_start.tcl ../mcu/$(TARGET)$(EXE)
 endif
 	$(XSDB) ../../misc/sdk/a9_run.tcl $(TARGET)$(EXE)
@@ -67,7 +75,7 @@ endif
 .PHONY: clean
 clean:
 	$(RM) $(wildcard *.o) $(wildcard *.d) $(TARGET)$(EXE) $(TARGET)$(EXE).size makeflags
-ifneq (,$(wildcard ../mcu))
+ifneq ($(wildcard ../mcu),)
 	cd ../mcu && $(MAKE) build=mcu D=SERVER clean
 endif
 
@@ -79,7 +87,7 @@ vars:
 	@echo SRC: $(SRC)
 	@echo OBJECTS: $(OBJECTS)
 	@echo MAKEFILE_LIST: $(MAKEFILE_LIST)
-ifneq (,$(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)))
+ifneq ($(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)),)
 	cd ../mcu && $(MAKE) build=mcu D=SERVER vars
 endif
 
@@ -91,7 +99,7 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 
 $(OBJECTS): makeflags # rebuild if MAKEFLAGS change
 # Select only command line variables
-cvars = {$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))}
+cvars = _$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))_
 makeflags: FORCE
 	@[ "$(if $(wildcard $@),$(shell cat $@),)" = "$(cvars)" ] || echo $(cvars)> $@
 FORCE: ;

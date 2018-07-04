@@ -51,31 +51,31 @@ flops (const int r, const int c, const int nnzb)
 
 
 /************************************************************************/
-int
+long
 loads (const int r, const int c, const int nnzb, const int num_block_rows)
 {
   /*
    * Loads due to the floating-point numbers only.
    * Load c of source vector, r of destination vector, and r*c of matrix. 
    */
-  int flpts_only = sizeof(double) * (c + r + r * c);
+  long flpts_only = sizeof(double) * (c + r + r * c);
   /*
    * Loads due to the col_idx[] array.
    * Each entry is read once for each nonzero block.  
    */
-  int col_idx_only = sizeof(int) * nnzb;
+  long col_idx_only = sizeof(int) * nnzb;
   /*
    * Loads due to the row_start[] array.
    * If the compiler is clever, each element need only be read once.
    */
-  int row_start_only = sizeof(int) * (num_block_rows + 1);
+  long row_start_only = sizeof(int) * (num_block_rows + 1);
 
   return flpts_only + col_idx_only + row_start_only;
 }
 
 
 /************************************************************************/
-int 
+long
 stores (const int r, const int c, const int nnzb)
 {
   /* 
@@ -103,7 +103,7 @@ smvm_timing_run_with_results (struct SMVM_timing_results* p_results,
   double *timings;
   double t_median, t_min, t_max;
   double mflops;
-  int num_loads, num_stores;
+  long num_loads, num_stores;
 
   /* Will be set to the appropriate SpMV function for the register blocking
    * scheme we use.  Recall that there is a matrix of function pointers, each
@@ -186,8 +186,8 @@ smvm_timing_run_with_results (struct SMVM_timing_results* p_results,
           fprintf (stderr, "\tMin time:                                 %.10E sec\n", t_min);
           fprintf (stderr, "\tMax time:                                 %.10E sec\n", t_max);
           fprintf (stderr, "\tMflops (floating-point ops, not per sec): %.10E\n", mflops);
-          fprintf (stderr, "\tnum_loads:                                %d\n", num_loads);
-          fprintf (stderr, "\tnum_stores:                               %d\n", num_stores);
+          fprintf (stderr, "\tnum_loads:                                %ld\n", num_loads);
+          fprintf (stderr, "\tnum_stores:                               %ld\n", num_stores);
         }
 
       smvm_save_timing_results (p_results, m, n, r, c, nnzb, num_trials, 
@@ -220,7 +220,7 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
 
   /* Temporary variables in which to store results of SMVM runs. */
   double secs, t_median, t_min, t_max, mflops;
-  int num_loads, num_stores;
+  long num_loads, num_stores;
 
   /* Will be set to the appropriate SpMV function for the register blocking
    * scheme we use.  Recall that there is a matrix of function pointers, each
@@ -350,8 +350,8 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
           fprintf (stderr, "\tMin time:                                 %.10E sec\n", t_min);
           fprintf (stderr, "\tMax time:                                 %.10E sec\n", t_max);
           fprintf (stderr, "\tMflops (floating-point ops, not per sec): %.10E\n", mflops);
-          fprintf (stderr, "\tnum_loads:                                %d\n", num_loads);
-          fprintf (stderr, "\tnum_stores:                               %d\n", num_stores);
+          fprintf (stderr, "\tnum_loads:                                %ld\n", num_loads);
+          fprintf (stderr, "\tnum_stores:                               %ld\n", num_stores);
         }
 
       smvm_save_timing_results (p_results, m, n, r, c, nnzb, num_trials, 
@@ -395,7 +395,7 @@ smvm_timing_run (int m, int n, int r, int c,
   double *timings;
   double t_median, t_min, t_max;
   double mflops;
-  int num_loads, num_stores;
+  long num_loads, num_stores;
 
   /* f
    *   Will be set to the appropriate SpMV function for the register blocking
@@ -488,8 +488,8 @@ smvm_timing_run (int m, int n, int r, int c,
         fprintf (stdout, "\tMin time:                                 %.10E sec\n", t_min);
         fprintf (stdout, "\tMax time:                                 %.10E sec\n", t_max);
         fprintf (stdout, "\tMflops (floating-point ops, not per sec): %.10E\n", mflops);
-        fprintf (stdout, "\tnum_loads:                                %d\n", num_loads);
-        fprintf (stdout, "\tnum_stores:                               %d\n", num_stores);
+        fprintf (stdout, "\tnum_loads:                                %ld\n", num_loads);
+        fprintf (stdout, "\tnum_stores:                               %ld\n", num_stores);
       }
 
       /*
@@ -502,7 +502,7 @@ smvm_timing_run (int m, int n, int r, int c,
       fprintf (outfile,
                "%d,%d,%d,%d,%d,%d,"
                "%.10E,%.10E,%.10E,%.10E,"
-               "%d,%d\n",
+               "%ld,%ld\n",
                m, n, r, c, nnzb, num_trials,
                t_median, t_min, t_max, mflops, 
                num_loads, num_stores);

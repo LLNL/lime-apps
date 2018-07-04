@@ -10,6 +10,9 @@
 #include <vector>
 #include <iostream> // cout, endl
 #include <fstream> // ofstream
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 using namespace std;
 
 #include "hash_nbits.hpp"
@@ -55,10 +58,6 @@ unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 char *oname = NULL;
 
 // TODO: find a better place for these globals
-
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
 
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
 unsigned long long tsetup, treorg, toper, tcache;
@@ -204,6 +203,9 @@ void page_rank_itr(
 #endif
 
 	// Accumulate PRs for each vertex
+#if defined(_OPENMP)
+	#pragma omp parallel for
+#endif
 	for (gsize_t i = 0; i < num_vertices; ++i) {
 		gsize_t edges = adj_list_graph[i].size();
 		index_p edge_i = adj_list_graph[i].data();
@@ -324,6 +326,10 @@ MAIN
 		fprintf(stderr, "\n");
 		return EXIT_FAILURE;
 	}
+#if defined(_OPENMP)
+	// to control the number of threads use: export OMP_NUM_THREADS=N
+	printf("threads: %d\n", omp_get_max_threads());
+#endif
 #ifdef USE_SP
 	if (block_sz > SP_SIZE) block_sz = SP_SIZE;
 #endif

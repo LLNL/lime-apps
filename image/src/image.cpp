@@ -5,6 +5,9 @@
 #include <unistd.h> // getopt, optarg
 #include <algorithm> // min
 #include <iostream> // cout, endl
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 using namespace std;
 
 #include "ColorImage.hpp"
@@ -42,10 +45,6 @@ typedef unsigned long ulong_t;
 typedef uchar_t* uchar_p;
 
 // TODO: find a better place for these globals
-
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
 
 tick_t start, finish;
 tick_t t0, t1, t2, t3, t4, t5, t6, t7;
@@ -203,6 +202,10 @@ MAIN
 		fprintf(stderr, "an image will be auto generated with a pattern.\n");
 		return EXIT_FAILURE;
 	}
+#if defined(_OPENMP)
+	// to control the number of threads use: export OMP_NUM_THREADS=N
+	printf("threads: %d\n", omp_get_max_threads());
+#endif
 
 
 	/* * * * * * * * * * block test * * * * * * * * * */
@@ -448,7 +451,6 @@ MAIN
 #else
 		block_max = block_min;
 #endif
-		int didx = 0;
 
 		tsetup = treorg = tcache = 0;
 		CLOCKS_EMULATE
@@ -465,6 +467,7 @@ MAIN
 		size_t view_off;
 		size_t view_end = (ref_w/decimate) * (ref_h/decimate) * elem_sz;
 		int v = 0;
+		int didx = 0;
 		struct view_c {
 			int end; /* used by diff() */
 			uchar_p restrict block1, block2;
@@ -594,10 +597,16 @@ MAIN
 #else /* USE_ACC */
 
 		size_t ref_inc = elem_sz * decimate;
-		for (int y = 0; y < ref_h; y += decimate) {
-			register const uchar_t *ptr1 = (uchar_t*)&ref_a1[ref_w*y];
-			register const uchar_t *ptr2 = (uchar_t*)&ref_a2[ref_w*y];
+		int view_w = ref_w / decimate;
+		int view_h = ref_h / decimate;
+#if defined(_OPENMP)
+		#pragma omp parallel for
+#endif
+		for (int i = 0; i < view_h; i++) {
+			register const uchar_t *ptr1 = (uchar_t*)&ref_a1[ref_w*decimate*i];
+			register const uchar_t *ptr2 = (uchar_t*)&ref_a2[ref_w*decimate*i];
 			register const uchar_t *end1 = ptr1 + elem_sz * ref_w;
+			register uchar_t *dptr = &davg[view_w*i];
 			//__asm__ __volatile__ ("nop");
 			while (ptr1 < end1) {
 				int dR = abs(ptr1[0] - ptr2[0]);
@@ -605,7 +614,7 @@ MAIN
 				int dB = abs(ptr1[2] - ptr2[2]);
 				ptr1 += ref_inc;
 				ptr2 += ref_inc;
-				davg[didx++] = (dR + dG + dB) / 3;
+				*dptr++ = (dR + dG + dB) / 3;
 			}
 			//__asm__ __volatile__ ("nop");
 		}
@@ -638,7 +647,9 @@ MAIN
 		maxd = 0;
 		for (int i = 0; i < davg_sz; i++) if (davg[i] > maxd) maxd = davg[i];
 		printf("max difference: %u\n", maxd);
+#if defined(USE_ACC)
 		if (didx != davg_sz) printf(" -- error: difference incorrect\n");
+#endif
 		} // for block_sz...
 
 		/* output image difference */

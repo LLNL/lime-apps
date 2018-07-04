@@ -71,6 +71,10 @@ sub scan {
 			$tref->{STRM}{$r_ns}{$w_ns}{RUN} = $1;
 			next;
 		}
+		if (/Runtime:\s+(\d+\.\d+)/) { # xsb
+			$tref->{XSB}{$r_ns}{$w_ns}{RUN} = $1;
+			next;
+		}
 	}
 }
 

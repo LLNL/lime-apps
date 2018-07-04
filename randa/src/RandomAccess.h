@@ -35,8 +35,10 @@ typedef __UINT64_TYPE__ uran_t;
 /* * * * * Table configuration * * * * */
 /* TableSize multiplier to get number of updates to table */
 /* (suggested: 4x number of table entries) */
+#if !defined(UPDATE_FACTOR)
 #define UPDATE_FACTOR 0.0625
 //#define UPDATE_FACTOR ((double)VECT_LEN/TableSize*4)
+#endif
 /* Verify updates to Table */
 #define VERIFY 1
 
@@ -73,8 +75,9 @@ typedef __UINT64_TYPE__ table_t;
 
 #define VECTOR
 /* Vector length to generate and process addresses */
+#if !defined(VECT_LEN)
 #define VECT_LEN 1024
-//#define VECT_LEN 128
+#endif
 
 typedef struct HPCC_RandomAccess_tabparams_s {
   s64Int LocalTableSize; /* local size of the table may be rounded up >= MinLocalTableSize */

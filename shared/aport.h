@@ -43,12 +43,18 @@ enum {
 
 typedef uint32_t flit_t;
 
-// Address translation: takes low bits, limited to 4G
+#include <stdio.h>
+inline flit_t addr_cast(const void *addr)
+{
+	// printf("addr:%p\n", addr);
 #ifdef __cplusplus
-#define ATRAN(addr) static_cast<flit_t>(reinterpret_cast<uintptr_t>(addr))
+	return static_cast<flit_t>(reinterpret_cast<uintptr_t>(addr));
 #else
-#define ATRAN(addr) ((uintptr_t)addr)
+	return ((uintptr_t)addr);
 #endif
+}
+// Address translation: takes low bits, limited to 4G
+#define ATRAN(addr) addr_cast(addr)
 
 extern stream_t *gport;
 
@@ -93,7 +99,7 @@ extern void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned
 // reg   31  bits   0
 //     |--------------|
 //   0 | status:32    | zero:24 okay:1 slverr:1 decerr:1 interr:1 treqstat:1 tdest:3
-//   1 | command:8    | reqstat:1 ignore:4 command:3
+//   1 | command:8    | tdest:8 tid:8 reqstat:1 ignore:4 command:3
 //   2 | address:32   |
 //   3 | size:30      |
 //   4 | inc/index:30 |

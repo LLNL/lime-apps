@@ -5,8 +5,7 @@
  *      Author: lloyd23
  */
 
-#include <stdio.h>
-
+#include <unistd.h> // getopt, optarg
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,7 +15,7 @@ extern "C" {
 #endif
 
 // Example main arguments
-// #define MARGS ""
+// #define MARGS "-s20"
 
 #include "config.h"
 #include "alloc.h"
@@ -26,20 +25,39 @@ extern "C" {
 #include "clocks.h"
 #include "sysinit.h"
 
-// TODO: find a better place for these globals
+#define DEFAULT_SCALE 20U // log 2 size
 
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
+unsigned scale = DEFAULT_SCALE;
 
 
 MAIN
 {
 	HPCC_Params params;
+	/* * * * * * * * * * get arguments beg * * * * * * * * * */
+	int opt;
+	bool nok = false;
 
-	//for (unsigned i = 18; i <= 24; i++) {printf("\nMax Mem: 2^%u\n", i);
+	while ((opt = getopt(argc, argv, "s:")) != -1) {
+		switch (opt) {
+		case 's':
+			scale = atoi(optarg);
+			break;
+		default: /* '?' */
+			nok = true;
+		}
+	}
+	if (nok) {
+		fprintf(stderr, "Usage: dgemm -s<int>\n");
+		fprintf(stderr, "  -s  scale 2^n, default: n=%d\n", DEFAULT_SCALE);
+		fprintf(stderr, "\n");
+		return EXIT_FAILURE;
+	}
+	printf("scale: %u\n", scale);
+
+	/* * * * * * * * * * get arguments end * * * * * * * * * */
+
 	params.outFname[0] = '\0'; /* use stdout */
-	params.HPLMaxProcMem = (size_t)1 << 20; /* one meg */
+	params.HPLMaxProcMem = (size_t)1 << scale;
 	params.RunSingleDGEMM = 1;
 
 	/* -------------------------------------------------- */
@@ -52,8 +70,7 @@ MAIN
 		if (params.Failure) printf(" -- DGEMM Failure\n");
 		printf("End of SingleDGEMM section.\n");
 	}
-	//}
 
 	TRACE_CAP
-	return 0;
+	return EXIT_SUCCESS;
 }

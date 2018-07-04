@@ -16,7 +16,8 @@
 
 #if !defined(ALIGN_SZ)
 #if defined(__aarch64__)
-#define ALIGN_SZ 64
+// #define ALIGN_SZ 64
+#define ALIGN_SZ 128 // match HMC MAX_BLOCK_SIZE
 #else
 #define ALIGN_SZ 32
 #endif
@@ -31,7 +32,11 @@
 */
 #ifdef __cplusplus
 
-#if defined(USE_ACC)
+#if defined(SYSTEMC) && defined(__LP64__)
+#define NALLOC(t,n) (t*)sbrk(CEIL((n)*sizeof(t),ALIGN_SZ))
+#define NFREE(p)
+
+#elif defined(USE_ACC)
 // FIXME: NEWA doesn't construct, only works for simple types
 // TODO: make allocator for accelerator
 #include <malloc.h> // memalign, free
@@ -156,6 +161,7 @@ inline void chk_alloc(const void *aptr, size_t nbytes, const char *str)
 		SHOW_HEAP
 		exit(EXIT_FAILURE);
 	}
+	// else fprintf(stderr, "chk_alloc: %p %lu: %s\n", aptr, (unsigned long)nbytes, str);
 }
 
 #endif /* ALLOC_H_ */

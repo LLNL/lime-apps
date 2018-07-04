@@ -13,7 +13,7 @@
 // defined(STATS)  : print memory access statistics
 #define _TADDR_ 1 // R/W address AXI events
 #define _TALL_  2 // all AXI events
-// defined(TRACE)  : enable trace capture, =TADDR_, =TALL_
+// defined(TRACE)  : enable trace capture, =_TADDR_, =_TALL_
 // defined(CLOCKS) : enable clock scaling for emulation
 // defined(ENTIRE) : flush/invalidate entire cache
 // defined(USE_SP) : use scratch pad memory

@@ -1,0 +1,89 @@
+//config.def file necessary for SystemC model of HMC to operate
+//
+//format : PARAMETER_NAME<equal>value//comment
+//
+//Please direct questions/comments/concerns to ecooperbalis@micron.com
+
+//flag to enable writing the power output log for Fast Forward project
+WRITE_POWER_LOG=false
+NUM_PARTITIONS=8 // 2, 4, 8 == 4GB, 8GB, 16GB resp. per Elliott 6/18/2014
+
+//
+//[generator]
+//
+//specifies the number of traffic generators attached to the host controller module
+NUM_GENERATORS=4
+//specifies the number of requests each traffic generator should issue
+NUM_REQUESTS=1000
+//specifies if the generated address should be 32B aligned.  unaligned addresses require an extra CAS
+ALIGNED_32B=true
+//time in nanoseconds the generator should be active
+BURST_TIME=500
+//time in nanoseconds the generator should idle
+IDLE_TIME=20
+//specifies the read-write mix of the request stream
+PERCENTAGE_READ=66
+//specifies the percetage of each request size in the generated stream.  sum of these values should be 100
+PERCENTAGE_16B=0
+PERCENTAGE_32B=25
+PERCENTAGE_48B=0
+PERCENTAGE_64B=50
+PERCENTAGE_80B=0
+PERCENTAGE_96B=0
+PERCENTAGE_112B=25
+PERCENTAGE_128B=0
+
+//dictates the likelihood a subsequent request will be sequential (0-100 (%))
+SEQUENTIAL_FREQUENCY=0
+//specifies the bit which is incremented given the above case occurs
+SEQUENTIAL_STRIDE=6
+
+//
+//[trace reader]
+//
+//used to offeset trace addresses when using multiple traces
+ADDRESS_OFFSET=64
+//used to offset timing of traces when using multiple traces
+TIME_OFFSET=1600
+//time in ps used to convert clock cycle values in trace to time
+TRACE_CPU_CLOCK=450
+//print issuing from trace
+TRACE_DEBUG=false
+
+//
+//[host controller]
+//
+//specifies the depth (in flits) of each request buffer. each link has an independent request buffer.
+REQUEST_BUFFER_SIZE=288
+//available tags associated with each link.
+TAGS_PER_LINK=256
+//available tokens associated with each link
+TOKENS_PER_LINK=288
+//specifies whether or not a write request should consume a tag and return a response (true <equal> no tags, no responses)
+POSTED_WRITES=false
+//specifies if the host controller requires tokens on the return path (typically set to true)
+RESPONSE_OPEN_LOOP=true
+//dicates the number of link cycles between the tail of one request and the head of the next
+REQUEST_SPACING=0
+//dictates how the host controller assigns requests to the links
+//0 random
+//1 local vaults
+//2 use TLM streaming_width (which indicates Generator ID)
+HOST_MAPPING=1
+
+//
+//[link]
+//
+//15 GHz Link : 3, 12.5/10 GHz Link : 2
+//old parameter, causes SystemC binding error
+//FLITS_PER_CYCLE_LINK<equal>2
+
+//
+//[vaultcontroller]
+//
+//dictates address mapping (see spec)
+MAX_BLOCK_SIZE=128
+//enable/disable open page policy
+OPEN_PAGE=false
+//dictates how many page hits before forcing a page closed
+MAX_PAGE_HITS=8

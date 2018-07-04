@@ -35,10 +35,6 @@ unsigned block_sz = 1U<<DEFAULT_BLOCK_LSZ;
 
 // TODO: find a better place for these globals
 
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
-
 #if defined(USE_ACC)
 #include "IndexArray.hpp"
 typedef int index_t; // int used in bcsr_matrix_t
@@ -133,8 +129,8 @@ MAIN
 	fprintf(fout, "Non-zero blocks:    %d\n", timing_results.nnzb);
 	fprintf(fout, "Repetitions:        %d\n", timing_results.num_trials);
 	fprintf(fout, "Mflop/s:            %.6f\n", timing_results.mflops/timing_results.t_median);
-	fprintf(fout, "num_loads:          %d\n", timing_results.num_loads);
-	fprintf(fout, "num_stores:         %d\n", timing_results.num_stores);
+	fprintf(fout, "num_loads:          %ld\n", timing_results.num_loads);
+	fprintf(fout, "num_stores:         %ld\n", timing_results.num_stores);
 
 	TRACE_CAP
 	return 0;

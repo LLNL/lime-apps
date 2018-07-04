@@ -222,12 +222,6 @@ extern void tuned_STREAM_Triad(STREAM_TYPE scalar);
 extern int omp_get_num_threads();
 #endif
 
-// TODO: find a better place for these globals
-
-#if defined(STATS) || defined(TRACE)
-XAxiPmon apm;
-#endif // STATS || TRACE
-
 
 MAIN
 {
@@ -437,6 +431,7 @@ MAIN
 	NFREE(c);
 #endif
 
+	TRACE_CAP
 	return 0;
 }
 
@@ -486,7 +481,7 @@ double mysecond()
 	tick_t t;
 
 	tget(t);
-	return((us long long)tval(t)/(double)TICKS_ESEC);
+	return(tvesec(tval(t)));
 #endif
 }
 

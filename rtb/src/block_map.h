@@ -697,7 +697,15 @@ public:
 
 	void
 	find(mapped_type* __fnd, const key_type* __x, size_type __n)
-	{ while (__n--) *__fnd++ = this->find(*__x++); }
+	{
+#if defined(_OPENMP)
+		#pragma omp parallel for
+		for (size_type i = 0; i < __n; i++)
+			__fnd[i] = this->find(__x[i]);
+#else
+		while (__n--) *__fnd++ = this->find(*__x++);
+#endif
+	}
 
 #endif
 
@@ -817,7 +825,15 @@ public:
 		std::pair<iterator, iterator>* __rng,
 		const key_type* __x,
 		size_type __n)
-	{ while (__n--) *__rng++ = this->equal_range(*__x++); }
+	{
+#if defined(_OPENMP)
+		#pragma omp parallel for
+		for (size_type i = 0; i < __n; i++)
+			__rng[i] = this->equal_range(__x[i]);
+#else
+		while (__n--) *__rng++ = this->equal_range(*__x++);
+#endif
+	}
 
 	inline iterator
 	find(const key_type& __x) // returns end if no match

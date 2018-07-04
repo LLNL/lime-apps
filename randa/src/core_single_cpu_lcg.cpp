@@ -254,10 +254,16 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 	uran_t ran[VECT_LEN]; /* current random numbers */
 
 	tget(t2);
+#if defined(_OPENMP)
+	#pragma omp parallel for
+#endif
 	for (j=0; j<VECT_LEN; j++)
 		ran[j] = HPCC_starts_LCG((nupdate/VECT_LEN) * j);
 
 	for (i=0; i<nupdate/VECT_LEN; i++) {
+#if defined(_OPENMP)
+		#pragma omp parallel for
+#endif
 		for (j=0; j<VECT_LEN; j++) {
 			ran[j] = LCG_MUL64 * ran[j] + LCG_ADD64;
 			Table[ran[j] >> (sizeof(uran_t)*8 - logTableSize)] ^= ran[j];

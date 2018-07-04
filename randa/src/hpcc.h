@@ -210,7 +210,7 @@ extern int xjumpm_(int *, int *, int *, int *, int *, int *, int *);
 #define HPCC_free(p) NFREE(p)
 #define HPCC_XMALLOC(t,s) NALLOC(t,s)
 
-#define XMALLOC(t,s) ((t*)malloc(sizeof(t)*(s)))
-#define XCALLOC(t,s) ((t*)calloc((s),sizeof(t)))
+// #define XMALLOC(t,s) ((t*)malloc(sizeof(t)*(s)))
+// #define XCALLOC(t,s) ((t*)calloc((s),sizeof(t)))
 
 #endif

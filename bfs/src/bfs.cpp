@@ -58,10 +58,6 @@ char *oname = NULL;
 
 // TODO: find a better place for these globals
 
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
-
 tick_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
 unsigned long long tsetup, treorg, toper, tcache;
 

@@ -6,19 +6,20 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.6
+PACKAGE = apps-1.7.1
 build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
-XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
-#XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
+#XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
+XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 
 .PHONY: all
 all:
-ifeq (,$(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))))
+ifeq ($(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))),)
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
 	cd sort/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
+	cd xsb/$(build) && $(MAKE) $@
 endif
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
@@ -62,6 +63,10 @@ spmv:
 strm:
 	cd strm/$(build) && $(MAKE) all
 
+.PHONY: xsb
+xsb:
+	cd xsb/$(build) && $(MAKE) all
+
 .PHONY: dist
 dist: distclean
 	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs .project *
@@ -76,14 +81,19 @@ distclean:
 
 .PHONY: fpga
 fpga:
-	$(XSDB) misc/sdk/fpga_config.tcl $(HWP)
+ifeq ($(build),zynq)
+	$(XSDB) misc/sdk/fpga_config_z7.tcl $(HWP)
+else ifeq ($(build),zup)
+	$(XSDB) misc/sdk/fpga_config_zu.tcl $(HWP)
+endif
 
 .DEFAULT:
-ifeq (,$(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))))
+ifeq ($(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))),)
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
 	cd sort/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
+	cd xsb/$(build) && $(MAKE) $@
 endif
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@

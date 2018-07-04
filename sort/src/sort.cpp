@@ -26,10 +26,6 @@ unsigned scale = DEFAULT_SCALE;
 
 // TODO: find a better place for these globals
 
-#if defined(STATS) || defined(TRACE) 
-XAxiPmon apm;
-#endif // STATS || TRACE
-
 tick_t t0, t1;
 unsigned long long tsetup, treorg, toper, tcache;
 

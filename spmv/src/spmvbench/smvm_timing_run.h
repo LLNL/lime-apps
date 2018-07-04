@@ -42,7 +42,7 @@ flops (const int r, const int c, const int nnzb);
  * @param nnzb              Number of nonzero blocks in the matrix.
  * @param num_block_rows    Number of block rows in the matrix.
  */
-int
+long
 loads (const int r, const int c, const int nnzb, const int num_block_rows);
 
 
@@ -54,7 +54,7 @@ loads (const int r, const int c, const int nnzb, const int num_block_rows);
  * @param c
  * @param nnzb   Number of nonzero blocks in the matrix.
  */
-int 
+long
 stores (const int r, const int c, const int nnzb);
 
 

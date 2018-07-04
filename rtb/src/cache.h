@@ -66,6 +66,9 @@
 #endif // ZYNQ
 
 #ifdef __cplusplus
+#if defined(SYSTEMC)
+#include <systemc.h>
+#endif
 namespace host {
 
 #if defined(ZYNQ)
@@ -100,6 +103,17 @@ inline void cache_invalidate(const void *ptr, size_t size)
 	else Xil_DCacheInvalidateRange((INTPTR)ptr, size);
 }
 #endif // __aarch64__
+
+#elif defined(SYSTEMC)
+// cache management overhead in ns per byte
+#define _NSPB .230
+inline void cache_flush(void) {}
+inline void cache_flush(const void *ptr, size_t size) {wait(_NSPB*size,SC_NS);}
+inline void cache_flush_invalidate(void) {}
+inline void cache_flush_invalidate(const void *ptr, size_t size) {wait(_NSPB*size,SC_NS);}
+inline void cache_invalidate(void) {}
+inline void cache_invalidate(const void *ptr, size_t size) {wait(_NSPB*size,SC_NS);}
+#undef _NSPB
 
 #else // ZYNQ
 inline void cache_flush(void) {}

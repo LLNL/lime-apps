@@ -6,10 +6,10 @@
  */
 
 #include "stream.h"
+
+#if defined(__microblaze__)
+
 #include "xstatus.h"
-
-
-#ifdef __microblaze__
 
 int stream_init(stream_t *port, unsigned id)
 {
@@ -26,7 +26,7 @@ int stream_send(stream_t *port, void *buf, size_t size, unsigned flags)
 		putfslx(*wptr++, 0, FSL_DEFAULT);
 	}
 	if (flags & F_ENDP) putfslx(*wptr, 0, FSL_CONTROL);
-	else putfslx(*wptr++, 0, FSL_DEFAULT);
+	else putfslx(*wptr, 0, FSL_DEFAULT);
 
 	return XST_SUCCESS;
 }
@@ -41,15 +41,16 @@ int stream_recv(stream_t *port, void *buf, size_t size, unsigned flags)
 		getfslx(*wptr++, 0, FSL_DEFAULT);
 	}
 	if (flags & F_ENDP) getfslx(*wptr, 0, FSL_CONTROL);
-	else getfslx(*wptr++, 0, FSL_DEFAULT);
+	else getfslx(*wptr, 0, FSL_DEFAULT);
 
 	return XST_SUCCESS;
 }
 
-#else /* __microblaze__ */
+#else /* ARM */
 
 #define NDEBUG 1
 #include <assert.h>
+#include "xstatus.h"
 
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
@@ -93,7 +94,7 @@ int stream_init(stream_t *port, unsigned id)
 	return Status;
 }
 
-#include <stdio.h>
+//#include <stdio.h>
 int stream_send(stream_t *port, void *buf, size_t size, unsigned flags)
 {
 	XLlFifo *InstancePtr = &port->Instance;
@@ -157,4 +158,4 @@ int stream_recv(stream_t *port, void *buf, size_t size, unsigned flags)
 	return XST_SUCCESS;
 }
 
-#endif /* __microblaze__ */
+#endif /* ARM */

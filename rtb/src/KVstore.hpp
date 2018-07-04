@@ -25,8 +25,8 @@
 
 #else // use CPU
 #include <cstring> // memcpy, memset
-#define memcpy ::memcpy
-#define memset ::memset
+// #define memcpy ::memcpy
+// #define memset ::memset
 #endif
 
 /* NOTE: if invalidate is used on non-cache aligned and sized allocations, */
@@ -114,6 +114,9 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #include "xparameters.h"
 #define THIS_PN ARM0_PN
 #define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
+#elif defined(SYSTEMC)
+#define THIS_PN 0
+#define STREAM_DEVICE_ID 0
 #endif
 
 #define THIS_ID getID(THIS_PN)
@@ -560,7 +563,7 @@ public:
 #endif
 		chk_alloc(data, sizeof(slot_s)*slots, "NALLOC data in setup()");
 		memset(data, 0, sizeof(slot_s)*slots);
-#if defined(USE_STREAM)
+#if defined(USE_STREAM) && defined(__ARM_ARCH)
 		// flush all caches on host for data range
 		// FIXME: can't use cache_flush(ptr, size) because it uses L1D variant
 		Xil_DCacheFlushRange((INTPTR)data, sizeof(slot_s)*slots);
@@ -588,7 +591,16 @@ public:
 	{
 		flit_t reg[7];
 
-		/* LSU2 contiguous store (with stride command) */
+#if defined(CONTIG)
+		/* LSU2 contiguous store (with move command) */
+		reg[1] = 0x00000000;              /* clear status */
+		reg[2] = LSU_CMD(1,LSU_move);     /* reqstat=1, command=move */
+		reg[3] = ATRAN(buf);              /* address */
+		reg[4] = sizeof(mapped_type)*len; /* size */
+		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 4); // go
+		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 4); // debug
+#else
+		/* LSU2 contiguous store (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
 		reg[2] = LSU_CMD(1,LSU_smove); /* reqstat=1, command=smove */
 		reg[3] = ATRAN(buf);           /* address */
@@ -597,6 +609,7 @@ public:
 		reg[6] = len;                  /* repetitions */
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 6); // go
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 6); // debug
+#endif
 
 		/* LSU2 index2 load */
 		reg[1] = 0x00000000;               /* clear status */
@@ -612,8 +625,18 @@ public:
 		reg[2] = topsearch-1;    /* plen, minus 1 */
 		aport_nwrite(PRU0_ID, THIS_ID, 0, 0, reg, 2);
 
+#if defined(CONTIG)
 		/* start streaming keys */
-		/* LSU1 contiguous load (with strided move) */
+		/* LSU1 contiguous load (with move command) */
+		reg[1] = 0x00000000;           /* clear status */
+		reg[2] = LSU_CMD(0,LSU_move);  /* reqstat=0, command=move */
+		reg[3] = ATRAN(key);           /* address */
+		reg[4] = sizeof(key_type)*len; /* size */
+		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 4); // go
+		// aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 0, 0, reg, 4); // debug
+#else
+		/* start streaming keys */
+		/* LSU1 contiguous load (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
 		reg[2] = LSU_CMD(0,LSU_smove); /* reqstat=0, command=smove */
 		reg[3] = ATRAN(key);           /* address */
@@ -622,6 +645,7 @@ public:
 		reg[6] = len;                  /* repetitions */
 		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 6); // go
 		// aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 0, 0, reg, 6); // debug
+#endif
 
 		/* receive store status */
 		stream_recv(gport, reg, 2*sizeof(unsigned), F_BEGP|F_ENDP);
@@ -672,7 +696,7 @@ template<typename K, typename V>
 class KVstore
 : public _KVstore<K,V>
 #if defined(USE_STREAM)
-, stream_port
+, public stream_port
 #endif
 {
 
@@ -971,9 +995,9 @@ public:
 
 }; // class KVstore
 
-// let them be used by application
-//#undef memcpy
-//#undef memset
+// remove application visibility
+#undef memcpy
+#undef memset
 
 #endif // _KV_STORE_HPP
 

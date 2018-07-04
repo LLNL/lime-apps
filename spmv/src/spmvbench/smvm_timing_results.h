@@ -35,9 +35,9 @@ struct SMVM_timing_results
   /** Millions of floating-point operations executed in a single repetition */
   double mflops; 
   /** Number of loads in a single repetition */
-  int num_loads;
+  long num_loads;
   /** Number of stores in a single repetition */
-  int num_stores;
+  long num_stores;
 };
 
 
@@ -74,7 +74,7 @@ smvm_save_timing_results (struct SMVM_timing_results* p_results,
 			  const int nnzb, const int num_trials, 
 			  const double t_median, const double t_min, 
 			  const double t_max, const double mflops, 
-			  const int num_loads, const int num_stores);
+			  const long num_loads, const long num_stores);
 
 #endif /* _smvm_timing_results_h */
 

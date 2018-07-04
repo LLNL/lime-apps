@@ -38,7 +38,7 @@ Casting the ticks to a signed value allows a more efficient
 conversion to a float on x86 CPUs, but it limits the count to one
 less high-order bit. Uncomment "unsigned" to use a full tick count.
 */
-#define us /*unsigned*/
+#define _us /*unsigned*/
 
 #if defined(FTIME)
 
@@ -101,6 +101,14 @@ typedef uint64_t tick_t;
 #define tget(t) t = rpns()
 #define tval(t) (t)
 
+#elif defined(SYSTEMC)
+
+#include <systemc.h>
+typedef uint64 tick_t;
+#define TICKS_SEC 1000000000000ULL
+#define tget(t) t = sc_time_stamp().value()
+#define tval(t) (t)
+
 #else
 
 #include <time.h>
@@ -114,7 +122,7 @@ typedef clock_t tick_t;
 #define tinc(a,b) ((a) += (b))
 #define tdec(a,b) ((a) -= (b))
 #define tdiff(f,s) (tval(f)-tval(s))
-#define tsec(f,s) ((us long long)tdiff(f,s)/(double)TICKS_SEC)
-#define tvsec(v) ((us long long)(v)/(double)TICKS_SEC)
+#define tsec(f,s) ((_us long long)tdiff(f,s)/(double)TICKS_SEC)
+#define tvsec(v) ((_us long long)(v)/(double)TICKS_SEC)
 
 #endif /* _TICKS_H */

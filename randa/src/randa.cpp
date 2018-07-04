@@ -5,11 +5,15 @@
  *      Author: lloyd23
  */
 
+#include <unistd.h> // getopt, optarg
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 #include "hpcc.h"
 #include "RandomAccess.h"
 
 // Example main arguments
-// #define MARGS ""
+// #define MARGS "-s29" *
 
 #include "config.h"
 #include "alloc.h"
@@ -19,11 +23,13 @@
 #include "clocks.h"
 #include "sysinit.h"
 
-// TODO: find a better place for these globals
+#define DEFAULT_SCALE 29U // log 2 size
+#define DEFAULT_VECTOR_LSZ 10U // log 2 size
 
-#if defined(STATS) || defined(TRACE)
-XAxiPmon apm;
-#endif // STATS || TRACE
+unsigned scale = DEFAULT_SCALE;
+unsigned vect_len = 1U<<DEFAULT_VECTOR_LSZ;
+
+// TODO: find a better place for these globals
 
 #if defined(USE_ACC)
 #include "IndexArray.hpp"
@@ -34,30 +40,48 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 MAIN
 {
 	HPCC_Params params;
+	/* * * * * * * * * * get arguments beg * * * * * * * * * */
+	int opt;
+	bool nok = false;
 
 #if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
-#if 0
-	/* test communication performance between Host and DRE (uncomment wait) */
-	{
-		register int i;
-		tick_t t0, t1;
-
-		CLOCKS_EMULATE
-		tget(t0);
-		for (i = 0; i < 1000; i++) {dre.wait();}
-		tget(t1);
-		CLOCKS_NORMAL
-		printf("DRE wait time: %llu ticks\n", tdiff(t1,t0)/1000);
-		printf("DRE wait time: %.3f usec\n", tesec(t1,t0)*1000);
-		return 0;
-	}
-#endif
 #endif // USE_ACC
+	while ((opt = getopt(argc, argv, "s:v:")) != -1) {
+		switch (opt) {
+		case 's':
+			scale = atoi(optarg);
+			break;
+		case 'v':
+			vect_len = (1U << atoi(optarg));
+			if (vect_len < 8) {
+				fprintf(stderr, "vector length must be 8 or greater.\n");
+				nok = true;
+			}
+			break;
+		default: /* '?' */
+			nok = true;
+		}
+	}
+	if (nok) {
+		fprintf(stderr, "Usage: randa -s<int> -v<int>\n");
+		fprintf(stderr, "  -s  table scale 2^n, default: n=%d\n", DEFAULT_SCALE);
+		// not used, currently a constant specified by VECT_LEN in RandomAccess.h
+		// fprintf(stderr, "  -v  vector length 2^n, default: n=%d\n", DEFAULT_VECTOR_LSZ);
+		fprintf(stderr, "\n");
+		return EXIT_FAILURE;
+	}
+#if defined(_OPENMP)
+	// to control the number of threads use: export OMP_NUM_THREADS=N
+	printf("threads: %d\n", omp_get_max_threads());
+#endif
+	printf("table scale: %u\n", scale);
+	printf("vector length: %u\n", VECT_LEN);
+
+	/* * * * * * * * * * get arguments end * * * * * * * * * */
 
 	params.outFname[0] = '\0'; /* use stdout */
-//	params.HPLMaxProcMem = (size_t)1 << 26; /* 64MBytes, use for ZC706 Linux*/
-	params.HPLMaxProcMem = (size_t)1 << 29; /* half-gig */
+	params.HPLMaxProcMem = (size_t)1 << scale;
 	params.RunSingleRandomAccess_LCG = 1;
 
 	/* -------------------------------------------------- */
@@ -71,5 +95,5 @@ MAIN
 	}
 
 	TRACE_CAP
-	return 0;
+	return EXIT_SUCCESS;
 }

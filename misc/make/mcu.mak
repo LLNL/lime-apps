@@ -59,7 +59,7 @@ $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 
 $(OBJECTS): makeflags # rebuild if MAKEFLAGS change
 # Select only command line variables
-cvars = {$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))}
+cvars = _$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))_
 makeflags: FORCE
 	@[ "$(if $(wildcard $@),$(shell cat $@),)" = "$(cvars)" ] || echo $(cvars)> $@
 FORCE: ;
