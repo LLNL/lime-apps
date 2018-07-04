@@ -1,0 +1,66 @@
+$ make D=DIRECT,RDTSC,TICKS_SEC=2200000000
+lloyd23@OUREA ~/work/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.239811 sec
+Insert count: 20135937
+Insert  rate: 4863297.963404 ops/sec
+Run     time: 5.343145 sec
+Oper.   time: 1.202758 sec
+Insert  time: 4.140387 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+Stats   time: 0.000029 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 6608707.723186 ops/sec
+Run     time: 0.161086 sec
+Oper.   time: 0.002420 sec
+Lookup  time: 0.158666 sec
+  Fill  time: 0.158593 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000032 sec
+
+lloyd23@OUREA ~/work/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.60 -c -w8Ki -h.90 -z.99
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.234797 sec
+Insert count: 20135937
+Insert  rate: 4849686.491505 ops/sec
+Run     time: 5.353512 sec
+Oper.   time: 1.201504 sec
+Insert  time: 4.152008 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+Stats   time: 0.000029 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 8396211.120284 ops/sec
+Run     time: 0.000995 sec
+Oper.   time: 0.000019 sec
+Lookup  time: 0.000976 sec
+  Fill  time: 0.000975 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
