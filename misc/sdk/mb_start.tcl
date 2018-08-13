@@ -1,3 +1,4 @@
+# Commands to start a program on the MicroBlaze
 set PROG_ELF [lindex $argv 0]
 puts "connect"
 puts [connect -url tcp:127.0.0.1:3121]

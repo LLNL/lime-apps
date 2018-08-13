@@ -8,6 +8,8 @@
 #ifndef CLOCKS_H_
 #define CLOCKS_H_
 
+#include "config.h"
+
 /* expects ticks.h to be included elsewhere */
 #define tesec(f,s) ((_us long long)tdiff(f,s)/(double)TICKS_ESEC)
 #define tvesec(v) ((_us long long)(v)/(double)TICKS_ESEC)
@@ -42,7 +44,7 @@
 
 #else /* not ZYNQ */
 
-#define TICKS_ESEC (1000000*20)
+#define TICKS_ESEC (TICKS_SEC*20)
 
 #endif /* ZYNQ */
 

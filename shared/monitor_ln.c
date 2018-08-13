@@ -119,7 +119,7 @@ void stats_print(void) {
   /*intrglobaldisable();*/
   /*printf("scalefactor is %d\n", params->scalefactor);*/
   printf("Slot TranW TranR ByteW ByteR StrobeLW\r\n");
-  printf("CPU %s%d %s%d %s%d %s%d %d\r\n",
+  printf("CPU %s%u %s%u %s%u %s%u %u\r\n",
     (intrhwgetstatus() & XAPM_IXR_MC0_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_0),
     (intrhwgetstatus() & XAPM_IXR_MC1_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_1),
     (intrhwgetstatus() & XAPM_IXR_MC2_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_2),
@@ -127,7 +127,7 @@ void stats_print(void) {
     getincrementer(XAPM_INCREMENTER_2)
     );
 #if defined(USE_ACC) 
-  printf("ACC %s%d %s%d %s%d %s%d %d\r\n",
+  printf("ACC %s%u %s%u %s%u %s%u %u\r\n",
     (intrhwgetstatus() & XAPM_IXR_MC4_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_4),
     (intrhwgetstatus() & XAPM_IXR_MC5_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_5),
     (intrhwgetstatus() & XAPM_IXR_MC6_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_6),
@@ -141,7 +141,7 @@ void stats_print(void) {
 
 #if defined(TRACE)
 
-#if ZYNQ == _Z7_
+#if defined(ZYNQ) && ZYNQ == _Z7_
 #define ENTRY_SZ 32U   /* 32 bytes, 256 bits */
 #define ADDR_MASK 0x3FFFFFFFU
 #define TRACE_MEM_SZ (1LU<<30) /* ZC706 */

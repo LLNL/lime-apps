@@ -1,11 +1,11 @@
 #!/bin/sh
 
 # latency R,W
-lat_ns_="85,106 200,400"
-larg_=".10 .50 .90"
+lat_ns_="85,106"
+larg_=".10 .20 .30 .40 .50 .60 .70 .80 .90"
 harg_=".90"
 zarg_=".99"
-config_="USE_HASH"
+config_=USE_HASH
 
 # latency R,W
 # lat_ns_="85,106 200,400"
@@ -14,17 +14,11 @@ config_="USE_HASH"
 # zarg_=".00 .99"
 # config_="STL DIRECT USE_HASH"
 
-build=zynq
-adir=$WORKSPACE_LOC/apps
-echo $adir
-
 # start with clean build
-cd $adir
-make build=$build clean
+make clean
 
 # configure FPGA
-cd $adir
-make build=$build fpga
+make fpga
 
 for lat_ns in $lat_ns_ ; do
   r_ns=${lat_ns%%,*}
@@ -38,8 +32,8 @@ for lat_ns in $lat_ns_ ; do
     echo "load: $larg hit: $harg zipf: $zarg config: $conf"
 
     # make and run application
-    cd $adir/rtb/$build
-    args="-e32Mi -l$larg -rsrr550.fa -w1Mi -h$harg -z$zarg"
+    args="-e32Mi -l$larg -c -w8Ki -h$harg -z$zarg"
+    # args="-e32Mi -l$larg -rsrr550.fa -w1Mi -h$harg -z$zarg"
     make D=$conf,CLOCKS,STATS,T_R=$r_ns,T_W=$w_ns RUN_ARGS="$args" run
 
   done

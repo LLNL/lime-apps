@@ -29,7 +29,7 @@ using namespace Micron::Internal::HMC;
 #define T_QUEUE_R (T_R - T_DRAM_R - T_TRANS) // 00 20 40
 
 // Queue delay, ps per entry
-#define _PSPE 800
+#define _PSPE 1900
 
 // Interconnect bandwidth, ps per byte
 // 32 GiB/s is ~ 29.10 ps/byte
@@ -50,9 +50,9 @@ SC_MODULE(HMCController)
 		if (id < NSOCKETS) {reqcnt[id]++; treqcnt++;}
 
 		// multiple queue delay model
-		delay += sc_time(reqcnt[id] * _PSPE, SC_PS);
+		// delay += sc_time(reqcnt[id] * _PSPE, SC_PS);
 		// single queue delay model
-		// delay += sc_time(treqcnt * _PSPE, SC_PS);
+		delay += sc_time(treqcnt * _PSPE, SC_PS);
 
 		// bandwidth model, for write
 		if (tpay.is_write()) {
@@ -65,10 +65,16 @@ SC_MODULE(HMCController)
 			nextwr = sc_time_stamp() + delay + tslot;
 		}
 
+#if 1
 		// FIXME: use address to determine memory type (SRAM, DRAM)
 		// instead of id (id == 2 is LSU2 write).
 		if (tpay.is_read()) delay += sc_time(T_DRAM_R+T_QUEUE_R, SC_NS);
 		else delay += sc_time(id == 2 ? T_SRAM_W : (T_DRAM_W+T_QUEUE_W), SC_NS);
+#else
+		// accelerator has off-chip transport delay
+		if (tpay.is_read()) delay += sc_time(T_R, SC_NS);
+		else delay += sc_time(T_W, SC_NS);
+#endif
 
 		// cout << reqcnt[0] << ':' << reqcnt[1] << ':' << reqcnt[2] << ':' << reqcnt[3] << endl;
 		// cout << id << ':' << sc_time_stamp() << ':' << sc_time_stamp()+delay << endl;

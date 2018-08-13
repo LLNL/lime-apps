@@ -15,12 +15,13 @@
 #include "port_dma.h"
 #include "ctlreg.h"
 
+#define PEQ_FAC 3 // payload event queue factor
 #define DMAC_DEPTH 4
 #define OUTSTANDING_READ 16
 #define OUTSTANDING_WRITE 16
 // TODO: calculate from MD and max burst length
 #define MAX_BLOCK_SIZE 128
-#define ADDR_CALC_CYCLES 7
+#define ADDR_CALC_CYCLES 6 // 7 hangs HMCSim
 
 // FIXME: duplicated in aport.h, merge?
 enum {
@@ -309,7 +310,7 @@ SC_MODULE(mm2s)
 					unsigned bsize = MAX_BLOCK_SIZE - (addr % MAX_BLOCK_SIZE); // aligned block size
 					unsigned tsize = (size < bsize) ? size : bsize; // transaction size
 					// cout << "id:" << id << " peqcnt:" << peqcnt << endl;
-					if (peqcnt > 0) wait(peqcnt*3); // responses backing up, throttle requests
+					if (peqcnt > 0) wait(peqcnt*PEQ_FAC); // responses backing up, throttle requests
 #if defined(TRACE)
 					extern FILE *tfp;
 					fprintf(tfp, "1,R,0x%08lX,%u,%u,%llu\n", addr, tsize, id, sc_time_stamp().value()/800);
@@ -487,7 +488,7 @@ SC_MODULE(s2mm)
 					unsigned bsize = MAX_BLOCK_SIZE - (addr % MAX_BLOCK_SIZE); // aligned block size
 					unsigned tsize = (size < bsize) ? size : bsize; // transaction size
 					// cout << "id:" << id << " peqcnt:" << peqcnt << endl;
-					if (peqcnt > 0) wait(peqcnt*3); // responses backing up, throttle requests
+					if (peqcnt > 0) wait(peqcnt*PEQ_FAC); // responses backing up, throttle requests
 #if defined(TRACE)
 					extern FILE *tfp;
 					fprintf(tfp, "1,W,0x%08lX,%u,%u,%llu\n", addr, tsize, id, sc_time_stamp().value()/800);

@@ -2,14 +2,23 @@ LABEL = V$(subst .,_,$(VERSION))
 EXE = .elf
 
 #DEFS += -DVERSION=$(VERSION)
+DEFS += -DTIMEOFDAY
 
-ifneq (,$(findstring USE_MARGS,$(DEFS)))
+ifneq ($(findstring USE_MARGS,$(DEFS)),)
   DEFS += -DMARGS='"$(RUN_ARGS)"'
 endif
 
-ifneq (,$(findstring M5,$(DEFS)))
+ifneq ($(findstring M5,$(DEFS)),)
   SRC += ../../m5
   MODULES += m5op_arm_A64
+endif
+
+ifneq ($(findstring CLOCKS,$(DEFS)),)
+  MODULES += clocks_ln
+endif
+
+ifneq ($(filter %STATS %TRACE,$(DEFS)),)
+  MODULES += monitor_ln
 endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
@@ -20,8 +29,11 @@ CC = arm-linux-gnueabihf-gcc
 CXX = arm-linux-gnueabihf-g++
 SIZE = arm-linux-gnueabihf-size
 
-OPT = -O3
-##MACH = -march=armv8-a    # change if targeting 32-bit zynq
+OPT ?= -O3
+ifdef OMP
+  OPT += -fopenmp
+endif
+##MACH = -march=armv8-a    # targeting 32-bit zynq
 CPPFLAGS += -MMD $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CFLAGS += $(MACH) $(OPT) -Wall
@@ -43,12 +55,13 @@ LDFLAGS += -static -L$(HOME)/local/lib
 .PHONY: all
 all: $(TARGET)$(EXE)
 
-$(TARGET)$(EXE): $(OBJECTS) 
-	$(LINK.cpp) $(OBJECTS) $(LDLIBS) $(LFLAGS) -o $@
-	
 .PHONY: run
-run: $(TARGET)
-	./$(TARGET) $(RUN_ARGS)
+run: $(TARGET)$(EXE)
+ifdef OMP
+	OMP_NUM_THREADS=$(OMP) ./$(TARGET)$(EXE) $(RUN_ARGS)
+else
+	./$(TARGET)$(EXE) $(RUN_ARGS)
+endif
 
 .PHONY: clean
 clean:
@@ -63,14 +76,14 @@ vars:
 	@echo OBJECTS: $(OBJECTS)
 	@echo MAKEFILE_LIST: $(MAKEFILE_LIST)
 
-$(TARGET): $(OBJECTS)
+$(TARGET)$(EXE): $(OBJECTS)
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 
 $(OBJECTS): makeflags # rebuild if MAKEFLAGS change
 # Select only command line variables
-cvars = {$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))}
+cvars = _$(strip $(foreach flag,$(MAKEFLAGS),$(if $(findstring =,$(flag)),$(flag),)))_
 makeflags: FORCE
 	@[ "$(if $(wildcard $@),$(shell cat $@),)" = "$(cvars)" ] || echo $(cvars)> $@
 FORCE: ;

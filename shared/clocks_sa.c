@@ -14,9 +14,8 @@
 #define CLOCKS_EMULATE clocks_emulate();
 #define CLOCKS_NORMAL  clocks_normal();
 
-#if ZYNQ == _Z7_
+#if defined(ZYNQ) && ZYNQ == _Z7_
 /* Zynq-7000 Device */
-#define TICKS_ESEC (2571428545UL/2)
 
 void clocks_emulate(void)
 {
@@ -83,9 +82,8 @@ void clocks_normal(void)
 	delay2[2] = 0; delay2[4] = 0; delay3[2] = 0; delay3[4] = 0;
 }
 
-#elif ZYNQ == _ZU_
+#elif defined(ZYNQ) && ZYNQ == _ZU_
 /* Zynq UltraScale+ Device */
-#define TICKS_ESEC (1999980000UL) // 99999000*20
 
 void clocks_emulate(void)
 {

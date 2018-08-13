@@ -3,6 +3,7 @@ VERSION = 3.1
 SRC = ../src ../../shared
 ifneq ($(filter %SYSTEMC,$(DEFS)),)
   SRC += ../../shared/sc
+  LDFLAGS += -static
 endif
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES = server

@@ -8,6 +8,8 @@
 #ifndef MONITOR_H_
 #define MONITOR_H_
 
+#include "config.h"
+
 //------------------ Initialization ------------------//
 
 #if defined(STATS) || defined(TRACE)

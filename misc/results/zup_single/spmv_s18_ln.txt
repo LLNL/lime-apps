@@ -1,0 +1,259 @@
+/root/apps2
+cd bfs/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/bfs/arm_64'
+rm -f   bfs makeflags
+make[1]: Leaving directory '/root/apps2/bfs/arm_64'
+cd dgemm/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/dgemm/arm_64'
+rm -f   dgemm makeflags
+make[1]: Leaving directory '/root/apps2/dgemm/arm_64'
+cd sort/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/sort/arm_64'
+rm -f   sort makeflags
+make[1]: Leaving directory '/root/apps2/sort/arm_64'
+cd strm/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/strm/arm_64'
+rm -f strm.o clocks_ln.o monitor_ln.o strm.d clocks_ln.d monitor_ln.d strm makeflags
+make[1]: Leaving directory '/root/apps2/strm/arm_64'
+cd image/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/image/arm_64'
+rm -f ColorImage.o clocks_ln.o monitor_ln.o image.o image.d ColorImage.d clocks_ln.d monitor_ln.d image makeflags
+make[1]: Leaving directory '/root/apps2/image/arm_64'
+cd pager/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/pager/arm_64'
+rm -f   pager makeflags
+make[1]: Leaving directory '/root/apps2/pager/arm_64'
+cd randa/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/randa/arm_64'
+rm -f randa.o utility.o clocks_ln.o monitor_ln.o core_single_cpu_lcg.o core_single_cpu_lcg.d randa.d utility.d clocks_ln.d monitor_ln.d randa makeflags
+make[1]: Leaving directory '/root/apps2/randa/arm_64'
+cd rtb/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/rtb/arm_64'
+rm -f   rtb makeflags
+make[1]: Leaving directory '/root/apps2/rtb/arm_64'
+cd spmv/arm_64 && make clean
+make[1]: Entering directory '/root/apps2/spmv/arm_64'
+rm -f   spmv makeflags
+make[1]: Leaving directory '/root/apps2/spmv/arm_64'
+r_ns: 45 w_ns: 45
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+SpMV time: 0.334188 sec
+Oper. time: 0.334187 sec
+Cache time: 0.000001 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 566312 6000803 9060896 384284384 3
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            53.340595
+num_loads:          36700188
+num_stores:         71303168
+r_ns: 70 w_ns: 70
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+SpMV time: 0.495488 sec
+Oper. time: 0.495486 sec
+Cache time: 0.000001 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 2252147 14117868 36034052 904549184 12
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            35.976270
+num_loads:          36700188
+num_stores:         71303168
+r_ns: 100 w_ns: 100
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+SpMV time: 0.716999 sec
+Oper. time: 0.716998 sec
+Cache time: 0.000001 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 5013652 24605998 80217760 1576893328 24
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            24.861664
+num_loads:          36700188
+num_stores:         71303168
+r_ns: 200 w_ns: 200
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+SpMV time: 1.350044 sec
+Oper. time: 1.350042 sec
+Cache time: 0.000003 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 8998541 37227589 143975616 -1908967456 33
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            13.203857
+num_loads:          36700188
+num_stores:         71303168
+r_ns: 400 w_ns: 400
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+SpMV time: 2.812158 sec
+Oper. time: 2.812154 sec
+Cache time: 0.000003 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15098992 53692222 241582268 -852973744 49
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            6.338831
+num_loads:          36700188
+num_stores:         71303168
+r_ns: 800 w_ns: 800
+app: spmv config: STOCK
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o spmv.o ../src/spmv.cpp
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o block_smvm_code.o ../src/spmvbench/block_smvm_code.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_benchmark.o ../src/spmvbench/smvm_benchmark.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_results.o ../src/spmvbench/smvm_timing_results.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_timing_run.o ../src/spmvbench/smvm_timing_run.cpp
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_verify_result.o ../src/spmvbench/smvm_verify_result.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o timing.o ../src/spmvbench/timing.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcoo_matrix.o ../src/matrix_generator/bcoo_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o bcsr_matrix.o ../src/matrix_generator/bcsr_matrix.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o create_rand.o ../src/matrix_generator/create_rand.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o __complex.o ../src/bebop_util/__complex.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o mt19937ar.o ../src/bebop_util/mt19937ar.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o random_number.o ../src/bebop_util/random_number.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_malloc.o ../src/bebop_util/smvm_malloc.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o smvm_util.o ../src/bebop_util/smvm_util.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o sort_joint_arrays.o ../src/bebop_util/sort_joint_arrays.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -static -L/root/local/lib  spmv.o block_smvm_code.o smvm_benchmark.o smvm_timing_results.o smvm_timing_run.o smvm_verify_result.o timing.o bcoo_matrix.o bcsr_matrix.o create_rand.o __complex.o mt19937ar.o random_number.o smvm_malloc.o smvm_util.o sort_joint_arrays.o clocks_ln.o monitor_ln.o   -o spmv
+./spmv -c -s18 -n34 -v15
+AXI PMON is in Advanced Mode
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+SpMV time: 6.188967 sec
+Oper. time: 6.188961 sec
+Cache time: 0.000006 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 24012650 75384436 384193456 539677792 119894
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            2.880253
+num_loads:          36700188
+num_stores:         71303168

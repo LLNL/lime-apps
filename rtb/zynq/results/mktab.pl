@@ -24,7 +24,7 @@ sub scan {
 	my $zipf; # distribution, 0 = uniform, !0 = Zipf skew
 	while (<$fhi>) {
 		# print $_;
-		if (/V_W:(\d+) V_R:(\d+)/) {
+		if (/W:(\d+) R:(\d+)/) {
 			$mtime = sprintf "%03u,%03u", $2, $1;
 			next;
 		}

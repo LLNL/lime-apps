@@ -67,7 +67,7 @@ void stats_stop(void)
 void stats_print(void)
 {
 	xil_printf("Slot TranW TranR ByteW ByteR StrobeLW\r\n");
-	xil_printf("CPU %s%d %s%d %s%d %s%d %d\r\n",
+	xil_printf("CPU %s%u %s%u %s%u %s%u %u\r\n",
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC0_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_0),
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC1_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_1),
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC2_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_2),
@@ -75,7 +75,7 @@ void stats_print(void)
 		XAxiPmon_GetIncrementer(&apm, XAPM_INCREMENTER_2)
 		);
 #if defined(USE_ACC)
-	xil_printf("ACC %s%d %s%d %s%d %s%d %d\r\n",
+	xil_printf("ACC %s%u %s%u %s%u %s%u %u\r\n",
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC4_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_4),
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC5_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_5),
 		(XAxiPmon_IntrGetStatus(&apm) & XAPM_IXR_MC6_OVERFLOW_MASK) ? "*" : "", XAxiPmon_GetMetricCounter(&apm, XAPM_METRIC_COUNTER_6),
@@ -127,7 +127,7 @@ void trace_stop(void)
 	XAxiPmon_StopEventLog(&apm);
 }
 
-#if ZYNQ == _Z7_
+#if defined(ZYNQ) && ZYNQ == _Z7_
 #define ENTRY_SZ 32U   /* 32 bytes, 256 bits */
 #define ADDR_MASK 0x3FFFFFFFU
 #define TRACE_MEM_SZ (1LU<<30) /* ZC706 */
@@ -200,6 +200,7 @@ print("f_open\r\n");
 	}
 	Xil_DCacheFlush();
 print("grab\r\n");
+	*tcd = 0;
 	do { /* grab trace */
 		bptr = buf_beg;
 print("fill\r\n");
@@ -287,6 +288,7 @@ void trace_capture(void)
 	/* copy trace to heap */
 	XTime_GetTime(&start);
 	Xil_DCacheFlush();
+	*tcd = 0;
 	do {
 		unsigned int i;
 		tmp = 0;
@@ -356,6 +358,7 @@ void trace_capture(void)
 	register elem_t tmp;
 	unsigned long tot = 0;
 	Xil_DCacheFlush();
+	*tcd = 0;
 	do {
 		unsigned int i;
 		tmp = 0;

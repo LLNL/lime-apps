@@ -1,7 +1,9 @@
 LABEL = V$(subst .,_,$(VERSION))
 
 #DEFS += -DVERSION=$(VERSION)
-DEFS += -DTIMEOFDAY
+ifeq ($(findstring SYSTEMC,$(DEFS)),)
+  DEFS += -DTIMEOFDAY
+endif
 
 ifneq ($(findstring USE_MARGS,$(DEFS)),)
   DEFS += -DMARGS='"$(RUN_ARGS)"'

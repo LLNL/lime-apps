@@ -6,7 +6,7 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.7.1
+PACKAGE = apps-1.8.2
 build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
 #XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
