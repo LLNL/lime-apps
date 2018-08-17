@@ -23,16 +23,30 @@ endif
 OBJECTS = $(addsuffix .o,$(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
 
+ARCH ?= aarch64
+ifneq ($(ARCH),$(shell uname -m))
+  CROSS_COMPILE ?= aarch64-linux-gnu-
+  # CROSS_COMPILE ?= arm-linux-gnueabihf- # 32-bit arm
+endif
+ifneq ($(CROSS_COMPILE),)
+  EXE ?= .elf
+  LD = $(CROSS_COMPILE)ld
+  CC = $(CROSS_COMPILE)gcc
+  CXX = $(CROSS_COMPILE)g++
+endif
+
 OPT ?= -O3
 ifdef OMP
   OPT += -fopenmp
 endif
-MACH = -march=armv8-a
+ifeq ($(ARCH),aarch64)
+  MACH = -march=armv8-a
+endif
 CPPFLAGS += -MMD $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CFLAGS += $(MACH) $(OPT) -Wall
 CXXFLAGS += $(CFLAGS)
-LDFLAGS += -static -L$(HOME)/local/lib
+LDFLAGS += -static
 #LDLIBS += -lrt
 
 # Cancel version control implicit rules
@@ -47,30 +61,30 @@ LDFLAGS += -static -L$(HOME)/local/lib
 .SUFFIXES: .o .c .cc .cpp .h .hpp .d .mak
 
 .PHONY: all
-all: $(TARGET)
+all: $(TARGET)$(EXE)
 
 .PHONY: run
-run: $(TARGET)
+run: $(TARGET)$(EXE)
 ifdef OMP
-	OMP_NUM_THREADS=$(OMP) ./$(TARGET) $(RUN_ARGS)
+	OMP_NUM_THREADS=$(OMP) ./$(TARGET)$(EXE) $(RUN_ARGS)
 else
-	./$(TARGET) $(RUN_ARGS)
+	./$(TARGET)$(EXE) $(RUN_ARGS)
 endif
 
 .PHONY: clean
 clean:
-	$(RM) $(wildcard *.o) $(wildcard *.d) $(TARGET) makeflags
+	$(RM) $(wildcard *.o) $(wildcard *.d) $(TARGET)$(EXE) makeflags
 
 .PHONY: vars
 vars:
-	@echo TARGET: $(TARGET)
+	@echo TARGET: $(TARGET)$(EXE)
 	@echo VERSION: $(VERSION)
 	@echo DEFS: $(DEFS)
 	@echo SRC: $(SRC)
 	@echo OBJECTS: $(OBJECTS)
 	@echo MAKEFILE_LIST: $(MAKEFILE_LIST)
 
-$(TARGET): $(OBJECTS)
+$(TARGET)$(EXE): $(OBJECTS)
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
