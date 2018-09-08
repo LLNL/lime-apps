@@ -51,7 +51,9 @@
 // #define MARGS ""
 
 #include "config.h"
+#ifdef DYN
 #include "alloc.h"
+#endif
 #include "cache.h"
 #include "monitor.h"
 #include "ticks.h"
@@ -256,6 +258,7 @@ MAIN
 #endif
 
 	printf("Array size = %llu (elements), Offset = %d (elements)\n" , (unsigned long long) STREAM_ARRAY_SIZE, OFFSET);
+	printf("Array addr %p %p %p\n", a, b, c);
 	printf("Memory per array = %.1f MiB (= %.1f GiB).\n", 
 		BytesPerWord * ( (double) STREAM_ARRAY_SIZE / 1024.0/1024.0),
 		BytesPerWord * ( (double) STREAM_ARRAY_SIZE / 1024.0/1024.0/1024.0));

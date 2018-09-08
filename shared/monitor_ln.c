@@ -34,6 +34,9 @@
 #include <sys/msg.h>
 #include <sys/ipc.h>
 #include <stdint.h>
+#if defined(PAPI)
+#include <papi.h>
+#endif
 #include "xapm.h"
 #include "xparam.h"
 #include "monitor.h"
@@ -50,8 +53,15 @@
 #define MAP_SIZE 4096
 
 static int uiofd;
+#if defined(PAPI)
+int PAPI_events[] = {
+  PAPI_L1_DCA, PAPI_L1_DCM, PAPI_L2_DCA, PAPI_L2_DCM,
+  PAPI_LD_INS, PAPI_SR_INS, PAPI_TOT_CYC
+};
+static long long counters[7];
+#endif
 
-/* baseaddr and params are definited in xapm.h */
+/* baseaddr and params are defined in xapm.h */
 
 void monitor_init(void) {
   char* uiod = "/dev/uio0";
@@ -79,6 +89,10 @@ void monitor_init(void) {
     printf("AXI PMON is in Profile Mode\n");
   else
     printf("AXI PMON is in trace Mode\n");
+
+#if defined(PAPI)
+  PAPI_library_init(PAPI_VER_CURRENT);
+#endif
 }
 
 void monitor_finish(void) {
@@ -109,10 +123,18 @@ void stats_start(void) {
   intrclear(XAPM_IXR_ALL_MASK);
   resetmetriccounter();
   enablemetricscounter();
+
+#if defined(PAPI)
+  PAPI_start_counters(PAPI_events, 7);
+#endif
 }
 
 void stats_stop(void) {
   disablemetricscounter();
+
+#if defined(PAPI)
+  PAPI_read_counters(counters, 7);
+#endif
 }
 
 void stats_print(void) {
@@ -134,6 +156,11 @@ void stats_print(void) {
     (intrhwgetstatus() & XAPM_IXR_MC7_OVERFLOW_MASK) ? "*" : "", getmetriccounter( XAPM_METRIC_COUNTER_7),
     getincrementer(XAPM_INCREMENTER_6)
     );
+#endif
+
+#if defined(PAPI)
+  printf("%lld L1 accesses, %lld L1 misses (%.2lf%%), %lld L2 accesses and %lld L2 misses (%.2lf%%)\n", counters[0], counters[1], (double)counters[1]*100 / (double)counters[0],counters[2], counters[3], (double)counters[3]*100 / (double)counters[2]);
+  printf("%lld Loads, %lld Stores, %lld Total and %lld Clock cycle\n", counters[4], counters[5], counters[4]+counters[5], counters[6]);
 #endif
 }
 

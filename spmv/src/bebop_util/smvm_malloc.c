@@ -47,12 +47,14 @@
 /* #include <malloc.h> */    /* malloc, realloc */
 #include <stdio.h>     /* the usual output stuff */
 #include <stdlib.h>    /* exit(), malloc(), realloc() */
+#include <string.h>    /* memset() */
+#include "alloc.h"     /* NALLOC(), NFREE() */
 
 
 void*
 mfh_malloc (size_t size, char* srcfile, int linenum)
 {
-  void *ptr = malloc(size);
+  void *ptr = NALLOC(char, size);
 
   if ((ptr == NULL) && (size > 0))
     {
@@ -69,10 +71,10 @@ void*
 mfh_calloc (size_t num_elements, size_t element_size, char* srcfile, 
 	   int linenum)
 {
-  void *ptr = calloc (num_elements, element_size);
+  void *ptr = NALLOC(char, num_elements*element_size);
   /* 
    * If we tried to allocate non-zero amount of memory and it failed,
-   * abort with an error message. 
+   * abort with an error message.
    */
   if ((ptr == NULL) && (num_elements > 0) && (element_size > 0))
     {
@@ -82,6 +84,7 @@ mfh_calloc (size_t num_elements, size_t element_size, char* srcfile,
 	       (unsigned long) element_size);
       smvm_exit (EXIT_FAILURE);
     }
+  memset(ptr, 0, num_elements*element_size);
   return ptr;
 }
 
@@ -89,7 +92,7 @@ mfh_calloc (size_t num_elements, size_t element_size, char* srcfile,
 void*
 mfh_realloc (void* ptr, size_t size, char* srcfile, int linenum)
 {
-  ptr = realloc (ptr, size);
+  ptr = NULL; // realloc(ptr, size); // TODO: need aligned version
 
   if ((ptr == NULL) && (size > 0))
     {
@@ -105,6 +108,6 @@ mfh_realloc (void* ptr, size_t size, char* srcfile, int linenum)
 void
 mfh_free (void* ptr, char* srcfile, int linenum)
 {
-  free (ptr);
+  NFREE(ptr);
 }
 

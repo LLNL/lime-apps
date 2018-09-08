@@ -47,7 +47,10 @@ CPPFLAGS += $(patsubst %,-I%,$(SRC))
 CFLAGS += $(MACH) $(OPT) -Wall
 CXXFLAGS += $(CFLAGS)
 LDFLAGS += -static
-#LDLIBS += -lrt
+ifneq ($(findstring PAPI,$(DEFS)),)
+LDFLAGS += -L/usr/local/lib
+LDLIBS += -lpapi -lpthread
+endif
 
 # Cancel version control implicit rules
 %:: %,v

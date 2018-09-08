@@ -11,12 +11,14 @@
 #include "config.h"
 #include "monitor.h"
 
+/* Switching back to making attribute changes in translation_table.S */
+#if 0 && defined(ZYNQ) && ZYNQ == _Z7_
+#include "xil_mmu.h" // Xil_SetTlbAttributes
+// #include "xil_cache.h" // Xil_xCacheEnable
 /* 0x15de6: Shareable, Domain:1111, Outer & Inner Cacheable: Write-Back, Write-Allocate */
 /* 0x14de6: Shareable, Domain:1111, Inner Cacheable: Write-Back, Write-Allocate */
 /* 0x04c06: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, Write-Allocate */
 /* 0x04c0e: Non-shareable, Domain:0000, Inner Cacheable: Write-Back, no Write-Allocate */
-#if defined(ZYNQ) && ZYNQ == _Z7_
-#include "xil_mmu.h" // Xil_SetTlbAttributes
 static inline void mmu_setup(void) {
 	char *ptr;
 	Xil_SetTlbAttributes((INTPTR)0x40000000, 0x04c06); /* Inner Cacheable */
@@ -40,7 +42,9 @@ static inline void mmu_setup(void) {
 #endif
 static inline void get_args(const char *arg0, int *argc, char **argv[]) {
 	int i, n;
-	char *str, *ptr, *end, **args;
+	char *ptr, *end;
+	char *str, **args;
+	// static char str[256], *args[32];
 	str = (char*)malloc(strlen(MARGS)+1);
 	if (str == NULL) return;
 	strcpy(str, MARGS);
@@ -55,7 +59,7 @@ static inline void get_args(const char *arg0, int *argc, char **argv[]) {
 	if ((ptr = strrchr(arg0, '/')) == NULL) ptr = (char*)arg0; else ptr++;
 	args[0] = ptr;
 	for (ptr = str, i = 1; ptr < end; ) {
-		while (ptr < end && *ptr <= ' ') *ptr++ = '\0';
+		while (ptr < end && *ptr <= ' ') ptr++;
 		if (*ptr > ' ') args[i++] = ptr;
 		while (ptr < end && *ptr >  ' ') ptr++;
 	}
@@ -75,7 +79,23 @@ static inline void get_args(const char *arg0, int *argc, char **argv[]) {
 #define GET_ARGS(arg0)
 #endif
 
-#if defined(_MMU_SETUP) || defined(_GET_ARGS) || defined(_MONITOR_INIT)
+/*
+  There appears to be a bug in clean up after return from main (xil-crt0.S).
+  After multiple runs of a standalone application, it will hang, give
+  irregular results, or not pass self checks. Adding a call to 
+  Xil_DCacheDisable() before return from main seems to fix the problem.
+  Using atexit(Xil_DCacheDisable) does not work. When using atexit,
+  clean up may occur before Xil_DCacheDisable is called.
+*/
+#if defined(ZYNQ) && ZYNQ == _Z7_
+#include "xil_cache.h" // Xil_DCacheDisable
+#define FINI_BUG Xil_DCacheDisable();
+#define _FINI_BUG
+#else
+#define FINI_BUG
+#endif
+
+#if defined(_MMU_SETUP) || defined(_GET_ARGS) || defined(_MONITOR_INIT) || defined(_FINI_BUG)
 #define MAIN \
 static int _sub_main(int argc, char *argv[]); \
 int main(int argc, char *argv[]) \
@@ -86,6 +106,7 @@ int main(int argc, char *argv[]) \
 	MONITOR_INIT \
 	ret = _sub_main(argc, argv); \
 	MONITOR_FINISH \
+	FINI_BUG \
 	return ret; \
 } \
 static int _sub_main(int argc, char *argv[])

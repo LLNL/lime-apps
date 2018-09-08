@@ -2,13 +2,13 @@ set PLAT_DIR [lindex $argv 0]
 puts "connect"
 puts [connect -url tcp:127.0.0.1:3121]
 puts [source C:/Xilinx/SDK/2018.2/scripts/sdk/util/zynqmp_utils.tcl]
-puts [targets -set -filter {name =~"APU*"} -index 0]
+puts [targets -set -filter {name =~"APU*"}]
 puts "rst -srst"
 puts [rst -srst]
 after 2000
 puts "fpga -file $PLAT_DIR/system_wrapper.bit"
 puts [fpga -file $PLAT_DIR/system_wrapper.bit]
-#puts [targets -set -filter {name =~"APU*"} -index 0]
+#puts [targets -set -filter {name =~"APU*"}]
 puts [source $PLAT_DIR/psu_init.tcl]
 puts [psu_init]
 after 1000
