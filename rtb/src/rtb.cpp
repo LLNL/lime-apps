@@ -960,8 +960,8 @@ MAIN
 
 #if 1
 		(void)pcount; /* silence warning */
-		tget(start);
 		if (flags & PFLAG) fprintf(stderr, "...");
+		tget(start);
 		kbuf.block_lookup(wload, warg);
 		lcount = warg;
 		tget(finish);
