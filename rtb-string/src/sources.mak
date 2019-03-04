@@ -8,7 +8,7 @@ endif
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES = server
 else
-  MODULES = rtb fasta path
+  MODULES = rtb path
   ifneq ($(filter zup zynq,$(notdir $(CURDIR))),)
     MODULES += fatfs
   endif

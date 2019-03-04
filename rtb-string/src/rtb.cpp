@@ -25,7 +25,6 @@ $Log: $
 #include <omp.h>
 #endif
 
-#include "fasta.h"
 #include "path.h"
 
 // Example main arguments
@@ -55,6 +54,7 @@ $Log: $
 #define DEFAULT_HITR 0.98
 #define DEFAULT_SKEW 0.0
 #define DEFAULT_WORK 0
+#define DEFAULT_DARG 4096
 
 #define CFLAG 0x01
 #define DFLAG 0x02
@@ -70,8 +70,8 @@ $Log: $
 #define EXT_TERM ".png"
 #endif // ENABLE_PLOT
 
-typedef uint64_t kmer_t;
-#define KEY_SZ sizeof(kmer_t)
+typedef uint64_t ngram_t;
+#define KEY_SZ sizeof(ngram_t)
 typedef unsigned int sid_t;
 #define DAT_SZ sizeof(sid_t)
 typedef unsigned long ulong_t;
@@ -80,9 +80,10 @@ int flags; /* argument flags */
 unsigned earg = DEFAULT_ENT; /* maximum entries (keys) */
 float larg = DEFAULT_LOAD; /* load factor */
 unsigned barg = 1U<<DEFAULT_BLOCK_LSZ; /* buffer block length */
-int karg = DEFAULT_KLEN; /* k-mer length */
+int karg = DEFAULT_KLEN; /* n-gram length */
 float harg = DEFAULT_HITR; /* hit ratio */
 float zarg = DEFAULT_SKEW; /* zipf skew */
+uint64_t darg = DEFAULT_DARG; /* number of random keys to look up */
 char *qarg = NULL; /* query file name (in) */
 char *rarg = NULL; /* reference file name (in) */
 char *sarg = NULL; /* saved workload file name (out) */
@@ -101,38 +102,38 @@ unsigned long long tinsert, tlookup, toper, trun;
 
 // TODO: consider using std::conditional<>::type for result type
 #if defined(MULTIMAP)
-typedef block_multimap<kmer_t,sid_t> kdb_t;
+typedef block_multimap<ngram_t,sid_t> ndb_t;
 #if defined(USE_ACC)
-typedef typename kdb_t::mapped_type* result_type;
+typedef typename ndb_t::mapped_type* result_type;
 inline bool is_valid(const result_type &v) {return v != nullptr;}
 #else // USE_ACC
-typedef std::pair<typename kdb_t::iterator, typename kdb_t::iterator> result_type;
-inline bool is_valid(const result_type &v) {return v.first != typename kdb_t::iterator(nullptr);}
+typedef std::pair<typename ndb_t::iterator, typename ndb_t::iterator> result_type;
+inline bool is_valid(const result_type &v) {return v.first != typename ndb_t::iterator(nullptr);}
 #endif // USE_ACC
 
 #else // MULTIMAP
-typedef block_map<kmer_t,sid_t> kdb_t;
+typedef block_map<ngram_t,sid_t> ndb_t;
 #if 1 || defined(USE_ACC)
-typedef typename kdb_t::mapped_type result_type;
+typedef typename ndb_t::mapped_type result_type;
 inline bool is_valid(const result_type &v) {return v != 0;}
 #else // USE_ACC
-typedef typename kdb_t::iterator result_type;
-inline bool is_valid(const result_type &v) {return v != typename kdb_t::iterator(nullptr);}
+typedef typename ndb_t::iterator result_type;
+inline bool is_valid(const result_type &v) {return v != typename ndb_t::iterator(nullptr);}
 #endif // USE_ACC
 
 #endif // MULTIMAP
 
-typedef typename kdb_t::key_type key_type;
-typedef typename kdb_t::mapped_type mapped_type;
-typedef typename kdb_t::value_type value_type;
-typedef typename kdb_t::size_type size_type;
-typedef typename kdb_t::const_local_iterator const_local_iterator;
+typedef typename ndb_t::key_type key_type;
+typedef typename ndb_t::mapped_type mapped_type;
+typedef typename ndb_t::value_type value_type;
+typedef typename ndb_t::size_type size_type;
+typedef typename ndb_t::const_local_iterator const_local_iterator;
 typedef std::pair<key_type, mapped_type> kvpair_type;
 
-kdb_t kdb;
+ndb_t ndb;
 
-#define LOAD_COUNT kdb.size()
-#define LOAD_MAX (kdb.bucket_count() * larg + 0.5)
+#define LOAD_COUNT ndb.size()
+#define LOAD_MAX (ndb.bucket_count() * larg + 0.5)
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 #if 0
@@ -202,9 +203,9 @@ struct {
 	{
 		tget(t0);
 #if defined(MULTIMAP)
-		result_type res = kdb.equal_range(key);
+		result_type res = ndb.equal_range(key);
 #else
-		result_type res = kdb.find(key);
+		result_type res = ndb.find(key);
 #endif
 		tget(t1);
 		tinc(tlookup, tdiff(t1,t0));
@@ -216,7 +217,7 @@ struct {
 	inline void add(key_type key, mapped_type mval)
 	{
 		tget(t0);
-		kdb.insert({key, mval});
+		ndb.insert({key, mval});
 		tget(t1);
 		tinc(tinsert, tdiff(t1,t0));
 	}
@@ -244,9 +245,9 @@ struct {
 		if (lcount == 0) return;
 		tget(t0);
 #if defined(MULTIMAP)
-		kdb.equal_range(result, keys, lcount);
+		ndb.equal_range(result, keys, lcount);
 #else
-		kdb.find(result, keys, lcount);
+		ndb.find(result, keys, lcount);
 #endif
 		tget(t1);
 		tinc(tlookup, tdiff(t1,t0));
@@ -262,7 +263,7 @@ struct {
 	{
 		if (acount == 0) return;
 		tget(t0);
-		kdb.insert(reinterpret_cast<typename kdb_t::const_pointer>(kvpair), acount);
+		ndb.insert(reinterpret_cast<typename ndb_t::const_pointer>(kvpair), acount);
 		tget(t1);
 		tinc(tinsert, tdiff(t1,t0));
 		acount = 0;
@@ -274,9 +275,9 @@ struct {
 			size_type count = MIN(length, blen-i);
 			tget(t0);
 #if defined(MULTIMAP)
-			kdb.equal_range(result, keys+i, count);
+			ndb.equal_range(result, keys+i, count);
 #else
-			kdb.find(result, keys+i, count);
+			ndb.find(result, keys+i, count);
 #endif
 			tget(t1);
 			tinc(tlookup, tdiff(t1,t0));
@@ -288,7 +289,7 @@ struct {
 		}
 	}
 
-} kbuf;
+} nbuf;
 
 /***************** string functions ****************/
 
@@ -304,76 +305,103 @@ typedef struct {
 } entry_t;
 
 
-int
-File_Read_Entry(std::ifstream& ifile, entry_t* file_entry) {
+std::ifstream& operator>>(std::ifstream& i, entry_t& file_entry) {
 	std::string buf;
-	std::getline(ifile, buf);
-	file_entry->entry_len = buf.length();
-	file_entry->str = (char*)malloc(file_entry->entry_len);
-	memcpy(file_entry->str, buf.c_str(), file_entry->entry_len);
-	return file_entry->entry_len;
+	std::getline(i, buf);
+	file_entry.entry_len = buf.length();
+	file_entry.str = (char*)malloc(file_entry.entry_len);
+	memcpy(file_entry.str, buf.c_str(), file_entry.entry_len);
+	return i;
 }
 
+std::ofstream& operator<<(std::ofstream& o, entry_t& file_entry) {
+	o.write(file_entry.str, file_entry.entry_len);
+	return o;
+}
+
+
 static inline
-int hex2k(char c, kmer_t* v)
-{
+int h2i(char c, unsigned char& v) {
 	if (c >= 'a' && c <= 'f') {
-		*v = c - 'a' + 10;
+		v = c - 'a' + 10;
 	} else if (c >= 'A' && c <= 'F') {
-		*v = c - 'A' + 10;
+		v = c - 'A' + 10;
 	} else if (c >= '0' && c <= '9') {
-		*v = c - '0';
+		v = c - '0';
 	} else {
 		return -1;
 	}
 	return 0;
 }
 
-static
-int str_op(char *str, int slen, int klen, int sid, int op)
+static inline
+int hc2ic(char* b, unsigned char& v)
 {
-	int kcnt = 0;
+	v = 0;
+	for (int i = 0; i < 2; i++) {
+		int sh = 4 * i;
+		unsigned char hv;
+		if (h2i(b[i], hv) < 0) { return -1; }
+		v |= hv << sh;
+	}
+	return 0;
+}
+
+static
+int str_op(char *str, int slen, int nlen, int sid, int op)
+{
+	int ncnt = 0;
 	int j; /* position of last byte in sequence */
 	int k = 0; /* count of contiguous valid characters */
 	unsigned sh = 0;
-	kmer_t kmer = 0; /* canonical k-mer */
+	ngram_t ngram = 0; /* canonical n-gram */
 	int read_mode = READ_MODE_NULL;
 	int input_width = 0; // width of input character. we assume this doesn't change
+	char hbuf[2];
+	int hptr = 0;
 
 	for (j = 0; j < slen; j++) {
 		char c = str[j];
-		kmer_t v = 0;
+		unsigned char v = 0;
 		switch (read_mode) {
 			case READ_MODE_NULL: // skip to next valid character
-				if (c == '"')      { read_mode = READ_MODE_STRING; input_width = 8; }
-				else if (c == '{') { read_mode = READ_MODE_HEX; input_width = 4; }
+				if (c == '"')      { read_mode = READ_MODE_STRING; }
+				else if (c == '{') { read_mode = READ_MODE_HEX; }
 				continue;
 			case READ_MODE_STRING: // read character literals
-				if (c == '"')      { read_mode = READ_MODE_NULL; input_width = 0; continue; }
+				if (c == '"')      { read_mode = READ_MODE_NULL; continue; }
 				v = c;
 				break;
 			case READ_MODE_HEX: // read base-16 encoded character literals
-				if (c == '}')      { read_mode = READ_MODE_NULL; input_width = 0; continue; }
-				if (hex2k(c, &v)) {
+				if (c == '}')      { read_mode = READ_MODE_NULL; continue; }
+				hbuf[hptr++] = c;
+				if (hptr == 2) {
+					hptr = 0;
+					if (hc2ic(hbuf, v) < 0) {
+						// hex buf contained invalid data
+						continue;
+					}
+				} else {
+					// accumulate more characters
 					continue;
 				}
 				break;
 		}
-		v &= (1 << input_width) - 1;
-		kmer |= (v << (sh)); // shift one character into the buffer
-		if (sh < (64u-input_width)) { sh += input_width; }
-		if (++k >= klen) {
-			kcnt++;
-			/* do k-mer op here... */
+		v &= (1 << 8) - 1;
+		ngram |= (v << (sh)); // shift one character into the buffer
+		if (sh < (64u-8)) { sh += 8; }
+		if (++k >= nlen) {
+			ncnt++;
+			/* do n-gram op here... */
 			if (op == OP_ADD) {
-				kbuf.add(kmer, sid);
+				nbuf.add(ngram, sid);
 			} else if (op == OP_LOOKUP) {
-				kbuf.lookup(kmer);
+				nbuf.lookup(ngram);
 			}
-			kmer >>= input_width; // shift one character out of the buffer
+			ngram >>= input_width; // shift one character out of the buffer
 		}
 	}
-	return kcnt;
+	return ncnt;
 }
 
 static inline
@@ -389,9 +417,9 @@ int str_add(char *str, int slen, int klen, int sid)
 }
 
 static
-void ktob(kmer_t kmer, int klen, char *buf)
+std::size_t ktob(ngram_t ngram, int klen, char *buf)
 {
-	printf("{ %" PRIx64 " }", kmer);
+	return sprintf(buf, "{ %" PRIx64 " }", ngram);
 }
 
 /***************** end string functions ****************/
@@ -417,7 +445,7 @@ MAIN
 	char *s;
 
 #if defined(USE_ACC)
-	kdb.acc.wait(); /* wait for accelerator initialization */
+	ndb.acc.wait(); /* wait for accelerator initialization */
 #endif // USE_ACC
 	while (--argc > 0 && (*++argv)[0] == '-')
 		for (s = argv[0]+1; *s; s++)
@@ -462,6 +490,8 @@ MAIN
 				break;
 			case 'd':
 				flags |= DFLAG;
+				if (isdigit(s[1])) darg = atoulk(s+1);
+				s += strlen(s+1);
 				break;
 			case 'q':
 				qarg = s+1;
@@ -507,8 +537,8 @@ MAIN
 		fprintf(stderr, " -- block length must be 2 or greater.\n");
 		nok = 1;
 	}
-	if ((unsigned)karg*2 > sizeof(kmer_t)*8) {
-		fprintf(stderr, " -- k-mer length must be %lu or less.\n", (ulong_t)sizeof(kmer_t)*4);
+	if ((unsigned)karg*2 > sizeof(ngram_t)*8) {
+		fprintf(stderr, " -- n-gram length must be %lu or less.\n", (ulong_t)sizeof(ngram_t)*4);
 		nok = 1;
 	}
 	// TODO: bounds check larg and harg
@@ -518,16 +548,16 @@ MAIN
 		fprintf(stderr, "  -e  max entries (keys) <int>, default %u\n", DEFAULT_ENT);
 		fprintf(stderr, "  -l  load factor <float>, default %.4f\n", DEFAULT_LOAD);
 		fprintf(stderr, "  -b  block length 2^n <int>, default: n=%u\n", DEFAULT_BLOCK_LSZ);
-		fprintf(stderr, "  -k  k-mer length <int>, default %d\n", DEFAULT_KLEN);
+		fprintf(stderr, "  -k  n-gram length <int>, default %d\n", DEFAULT_KLEN);
 		fprintf(stderr, "  -h  hit ratio <float>, default %.4f\n", DEFAULT_HITR);
 		fprintf(stderr, "  -z  zipf skew <float>, default %.4f\n", DEFAULT_SKEW);
 		fprintf(stderr, "  -p  show progress\n");
 		fprintf(stderr, "      ---------- operations ----------\n");
 		fprintf(stderr, "  -c  add random keys\n");
-		fprintf(stderr, "  -d  lookup random keys\n");
-		fprintf(stderr, "  -q  query with FASTA file <in_file>\n");
-		fprintf(stderr, "  -r  read FASTA reference <in_file>\n");
-		fprintf(stderr, "  -s  save workload to FASTA file <out_file>\n");
+		fprintf(stderr, "  -d  lookup random keys <int>, default %d\n", DEFAULT_DARG);
+		fprintf(stderr, "  -q  query with file <in_file>\n");
+		fprintf(stderr, "  -r  read reference <in_file>\n");
+		fprintf(stderr, "  -s  save workload to file <out_file>\n");
 		fprintf(stderr, "  -w  workload length <int>, default %u\n", DEFAULT_WORK);
 		fprintf(stderr, "      --------------------------------\n");
 #if defined(ENABLE_PLOT)
@@ -546,27 +576,27 @@ MAIN
 	if (barg > SP_SIZE/sizeof(unsigned)/8) barg = SP_SIZE/sizeof(unsigned)/8; /* up to 1/8th of scratchpad */
 #endif
 	printf("block length: %u\n", barg);
-	printf("k-mer length: %d\n", karg);
+	printf("n-gram length: %d\n", karg);
 	printf("max entries: %u\n", earg);
 	printf("key size: %lu data size: %lu\n", (ulong_t)KEY_SZ, (ulong_t)DAT_SZ);
 #if defined(USE_ACC)
-	printf("slot size: %lu\n", (ulong_t)sizeof(kdb_t::slot_s));
+	printf("slot size: %lu\n", (ulong_t)sizeof(ndb_t::slot_s));
 #endif // USE_ACC
 
 	/* * * * * * * * * * Start Up * * * * * * * * * */
 	tget(start);
-	kdb.reserve(earg);
-	kbuf.init(barg);
+	ndb.reserve(earg);
+	nbuf.init(barg);
 	tget(finish);
 	printf("Startup time: %f sec\n", tsec(finish, start));
 
 #if 0
 	if (flags & CFLAG || rarg != NULL) {
 		int klim = ceil(log(LOAD_MAX)/log(4));
-		/* test for k-mer length too small for specified load factor */
-		/* if k-mer length is too small, there are not enough permutations */
+		/* test for n-gram length too small for specified load factor */
+		/* if n-gram length is too small, there are not enough permutations */
 		if (karg < klim) { /* 4^karg < LOAD_MAX */
-			fprintf(stderr, " -- k-mer length must be %u or greater.\n", klim);
+			fprintf(stderr, " -- n-gram length must be %u or greater.\n", klim);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -582,30 +612,30 @@ MAIN
 		if (flags & PFLAG) fprintf(stderr, "add");
 		RAND_SEED(42);
 		tinsert = tlookup = 0;
-		kbuf.clear_counts();
-		kdb.clear_time();
+		nbuf.clear_counts();
+		ndb.clear_time();
 		// CLOCKS_EMULATE
-		// CACHE_BARRIER(kdb.acc)
+		// CACHE_BARRIER(ndb.acc)
 		// TRACE_START
 		// STATS_START
 
 		tget(start);
-		/* Add k-mers until the specified load factor is reached */
+		/* Add n-grams until the specified load factor is reached */
 		/* The first test is faster, the second is more accurate. */
-		while (LOAD_COUNT < maxl || kdb.load_factor() < larg) {
-			kmer_t kmer = RAND_GEN;
+		while (LOAD_COUNT < maxl || ndb.load_factor() < larg) {
+			ngram_t ngram = RAND_GEN;
 			sid_t sid = ++acount;
-			kbuf.add(kmer, sid);
+			nbuf.add(ngram, sid);
 			if ((flags & PFLAG) && acount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		kbuf.flush_add();
-		CACHE_SEND_ALL(kdb.acc)
+		nbuf.flush_add();
+		CACHE_SEND_ALL(ndb.acc)
 		tget(finish);
 
-		// CACHE_BARRIER(kdb.acc)
+		// CACHE_BARRIER(ndb.acc)
 		// STATS_STOP
 		// TRACE_STOP
 		// CLOCKS_NORMAL
@@ -618,7 +648,7 @@ MAIN
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Insert  time: %f sec\n", tvesec(tinsert));
-		kdb.print_time();
+		ndb.print_time();
 		// STATS_PRINT
 	}
 
@@ -626,7 +656,7 @@ MAIN
 	if (rarg != NULL) {
 		std::ifstream fin(rarg);
 		entry_t entry;
-		int i, len;
+		int i;
 		size_type pcount = PROGRESS_COUNT;
 		size_type acount = 0; /* add count */
 		size_type tcount = 0; /* total bases count */
@@ -639,31 +669,33 @@ MAIN
 
 		if (flags & PFLAG) fprintf(stderr, "read");
 		tinsert = tlookup = 0;
-		kbuf.clear_counts();
-		kdb.clear_time();
+		nbuf.clear_counts();
+		ndb.clear_time();
 		// CLOCKS_EMULATE
-		// CACHE_BARRIER(kdb.acc)
+		// CACHE_BARRIER(ndb.acc)
 		// TRACE_START
 		// STATS_START
 
 		tget(start);
-		for (i = 1; (len = File_Read_Entry(fin, &entry)) > 0; i++) {
-			acount += str_add(entry.str, len, karg, i);
-			tcount += len;
+		for (i = 1;; i++) {
+			fin >> entry;
+			if (!entry.entry_len) { break; }
+			acount += str_add(entry.str, entry.entry_len, karg, i);
+			tcount += entry.entry_len;
 			if ((flags & PFLAG) && acount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 			free(entry.str);
-			/* Add k-mers until the specified load factor is reached */
+			/* Add n-grams until the specified load factor is reached */
 			/* The first test is faster, the second is more accurate. */
-			if (LOAD_COUNT >= maxl && kdb.load_factor() >= larg) break;
+			if (LOAD_COUNT >= maxl && ndb.load_factor() >= larg) break;
 		}
-		kbuf.flush_add();
-		CACHE_SEND_ALL(kdb.acc)
+		nbuf.flush_add();
+		CACHE_SEND_ALL(ndb.acc)
 		tget(finish);
 
-		// CACHE_BARRIER(kdb.acc)
+		// CACHE_BARRIER(ndb.acc)
 		// STATS_STOP
 		// TRACE_STOP
 		// CLOCKS_NORMAL
@@ -677,10 +709,10 @@ MAIN
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Insert  time: %f sec\n", tvesec(tinsert));
-		kdb.print_time();
+		ndb.print_time();
 		// STATS_PRINT
 		fin.close();
-		if (kdb.load_factor() < larg) {
+		if (ndb.load_factor() < larg) {
 			fprintf(stderr, " -- warning: did not reach load factor: %.4f\n", larg);
 		}
 	}
@@ -690,7 +722,7 @@ MAIN
 		if (flags & PFLAG) fprintf(stderr, "gather stats...\n");
 
 		tget(start);
-		kdb.print_stats();
+		ndb.print_stats();
 		tget(finish);
 		SHOW_HEAP
 		printf("Stats   time: %f sec\n", tsec(finish, start));
@@ -705,27 +737,28 @@ MAIN
 		if (flags & PFLAG) fprintf(stderr, "lookup");
 		RAND_SEED(42);
 		tinsert = tlookup = 0;
-		kbuf.clear_counts();
-		kdb.clear_time();
+		nbuf.clear_counts();
+		ndb.clear_time();
 		CLOCKS_EMULATE
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		TRACE_START
 		STATS_START
 
 		tget(start);
-		while (lcount < kdb.size()) {
-			kmer_t kmer = RAND_GEN;
-			kbuf.lookup(kmer);
+//		while (lcount < ndb.size()) {
+		while (lcount < darg) {
+			ngram_t ngram = RAND_GEN;
+			nbuf.lookup(ngram);
 			lcount++;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		kbuf.flush_lookup();
+		nbuf.flush_lookup();
 		tget(finish);
 
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		STATS_STOP
 		TRACE_STOP
 		CLOCKS_NORMAL
@@ -734,12 +767,12 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Lookup  time: %f sec\n", tvesec(tlookup));
-		kdb.print_time();
+		ndb.print_time();
 		STATS_PRINT
 	}
 
@@ -747,7 +780,6 @@ MAIN
 	if (qarg != NULL) {
 		std::ifstream fin(qarg);
 		entry_t entry;
-		int len;
 		size_type pcount = PROGRESS_COUNT;
 		size_type lcount = 0; /* lookup count */
 		size_type tcount = 0; /* total bases count */
@@ -760,27 +792,29 @@ MAIN
 
 		if (flags & PFLAG) fprintf(stderr, "query");
 		tinsert = tlookup = 0;
-		kbuf.clear_counts();
-		kdb.clear_time();
+		nbuf.clear_counts();
+		ndb.clear_time();
 		CLOCKS_EMULATE
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		TRACE_START
 		STATS_START
 
 		tget(start);
-		while ((len = File_Read_Entry(fin, &entry)) > 0) {
-			lcount += str_lookup(entry.str, len, karg);
-			tcount += len;
+		while (true) {
+			fin >> entry;
+			if (!entry.entry_len) { break; }
+			lcount += str_lookup(entry.str, entry.entry_len, karg);
+			tcount += entry.entry_len;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 			free(entry.str);
 		}
-		kbuf.flush_lookup();
+		nbuf.flush_lookup();
 		tget(finish);
 
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		STATS_STOP
 		TRACE_STOP
 		CLOCKS_NORMAL
@@ -789,19 +823,19 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Bases   rate: %f bp/sec\n", tcount/tvesec(trun));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Lookup  time: %f sec\n", tvesec(tlookup));
-		kdb.print_time();
+		ndb.print_time();
 		STATS_PRINT
 		fin.close();
 	}
 
 	/* * * * * * * * * * Workload * * * * * * * * * */
-	if (warg && kdb.size()) {
+	if (warg && ndb.size()) {
 		double zeta = 0.0;
 		size_type i, j, rank, samples;
 		key_type *wptr;
@@ -824,14 +858,14 @@ MAIN
 		/* calculate zeta */
 		if (zarg != 0.0) {
 			// FIXME: for multimap, use key count
-			size_type zN = kdb.size(); /* Zipf N, dictionary size  */
+			size_type zN = ndb.size(); /* Zipf N, dictionary size  */
 			if (zN > 10000000U) zN = 10000000U;
 			if (flags & PFLAG) fprintf(stderr, "calc zeta... ");
 			for (i = 1; i <= zN; i++) zeta += 1.0/pow((double)i, zarg);
 			if (flags & PFLAG) fprintf(stderr, "%f\n", zeta);
 		}
 
-		/* generate misses by checking if random keys are in kdb */
+		/* generate misses by checking if random keys are in ndb */
 		if (flags & PFLAG) fprintf(stderr, "generate misses...\n");
 		wptr = wload;
 		samples = (1.0-harg)*warg+0.5;
@@ -841,7 +875,7 @@ MAIN
 			/* generate a random item */
 			do {
 				temp = RAND_GEN;
-			} while (kdb.count(temp));
+			} while (ndb.count(temp));
 			wptr[i] = temp;
 #if 1
 			/* repeat item */
@@ -857,7 +891,7 @@ MAIN
 #endif
 		}
 
-		/* generate hits by randomly selecting items from kdb */
+		/* generate hits by randomly selecting items from ndb */
 		if (flags & PFLAG) fprintf(stderr, "generate hits...\n");
 		wptr = wload + i;
 		samples = warg - i;
@@ -867,11 +901,11 @@ MAIN
 			const_local_iterator clit;
 			/* pick a random bucket until a non-empty one is found */
 			do {
-				bucket = rand() % kdb.bucket_count();
-				clit = kdb.cbegin(bucket);
-			} while (clit == kdb.cend(bucket));
+				bucket = rand() % ndb.bucket_count();
+				clit = ndb.cbegin(bucket);
+			} while (clit == ndb.cend(bucket));
 			/* pick a random item from the bucket */
-			for (steps = rand() % kdb.bucket_size(bucket); steps; steps--) clit++;
+			for (steps = rand() % ndb.bucket_size(bucket); steps; steps--) clit++;
 			wptr[i] = clit->first;
 			/* repeat item */
 			if (zarg != 0.0) {
@@ -897,23 +931,22 @@ MAIN
 
 		/* save workload */
 		if (sarg != NULL) {
-			FILE *fout;
-			char hdr[32];
-			char str[48];
-			sequence entry = {hdr, str};
+			std::ofstream fout(sarg);
+
+			char str[256];
+			entry_t entry = {str, 0};
 			size_type pcount = PROGRESS_COUNT-1;
 			size_type scount; /* save count */
 
-			if ((fout = fopen(sarg, "w")) == NULL) {
+			if (!fout.is_open() && !fout.good()) {
 				fprintf(stderr, " -- can't open file: %s\n", sarg);
 				exit(EXIT_FAILURE);
 			}
 
 			if (flags & PFLAG) fprintf(stderr, "save workload");
 			for (scount = 0; scount < warg; scount++) {
-				sprintf(entry.hdr, "%lu", (ulong_t)scount);
-				ktob(wload[scount], karg, entry.str);
-				Fasta_Write_File(fout, &entry, 1, karg);
+				entry.entry_len = ktob(wload[scount], karg, entry.str);
+				fout << entry << std::endl;
 				if ((flags & PFLAG) && scount >= pcount) {
 					fputc('.', stderr);
 					pcount += PROGRESS_COUNT;
@@ -921,16 +954,16 @@ MAIN
 			}
 			if (flags & PFLAG) fputc('\n', stderr);
 
-			fclose(fout);
+			fout.close();
 		}
 
 		/* do lookup */
 		if (flags & PFLAG) fprintf(stderr, "workload");
 		tinsert = tlookup = 0;
-		kbuf.clear_counts();
-		kdb.clear_time();
+		nbuf.clear_counts();
+		ndb.clear_time();
 		CLOCKS_EMULATE
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		TRACE_START
 		STATS_START
 
@@ -938,24 +971,24 @@ MAIN
 		(void)pcount; /* silence warning */
 		if (flags & PFLAG) fprintf(stderr, "...");
 		tget(start);
-		kbuf.block_lookup(wload, warg);
+		nbuf.block_lookup(wload, warg);
 		lcount = warg;
 		tget(finish);
 #else
 		tget(start);
 		while (lcount < warg) {
-			kbuf.lookup(wload[lcount]);
+			nbuf.lookup(wload[lcount]);
 			lcount++;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		kbuf.flush_lookup();
+		nbuf.flush_lookup();
 		tget(finish);
 #endif
 
-		CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(ndb.acc)
 		STATS_STOP
 		TRACE_STOP
 		CLOCKS_NORMAL
@@ -964,13 +997,13 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
 		printf("Lookup  zipf: %.2f\n", zarg);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Lookup  time: %f sec\n", tvesec(tlookup));
-		kdb.print_time();
+		ndb.print_time();
 		STATS_PRINT
 	}
 
