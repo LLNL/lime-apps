@@ -18,6 +18,9 @@ $Log: $
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
+#if defined(SYSTEMC)
+#include <sys/time.h>
+#endif
 
 #include "fasta.h"
 #include "path.h"
@@ -961,10 +964,18 @@ MAIN
 #if 1
 		(void)pcount; /* silence warning */
 		if (flags & PFLAG) fprintf(stderr, "...");
+#if defined(SYSTEMC)
+		struct timeval rt0;
+		gettimeofday(&rt0,NULL);
+#endif
 		tget(start);
 		kbuf.block_lookup(wload, warg);
 		lcount = warg;
 		tget(finish);
+#if defined(SYSTEMC)
+		struct timeval rt1;
+		gettimeofday(&rt1,NULL);
+#endif
 #else
 		tget(start);
 		while (lcount < warg) {
@@ -991,6 +1002,12 @@ MAIN
 		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)kbuf.hits, (double)kbuf.hits/lcount*100.0);
 		printf("Lookup  zipf: %.2f\n", zarg);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
+#if defined(SYSTEMC)
+		printf("Real    time: %f sec\n", 
+			(((unsigned long long)rt1.tv_sec*1000000UL+rt1.tv_usec)  -
+			 ((unsigned long long)rt0.tv_sec*1000000UL+rt0.tv_usec)) /
+			(double)1000000UL);
+#endif
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Lookup  time: %f sec\n", tvesec(tlookup));

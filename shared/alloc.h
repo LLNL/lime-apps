@@ -96,9 +96,11 @@ extern unsigned char _heap_start[];
 
 inline void *spalloc(size_t nbytes)
 {
-	static unsigned char *top = (unsigned char *)SP_BEG;
-	unsigned char *ptr = top;
+	static unsigned char *top = NULL;
+	unsigned char *ptr;
 
+	if (top == NULL) top = (unsigned char *)SP_BEG;
+	ptr = top;
 	if ((uintptr_t)ptr + nbytes > SP_END) return NULL;
 	top += CEIL(nbytes, ALIGN_SZ);
 	return ptr;

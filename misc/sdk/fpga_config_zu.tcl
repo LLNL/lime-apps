@@ -1,7 +1,7 @@
 set PLAT_DIR [lindex $argv 0]
 puts "connect"
 puts [connect -url tcp:127.0.0.1:3121]
-puts [source C:/Xilinx/SDK/2018.2/scripts/sdk/util/zynqmp_utils.tcl]
+puts [source [regsub "Vivado" $::env(XILINX_VIVADO) "SDK"]/scripts/sdk/util/zynqmp_utils.tcl]
 puts [targets -set -filter {name =~"APU*"}]
 puts "rst -srst"
 puts [rst -srst]

@@ -18,10 +18,12 @@ OPTM = -O2
 MACH = -mcpu=v9.6 -mlittle-endian -mno-xl-reorder -mxl-barrel-shift -mno-xl-soft-div -mno-xl-soft-mul
 CPPFLAGS += -MMD $(DEFS)
 CPPFLAGS += $(patsubst %,-I%,$(SRC))
-CPPFLAGS += -I$(BSP)/engine_0_mcu_0_microblaze_0/include
+# CPPFLAGS += -I$(BSP)/engine_0_mcu_0_microblaze_0/include
+CPPFLAGS += -I$(BSP)/engine_0_microblaze_0/include
 CFLAGS += $(MACH) $(OPTM) -Wall -fno-strict-aliasing -ffunction-sections -fdata-sections
 CXXFLAGS += $(CFLAGS)
-LDFLAGS += -Wl,-T -Wl,mcu_lscript.ld -L$(BSP)/engine_0_mcu_0_microblaze_0/lib -Wl,--no-relax -Wl,--gc-sections
+# LDFLAGS += -Wl,-T -Wl,mcu_lscript.ld -L$(BSP)/engine_0_mcu_0_microblaze_0/lib -Wl,--no-relax -Wl,--gc-sections
+LDFLAGS += -Wl,-T -Wl,mcu_lscript.ld -L$(BSP)/engine_0_microblaze_0/lib -Wl,--no-relax -Wl,--gc-sections
 LDLIBS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
 # Cancel version control implicit rules

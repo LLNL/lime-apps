@@ -11,21 +11,27 @@ build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
 #XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
 XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
+SEP := ,
+DS = $(subst $(SEP), ,$(D))
 
 .PHONY: all
 all:
-ifeq ($(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))),)
+ifeq ($(filter CLIENT USE_LSU USE_HASH,$(DS)),)
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
 	cd sort/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
 	cd xsb/$(build) && $(MAKE) $@
 endif
+ifeq ($(filter CLIENT,$(DS)),)
+	cd rtb/$(build) && $(MAKE) $@
+endif
+ifeq ($(filter USE_HASH,$(DS)),)
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
-	cd rtb/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
+endif
 
 .PHONY: bfs
 bfs:
@@ -88,15 +94,19 @@ else ifeq ($(build),zup)
 endif
 
 .DEFAULT:
-ifeq ($(or $(findstring CLIENT,$(D)),$(findstring USE_LSU,$(D))),)
+ifeq ($(filter CLIENT USE_LSU USE_HASH,$(DS)),)
 	cd bfs/$(build) && $(MAKE) $@
 	cd dgemm/$(build) && $(MAKE) $@
 	cd sort/$(build) && $(MAKE) $@
 	cd strm/$(build) && $(MAKE) $@
 	cd xsb/$(build) && $(MAKE) $@
 endif
+ifeq ($(filter CLIENT,$(DS)),)
+	cd rtb/$(build) && $(MAKE) $@
+endif
+ifeq ($(filter USE_HASH,$(DS)),)
 	cd image/$(build) && $(MAKE) $@
 	cd pager/$(build) && $(MAKE) $@
 	cd randa/$(build) && $(MAKE) $@
-	cd rtb/$(build) && $(MAKE) $@
 	cd spmv/$(build) && $(MAKE) $@
+endif
