@@ -164,7 +164,7 @@ ndb_t ndb;
 
 #endif
 
-struct {
+struct nmer_buf_t {
 	size_type length; /* length of buffers */
 	size_type lcount; /* count of items in lookup buffers */
 	size_type acount; /* count of items in add buffer */
@@ -175,12 +175,7 @@ struct {
 	result_type *result;
 	kvpair_type *kvpair;
 
-	void clear_counts(void)
-	{
-		hits = 0;
-	}
-
-	void init(size_type buf_len)
+	nmer_buf_t(size_type buf_len)
 	{
 		length = buf_len;
 		acount = 0;
@@ -194,7 +189,17 @@ struct {
 
 		kvpair = SP_NALLOC(kvpair_type, length); /* used on add */
 		chk_alloc(kvpair, sizeof(kvpair_type)*length, "SP_NALLOC kvpair in init()");
+	}
 
+	~nmer_buf_t() {
+		free(keys);
+		free(result);
+		free(kvpair);
+	}
+
+	void clear_counts(void)
+	{
+		hits = 0;
 	}
 
 #if defined(NO_BUFFER)
@@ -289,15 +294,18 @@ struct {
 		}
 	}
 
-} nbuf;
+};
+
+nmer_buf_t* nbuf;
 
 /***************** string functions ****************/
 
-#define READ_MODE_NULL   0
-#define READ_MODE_STRING 1
-#define READ_MODE_HEX    2
-#define OP_ADD           0
-#define OP_LOOKUP        1
+#define READ_MODE_NULL       0
+#define READ_MODE_STRING     1
+#define READ_MODE_STRING_ESC 2
+#define READ_MODE_HEX        3
+#define OP_ADD               0
+#define OP_LOOKUP            1
 
 typedef struct {
 	char *str;
@@ -309,8 +317,10 @@ std::ifstream& operator>>(std::ifstream& i, entry_t& file_entry) {
 	std::string buf;
 	std::getline(i, buf);
 	file_entry.entry_len = buf.length();
-	file_entry.str = (char*)malloc(file_entry.entry_len);
-	memcpy(file_entry.str, buf.c_str(), file_entry.entry_len);
+	if (file_entry.entry_len) {
+		file_entry.str = (char*)malloc(file_entry.entry_len);
+		memcpy(file_entry.str, buf.c_str(), file_entry.entry_len);
+  }
 	return i;
 }
 
@@ -353,10 +363,8 @@ int str_op(char *str, int slen, int nlen, int sid, int op)
 	int ncnt = 0;
 	int j; /* position of last byte in sequence */
 	int k = 0; /* count of contiguous valid characters */
-	unsigned sh = 0;
 	ngram_t ngram = 0; /* canonical n-gram */
 	int read_mode = READ_MODE_NULL;
-	int input_width = 0; // width of input character. we assume this doesn't change
 	char hbuf[2];
 	int hptr = 0;
 
@@ -367,10 +375,16 @@ int str_op(char *str, int slen, int nlen, int sid, int op)
 			case READ_MODE_NULL: // skip to next valid character
 				if (c == '"')      { read_mode = READ_MODE_STRING; }
 				else if (c == '{') { read_mode = READ_MODE_HEX; }
+				k = 0;
 				continue;
 			case READ_MODE_STRING: // read character literals
+				if (c == '\\')      { read_mode = READ_MODE_STRING_ESC; continue; }
 				if (c == '"')      { read_mode = READ_MODE_NULL; continue; }
 				v = c;
+				break;
+			case READ_MODE_STRING_ESC:
+				v = c;
+				read_mode = READ_MODE_STRING;
 				break;
 			case READ_MODE_HEX: // read base-16 encoded character literals
 				if (c == '}')      { read_mode = READ_MODE_NULL; continue; }
@@ -387,18 +401,17 @@ int str_op(char *str, int slen, int nlen, int sid, int op)
 				}
 				break;
 		}
-		v &= (1 << 8) - 1;
-		ngram |= (v << (sh)); // shift one character into the buffer
-		if (sh < (64u-8)) { sh += 8; }
+		ngram >>= 8; // shift one character out of the buffer
+		v &= 255;
+		ngram |= ((uint64_t)v << (56)); // shift the new character into the buffer
 		if (++k >= nlen) {
 			ncnt++;
 			/* do n-gram op here... */
 			if (op == OP_ADD) {
-				nbuf.add(ngram, sid);
+				nbuf->add(ngram, sid);
 			} else if (op == OP_LOOKUP) {
-				nbuf.lookup(ngram);
+				nbuf->lookup(ngram);
 			}
-			ngram >>= input_width; // shift one character out of the buffer
 		}
 	}
 	return ncnt;
@@ -586,7 +599,7 @@ MAIN
 	/* * * * * * * * * * Start Up * * * * * * * * * */
 	tget(start);
 	ndb.reserve(earg);
-	nbuf.init(barg);
+	nbuf = new nmer_buf_t(barg);
 	tget(finish);
 	printf("Startup time: %f sec\n", tsec(finish, start));
 
@@ -612,7 +625,7 @@ MAIN
 		if (flags & PFLAG) fprintf(stderr, "add");
 		RAND_SEED(42);
 		tinsert = tlookup = 0;
-		nbuf.clear_counts();
+		nbuf->clear_counts();
 		ndb.clear_time();
 		// CLOCKS_EMULATE
 		// CACHE_BARRIER(ndb.acc)
@@ -625,13 +638,13 @@ MAIN
 		while (LOAD_COUNT < maxl || ndb.load_factor() < larg) {
 			ngram_t ngram = RAND_GEN;
 			sid_t sid = ++acount;
-			nbuf.add(ngram, sid);
+			nbuf->add(ngram, sid);
 			if ((flags & PFLAG) && acount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		nbuf.flush_add();
+		nbuf->flush_add();
 		CACHE_SEND_ALL(ndb.acc)
 		tget(finish);
 
@@ -669,7 +682,7 @@ MAIN
 
 		if (flags & PFLAG) fprintf(stderr, "read");
 		tinsert = tlookup = 0;
-		nbuf.clear_counts();
+		nbuf->clear_counts();
 		ndb.clear_time();
 		// CLOCKS_EMULATE
 		// CACHE_BARRIER(ndb.acc)
@@ -691,7 +704,7 @@ MAIN
 			/* The first test is faster, the second is more accurate. */
 			if (LOAD_COUNT >= maxl && ndb.load_factor() >= larg) break;
 		}
-		nbuf.flush_add();
+		nbuf->flush_add();
 		CACHE_SEND_ALL(ndb.acc)
 		tget(finish);
 
@@ -705,7 +718,7 @@ MAIN
 		toper = trun-tinsert-tlookup;
 		printf("Insert count: %lu\n", (ulong_t)acount);
 		printf("Insert  rate: %f ops/sec\n", acount/tvesec(tinsert));
-		printf("Bases   rate: %f bp/sec\n", tcount/tvesec(trun));
+		printf("Byte    rate: %f b/sec\n", tcount/tvesec(trun));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Insert  time: %f sec\n", tvesec(tinsert));
@@ -737,7 +750,7 @@ MAIN
 		if (flags & PFLAG) fprintf(stderr, "lookup");
 		RAND_SEED(42);
 		tinsert = tlookup = 0;
-		nbuf.clear_counts();
+		nbuf->clear_counts();
 		ndb.clear_time();
 		CLOCKS_EMULATE
 		CACHE_BARRIER(ndb.acc)
@@ -748,14 +761,14 @@ MAIN
 //		while (lcount < ndb.size()) {
 		while (lcount < darg) {
 			ngram_t ngram = RAND_GEN;
-			nbuf.lookup(ngram);
+			nbuf->lookup(ngram);
 			lcount++;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		nbuf.flush_lookup();
+		nbuf->flush_lookup();
 		tget(finish);
 
 		CACHE_BARRIER(ndb.acc)
@@ -767,7 +780,7 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf->hits, (double)nbuf->hits/lcount*100.0);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
@@ -792,7 +805,7 @@ MAIN
 
 		if (flags & PFLAG) fprintf(stderr, "query");
 		tinsert = tlookup = 0;
-		nbuf.clear_counts();
+		nbuf->clear_counts();
 		ndb.clear_time();
 		CLOCKS_EMULATE
 		CACHE_BARRIER(ndb.acc)
@@ -811,7 +824,7 @@ MAIN
 			}
 			free(entry.str);
 		}
-		nbuf.flush_lookup();
+		nbuf->flush_lookup();
 		tget(finish);
 
 		CACHE_BARRIER(ndb.acc)
@@ -823,9 +836,9 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf->hits, (double)nbuf->hits/lcount*100.0);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
-		printf("Bases   rate: %f bp/sec\n", tcount/tvesec(trun));
+		printf("Byte    rate: %f b/sec\n", tcount/tvesec(trun));
 		printf("Run     time: %f sec\n", tvesec(trun));
 		printf("Oper.   time: %f sec\n", tvesec(toper));
 		printf("Lookup  time: %f sec\n", tvesec(tlookup));
@@ -960,7 +973,7 @@ MAIN
 		/* do lookup */
 		if (flags & PFLAG) fprintf(stderr, "workload");
 		tinsert = tlookup = 0;
-		nbuf.clear_counts();
+		nbuf->clear_counts();
 		ndb.clear_time();
 		CLOCKS_EMULATE
 		CACHE_BARRIER(ndb.acc)
@@ -971,20 +984,20 @@ MAIN
 		(void)pcount; /* silence warning */
 		if (flags & PFLAG) fprintf(stderr, "...");
 		tget(start);
-		nbuf.block_lookup(wload, warg);
+		nbuf->block_lookup(wload, warg);
 		lcount = warg;
 		tget(finish);
 #else
 		tget(start);
 		while (lcount < warg) {
-			nbuf.lookup(wload[lcount]);
+			nbuf->lookup(wload[lcount]);
 			lcount++;
 			if ((flags & PFLAG) && lcount >= pcount) {
 				fputc('.', stderr);
 				pcount += PROGRESS_COUNT;
 			}
 		}
-		nbuf.flush_lookup();
+		nbuf->flush_lookup();
 		tget(finish);
 #endif
 
@@ -997,7 +1010,7 @@ MAIN
 		trun = tdiff(finish, start);
 		toper = trun-tinsert-tlookup;
 		printf("Lookup count: %lu\n", (ulong_t)lcount);
-		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf.hits, (double)nbuf.hits/lcount*100.0);
+		printf("Lookup  hits: %lu %.2f%%\n", (ulong_t)nbuf->hits, (double)nbuf->hits/lcount*100.0);
 		printf("Lookup  zipf: %.2f\n", zarg);
 		printf("Lookup  rate: %f ops/sec\n", lcount/tvesec(tlookup));
 		printf("Run     time: %f sec\n", tvesec(trun));
@@ -1008,6 +1021,7 @@ MAIN
 	}
 
 	/* * * * * * * * * * Wrap Up * * * * * * * * * */
+	delete nbuf;
 
 	TRACE_CAP
 	return EXIT_SUCCESS;
