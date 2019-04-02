@@ -1,5 +1,5 @@
-TARGET = rtb
-VERSION = 3.1
+TARGET = ngram
+VERSION = 1.0
 SRC = ../src ../../shared
 ifneq ($(filter %SYSTEMC,$(DEFS)),)
   SRC += ../../shared/sc
@@ -8,7 +8,7 @@ endif
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES = server
 else
-  MODULES = rtb path
+  MODULES = ngram path
   ifneq ($(filter zup zynq,$(notdir $(CURDIR))),)
     MODULES += fatfs
   endif

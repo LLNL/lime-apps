@@ -1,7 +1,7 @@
 /*
 $Id: $
 
-Description: read test bench
+Description: ngram test bench
 
 $Log: $
 */
@@ -192,9 +192,9 @@ struct nmer_buf_t {
 	}
 
 	~nmer_buf_t() {
-		free(keys);
-		free(result);
-		free(kvpair);
+		SP_NFREE(keys);
+		SP_NFREE(result);
+		SP_NFREE(kvpair);
 	}
 
 	void clear_counts(void)
