@@ -10,6 +10,9 @@ XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"$(RUN_ARGS)"'
 
+# Overwrite 32-bit Standalone sbrk with 64-bit version
+# MODULES += sbrk_sa
+
 ifneq ($(findstring M5,$(DEFS)),)
   SRC += ../../m5
   MODULES += m5op_arm_A64

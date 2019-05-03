@@ -121,11 +121,11 @@ inline void spfree(void *aptr)
 #if defined(ZYNQ)
 #ifdef __cplusplus
 #include <cstdio> // printf
-#include <cstdint> // uintXX_t
+#include <cstdint> // intptr_t
 extern "C" {void *_sbrk(intptr_t increment); void *sbrk(intptr_t increment);}
 #else
 #include <stdio.h> // printf
-#include <stdint.h> // uintXX_t
+#include <stdint.h> // intptr_t
 extern void *_sbrk(intptr_t increment); extern void *sbrk(intptr_t increment);
 #endif
 extern unsigned char _heap_start[];
@@ -136,8 +136,8 @@ inline void show_heap(void)
 	unsigned char *ptr = (unsigned char *)sbrk(0);
 	printf("heap start:%p top:%p end:%p\ntotal:%tu used:%tu\n",
 	_heap_start, _ptr, _heap_end, _heap_end - _heap_start, _ptr - _heap_start);
-	if (ptr != _heap_start) {
-		printf(" -- warning: sbrk has been called!\n");
+	if (ptr != _heap_start && ptr != _ptr) {
+		printf(" -- warning: sbrk has been called and differs from _sbrk!\n");
 		printf("heap start:%p top:%p end:%p\ntotal:%tu used:%tu\n",
 		_heap_start, ptr, _heap_end, _heap_end - _heap_start, ptr - _heap_start);
 	}

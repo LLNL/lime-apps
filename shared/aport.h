@@ -29,6 +29,9 @@
 #define LSU_CMD(reqs,cmd) \
 	((reqs) << 7 | (cmd))
 
+#define LSU_ACMD(addr,reqs,cmd) \
+	((((uintptr_t)(addr) >> 16)&0x70000) | (reqs) << 7 | (cmd))
+
 #define READ_CH 0
 #define WRITE_CH 1
 
@@ -96,17 +99,17 @@ extern void aport_nwrite(unsigned fwd_id, unsigned ret_id, unsigned go, unsigned
 
 //      load-store unit
 //      register map
-// reg   31  bits   0
-//     |--------------|
-//   0 | status:32    | zero:24 okay:1 slverr:1 decerr:1 interr:1 treqstat:1 tdest:3
-//   1 | command:8    | tdest:8 tid:8 reqstat:1 ignore:4 command:3
-//   2 | address:32   |
-//   3 | size:30      |
-//   4 | inc/index:30 |
-//   5 | rep/trans:30 |
-//   6 | ignore:32    |
-//   7 | ignore:32    |
-//     |--------------|
+// reg   31   bits   0
+//     |---------------|
+//   0 | status:32     | zero:24 okay:1 slverr:1 decerr:1 interr:1 treqstat:1 tdest:3
+//   1 | addrhi/cmd:32 | addrhi:16 ignore:8 reqstat:1 ignore:4 command:3
+//   2 | addrlo:32     |
+//   3 | size:30       |
+//   4 | inc/index:30  |
+//   5 | rep/trans:30  |
+//   6 | ignore:32     |
+//   7 | ignore:32     |
+//     |---------------|
 
 //      probe unit
 //      register map

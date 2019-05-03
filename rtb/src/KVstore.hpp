@@ -594,7 +594,7 @@ public:
 #if defined(CONTIG)
 		/* LSU2 contiguous store (with move command) */
 		reg[1] = 0x00000000;              /* clear status */
-		reg[2] = LSU_CMD(1,LSU_move);     /* reqstat=1, command=move */
+		reg[2] = LSU_ACMD(buf,1,LSU_move);     /* reqstat=1, command=move */
 		reg[3] = ATRAN(buf);              /* address */
 		reg[4] = sizeof(mapped_type)*len; /* size */
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 4); // go
@@ -602,7 +602,7 @@ public:
 #else
 		/* LSU2 contiguous store (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_CMD(1,LSU_smove); /* reqstat=1, command=smove */
+		reg[2] = LSU_ACMD(buf,1,LSU_smove); /* reqstat=1, command=smove */
 		reg[3] = ATRAN(buf);           /* address */
 		reg[4] = sizeof(mapped_type);  /* size */
 		reg[5] = sizeof(mapped_type);  /* increment */
@@ -613,7 +613,7 @@ public:
 
 		/* LSU2 index2 load */
 		reg[1] = 0x00000000;               /* clear status */
-		reg[2] = LSU_CMD(0,LSU_index2);    /* reqstat=0, command=index2 */
+		reg[2] = LSU_ACMD(data_base,0,LSU_index2);    /* reqstat=0, command=index2 */
 		reg[3] = ATRAN(data_base);         /* base address */
 		reg[4] = sizeof(slot_s);           /* size */
 		reg[5] = 0x00000000;               /* index (spacer) */
@@ -629,7 +629,7 @@ public:
 		/* start streaming keys */
 		/* LSU1 contiguous load (with move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_CMD(0,LSU_move);  /* reqstat=0, command=move */
+		reg[2] = LSU_ACMD(key,0,LSU_move);  /* reqstat=0, command=move */
 		reg[3] = ATRAN(key);           /* address */
 		reg[4] = sizeof(key_type)*len; /* size */
 		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 4); // go
@@ -638,7 +638,7 @@ public:
 		/* start streaming keys */
 		/* LSU1 contiguous load (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_CMD(0,LSU_smove); /* reqstat=0, command=smove */
+		reg[2] = LSU_ACMD(key,0,LSU_smove); /* reqstat=0, command=smove */
 		reg[3] = ATRAN(key);           /* address */
 		reg[4] = sizeof(key_type);     /* size */
 		reg[5] = stride;               /* increment */

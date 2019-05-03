@@ -277,6 +277,8 @@ public:
 	void print_stats(void)
 	{
 		typedef unsigned long ul_t;
+		printf("table addr: %p\n", acc.data_base);
+		printf("table size: %lu\n", (ul_t)acc.data_len*sizeof(slot_s));
 		printf("size: %lu\n", (ul_t)size());
 		printf("load_factor (elem): %f\n", load_factor());
 		printf("bucket_count: %lu\n", (ul_t)bucket_count());
@@ -594,6 +596,8 @@ public:
 	void print_stats(void)
 	{
 		typedef unsigned long ul_t;
+		printf("table addr: %p\n", acc.data_base);
+		printf("table size: %lu\n", (ul_t)acc.data_len*sizeof(slot_s));
 		printf("size: %lu unique: %lu duplicates: %lu %.2f%%\n",
 			(ul_t)size(), (ul_t)acc.elements, (ul_t)(size()-acc.elements),
 			(double)(size()-acc.elements)/size()*100.0);
