@@ -6,7 +6,7 @@
 # $Log: $
 #
 
-PACKAGE = apps-1.8.4
+PACKAGE = apps-1.8.5
 build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
 #XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
@@ -75,7 +75,7 @@ xsb:
 
 .PHONY: dist
 dist: distclean
-	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs .project *
+	tar --transform 's,^,$(PACKAGE)/,' -czf ../$(PACKAGE).tgz --exclude-vcs *
 
 .PHONY: distclean
 distclean:
