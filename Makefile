@@ -1,12 +1,12 @@
 #
 # $Id: $
 #
-# Description: Makefile for apps
+# Description: Makefile for lime-apps
 #
 # $Log: $
 #
 
-PACKAGE = apps-1.8.5
+PACKAGE = lime-apps-1.8.5
 build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
 #XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
