@@ -28,34 +28,33 @@
 #define FIRST_RD_LEN 1
 #define LAST_RD_LEN 1
 
-#define A0_ID 6
+#define A0_ID 16
 #define A0_ARLEN 8
 #define A0_AWLEN 8
 #define A0_RID A0_ID
 #define A0_ARID A0_ID
 #define A0_BID A0_ID
 #define A0_AWID A0_ID
-#define A0_ARADDR 32
-#define A0_AWADDR 32
+#define A0_ARADDR 40
+#define A0_AWADDR 40
 
-#define A1_ID 2
+#define A1_ID 3
 #define A1_ARLEN 8
 #define A1_AWLEN 8
 #define A1_RID A1_ID
 #define A1_ARID A1_ID
 #define A1_BID A1_ID
 #define A1_AWID A1_ID
-#define A1_ARADDR 32
-#define A1_AWADDR 32
+#define A1_ARADDR 40
+#define A1_AWADDR 40
 
 //default system parameters
-#define STREAM_SIZE 256
-#define TCD_LINE_SIZE 32
+#define STREAM_SIZE 512  //kluge, to compensate for extra zeros
 #define SW_ID 1
 #define TRACE_ID 0
 #define BYTE 8
 
-unsigned int nextfield(char **a, unsigned int len);
+unsigned long long int nextfield(char **a, unsigned int len);
 char *int2string(unsigned input_int);
 
 
@@ -79,19 +78,17 @@ int main(int argc, char *argv[])
 	unsigned long timestamp = 0;
 
 	while (1) {
-		int i, j, k, val;
+		int i, k, val;
 		//READ BYTES FROM FILE
-		for (k = 0; k < STREAM_SIZE; k = k+TCD_LINE_SIZE) {
-			for (j = 24; j > -1; j = j-8) {
-				val = fgetc(readfp);
-				if (val == EOF) {
-					printf("TRACE END....EOF FOUND\n");
-					goto term;
-				}
-				TCD_BYTE = int2string(val);
-				for (i = 0; i < 8; i++) {
-					 bitstream[i+j+k] = TCD_BYTE[i];
-				}
+		for (k = STREAM_SIZE-8; k >= 0; k = k-8) {
+			val = fgetc(readfp);
+			if (val == EOF) {
+				printf("TRACE END....EOF FOUND\n");
+				goto term;
+			}
+			TCD_BYTE = int2string(val);
+			for (i = 0; i < 8; i++) {
+				 bitstream[i+k] = TCD_BYTE[i];
 			}
 		}
 
@@ -115,6 +112,7 @@ int main(int argc, char *argv[])
 			unsigned int SW = nextfield(&cursor,SW_PACKET_LEN);
 			fprintf(writefp, "S,,0x%X,,,%lu\n",SW,timestamp);
 		} else if (logID == TRACE_ID) {
+
 			//APM0 PARSING
 			unsigned int a0_ext_event = nextfield(&cursor,EXT_EVENT_LEN);
 			unsigned int a0_wr_addr_latch = nextfield(&cursor,WRITE_ADDR_LATCH_LEN);
@@ -124,14 +122,14 @@ int main(int argc, char *argv[])
 			unsigned int a0_rd_addr_latch = nextfield(&cursor,READ_ADDR_LATCH_LEN);
 			unsigned int a0_first_rd = nextfield(&cursor,FIRST_RD_LEN);
 			unsigned int a0_last_rd = nextfield(&cursor,LAST_RD_LEN);
-			unsigned int a0_arlen = (nextfield(&cursor,A0_ARLEN)+1)*4;
-			unsigned int a0_awlen = (nextfield(&cursor,A0_AWLEN)+1)*4;
+			unsigned int a0_arlen = (nextfield(&cursor,A0_ARLEN)+1)*16;
+			unsigned int a0_awlen = (nextfield(&cursor,A0_AWLEN)+1)*16;
 			unsigned int a0_rid = nextfield(&cursor,A0_RID);
 			unsigned int a0_arid = nextfield(&cursor,A0_ARID);
 			unsigned int a0_bid = nextfield(&cursor,A0_BID);
 			unsigned int a0_awid = nextfield(&cursor,A0_AWID);
-			unsigned int a0_araddr = nextfield(&cursor,A0_ARADDR);
-			unsigned int a0_awaddr = nextfield(&cursor,A0_AWADDR);
+			unsigned long long int a0_araddr = nextfield(&cursor,A0_ARADDR);
+			unsigned long long int a0_awaddr = nextfield(&cursor,A0_AWADDR);
 
 			//APM1 PARSING
 			unsigned int a1_ext_event = nextfield(&cursor,EXT_EVENT_LEN);
@@ -142,18 +140,18 @@ int main(int argc, char *argv[])
 			unsigned int a1_rd_addr_latch = nextfield(&cursor,READ_ADDR_LATCH_LEN);
 			unsigned int a1_first_rd = nextfield(&cursor,FIRST_RD_LEN);
 			unsigned int a1_last_rd = nextfield(&cursor,LAST_RD_LEN);
-			unsigned int a1_arlen = (nextfield(&cursor,A1_ARLEN)+1)*8;
-			unsigned int a1_awlen = (nextfield(&cursor,A1_AWLEN)+1)*8;
+			unsigned int a1_arlen = (nextfield(&cursor,A1_ARLEN)+1)*16;
+			unsigned int a1_awlen = (nextfield(&cursor,A1_AWLEN)+1)*16;
 			unsigned int a1_rid = nextfield(&cursor,A1_RID);
 			unsigned int a1_arid = nextfield(&cursor,A1_ARID);
 			unsigned int a1_bid = nextfield(&cursor,A1_BID);
 			unsigned int a1_awid = nextfield(&cursor,A1_AWID);
-			unsigned int a1_araddr = nextfield(&cursor,A1_ARADDR);
-			unsigned int a1_awaddr = nextfield(&cursor,A1_AWADDR);
+			unsigned long long int a1_araddr = nextfield(&cursor,A1_ARADDR);
+			unsigned long long int a1_awaddr = nextfield(&cursor,A1_AWADDR);
 
 			//APM0 FILE WRITE
 			if (a0_wr_addr_latch == 1) {
-				fprintf(writefp,"0,W,0x%X,%u,%u,%lu\n",a0_awaddr,a0_awlen,a0_awid,timestamp);
+				fprintf(writefp,"0,W,0x%010llX,%u,%u,%lu\n",a0_awaddr,a0_awlen,a0_awid,timestamp);
 			}
 			if (a0_first_wr == 1) {
 				fprintf(writefp,"0,FW,,,,%lu\n",timestamp);
@@ -165,7 +163,7 @@ int main(int argc, char *argv[])
 				fprintf(writefp,"0,B,,,%u,%lu\n",a0_bid,timestamp);
 			}
 			if (a0_rd_addr_latch == 1) {
-				fprintf(writefp,"0,R,0x%X,%u,%u,%lu\n",a0_araddr,a0_arlen,a0_arid,timestamp);
+				fprintf(writefp,"0,R,0x%010llX,%u,%u,%lu\n",a0_araddr,a0_arlen,a0_arid,timestamp);
 			}
 			if (a0_first_rd == 1) {
 				fprintf(writefp,"0,FR,,,%u,%lu\n",a0_rid,timestamp);
@@ -176,7 +174,7 @@ int main(int argc, char *argv[])
 
 			//APM1 FILE WRITE
 			if (a1_wr_addr_latch == 1) {
-				fprintf(writefp,"1,W,0x%X,%u,%u,%lu\n",a1_awaddr,a1_awlen,a1_awid,timestamp);
+				fprintf(writefp,"1,W,0x%010llX,%u,%u,%lu\n",a1_awaddr,a1_awlen,a1_awid,timestamp);
 			}
 			if (a1_first_wr == 1) {
 				fprintf(writefp,"1,FW,,,,%lu\n",timestamp);
@@ -188,7 +186,7 @@ int main(int argc, char *argv[])
 				fprintf(writefp,"1,B,,,%u,%lu\n",a1_bid,timestamp);
 			}
 			if (a1_rd_addr_latch == 1) {
-				fprintf(writefp,"1,R,0x%X,%u,%u,%lu\n",a1_araddr,a1_arlen,a1_arid,timestamp);
+				fprintf(writefp,"1,R,0x%010llX,%u,%u,%lu\n",a1_araddr, a1_arlen,a1_arid,timestamp);
 			}
 			if (a1_first_rd == 1) {
 				fprintf(writefp,"1,FR,,,%u,%lu\n",a1_rid,timestamp);
@@ -205,10 +203,10 @@ term:
 	return 0;
 }
 
-unsigned int nextfield(char **a, unsigned int len)
+unsigned long long int nextfield(char **a, unsigned int len)
 {
-	unsigned int num = 0;
-	unsigned int mask = 1;
+	unsigned long long int num = 0;
+	unsigned long long int mask = 1;
 	while (len--) {
 		num |= (*(*a)-- == '1') ? mask : 0;
 		mask <<= 1;
