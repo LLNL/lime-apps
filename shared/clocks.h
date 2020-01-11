@@ -11,8 +11,8 @@
 #include "config.h"
 
 /* expects ticks.h to be included elsewhere */
-#define tesec(f,s) ((_us long long)tdiff(f,s)/(double)TICKS_ESEC)
-#define tvesec(v) ((_us long long)(v)/(double)TICKS_ESEC)
+#define tesec(f,s) ((_uns long long)tdiff(f,s)/(double)TICKS_ESEC)
+#define tvesec(v) ((_uns long long)(v)/(double)TICKS_ESEC)
 
 #if defined(CLOCKS)
 

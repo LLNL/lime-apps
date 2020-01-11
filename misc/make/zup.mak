@@ -4,8 +4,7 @@ EXE = .elf
 WORKSPACE_LOC ?= ../../..
 BSP = $(WORKSPACE_LOC)/standalone_bsp_a53
 HWP = $(WORKSPACE_LOC)/hw_platform_0
-#XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
-XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
+XSDB := xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"$(RUN_ARGS)"'

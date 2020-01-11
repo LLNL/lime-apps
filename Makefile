@@ -9,7 +9,6 @@
 PACKAGE = lime-apps-1.8.5
 build=x86_64
 HWP = $(WORKSPACE_LOC)/hw_platform_0
-#XSDB = xmd$(if $(findstring Linux,$(shell uname -s)),,.bat) -tcl
 XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 SEP := ,
 DS = $(subst $(SEP), ,$(D))
@@ -91,6 +90,8 @@ ifeq ($(build),zynq)
 	$(XSDB) misc/sdk/fpga_config_z7.tcl $(HWP)
 else ifeq ($(build),zup)
 	$(XSDB) misc/sdk/fpga_config_zu.tcl $(HWP)
+else
+	@echo "specify build=zup|zynq"
 endif
 
 .DEFAULT:

@@ -22,6 +22,10 @@ ifneq ($(filter %STATS %TRACE,$(DEFS)),)
   MODULES += monitor_ln
 endif
 
+ifneq ($(filter %CLOCKS %STATS %TRACE,$(DEFS)),)
+  MODULES += devtree
+endif
+
 ifneq ($(findstring SYSTEMC,$(DEFS)),)
   ifneq ($(findstring HMCSIM,$(DEFS)),)
     SRC += $(HOME)/work/hmcsim-2.3

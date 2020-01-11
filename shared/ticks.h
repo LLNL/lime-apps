@@ -38,7 +38,7 @@ Casting the ticks to a signed value allows a more efficient
 conversion to a float on x86 CPUs, but it limits the count to one
 less high-order bit. Uncomment "unsigned" to use a full tick count.
 */
-#define _us /*unsigned*/
+#define _uns /*unsigned*/
 
 #if defined(FTIME)
 
@@ -122,7 +122,7 @@ typedef clock_t tick_t;
 #define tinc(a,b) ((a) += (b))
 #define tdec(a,b) ((a) -= (b))
 #define tdiff(f,s) (tval(f)-tval(s))
-#define tsec(f,s) ((_us long long)tdiff(f,s)/(double)TICKS_SEC)
-#define tvsec(v) ((_us long long)(v)/(double)TICKS_SEC)
+#define tsec(f,s) ((_uns long long)tdiff(f,s)/(double)TICKS_SEC)
+#define tvsec(v) ((_uns long long)(v)/(double)TICKS_SEC)
 
 #endif /* _TICKS_H */

@@ -5,174 +5,166 @@
  *      Author: Abhishek Jain
  */
 
-
 #if defined(CLOCKS)
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <sys/time.h>  /* to time trace capture */
-#include <errno.h>
-#include <sys/msg.h>
-#include <sys/ipc.h>
-#include <stdint.h>
-#include "xparam.h"
-#include "clocks.h"
+#include <stdio.h> /* printf, fprintf, perror, fopen, fwrite */
+#include <stdlib.h> /* exit */
+#include <stdint.h> /* uint64_t */
 
-#define MAP_SIZE 4096
+#include "clocks.h"
+#include "devtree.h"
+
+#define DEV_TREE "/sys/firmware/devicetree/base/amba_pl@0"
+
+/* TODO: make clocks_init() and clocks_finish() functions (like monitor_ln.c) */
+/* TODO: check number of slots before mmaping & accessing delay units */
+
 
 void clocks_emulate(void)
 {
-  volatile unsigned int *delay0;
-  volatile unsigned int *delay1;
-  // volatile unsigned int *delay2;
-  // volatile unsigned int *delay3;
-  int delay0_fd;
-  int delay1_fd;
-  FILE *fp;
+	int found;
+	struct {uint64_t len, addr;} reg;
 
-  delay0_fd = open("/dev/mem", O_RDWR|O_SYNC);
-  if (delay0_fd < 0) {
-    printf("Opening file /dev/mem : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
+	/* delay0 */
+	found = dev_search(DEV_TREE, "axi_delay", 1, "reg", &reg, sizeof(reg));
+	if (found != 1) {
+		fprintf(stderr, "Can't find delay0 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay0 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay0 == MAP_FAILED) {
+		perror("delay0 mmap failed");
+		exit(1);
+	}
+	/* delay1 */
+	found = dev_search(DEV_TREE, "axi_delay", 2, "reg", &reg, sizeof(reg));
+	if (found != 2) {
+		fprintf(stderr, "Can't find delay1 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay1 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay1 == MAP_FAILED) {
+		perror("delay1 mmap failed");
+		exit(1);
+	}
+	/* delay2 */
+	found = dev_search(DEV_TREE, "axi_delay", 3, "reg", &reg, sizeof(reg));
+	if (found != 3) {
+		fprintf(stderr, "Can't find delay2 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay2 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay2 == MAP_FAILED) {
+		perror("delay2 mmap failed");
+		exit(1);
+	}
+	/* delay3 */
+	found = dev_search(DEV_TREE, "axi_delay", 4, "reg", &reg, sizeof(reg));
+	if (found != 4) {
+		fprintf(stderr, "Can't find delay3 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay3 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay3 == MAP_FAILED) {
+		perror("delay3 mmap failed");
+		exit(1);
+	}
 
-  delay0 = (unsigned int *)mmap(NULL,
-      XPAR_AXI_DELAY_0_HIGHADDR - XPAR_AXI_DELAY_0_BASEADDR,
-      PROT_READ|PROT_WRITE, MAP_SHARED, delay0_fd,
-      XPAR_AXI_DELAY_0_BASEADDR);
+	FILE *fp = fopen("/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed", "w+b");
+	if (fp == NULL) {
+		perror("Can't open frequency scaling file");
+		exit(1);
+	}
 
-  if (delay0 == MAP_FAILED) {
-    printf("delay0 mmap failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n",strerror(errno));
-    exit(1);
-  }
+	{char *str = (char *)"137999"; fwrite(str, sizeof(char), sizeof(str), fp);}
+	delay0[2] = 6*(T_SRAM_W+T_TRANS)           - 52; delay0[4] = 6*(T_SRAM_R+T_TRANS)           - 69; /* .16 ns per count */
+	delay1[2] = 6*(T_DRAM_W+T_QUEUE_W+T_TRANS) - 52; delay1[4] = 6*(T_DRAM_R+T_QUEUE_R+T_TRANS) - 69;
+	delay2[2] = 6*(T_SRAM_W)                   - 48; delay2[4] = 6*(T_SRAM_R)                   - 66;
+	delay3[2] = 6*(T_DRAM_W+T_QUEUE_W)         - 48; delay3[4] = 6*(T_DRAM_R+T_QUEUE_R)         - 66;
 
-  delay1_fd = open("/dev/mem", O_RDWR|O_SYNC);
-  if (delay1_fd < 0) {
-    printf("Opening file /dev/mem : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
+	printf("SRAM_W:%d SRAM_R:%d DRAM_W:%d DRAM_R:%d\nQUEUE_W:%d QUEUE_R:%d TRANS:%d W:%d R:%d\n",
+		T_SRAM_W, T_SRAM_R, T_DRAM_W, T_DRAM_R, T_QUEUE_W, T_QUEUE_R, T_TRANS,
+		T_DRAM_W+T_QUEUE_W+T_TRANS, T_DRAM_R+T_QUEUE_R+T_TRANS);
+	// printf("ARM_PLL_CTRL:%08X DDR_PLL_CTRL:%08X IO_PLL_CTRL:%08X\n", *apll_c, *dpll_c, *iopll_c);
+	// printf("ARM_CLK_CTRL:%08X DDR_CLK_CTRL:%08X\n", *arm_cc, *ddr_cc);
+	// printf("FPGA0_CLK_CTRL:%08X FPGA1_CLK_CTRL:%08X\n", *fpga0_cc, *fpga1_cc);
+	printf("Slot 0 - CPU_SRAM_B:%u CPU_SRAM_R:%u CPU_DRAM_B:%u CPU_DRAM_R:%u\n", delay0[2], delay0[4], delay1[2], delay1[4]);
+	printf("Slot 1 - ACC_SRAM_B:%u ACC_SRAM_R:%u ACC_DRAM_B:%u ACC_DRAM_R:%u\n", delay2[2], delay2[4], delay3[2], delay3[4]);
 
-  delay1 = (unsigned int *)mmap(NULL,
-      XPAR_AXI_DELAY_1_HIGHADDR - XPAR_AXI_DELAY_1_BASEADDR,
-      PROT_READ|PROT_WRITE, MAP_SHARED, delay1_fd,
-      XPAR_AXI_DELAY_1_BASEADDR);
-
-  if (delay1 == MAP_FAILED) {
-    printf("delay1 mmap failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
-
-  fp = fopen("/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed", "w+b");
-  if (fp == NULL) {
-    printf("Opening file for frequency scaling : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
-
-  {char *str = (char *)"137999"; fwrite(str, sizeof(char), sizeof(str), fp);}
-  delay0[2] = 6*(T_SRAM_W+T_TRANS)           - 52; delay0[4] = 6*(T_SRAM_R+T_TRANS)           - 69; /* .16 ns per count */
-  delay1[2] = 6*(T_DRAM_W+T_QUEUE_W+T_TRANS) - 52; delay1[4] = 6*(T_DRAM_R+T_QUEUE_R+T_TRANS) - 69;
-  // delay2[2] = 6*(T_SRAM_W)                   - 48; delay2[4] = 6*(T_SRAM_R)                   - 66;
-  // delay3[2] = 6*(T_DRAM_W+T_QUEUE_W)         - 48; delay3[4] = 6*(T_DRAM_R+T_QUEUE_R)         - 66;
-
-  printf("SRAM_W:%d SRAM_R:%d DRAM_W:%d DRAM_R:%d\nQUEUE_W:%d QUEUE_R:%d TRANS:%d W:%d R:%d\n",
-    T_SRAM_W, T_SRAM_R, T_DRAM_W, T_DRAM_R, T_QUEUE_W, T_QUEUE_R, T_TRANS,
-    T_DRAM_W+T_QUEUE_W+T_TRANS, T_DRAM_R+T_QUEUE_R+T_TRANS);
-  // printf("ARM_PLL_CTRL:%08X DDR_PLL_CTRL:%08X IO_PLL_CTRL:%08X\n", *apll_c, *dpll_c, *iopll_c);
-  // printf("ARM_CLK_CTRL:%08X DDR_CLK_CTRL:%08X\n", *arm_cc, *ddr_cc);
-  // printf("FPGA0_CLK_CTRL:%08X FPGA1_CLK_CTRL:%08X\n", *fpga0_cc, *fpga1_cc);
-  printf("Slot 0 - CPU_SRAM_B:%u CPU_SRAM_R:%u CPU_DRAM_B:%u CPU_DRAM_R:%u\n", delay0[2], delay0[4], delay1[2], delay1[4]);
-  // printf("Slot 1 - ACC_SRAM_B:%u ACC_SRAM_R:%u ACC_DRAM_B:%u ACC_DRAM_R:%u\n", delay2[2], delay2[4], delay3[2], delay3[4]);
-
-  fclose(fp);
-  munmap((void *)delay0, MAP_SIZE);
-  munmap((void *)delay1, MAP_SIZE);
-  close(delay0_fd);
-  close(delay1_fd);
+	fclose(fp);
+	dev_munmap((void *)delay0);
+	dev_munmap((void *)delay1);
+	dev_munmap((void *)delay2);
+	dev_munmap((void *)delay3);
 }
 
 void clocks_normal(void)
 {
-  volatile unsigned int *delay0;
-  volatile unsigned int *delay1;
-  // volatile unsigned int *delay2;
-  // volatile unsigned int *delay3;
-  int delay0_fd;
-  int delay1_fd;
-  FILE *fp;
+	int found;
+	struct {uint64_t len, addr;} reg;
 
-  delay0_fd = open("/dev/mem", O_RDWR|O_SYNC);
-  if (delay0_fd < 0) {
-    printf("Opening file /dev/mem : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
+	/* delay0 */
+	found = dev_search(DEV_TREE, "axi_delay", 1, "reg", &reg, sizeof(reg));
+	if (found != 1) {
+		fprintf(stderr, "Can't find delay0 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay0 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay0 == MAP_FAILED) {
+		perror("delay0 mmap failed");
+		exit(1);
+	}
+	/* delay1 */
+	found = dev_search(DEV_TREE, "axi_delay", 2, "reg", &reg, sizeof(reg));
+	if (found != 2) {
+		fprintf(stderr, "Can't find delay1 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay1 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay1 == MAP_FAILED) {
+		perror("delay1 mmap failed");
+		exit(1);
+	}
+	/* delay2 */
+	found = dev_search(DEV_TREE, "axi_delay", 3, "reg", &reg, sizeof(reg));
+	if (found != 3) {
+		fprintf(stderr, "Can't find delay2 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay2 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay2 == MAP_FAILED) {
+		perror("delay2 mmap failed");
+		exit(1);
+	}
+	/* delay3 */
+	found = dev_search(DEV_TREE, "axi_delay", 4, "reg", &reg, sizeof(reg));
+	if (found != 4) {
+		fprintf(stderr, "Can't find delay3 reg space in device tree.\n");
+		exit(1);
+	}
+	volatile unsigned int *delay3 = (unsigned int *)dev_mmap(reg.addr);
+	if (delay3 == MAP_FAILED) {
+		perror("delay3 mmap failed");
+		exit(1);
+	}
 
-  delay0 = (unsigned int *)mmap(NULL,
-      XPAR_AXI_DELAY_0_HIGHADDR - XPAR_AXI_DELAY_0_BASEADDR,
-      PROT_READ|PROT_WRITE, MAP_SHARED, delay0_fd,
-      XPAR_AXI_DELAY_0_BASEADDR);
+	FILE *fp = fopen("/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed", "w+b");
+	if (fp == NULL) {
+		perror("Can't open frequency scaling file");
+		exit(1);
+	}
 
-  if (delay0 == MAP_FAILED) {
-    printf("delay0 mmap failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n",strerror(errno));
-    exit(1);
-  }
+	{char *str = (char *)"1099999"; fwrite(str, sizeof(char), sizeof(str), fp);}
+	delay0[2] = 0; delay0[4] = 0;
+	delay1[2] = 0; delay1[4] = 0;
+	delay2[2] = 0; delay2[4] = 0;
+	delay3[2] = 0; delay3[4] = 0;
 
-  delay1_fd = open("/dev/mem", O_RDWR|O_SYNC);
-  if (delay1_fd < 0) {
-    printf("Opening file /dev/mem : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
-
-  delay1 = (unsigned int *)mmap(NULL,
-      XPAR_AXI_DELAY_1_HIGHADDR - XPAR_AXI_DELAY_1_BASEADDR,
-      PROT_READ|PROT_WRITE, MAP_SHARED, delay1_fd,
-      XPAR_AXI_DELAY_1_BASEADDR);
-
-  if (delay1 == MAP_FAILED) {
-    printf("delay1 mmap failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
-
-  fp = fopen("/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed", "w+b");
-  if (fp == NULL) {
-    printf("Opening file for frequency scaling : Failed\n");
-    printf("Error no is : %d\n", errno);
-    printf("Error description is : %s\n", strerror(errno));
-    exit(1);
-  }
-
-  {char *str = (char *)"1099999"; fwrite(str, sizeof(char), sizeof(str), fp);}
-  delay0[2] = 0; delay0[4] = 0; delay1[2] = 0; delay1[4] = 0;
-  // delay2[2] = 0; delay2[4] = 0; delay3[2] = 0; delay3[4] = 0;
-
-  fclose(fp);
-  munmap((void *)delay0, MAP_SIZE);
-  munmap((void *)delay1, MAP_SIZE);
-  close(delay0_fd);
-  close(delay1_fd);
+	fclose(fp);
+	dev_munmap((void *)delay0);
+	dev_munmap((void *)delay1);
+	dev_munmap((void *)delay2);
+	dev_munmap((void *)delay3);
 }
 
 #endif /* CLOCKS */

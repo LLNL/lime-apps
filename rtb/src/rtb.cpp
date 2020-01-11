@@ -610,8 +610,8 @@ MAIN
 		tinsert = tlookup = 0;
 		kbuf.clear_counts();
 		kdb.clear_time();
-		// CLOCKS_EMULATE
-		// CACHE_BARRIER(kdb.acc)
+		CLOCKS_EMULATE
+		CACHE_BARRIER(kdb.acc)
 		// TRACE_START
 		// STATS_START
 
@@ -631,10 +631,10 @@ MAIN
 		CACHE_SEND_ALL(kdb.acc)
 		tget(finish);
 
-		// CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(kdb.acc)
 		// STATS_STOP
 		// TRACE_STOP
-		// CLOCKS_NORMAL
+		CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
 
 		trun = tdiff(finish, start);
@@ -667,8 +667,8 @@ MAIN
 		tinsert = tlookup = 0;
 		kbuf.clear_counts();
 		kdb.clear_time();
-		// CLOCKS_EMULATE
-		// CACHE_BARRIER(kdb.acc)
+		CLOCKS_EMULATE
+		CACHE_BARRIER(kdb.acc)
 		// TRACE_START
 		// STATS_START
 
@@ -690,10 +690,10 @@ MAIN
 		CACHE_SEND_ALL(kdb.acc)
 		tget(finish);
 
-		// CACHE_BARRIER(kdb.acc)
+		CACHE_BARRIER(kdb.acc)
 		// STATS_STOP
 		// TRACE_STOP
-		// CLOCKS_NORMAL
+		CLOCKS_NORMAL
 		if (flags & PFLAG) fputc('\n', stderr);
 
 		trun = tdiff(finish, start);

@@ -542,7 +542,7 @@ static struct xapm_param *params;
 *
 ******************************************************************************/
 #define readreg(baseaddr, regoffset) \
-			(*(u32 *)(baseaddr + regoffset))
+			(*(volatile u32 *)(baseaddr + regoffset))
 
 /*****************************************************************************/
 /**
@@ -562,7 +562,7 @@ static struct xapm_param *params;
 *
 ******************************************************************************/
 #define writereg(baseaddr, regoffset, data) \
-				(*(u32 *)(baseaddr + regoffset) = data)
+				(*(volatile u32 *)(baseaddr + regoffset) = data)
 
 /****************************************************************************/
 /**

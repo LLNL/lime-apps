@@ -96,6 +96,12 @@ void stats_print(void)
 #include "xil_cache.h" /* Xil_DCacheFlush */
 #include <xtime_l.h> /* XTime, XTime_GetTime, COUNTS_PER_SECOND */
 
+typedef int tcd_t;
+
+// TODO: add to xaxipmon.h?
+#define XAPM_FLAG_MIDWR    0x00000080 /* Mid Write Flag */
+#define XAPM_FLAG_MIDRD    0x00000100 /* Mid Read Flag */
+
 void trace_start(void)
 {
 #if TRACE == _TALL_
@@ -107,6 +113,8 @@ void trace_start(void)
 		XAPM_FLAG_RDADDR|
 		XAPM_FLAG_FIRSTRD|
 		XAPM_FLAG_LASTRD|
+		XAPM_FLAG_MIDWR|
+		XAPM_FLAG_MIDRD|
 		XAPM_FLAG_SWDATA
 	);
 #else
@@ -127,39 +135,53 @@ void trace_stop(void)
 	XAxiPmon_StopEventLog(&apm);
 }
 
-#if defined(ZYNQ) && ZYNQ == _Z7_
-#define ENTRY_SZ 32U   /* 32 bytes, 256 bits */
-#define ADDR_MASK 0x3FFFFFFFU
-#define TRACE_MEM_SZ (1LU<<30) /* ZC706 */
+#if defined(PLATFORM_ZYNQMP)
+#define ADDR_MASK XPAR_PSU_DDR_0_S_AXI_HIGHADDR
+#elif defined(PLATFORM_ZYNQ)
+#define ADDR_MASK XPAR_PS7_DDR_0_S_AXI_HIGHADDR
 #else
-#define ENTRY_SZ 64U   /* 64 bytes, 512 bits */
-#define ADDR_MASK 0x7FFFFFFFU /* limited to lower 2G window */
-#define TRACE_MEM_SZ (1LU<<29) /* ZCU102 */
+#error "Unknown platform."
 #endif
+
+#if defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU102_ES2)
+#define TRACE_MEM_SZ (1LU<<29) /* ZCU102 */
+#elif defined(XPS_BOARD_SIDEWINDER100)
+#define TRACE_MEM_SZ (1LU<<34) /* Sidewinder */
+#else
+#define TRACE_MEM_SZ (1LU<<30) /* ZC706 */
+#endif
+
+#if XPAR_AXIPMON_0_FIFO_AXIS_TDATA_WIDTH <= 128
+#define TCD_ENTRY_SZ 16
+#elif XPAR_AXIPMON_0_FIFO_AXIS_TDATA_WIDTH <= 256
+#define TCD_ENTRY_SZ 32
+#elif XPAR_AXIPMON_0_FIFO_AXIS_TDATA_WIDTH <= 512
+#define TCD_ENTRY_SZ 64
+#elif XPAR_AXIPMON_0_FIFO_AXIS_TDATA_WIDTH <= 1024
+#define TCD_ENTRY_SZ 128
+#else
+#error "Trace entry too large."
+#endif
+
 #define BLK_SZ (1U<<17) /* 128 Kbytes */
 
 #if defined(USE_SD)
 #include "ff.h"
+
 #if _FFCONF == 8255
 #define f_mount(fs,path,opt) f_mount(opt,fs)
 #endif
 
-#if 0
+#if 1
 /*
    Save a memory trace to SD card. A file name is prompted for and entered
    from the terminal. Data is copied from a port on the Trace Capture Device
-   (tcd) to Zynq on-chip memory in blocks of size BLK_SZ and then written to
-   the SD card.
+   (tcd) to Zynq memory in BLK_SZ size blocks and then written to the SD card.
 */
 void trace_capture(void)
 {
-	typedef int tcd_t;
-	tcd_t *buf_beg = (tcd_t*)0x00000000U; /* copy buffer */
-	tcd_t *buf_end = (tcd_t*)((uintptr_t)buf_beg + BLK_SZ);
-	volatile tcd_t *tcd = (tcd_t*)XPAR_AXI_TCD_0_BASEADDR;
-	register tcd_t *bptr = buf_beg;
+	volatile tcd_t *tcd = (tcd_t*)XPAR_TRACE_0_AXI_TCD_0_BASEADDR;
 	register tcd_t tmp;
-	unsigned int blen = 0;
 	unsigned long tot = 0, time;
 	unsigned int fn_len;
 	XTime start, finish;
@@ -169,7 +191,8 @@ void trace_capture(void)
 	TCHAR fn[80]; /* File name */
 	FRESULT fr; /* FatFs function common result code */
 	UINT bw; /* File write count */
-	//BYTE buffer[BLK_SZ] __attribute__ ((aligned (512))); /* File copy buffer */
+	BYTE buffer[BLK_SZ] __attribute__ ((aligned (512))); /* File copy buffer */
+	// BYTE *buffer = 0x100000U;
 
 	/* get file name */
 	print("enter trace file name: ");
@@ -183,45 +206,40 @@ void trace_capture(void)
 	fn[fn_len] = '\0';
 	if (fn_len == 0) return;
 	XTime_GetTime(&start);
-	//Xil_DCacheDisable();
 	/* register work area for each logical drive */
-print("f_mount\r\n");
 	fr = f_mount(&fs, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = mount(fs, drive, 0)\r\n", fr);
+		xil_printf("fr: %d = mount(fs, drive, 0)\r\n", fr);
 		goto tc;
 	}
 	/* create destination file */
-print("f_open\r\n");
 	fr = f_open(&fdst, fn, FA_CREATE_ALWAYS | FA_WRITE);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = open(fd, fn:%s, FA_CREATE_ALWAYS | FA_WRITE)\r\n", fr, fn);
+		xil_printf("fr: %d = open(fd, fn: %s, FA_CREATE_ALWAYS | FA_WRITE)\r\n", fr, fn);
 		goto tc;
 	}
 	Xil_DCacheFlush();
-print("grab\r\n");
 	*tcd = 0;
 	do { /* grab trace */
-		bptr = buf_beg;
-print("fill\r\n");
+		register tcd_t *bptr = (tcd_t*)buffer;
+		unsigned int blen = 0;
 		do { /* fill buffer */
 			unsigned int i;
 			tmp = 0;
-			for (i = 0; i < (ENTRY_SZ/sizeof(tcd_t)); i++) /* fill entry */
-				{ outbyte('.'); tmp |= *bptr++ = *tcd; }
-			blen += ENTRY_SZ;
-xil_printf("entry - tmp:%x blen:%d tot:0x%lx\r\n", tmp, blen, tot);
-		} while (tmp && bptr < buf_end);
-		Xil_L1DCacheFlush(); /* L1 only is enabled for scratchpad area */
+			for (i = 0; i < (TCD_ENTRY_SZ/sizeof(tcd_t)); i++) /* fill entry */
+				tmp |= *bptr++ = *tcd;
+			blen += TCD_ENTRY_SZ;
+		} while (tmp && blen < BLK_SZ);
+		/* for Z7, only L1 is enabled for scratchpad area */
+		Xil_DCacheFlushRange((INTPTR)buffer, blen);
 		/* write buffer */
-print("f_write\r\n");
-		fr = f_write(&fdst, buf_beg, blen, &bw);
+		fr = f_write(&fdst, buffer, blen, &bw);
 		if (fr != FR_OK /*|| bw != blen*/) {
-			xil_printf("fr:%d = write(fd, buf, br:%d, bw:%d)\r\n", fr, blen, bw);
+			xil_printf("fr: %d = write(fd, buf, br: %d, bw: %d)\r\n", fr, blen, bw);
 			goto tc;
 		}
 		tot += blen;
-		if ((tot & ((1U<<20)-1)) == 0U) xil_printf("\rtrace length:0x%x\r", tot);
+		if ((tot & ((1U<<20)-1)) == 0U) xil_printf("\rtrace length: 0x%lx\r", tot);
 		if (tot >= TRACE_MEM_SZ) {
 			print(" -- error: trace capture memory exceeded\r\n");
 			goto tc;
@@ -229,22 +247,20 @@ print("f_write\r\n");
 	} while (tmp);
 tc:
 	/* close file */
-print("f_close\r\n");
 	fr = f_close(&fdst);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = close(fd)\r\n", fr);
+		xil_printf("fr: %d = close(fd)\r\n", fr);
 	}
 	/* unregister work area prior to discarding it */
 	fr = f_mount(NULL, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = unmount(NULL, drive, 0)\r\n", fr);
+		xil_printf("fr: %d = unmount(NULL, drive, 0)\r\n", fr);
 	}
-	//Xil_DCacheEnable();
 	XTime_GetTime(&finish);
 	time = (finish-start)/COUNTS_PER_SECOND;
-	xil_printf("trace length:0x%lx\r\n", tot);
-	xil_printf("capture time:%ld sec\r\n", time);
-	xil_printf("capture bandwidth:%ld bytes/sec\r\n", tot/time);
+	xil_printf("trace length: 0x%lx\r\n", tot);
+	xil_printf("capture time: %ld sec\r\n", time);
+	xil_printf("capture bandwidth: %ld bytes/sec\r\n", tot/time);
 }
 #else
 /*
@@ -254,15 +270,14 @@ print("f_close\r\n");
 */
 void trace_capture(void)
 {
-	typedef int elem_t;
 	extern unsigned char _heap_start[];
 	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
-	elem_t *mem_beg = (elem_t*)(((uintptr_t)&_heap_start) & ADDR_MASK);
-	elem_t *mem_end = (elem_t*)(((uintptr_t)&_heap_end) & ADDR_MASK);
-	volatile elem_t *tcd = (elem_t*)XPAR_AXI_TCD_0_BASEADDR;
-	register elem_t *dst = mem_beg;
-	register elem_t tmp;
+	tcd_t *mem_beg = (tcd_t*)(((uintptr_t)&_heap_start) & ADDR_MASK);
+	tcd_t *mem_end = (tcd_t*)(((uintptr_t)&_heap_end) & ADDR_MASK);
+	volatile tcd_t *tcd = (tcd_t*)XPAR_TRACE_0_AXI_TCD_0_BASEADDR;
+	register tcd_t *dst = mem_beg;
+	register tcd_t tmp;
 	unsigned int fn_len;
 	unsigned long tot = 0, time;
 	XTime start, finish;
@@ -292,53 +307,52 @@ void trace_capture(void)
 	do {
 		unsigned int i;
 		tmp = 0;
-		for (i = 0; i < (ENTRY_SZ/sizeof(elem_t)); i++)
+		for (i = 0; i < (TCD_ENTRY_SZ/sizeof(tcd_t)); i++)
 			tmp |= *dst++ = *tcd;
-		tot += ENTRY_SZ;
+		tot += TCD_ENTRY_SZ;
 	} while (tmp && dst < mem_end);
 	Xil_DCacheFlush();
 
-	//Xil_DCacheDisable();
 	/* register work area for each logical drive */
 	fr = f_mount(&fs, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = mount(fs, drive, 0)\r\n", fr);
+		xil_printf("fr: %d = mount(fs, drive, 0)\r\n", fr);
 		goto tc;
 	}
 	/* create destination file */
 	fr = f_open(&fdst, fn, FA_CREATE_ALWAYS | FA_WRITE);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = open(fd, fn:%s, FA_CREATE_ALWAYS | FA_WRITE)\r\n", fr, fn);
+		xil_printf("fr: %d = open(fd, fn: %s, FA_CREATE_ALWAYS | FA_WRITE)\r\n", fr, fn);
 		goto tc;
 	}
 	/* write buffer */
 	fr = f_write(&fdst, mem_beg, tot, &bw);
 	if (fr != FR_OK /*|| bw != blen*/) {
-		xil_printf("fr:%d = write(fd, buf, br:%d, bw:%d)\r\n", fr, tot, bw);
+		xil_printf("fr: %d = write(fd, buf, br: %d, bw: %d)\r\n", fr, tot, bw);
 		goto tc;
 	}
 tc:
 	/* close file */
 	fr = f_close(&fdst);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = close(fd)\r\n", fr);
+		xil_printf("fr: %d = close(fd)\r\n", fr);
 	}
 	/* unregister work area prior to discarding it */
 	fr = f_mount(NULL, drive, 0);
 	if (fr != FR_OK) {
-		xil_printf("fr:%d = unmount(NULL, drive, 0)\r\n", fr);
+		xil_printf("fr: %d = unmount(NULL, drive, 0)\r\n", fr);
 	}
-	//Xil_DCacheEnable();
 	XTime_GetTime(&finish);
 	time = (finish-start)/COUNTS_PER_SECOND;
 	if (tmp) print(" -- error: ran out of heap for trace\r\n");
-	xil_printf("trace address:0x%lx length:0x%lx\r\n", (long)mem_beg, tot);
-	xil_printf("capture time:%ld sec\r\n", time);
-	xil_printf("capture bandwidth:%ld bytes/sec\r\n", tot/time);
+	xil_printf("trace address: 0x%lx, length: 0x%lx\r\n", (long)mem_beg, tot);
+	xil_printf("capture time: %ld sec\r\n", time);
+	xil_printf("capture bandwidth: %ld bytes/sec\r\n", tot/time);
 
 	_exit(0); /* avoid destructors, type XMD% stop to terminate */
 }
 #endif
+
 #else /* not USE_SD */
 /*
    Save a memory trace to the heap for later download through JTAG with the
@@ -347,28 +361,27 @@ tc:
 */
 void trace_capture(void)
 {
-	typedef int elem_t;
 	extern unsigned char _heap_start[];
 	extern unsigned char _heap_end[];
 	/* use direct DRAM address not alias */
-	elem_t *mem_beg = (elem_t*)(((uintptr_t)&_heap_start) & ADDR_MASK);
-	elem_t *mem_end = (elem_t*)(((uintptr_t)&_heap_end) & ADDR_MASK);
-	volatile elem_t *tcd = (elem_t*)XPAR_AXI_TCD_0_BASEADDR;
-	elem_t *dst = mem_beg;
-	register elem_t tmp;
+	tcd_t *mem_beg = (tcd_t*)(((uintptr_t)&_heap_start) & ADDR_MASK);
+	tcd_t *mem_end = (tcd_t*)(((uintptr_t)&_heap_end) & ADDR_MASK);
+	volatile tcd_t *tcd = (tcd_t*)XPAR_TRACE_0_AXI_TCD_0_BASEADDR;
+	tcd_t *dst = mem_beg;
+	register tcd_t tmp;
 	unsigned long tot = 0;
 	Xil_DCacheFlush();
 	*tcd = 0;
 	do {
 		unsigned int i;
 		tmp = 0;
-		for (i = 0; i < (ENTRY_SZ/sizeof(elem_t)); i++)
+		for (i = 0; i < (TCD_ENTRY_SZ/sizeof(tcd_t)); i++)
 			tmp |= *dst++ = *tcd;
-		tot += ENTRY_SZ;
+		tot += TCD_ENTRY_SZ;
 	} while (tmp && dst < mem_end);
 	Xil_DCacheFlush();
 	if (tmp) print(" -- error: ran out of heap for trace\r\n");
-	xil_printf("trace address:0x%lx length:0x%lx\r\n", (long)mem_beg, tot);
+	xil_printf("trace address: 0x%lx, length: 0x%lx\r\n", (long)mem_beg, tot);
 	_exit(0); /* avoid destructors, type XMD% stop to terminate */
 	/* if needed run "hw_server -s tcp::3121" before "Dump/Restore Data File" tool */
 }

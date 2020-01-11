@@ -17,7 +17,12 @@ ifneq ($(findstring CLOCKS,$(DEFS)),)
 endif
 
 ifneq ($(filter %STATS %TRACE,$(DEFS)),)
+# TODO: download and patch linux-xlnx/samples/xilinx_apm/xaxipmon.c & .h?
   MODULES += monitor_ln
+endif
+
+ifneq ($(filter %CLOCKS %STATS %TRACE,$(DEFS)),)
+  MODULES += devtree
 endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
