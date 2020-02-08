@@ -32,21 +32,11 @@
 #define T_QUEUE_W (T_W - T_DRAM_W - T_TRANS) // 00 20 40
 #define T_QUEUE_R (T_R - T_DRAM_R - T_TRANS) // 00 20 40
 
-#if defined(ZYNQ)
-
-#if ZYNQ == _Z7_
-/* Zynq-7000 Device */
-#define TICKS_ESEC (2571428545UL/2)
-#elif ZYNQ == _ZU_
-/* Zynq UltraScale+ Device */
-#define TICKS_ESEC (1999980000UL) // 99999000*20
+#if defined(ZYNQ) && ZYNQ == _Z7_ && defined(XILTIME)
+#define TICKS_ESEC (2571428546UL/2)
+#else
+#define TICKS_ESEC (TICKS_SEC*20UL)
 #endif
-
-#else /* not ZYNQ */
-
-#define TICKS_ESEC (TICKS_SEC*20)
-
-#endif /* ZYNQ */
 
 #define CLOCKS_EMULATE clocks_emulate();
 #define CLOCKS_NORMAL  clocks_normal();
