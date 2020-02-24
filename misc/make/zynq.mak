@@ -1,4 +1,3 @@
-LABEL = V$(subst .,_,$(VERSION))
 EXE = .elf
 
 WORKSPACE_LOC ?= ../../..
@@ -22,6 +21,11 @@ ifneq ($(filter %STATS %TRACE,$(DEFS)),)
   MODULES += monitor_sa
 endif
 
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_SP -DUSE_OCM
+  MODULES += aport stream
+endif
+
 OBJECTS = $(addsuffix .o,$(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
 
@@ -43,21 +47,10 @@ CXXFLAGS += $(CFLAGS)
 LDFLAGS += -Wl,-build-id=none -specs=../../misc/sdk/Xilinx.spec -Wl,-T -Wl,cpu_lscript.ld -L$(BSP)/ps7_cortexa9_0/lib
 LDLIBS += -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group
 
-# Cancel version control implicit rules
-%:: %,v
-%:: RCS/%
-%:: RCS/%,v
-%:: s.%
-%:: SCCS/s.%
-# Delete default suffixes
-.SUFFIXES:
-# Define suffixes of interest
-.SUFFIXES: .o .c .cc .cpp .h .hpp .d .mak .ld
-
 .PHONY: all
 all: $(TARGET)$(EXE)
 ifneq ($(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)),)
-	cd ../mcu && $(MAKE) build=mcu D=SERVER all
+	$(MAKE) -C ../mcu build=mcu D=SERVER all
 endif
 
 .PHONY: fpga
@@ -75,7 +68,7 @@ endif
 clean:
 	$(RM) $(wildcard *.o) $(wildcard *.d) $(TARGET)$(EXE) $(TARGET)$(EXE).size makeflags
 ifneq ($(wildcard ../mcu),)
-	cd ../mcu && $(MAKE) build=mcu D=SERVER clean
+	$(MAKE) -C ../mcu build=mcu D=SERVER clean
 endif
 
 .PHONY: vars
@@ -87,12 +80,12 @@ vars:
 	@echo OBJECTS: $(OBJECTS)
 	@echo MAKEFILE_LIST: $(MAKEFILE_LIST)
 ifneq ($(and $(filter %CLIENT,$(DEFS)),$(wildcard ../mcu)),)
-	cd ../mcu && $(MAKE) build=mcu D=SERVER vars
+	$(MAKE) -C ../mcu build=mcu D=SERVER vars
 endif
 
 $(TARGET)$(EXE): $(OBJECTS) cpu_lscript.ld
 	$(LINK.cpp) $(OBJECTS) $(LOADLIBES) $(LDLIBS) -o $@
-	$(SIZE) $@  |tee $@.size
+	$(SIZE) $@ |tee $@.size
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 

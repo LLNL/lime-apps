@@ -1,31 +1,21 @@
 TARGET = rtb
 VERSION = 3.1
-SRC = ../src ../../shared
-ifneq ($(filter %SYSTEMC,$(DEFS)),)
-  SRC += ../../shared/sc
-  LDFLAGS += -static
-endif
+SRC += ../src ../../shared
 ifneq ($(filter %SERVER,$(DEFS)),)
-  MODULES = server
+  MODULES += server
 else
-  MODULES = rtb fasta path
+  MODULES += rtb fasta path
   ifneq ($(filter zup zynq,$(notdir $(CURDIR))),)
     MODULES += fatfs
   endif
 endif
-ifneq ($(filter %USE_LSU,$(DEFS)),)
-  DEFS += -DUSE_HASH
-  MODULES += lsu_cmd
-endif
-ifneq ($(filter %DIRECT %CLIENT %SERVER %USE_HASH,$(DEFS)),)
+ifneq ($(NEED_ACC),)
   MODULES += short
 endif
-ifneq ($(filter %CLIENT %SERVER %USE_HASH,$(DEFS)),)
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_HASH
   ifneq ($(filter %SYSTEMC,$(DEFS)),)
-    MODULES += aport stream_sc kvs
-  else
-    DEFS += -DUSE_SP -DUSE_OCM
-    MODULES += aport stream
+    MODULES += kvs
   endif
 endif
 ifneq ($(filter %SYSTEMC,$(DEFS)),)

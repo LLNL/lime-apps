@@ -1,16 +1,15 @@
 TARGET = image
 VERSION = 1.1
-SRC = ../src ../../shared
+SRC += ../src ../../shared
 DEFS += -DENTIRE
 ifneq ($(filter %SERVER,$(DEFS)),)
-  DEFS += -DUSE_LSU
-  MODULES = server
+  MODULES += server
 else
-  MODULES = image ColorImage
+  MODULES += image ColorImage
 endif
-ifneq ($(filter %CLIENT %SERVER %USE_LSU,$(DEFS)),)
-  DEFS += -DUSE_SP -DUSE_OCM
-  MODULES += lsu_cmd aport stream
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_LSU
+  MODULES += lsu_cmd
 endif
 ifeq ($(ARG),1)
   RUN_ARGS = -d2 -v15 -w24000 -h16000 pat pat

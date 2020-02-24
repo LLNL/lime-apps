@@ -1,10 +1,14 @@
-LABEL = V$(subst .,_,$(VERSION))
 EXE = .elf
 
 WORKSPACE_LOC ?= ../../..
 BSP = $(WORKSPACE_LOC)/standalone_bsp_mb
 
 #DEFS += -DVERSION=$(VERSION)
+
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_SP -DUSE_OCM
+  MODULES += aport stream
+endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
 VPATH = $(subst ' ',:,$(SRC))
@@ -24,17 +28,6 @@ CXXFLAGS += $(CFLAGS)
 LDFLAGS += -Wl,-T -Wl,mcu_lscript.ld -L$(BSP)/engine_0_mcu_0_microblaze_0/lib -Wl,--no-relax -Wl,--gc-sections
 LDLIBS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
-# Cancel version control implicit rules
-%:: %,v
-%:: RCS/%
-%:: RCS/%,v
-%:: s.%
-%:: SCCS/s.%
-# Delete default suffixes
-.SUFFIXES:
-# Define suffixes of interest
-.SUFFIXES: .o .c .cc .cpp .h .hpp .d .mak .ld
-
 .PHONY: all
 all: $(TARGET)$(EXE)
 
@@ -53,7 +46,7 @@ vars:
 
 $(TARGET)$(EXE): $(OBJECTS) mcu_lscript.ld
 	$(LINK.cpp) $(OBJECTS) $(LOADLIBES) $(LDLIBS) -o $@
-	$(SIZE) $@  |tee $@.size
+	$(SIZE) $@ |tee $@.size
 
 $(OBJECTS): $(MAKEFILE_LIST) # rebuild if MAKEFILEs change
 

@@ -1,21 +1,17 @@
 TARGET = main
 VERSION = 1.0
-SRC = ../../shared ../src
-ifneq ($(filter %SYSTEMC,$(DEFS)),)
-  SRC += ../../shared/sc
-endif
+SRC += ../src ../../shared
 ifneq ($(filter %SERVER,$(DEFS)),)
-  DEFS += -DUSE_LSU
-  MODULES = server
+  MODULES += server
 else
-  MODULES = main mod1 mod2
+  MODULES += main mod1 mod2
 endif
-ifneq ($(filter %DIRECT %CLIENT %SERVER %USE_LSU,$(DEFS)),)
+ifneq ($(NEED_ACC),)
   MODULES += accelerator
 endif
-ifneq ($(filter %CLIENT %SERVER %USE_LSU,$(DEFS)),)
-  DEFS += -DUSE_SP -DUSE_OCM
-  MODULES += lsu_cmd aport stream
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_LSU
+  MODULES += lsu_cmd
 endif
 ifeq ($(ARG),1)
   RUN_ARGS = -arg1x -arg2x

@@ -1,5 +1,3 @@
-LABEL = V$(subst .,_,$(VERSION))
-
 #DEFS += -DVERSION=$(VERSION)
 DEFS += -DTIMEOFDAY
 
@@ -17,12 +15,16 @@ ifneq ($(findstring CLOCKS,$(DEFS)),)
 endif
 
 ifneq ($(filter %STATS %TRACE,$(DEFS)),)
-# TODO: download and patch linux-xlnx/samples/xilinx_apm/xaxipmon.c & .h?
   MODULES += monitor_ln
 endif
 
 ifneq ($(filter %CLOCKS %STATS %TRACE,$(DEFS)),)
   MODULES += devtree
+endif
+
+ifneq ($(NEED_STREAM),)
+  DEFS += -DUSE_SP -DUSE_OCM
+  MODULES += aport stream
 endif
 
 OBJECTS = $(addsuffix .o,$(MODULES))
@@ -56,17 +58,6 @@ ifneq ($(findstring PAPI,$(DEFS)),)
 LDFLAGS += -L/usr/local/lib
 LDLIBS += -lpapi -lpthread
 endif
-
-# Cancel version control implicit rules
-%:: %,v
-%:: RCS/%
-%:: RCS/%,v
-%:: s.%
-%:: SCCS/s.%
-# Delete default suffixes
-.SUFFIXES:
-# Define suffixes of interest
-.SUFFIXES: .o .c .cc .cpp .h .hpp .d .mak
 
 .PHONY: all
 all: $(TARGET)$(EXE)

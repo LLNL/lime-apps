@@ -1,5 +1,3 @@
-LABEL = V$(subst .,_,$(VERSION))
-
 #DEFS += -DVERSION=$(VERSION)
 ifeq ($(findstring SYSTEMC,$(DEFS)),)
   DEFS += -DTIMEOFDAY
@@ -26,8 +24,19 @@ ifneq ($(filter %CLOCKS %STATS %TRACE,$(DEFS)),)
   MODULES += devtree
 endif
 
+ifneq ($(NEED_STREAM),)
+  ifneq ($(filter %SYSTEMC,$(DEFS)),)
+    MODULES += aport stream_sc
+  else
+    DEFS += -DUSE_SP -DUSE_OCM
+    MODULES += aport stream
+  endif
+endif
+
 ifneq ($(findstring SYSTEMC,$(DEFS)),)
+  SRC += ../../shared/scb
   ifneq ($(findstring HMCSIM,$(DEFS)),)
+    # special case for proprietary hmcsim
     SRC += $(HOME)/work/hmcsim-2.3
     LDFLAGS += -L$(HOME)/work/hmcsim-2.3
     LDLIBS += -lhmcsim
@@ -45,6 +54,7 @@ ifneq ($(findstring SYSTEMC,$(DEFS)),)
   CFLAGS += -Wno-strict-overflow
   # application build -std=option must match SystemC library build
   LDLIBS += -lsystemc -lpthread
+  LDFLAGS += -static
 endif
 
 
@@ -63,17 +73,6 @@ CFLAGS += $(MACH) $(OPT) -Wall
 CXXFLAGS += $(CFLAGS)
 #LDFLAGS += -static
 #LDLIBS += -lrt
-
-# Cancel version control implicit rules
-%:: %,v
-%:: RCS/%
-%:: RCS/%,v
-%:: s.%
-%:: SCCS/s.%
-# Delete default suffixes
-.SUFFIXES:
-# Define suffixes of interest
-.SUFFIXES: .o .c .cc .cpp .h .hpp .d .mak
 
 .PHONY: all
 all: $(TARGET)
