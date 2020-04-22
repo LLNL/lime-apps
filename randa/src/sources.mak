@@ -1,12 +1,12 @@
 TARGET = randa
 VERSION = 1.1
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
   MODULES += randa core_single_cpu_lcg utility
 endif
-ifneq ($(NEED_STREAM),)
+ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
   DEFS += -DUSE_LSU
   MODULES += lsu_cmd
 endif

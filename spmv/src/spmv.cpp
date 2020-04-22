@@ -19,13 +19,7 @@ extern "C" {
 // #define MARGS "-c -s18 -n34 -v15" *
 // #define MARGS "-c -s21 -n34 -v15"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -42,7 +36,7 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;

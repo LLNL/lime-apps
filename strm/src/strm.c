@@ -50,15 +50,7 @@
 // Example main arguments
 // #define MARGS ""
 
-#include "config.h"
-#ifdef DYN
-#include "alloc.h"
-#endif
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 /*-----------------------------------------------------------------------
  * INSTRUCTIONS:
@@ -225,7 +217,7 @@ extern int omp_get_num_threads();
 #endif
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	int         BytesPerWord;
 	int         k;
@@ -340,7 +332,7 @@ MAIN
 	/* --- MAIN LOOP --- repeat test cases NTIMES times --- */
 
 	CLOCKS_EMULATE
-	//CACHE_BARRIER
+	// CACHE_BARRIER(NULL)
 	TRACE_START
 	STATS_START
 	scalar = 3.0;
@@ -394,7 +386,7 @@ MAIN
 #endif
 	times[3][k] = mysecond() - times[3][k];
 	}
-	//CACHE_BARRIER
+	// CACHE_BARRIER(NULL)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

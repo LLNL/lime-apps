@@ -1,31 +1,21 @@
 TARGET = ngram
 VERSION = 1.0
-SRC = ../src ../../shared
-ifneq ($(filter %SYSTEMC,$(DEFS)),)
-  SRC += ../../shared/sc
-  LDFLAGS += -static
-endif
+SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
-  MODULES = server
+  MODULES += server
 else
-  MODULES = ngram path
+  MODULES += ngram path
   ifneq ($(filter zup zynq,$(notdir $(CURDIR))),)
     MODULES += fatfs
   endif
 endif
-ifneq ($(filter %USE_LSU,$(DEFS)),)
-  DEFS += -DUSE_HASH
-  MODULES += lsu_cmd
-endif
-ifneq ($(filter %DIRECT %CLIENT %SERVER %USE_HASH,$(DEFS)),)
+ifneq ($(filter $(NEED_ACC),$(DEFS)),)
   MODULES += short
 endif
-ifneq ($(filter %CLIENT %SERVER %USE_HASH,$(DEFS)),)
+ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
+  DEFS += -DUSE_HASH
   ifneq ($(filter %SYSTEMC,$(DEFS)),)
-    MODULES += aport stream_sc kvs
-  else
-    DEFS += -DUSE_SP -DUSE_OCM
-    MODULES += aport stream
+    MODULES += kvs
   endif
 endif
 ifneq ($(filter %SYSTEMC,$(DEFS)),)

@@ -1,5 +1,5 @@
 
-PACKAGE = lime-apps-1.8.5
+PACKAGE = lime-apps-1.9.0
 
 # Cancel version control implicit rules
 %:: %,v
@@ -11,14 +11,13 @@ PACKAGE = lime-apps-1.8.5
 .SUFFIXES:
 
 build = x86_64
-HWP = $(WORKSPACE_LOC)/hw_platform_0
-XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
 SEP := ,
 DS = $(subst $(SEP), ,$(D))
-APPS = bfs dgemm image pager randa rtb sort spmv strm xsb
+APPS = bfs dgemm image kvgen ngram pager randa rtb sort spmv strm xsb
 
 .PHONY: all
 all .DEFAULT:
+# No current support for accelerator
 ifeq ($(filter CLIENT OFFLOAD,$(DS)),)
 	$(MAKE) -C bfs/$(build) $@
 	$(MAKE) -C dgemm/$(build) $@
@@ -26,8 +25,14 @@ ifeq ($(filter CLIENT OFFLOAD,$(DS)),)
 	$(MAKE) -C strm/$(build) $@
 	$(MAKE) -C xsb/$(build) $@
 endif
+# No support for MCU (MicroBlaze)
 ifeq ($(filter CLIENT,$(DS)),)
 	$(MAKE) -C rtb/$(build) $@
+endif
+# Not part of run suite. Can be run individually.
+ifneq ($(filter clean,$(MAKECMDGOALS)),)
+	$(MAKE) -C kvgen/$(build) $@
+	$(MAKE) -C ngram/$(build) $@
 endif
 	$(MAKE) -C image/$(build) $@
 	$(MAKE) -C pager/$(build) $@
@@ -82,8 +87,8 @@ help:
 	@echo "  1) Xilinx tools in path"
 	@echo "     e.g., source /opt/Xilinx/Vivado/<version>/settings64.sh"
 	@echo "  -- Standalone Only --"
-	@echo "  2) Specify location of board support packages and hardware platform"
-	@echo "     e.g., export WORKSPACE_LOC=\$$HOME/<mywork>/lime/standalone/sdk"
+	@echo "  2) Specify location of lime directory"
+	@echo "     e.g., export LIME=\$$HOME/<mywork>/lime"
 	@echo "  3) Specify location of Boost C++ libraries"
 	@echo "     e.g., export BOOST_ROOT=\$$HOME/<mysrc>/boost_1_xx_0"
 
@@ -103,12 +108,22 @@ distclean:
 	$(MAKE) build=zup clean
 	$(MAKE) build=zynq clean
 
+search = $(firstword $(wildcard $(addsuffix /$(2),$(subst :, ,$(1)))))
+MAKDIR := $(call search,$(LIME):.:../lime,make)
+ifeq ($(MAKDIR),)
+  $(error LIME root directory not found or defined)
+endif
+LIME := $(patsubst %/,%,$(dir $(MAKDIR)))
+WORKSPACE_LOC ?= $(LIME)/standalone/sdk
+HWP = $(WORKSPACE_LOC)/hw_platform_0
+XSDB = xsdb$(if $(findstring Linux,$(shell uname -s)),,.bat)
+
 .PHONY: fpga
 fpga:
 ifeq ($(build),zynq)
-	$(XSDB) misc/sdk/fpga_config_z7.tcl $(HWP)
+	$(XSDB) $(MAKDIR)/sdk/fpga_config_z7.tcl $(HWP)
 else ifeq ($(build),zup)
-	$(XSDB) misc/sdk/fpga_config_zu.tcl $(HWP)
+	$(XSDB) $(MAKDIR)/sdk/fpga_config_zu.tcl $(HWP)
 else
 	@echo "specify build=zup|zynq"
 endif

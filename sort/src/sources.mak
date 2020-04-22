@@ -1,6 +1,6 @@
 TARGET = sort
 VERSION = 1.0
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 MODULES += sort
 ifeq ($(ARG),1)
   RUN_ARGS = -c -s28

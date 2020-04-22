@@ -15,13 +15,7 @@
 // Example main arguments
 // #define MARGS "-s29" *
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_SCALE 29U // log 2 size
 #define DEFAULT_VECTOR_LSZ 10U // log 2 size
@@ -37,7 +31,7 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif // USE_ACC
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	HPCC_Params params;
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */

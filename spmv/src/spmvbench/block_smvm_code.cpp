@@ -13,12 +13,7 @@ extern "C" {
 #include <algorithm> // min
 using namespace std;
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
+#include "lime.h"
 
 //#define PARTIAL 10 // used to shorten run time for trace capture
 
@@ -62,11 +57,7 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 	int col_len = row_start[end_row+1];
 	int rows_to_batch;
 	int max_block_size=block_sz/sizeof(double);
-#ifdef USE_SP
-	double * restrict block = (double*)SP_BEG; // view block
-#else
-	double * restrict block = NEWA(double, block_sz/sizeof(double)); // view block
-#endif
+	double * restrict block = SP_NALLOC(double, block_sz/sizeof(double)); // view block
 #if defined(PARTIAL)
 	end_row /= PARTIAL;
 #endif
@@ -135,15 +126,9 @@ void bsmvm_1x1_1 (const int start_row, /*const*/ int end_row, const int bm,
 	// flush output product to memory
 	host::cache_flush(dest+start_row, (end_row-start_row+1)*sizeof(double));
 	// make sure to invalidate cache before delete
-#ifdef USE_SP
-	Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
-#else
-	CACHE_DISPOSE(block, block_sz)
-#endif
+	CACHE_DISPOSE(dre, block, block_sz)
 	tget(t8);
-#ifndef USE_SP
-	DELETEA((double*)block);
-#endif
+	SP_NFREE((double*)block);
 	tinc(tcache, tdiff(t1,t0)+tdiff(t8,t7));
 	tinc(tsetup, tdiff(t2,t1));
 }

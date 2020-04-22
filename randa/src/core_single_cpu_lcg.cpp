@@ -47,12 +47,7 @@
 #include "hpcc.h"
 #include "RandomAccess.h"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
+#include "lime.h"
 
 typedef index_t* index_p;
 typedef table_t* table_p;
@@ -102,19 +97,11 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 #ifdef RAND_SERIAL
 	uran_t temp;
 #endif
-	uran_t ran[VECT_LEN]; /* current random numbers */
-//	index_t tidx[VECT_LEN]; /* current table index */
 	unsigned block_sz = VECT_LEN*sizeof(table_t);
-#ifdef USE_SP
-	table_p restrict block = (table_t*)SP_BEG; /* view block */
-	index_p restrict tidx = (index_t*)((size_t)block+block_sz); /* current table index */
-//	uran_p  restrict ran = (uran_t*)((size_t)tidx+VECT_LEN*sizeof(index_t)); /* current random numbers */
 	/* TODO: check for SP_SIZE overflow */
-#else
-	table_p restrict block = NALLOC(table_t, VECT_LEN); /* view block */
-	index_p restrict tidx = NALLOC(index_t, VECT_LEN); /* current table index */
-//	uran_p  restrict ran = NALLOC(uran_t, VECT_LEN); /* current random numbers */
-#endif
+	table_p restrict block = SP_NALLOC(table_t, VECT_LEN); /* view block */
+	index_p restrict tidx = SP_NALLOC(index_t, VECT_LEN); /* current table index */
+	uran_t ran[VECT_LEN]; /* current random numbers */
 
 	if (tidx == NULL) {printf(" -- error: allocating tidx\n"); return;}
 	//printf("Table:%p tidx:%p block:%p\n", Table, tidx, block); fflush(stdout);
@@ -228,13 +215,11 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 	// receive Table
 	host::cache_flush_invalidate(); /* invalidate all since Table size is half of memory */
 	// make sure to invalidate cache before delete
-	// CACHE_DISPOSE(tidx, VECT_LEN*sizeof(index_t)) // done in prior line
-	// CACHE_DISPOSE(block, block_sz)
+	// CACHE_DISPOSE(dre, tidx, VECT_LEN*sizeof(index_t)) // done in prior line
+	// CACHE_DISPOSE(dre, block, block_sz)
 	tget(t10);
-#ifndef USE_SP
-	NFREE((index_t*)tidx);
-	NFREE((table_t*)block);
-#endif
+	SP_NFREE((index_t*)tidx);
+	SP_NFREE((table_t*)block);
 #ifdef COUNT_DUP
 	printf("duplicates: %u\n", duplicates);
 #endif
@@ -351,7 +336,7 @@ HPCC_RandomAccess_LCG(HPCC_Params *params, int doIO, double *GUPs, int *failure)
 	/* Begin timing here */
 	tsetup = treorg = tcache = 0;
 	CLOCKS_EMULATE
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	TRACE_START
 	STATS_START
 	/* assume input data is in memory and not cached (flushed and invalidated) */
@@ -364,7 +349,7 @@ HPCC_RandomAccess_LCG(HPCC_Params *params, int doIO, double *GUPs, int *failure)
 	/* End timed section */
 	/* assume output data is in memory (flushed) */
 	tget(finish);
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

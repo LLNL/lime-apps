@@ -7,16 +7,10 @@
 // Example main arguments
 // #define MARGS "-s small"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	// =====================================================================
 	// Initialization & Command Line Read-In
@@ -155,7 +149,7 @@ MAIN
 	}
 
 	CLOCKS_EMULATE
-	// CACHE_BARRIER
+	CACHE_BARRIER(NULL)
 	TRACE_START
 	STATS_START
 	tget(tstart);
@@ -284,9 +278,10 @@ MAIN
 		printf("Simulation complete.\n" );
 	}
 	#endif
-
+	cache_flush(); /* flush all */
 	tget(tend);
-	// CACHE_BARRIER
+
+	CACHE_BARRIER(NULL)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

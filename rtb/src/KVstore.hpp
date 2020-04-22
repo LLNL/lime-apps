@@ -87,9 +87,16 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #endif
 
 #if defined(__microblaze__)
-#define cprint(s)
-#else
-#define cprint(s) fprintf(stderr,s)
+#define cprint(str)
+#define cprintf(format, ...)
+#elif defined(ZYNQ)
+#include "xil_printf.h"
+#define cprint(str) print(str)
+#define cprintf(format, ...) xil_printf(format, ## __VA_ARGS__)
+#else // not __microblaze__, ZYNQ
+#include <stdio.h>
+#define cprint(str) fprintf(stderr, str)
+#define cprintf(format, ...) fprintf(stderr, format, ## __VA_ARGS__)
 #endif
 
 // NOTE: no cycle counters are available on the MicroBlaze
@@ -109,14 +116,8 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 /* TODO: decide where to allocate and introduce stream ids to base class? */
 #if defined(__microblaze__)
 #define THIS_PN MCU0_PN
-#define STREAM_DEVICE_ID 0
-#elif defined(__ARM_ARCH) && defined(ZYNQ)
-#include "xparameters.h"
+#else
 #define THIS_PN ARM0_PN
-#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
-#elif defined(SYSTEMC)
-#define THIS_PN 0
-#define STREAM_DEVICE_ID 0
 #endif
 
 #define THIS_ID getID(THIS_PN)
@@ -127,18 +128,21 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #define LSU2_ID getID(LSU2_PN)
 #define PRU0_ID getID(PRU0_PN)
 
-#if defined(__ARM_ARCH)
+#if defined(ZYNQ)
+#include "xparameters.h"
+#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
+#else
+#define STREAM_DEVICE_ID 0
+#endif
+
 inline void dump_reg(void)
 {
-	for (int i = 0; i < 8; i++) xil_printf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
-	for (int i = 0; i < 2; i++) xil_printf(" PRU0   [%d]:%x\r\n", i, aport_read(PRU0_ID, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU1_RD[%d]:%x\r\n", i, aport_read(LSU1_ID+READ_CH, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU2_RD[%d]:%x\r\n", i, aport_read(LSU2_ID+READ_CH, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU2_WR[%d]:%x\r\n", i, aport_read(LSU2_ID+WRITE_CH, THIS_ID, i));
+	for (int i = 0; i < 8; i++) cprintf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
+	for (int i = 0; i < 2; i++) cprintf(" PRU0   [%d]:%x\r\n", i, aport_read(PRU0_ID, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU1_RD[%d]:%x\r\n", i, aport_read(LSU1_ID+READ_CH, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU2_RD[%d]:%x\r\n", i, aport_read(LSU2_ID+READ_CH, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU2_WR[%d]:%x\r\n", i, aport_read(LSU2_ID+WRITE_CH, THIS_ID, i));
 }
-#else
-#define dump_reg()
-#endif
 
 class stream_port {
 public:

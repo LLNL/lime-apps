@@ -23,13 +23,7 @@ using namespace std;
 // #define MARGS "-s19 -v15"
 // #define MARGS "-s22 -v15"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_RMAT_SCALE 16U // log 2 size
 #define DEFAULT_BLOCK_LSZ 12 // log 2 size
@@ -94,11 +88,7 @@ void page_rank_itr(
 	double jump_prob = (double(1) - damping_factor)/num_vertices;
 	double_p cur_pr = cur_pr_vector.data();
 	double_p next_pr = next_pr_vector.data();
-#ifdef USE_SP
-	double_p restrict block = (double*)SP_BEG; // view block
-#else
-	double_p restrict block = NEWA(double, block_sz/sizeof(double)); // view block
-#endif
+	double_p restrict block = SP_NALLOC(double, block_sz/sizeof(double)); // view block
 #if defined(PARTIAL)
 	num_vertices = PARTIAL;
 #endif
@@ -164,15 +154,9 @@ void page_rank_itr(
 	// flush output product to memory
 	host::cache_flush(next_pr, num_vertices*sizeof(double));
 	// make sure to invalidate cache before delete
-#ifdef USE_SP
-	Xil_L1DCacheInvalidateRange((INTPTR)block, block_sz);
-#else
-	CACHE_DISPOSE(block, block_sz)
-#endif
+	CACHE_DISPOSE(dre, block, block_sz)
 	tget(t8);
-#ifndef USE_SP
-	DELETEA((double*)block);
-#endif
+	SP_NFREE((double*)block);
 	tinc(tcache, tdiff(t1,t0)+tdiff(t8,t7));
 }
 
@@ -282,7 +266,7 @@ void page_rank_itr_check(
 //------------------ Main ------------------//
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
@@ -396,7 +380,7 @@ MAIN
 
 	tsetup = treorg = tcache = 0;
 	CLOCKS_EMULATE
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	TRACE_START
 	STATS_START
 
@@ -406,7 +390,7 @@ MAIN
 	// assume output data is in memory (flushed)
 	tget(finish);
 
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

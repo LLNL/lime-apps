@@ -77,19 +77,23 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
-#ifdef USE_STREAM
+#if defined(USE_STREAM)
 #include "aport.h"
 
 #define FWD_PN LSU0_PN
 
-#ifdef __microblaze__
+#if defined(__microblaze__)
 #include "fsl.h"
-#define DEVICE_ID 0
 #define RET_PN MCU0_PN
 #else
-#include "xparameters.h"
-#define DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
 #define RET_PN ARM0_PN
+#endif
+
+#if defined(ZYNQ)
+#include "xparameters.h"
+#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
+#else
+#define STREAM_DEVICE_ID 0
 #endif
 
 class stream_port {
@@ -98,7 +102,7 @@ public:
 	stream_t port;
 
 	stream_port(void) {
-		stream_init(&port, DEVICE_ID);
+		stream_init(&port, STREAM_DEVICE_ID);
 	}
 };
 #endif // USE_STREAM

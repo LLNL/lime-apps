@@ -1,6 +1,6 @@
 TARGET = strm
 VERSION = 1.0
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 MODULES += strm
 ifeq ($(ARG),1)
   DEFS += -DSTREAM_ARRAY_SIZE=120000000

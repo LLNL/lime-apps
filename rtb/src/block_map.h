@@ -160,13 +160,13 @@ public:
 		return std::make_pair(nullptr, false);
 	}
 
-#if 1
+#if 1 // begin insert
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
 #if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
-#endif
+#endif // end USE_STREAM && __ARM_ARCH
 		while (__n--) insert(*__arr++);
 #if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		dsb();
@@ -174,9 +174,9 @@ public:
 		// acc.cache_flush();
 		// tget(tB);
 		// tinc(tcache, tdiff(tB,tA));
-#endif
+#endif // end USE_STREAM && __ARM_ARCH
 	}
-#else
+#else // else insert
 	// TODO: version with drain only, modify args to drain(kvpair)?
 	// NOTE: Be careful of overlapping probes even when keys are sorted.
 	// Probes will need to be tested for overlap to prevent a hazard.
@@ -193,7 +193,7 @@ public:
 		CACHE_RECV(acc, value, sizeof(mapped_type)*__n);
 		tget(tE);
 	}
-#endif
+#endif // end insert
 
 	inline mapped_type*
 	equal_range(const key_type& __x) // returns nullptr if no match
@@ -218,13 +218,13 @@ public:
 		return __v;
 	}
 
-#if 0
+#if 0 // begin find
 	void
 	find(mapped_type* __fnd, const key_type* __x, size_type __n)
 	{
 		while (__n--) *__fnd++ = find(*__x++);
 	}
-#else
+#else // else find
 	void
 	find(mapped_type* __fnd, const key_type* __x, size_type __n)
 	{
@@ -238,7 +238,7 @@ public:
 		tinc(tcache, tdiff(tB,tA) + tdiff(tD,tC));
 		tinc(tfill, tdiff(tC,tB));
 	}
-#endif
+#endif // end find
 
 	size_type
 	erase(const key_type& __k)
@@ -294,10 +294,10 @@ public:
 			printf("PSL End\n");
 			free(hbin);
 		}
-#endif
+#endif // end PSL_HISTO
 #if defined(SPILL)
 		printf("spill size: %lu\n", (ul_t)acc.spill.size());
-#endif
+#endif // end SPILL
 	}
 
 	void clear_time(void)
@@ -477,13 +477,13 @@ public:
 		return end();
 	}
 
-#if 1
+#if 1 // begin insert
 	void
 	insert(const_pointer __arr, size_type __n)
 	{
 #if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		mtcp(XREG_CP15_CACHE_SIZE_SEL, 0);
-#endif
+#endif // end USE_STREAM && __ARM_ARCH
 		while (__n--) insert(*__arr++);
 #if 0 && defined(USE_STREAM) && defined(__ARM_ARCH)
 		dsb();
@@ -491,9 +491,9 @@ public:
 		// acc.cache_flush();
 		// tget(tB);
 		// tinc(tcache, tdiff(tB,tA));
-#endif
+#endif // end USE_STREAM && __ARM_ARCH
 	}
-#else
+#else // else insert
 	// NOTE: Be careful of overlapping probes even when keys are sorted.
 	// Probes will need to be tested for overlap to prevent a hazard.
 	void
@@ -509,7 +509,7 @@ public:
 		CACHE_RECV(acc, value, sizeof(mapped_type*)*__n);
 		tget(tE);
 	}
-#endif
+#endif // end insert
 
 	inline mapped_type*
 	equal_range(const key_type& __x) // returns nullptr if no match
@@ -519,7 +519,7 @@ public:
 		return mptr;
 	}
 
-#if 0
+#if 0 // begin equal_range
 	void
 	equal_range(
 		mapped_type** __rng,
@@ -528,7 +528,7 @@ public:
 	{
 		while (__n--) *__rng++ = equal_range(*__x++);
 	}
-#else
+#else // else equal_range
 	void
 	equal_range(
 		mapped_type** __rng,
@@ -545,7 +545,7 @@ public:
 		tinc(tcache, tdiff(tB,tA) + tdiff(tD,tC));
 		tinc(tfill, tdiff(tC,tB));
 	}
-#endif
+#endif // end equal_range
 
 	iterator
 	find(const key_type& __x) // returns end if no match
@@ -622,7 +622,7 @@ public:
 
 }; // class block_multimap
 
-#else // defined(USE_ACC)
+#else // not USE_ACC
 
 #include <unordered_map>
 
@@ -679,7 +679,7 @@ public:
 		size_type __n)
 	{ while (__n--) *__rng++ = this->equal_range(*__x++); }
 
-#if 0
+#if 0 // begin find
 
 	inline iterator
 	find(const key_type& __x) // returns end if no match
@@ -689,7 +689,7 @@ public:
 	find(iterator* __fnd, const key_type* __x, size_type __n)
 	{ while (__n--) *__fnd++ = this->find(*__x++); }
 
-#else
+#else // else find
 
 	inline mapped_type
 	find(const key_type& __x) // returns zero if no match
@@ -706,12 +706,12 @@ public:
 		#pragma omp parallel for
 		for (size_type i = 0; i < __n; i++)
 			__fnd[i] = this->find(__x[i]);
-#else
+#else // not _OPENMP
 		while (__n--) *__fnd++ = this->find(*__x++);
-#endif
+#endif // end _OPENMP
 	}
 
-#endif
+#endif // end find
 
 	// * * * * * * * * * * non-standard methods * * * * * * * * * * //
 
@@ -808,13 +808,13 @@ public:
 			static_cast<float>(base_map::bucket_count());
 	}
 
-#else
+#else // not MAX_ELEM
 
 	inline iterator
 	insert(const value_type& __x) // returns no indication if new
 	{ return base_map::insert(__x); }
 
-#endif // defined(MAX_ELEM)
+#endif // end MAX_ELEM
 
 	void
 	insert(const_pointer __arr, size_type __n)
@@ -834,9 +834,9 @@ public:
 		#pragma omp parallel for
 		for (size_type i = 0; i < __n; i++)
 			__rng[i] = this->equal_range(__x[i]);
-#else
+#else // not _OPENMP
 		while (__n--) *__rng++ = this->equal_range(*__x++);
-#endif
+#endif // end _OPENMP
 	}
 
 	inline iterator
@@ -896,6 +896,6 @@ public:
 
 }; // class block_multimap
 
-#endif // defined(USE_ACC)
+#endif // end USE_ACC
 
-#endif /* _BLOCK_MAP_H */
+#endif /* end _BLOCK_MAP_H */
