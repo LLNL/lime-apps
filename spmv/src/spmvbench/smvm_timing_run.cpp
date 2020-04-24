@@ -190,7 +190,7 @@ smvm_timing_run_with_results (struct SMVM_timing_results* p_results,
                                 num_stores);
      
       __WITH_DEBUG2( fprintf (stderr, "Deallocating space for timing data...") );
-      free (timings);
+      smvm_free (timings);
       __WITH_DEBUG2( fprintf (stderr, "done.\n") );
     } /* the non-dryrun case */
 }
@@ -505,7 +505,7 @@ smvm_timing_run (int m, int n, int r, int c,
       /* sleep(1); // Pause to let the file write proceed. */
 
       __WITH_DEBUG2( fprintf (stderr, "Deallocating space for timing data...") );
-      free (timings);
+      smvm_free (timings);
       __WITH_DEBUG2( fprintf (stderr, "done.\n") );
     } /* the non-dryrun case */
 }

@@ -48,6 +48,7 @@
 #include <stdio.h>     /* the usual output stuff */
 #include <stdlib.h>    /* exit(), malloc(), realloc() */
 #include <string.h>    /* memset() */
+#include "config.h"
 #include "alloc.h"     /* NALLOC(), NFREE() */
 
 

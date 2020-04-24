@@ -593,21 +593,23 @@ public:
 
 	void fill(void *buf, size_t len, const void *key, size_t stride)
 	{
+		uintptr_t paddr;
 		flit_t reg[7];
 
+		paddr = ATRAN(buf);
 #if defined(CONTIG)
 		/* LSU2 contiguous store (with move command) */
 		reg[1] = 0x00000000;              /* clear status */
-		reg[2] = LSU_ACMD(buf,1,LSU_move);     /* reqstat=1, command=move */
-		reg[3] = ATRAN(buf);              /* address */
+		reg[2] = LSU_ACMD(paddr,1,LSU_move); /* reqstat=1, command=move */
+		reg[3] = flit_t(paddr);           /* address */
 		reg[4] = sizeof(mapped_type)*len; /* size */
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 4); // go
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 4); // debug
 #else
 		/* LSU2 contiguous store (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(buf,1,LSU_smove); /* reqstat=1, command=smove */
-		reg[3] = ATRAN(buf);           /* address */
+		reg[2] = LSU_ACMD(paddr,1,LSU_smove); /* reqstat=1, command=smove */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(mapped_type);  /* size */
 		reg[5] = sizeof(mapped_type);  /* increment */
 		reg[6] = len;                  /* repetitions */
@@ -615,10 +617,11 @@ public:
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 6); // debug
 #endif
 
+		paddr = ATRAN(data_base);
 		/* LSU2 index2 load */
 		reg[1] = 0x00000000;               /* clear status */
-		reg[2] = LSU_ACMD(data_base,0,LSU_index2);    /* reqstat=0, command=index2 */
-		reg[3] = ATRAN(data_base);         /* base address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_index2); /* reqstat=0, command=index2 */
+		reg[3] = flit_t(paddr);            /* base address */
 		reg[4] = sizeof(slot_s);           /* size */
 		reg[5] = 0x00000000;               /* index (spacer) */
 		reg[6] = sizeof(slot_s)*topsearch; /* transfer size */
@@ -629,12 +632,13 @@ public:
 		reg[2] = topsearch-1;    /* plen, minus 1 */
 		aport_nwrite(PRU0_ID, THIS_ID, 0, 0, reg, 2);
 
+		paddr = ATRAN(key);
 #if defined(CONTIG)
 		/* start streaming keys */
 		/* LSU1 contiguous load (with move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(key,0,LSU_move);  /* reqstat=0, command=move */
-		reg[3] = ATRAN(key);           /* address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_move); /* reqstat=0, command=move */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(key_type)*len; /* size */
 		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 4); // go
 		// aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 0, 0, reg, 4); // debug
@@ -642,8 +646,8 @@ public:
 		/* start streaming keys */
 		/* LSU1 contiguous load (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(key,0,LSU_smove); /* reqstat=0, command=smove */
-		reg[3] = ATRAN(key);           /* address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_smove); /* reqstat=0, command=smove */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(key_type);     /* size */
 		reg[5] = stride;               /* increment */
 		reg[6] = len;                  /* repetitions */

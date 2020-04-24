@@ -4,6 +4,7 @@
 #include <cstddef> // size_t
 #include <memory> // std::allocator
 
+#include "config.h"
 #include "alloc.h" // NALLOC, SP_NALLOC, chk_alloc
 
 
