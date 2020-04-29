@@ -1,5 +1,5 @@
 
-PACKAGE = lime-apps-1.9.0
+PACKAGE = lime-apps-2.2.0
 
 # Cancel version control implicit rules
 %:: %,v
