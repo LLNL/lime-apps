@@ -108,8 +108,8 @@ distclean:
 	$(MAKE) build=zup clean
 	$(MAKE) build=zynq clean
 
-search = $(firstword $(wildcard $(addsuffix /$(2),$(subst :, ,$(1)))))
-MAKDIR := $(call search,$(LIME):.:../lime,make)
+search = $(firstword $(wildcard $(addsuffix /$(2),$(subst ;, ,$(1)))))
+MAKDIR := $(call search,$(LIME);.;../lime,make)
 ifeq ($(MAKDIR),)
   $(error LIME root directory not found or defined)
 endif
