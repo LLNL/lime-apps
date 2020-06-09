@@ -42,6 +42,10 @@ Access to the Internet is needed to clone public repositories when building the 
 - Fidus Sidewinder
 - Xilinx ZC706 (partial)
 
+### Contributing
+Bug fixes, new features, applications, or hardware modules can be submitted as [pull requests](http://help.github.com/articles/using-pull-requests/).
+All new contributions must be open source and not contain any proprietary code.
+
 ### License
 LiME is distributed under the terms of the BSD 3-Clause license.
 See LICENSE and NOTICE for details.
