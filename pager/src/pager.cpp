@@ -35,8 +35,15 @@ typedef size_t gsize_t; // graph size type
 
 typedef double* double_p;
 typedef index_t* index_p;
-typedef std::vector< std::vector <index_t> > graph_t;
+#if defined(USE_STREAM) && defined(__linux__)
+#include <allocator.h>
+typedef std::vector<index_t, ACC_NS::allocator<index_t> > idx_vec_t;
+typedef std::vector<idx_vec_t, ACC_NS::allocator<idx_vec_t> > graph_t;
+typedef std::vector<double, ACC_NS::allocator<double> > double_vec_t;
+#else
+typedef std::vector<std::vector<index_t> > graph_t;
 typedef std::vector<double> double_vec_t;
+#endif
 
 typedef boost::compressed_sparse_row_graph<boost::directedS, boost::no_property, boost::no_property, boost::no_property, index_t, index_t> DummyForRMAT;
 typedef boost::rmat_iterator<boost::mt19937, DummyForRMAT> RMATGen;
