@@ -22,6 +22,7 @@
 #include "ticks.h"
 #include "clocks.h"
 #include "sysinit.h"
+#include "gdt.h"
 
 #define DEFAULT_SCALE 29U // log 2 size
 #define DEFAULT_VECTOR_LSZ 10U // log 2 size
@@ -35,8 +36,6 @@ unsigned vect_len = 1U<<DEFAULT_VECTOR_LSZ;
 #include "IndexArray.hpp"
 IndexArray<index_t> dre; // Data Reorganization Engine
 #endif // USE_ACC
-
-void config_gdt();
 
 MAIN
 {
