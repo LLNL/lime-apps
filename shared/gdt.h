@@ -1,6 +1,3 @@
-#ifndef CONFIG_GDT_H_
-#define CONFIG_GDT_H_
-
 #define B_OFFSET 0x00010000
 #define R_OFFSET 0x00020000
 
@@ -12,5 +9,4 @@ extern "C" {
 void config_gdt();
 #ifdef __cplusplus
 }
-#endif
 #endif
