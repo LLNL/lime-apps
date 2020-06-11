@@ -4,7 +4,7 @@ SRC += ../src ../../shared
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
-  MODULES += randa core_single_cpu_lcg utility
+  MODULES += randa core_single_cpu_lcg utility gdt
 endif
 ifneq ($(NEED_STREAM),)
   DEFS += -DUSE_LSU

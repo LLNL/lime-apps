@@ -36,9 +36,13 @@ unsigned vect_len = 1U<<DEFAULT_VECTOR_LSZ;
 IndexArray<index_t> dre; // Data Reorganization Engine
 #endif // USE_ACC
 
+void config_gdt();
 
 MAIN
 {
+	/* --- Configure the Gaussian Delay Tables (GTD) --- */
+	config_gdt();
+
 	HPCC_Params params;
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
