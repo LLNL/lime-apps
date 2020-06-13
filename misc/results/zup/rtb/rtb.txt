@@ -1,0 +1,84 @@
+lloyd23@kome ~/work/apps.tst2/rtb/zup
+$ make D=USE_HASH,STATS RUN_ARGS="-e512Mi -l.60 -c -w1Mi -h.90 -z.99" run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DUSE_HASH -DSTATS -DUSE_SP -DUSE_OCM -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e512Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -I../../shared -IC:/cygwin/home/lloyd23/work/lime.tst2/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+
+# 8 GB hash table
+# hard coded table address
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 536870912
+key size: 8 data size: 4
+slot size: 16
+Startup time: 10.095529 sec
+Insert count: 322880513
+Insert  rate: 1873486.435239 ops/sec
+Run     time: 195.172745 sec
+Oper.   time: 22.830684 sec
+Insert  time: 172.342061 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+table addr: 0x1100000000
+table size: 8589934592
+size: 322123537
+load_factor (elem): 0.600002
+bucket_count: 536870932
+max_psl: 21
+heap start:0x1000231080 top:0x1000232000 end:0x10ff231080
+total:4278190080 used:3968
+Stats   time: 0.011583 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5247412.235270 ops/sec
+Run     time: 0.207021 sec
+Oper.   time: 0.007194 sec
+Lookup  time: 0.199827 sec
+  Fill  time: 0.188891 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.010289 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 11 65587 704 4197632 0
+ACC 1048576 4755455 4194304 360710144 1048576
+
+lloyd23@kome ~/work/apps/rtb/zup
+$ make D=USE_HASH,STATS run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DUSE_HASH -DSTATS -DUSE_SP -DUSE_OCM -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -I../../shared -IC:/cygwin/home/lloyd23/work/lime.tst2/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.630989 sec
+Insert count: 20135937
+Insert  rate: 1867473.600766 ops/sec
+Run     time: 12.206994 sec
+Oper.   time: 1.424546 sec
+Insert  time: 10.782448 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+table addr: 0x1000230600
+table size: 536870912
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+heap start:0x1000230080 top:0x1020234000 end:0x10ff230080
+total:4278190080 used:536887168
+Stats   time: 0.011325 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 6272442.781309 ops/sec
+Run     time: 0.174419 sec
+Oper.   time: 0.007247 sec
+Lookup  time: 0.167172 sec
+  Fill  time: 0.156236 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.010288 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 11 65584 704 4197440 0
+ACC 1048576 4194304 4194304 293601280 1048576

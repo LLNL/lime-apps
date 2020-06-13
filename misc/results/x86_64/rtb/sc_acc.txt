@@ -1,0 +1,97 @@
+$ make D=SYSTEMC,USE_HASH,RDTSC,TICKS_SEC=2200000000
+
+# with Pthreads
+lloyd23@OUREA ~/work/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.60 -c -w8Ki -h.90 -z.99
+&s_ctl: 0x274e5c
+s_gctl: 0x64a128
+var: 0x273c7c
+aheap: 0x80061e80
+heap: 0xbfc90008
+
+Info: /OSCI/SystemC: Simulation begin.
+&s_ctl: 0x274e5c
+s_gctl: 0x64a128
+var: 0xbf28cd9c
+aheap: 0x800d9740
+heap: 0x20fc0008
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.264012 sec
+Insert count: 20135937
+Insert  rate: 4927870.508158 ops/sec
+Run     time: 5.278369 sec
+Oper.   time: 1.192236 sec
+Insert  time: 4.086134 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+Stats   time: 0.000029 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 207.086280 ops/sec
+Run     time: 39.558415 sec
+Oper.   time: 0.000024 sec
+Lookup  time: 39.558391 sec
+  Fill  time: 39.558390 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+# with SystemC QuickThreads, 6115 times slower than x86 cygwin direct
+lloyd23@OUREA ~/work/apps/rtb/x86_64
+$ ./rtb -e32Mi -l.60 -c -w8Ki -h.90 -z.99
+&s_ctl: 0x274e5c
+s_gctl: 0x64a128
+var: 0x273c7c
+aheap: 0x80061e00
+heap: 0xbfc90008
+
+Info: /OSCI/SystemC: Simulation begin.
+&s_ctl: 0x274e5c
+s_gctl: 0x64a128
+var: 0xbe9bff9c
+aheap: 0x800d6e00
+heap: 0x20fc0008
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.246698 sec
+Insert count: 20135937
+Insert  rate: 4941558.598079 ops/sec
+Run     time: 5.273899 sec
+Oper.   time: 1.199084 sec
+Insert  time: 4.074815 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+Stats   time: 0.000029 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1372.676411 ops/sec
+Run     time: 5.967927 sec
+Oper.   time: 0.000024 sec
+Lookup  time: 5.967903 sec
+  Fill  time: 5.967902 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.

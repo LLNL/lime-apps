@@ -1,0 +1,16 @@
+
+"RTB Lookup rate (ops/sec) - results/sc_acc_fixed3c.txt"
+
+"Distribution: Zipf=0.99"
+"Load Factor / Hit Rate", hit 90%
+0.10, 70028298.544861
+0.20, 63474510.39705
+0.30, 53766094.386799
+0.40, 41365781.772879
+0.50, 35842218.633333
+0.60, 28648837.987464
+0.70, 22077691.915296
+0.80, 16050191.959669
+0.90, 7414494.728975
+
+"off-chip transfer delay, block transfer for keys and results"

@@ -1,0 +1,25 @@
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x4021ca70
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:20 QUEUE_R:20 TRANS:24 V_W:89 V_R:89
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:311 CPU_DRAM_R:312
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:239 ACC_DRAM_R:223
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.242625 seconds
+0.017287167 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.242474 sec
+Cache time: 0.000151 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321654 8471636 138292928 271092448 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+enter trace file name: ra29st.bin
+trace length:0x18259420
+capture time:59 sec
+capture bandwidth:6866371 bytes/sec

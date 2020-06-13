@@ -1,0 +1,48 @@
+gem5, x86_64, detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+RDTSC timer
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+info: Increasing stack size by one page.
+Array size = 2000000 (elements), Offset = 0 (elements)
+Memory per array = 15.3 MiB (= 0.0 GiB).
+Total memory required = 45.8 MiB (= 0.0 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1546.9     0.020686     0.020686     0.020686
+Scale:           1543.6     0.020730     0.020730     0.020730
+Add:             2367.7     0.020273     0.020273     0.020273
+Triad:           2245.0     0.021381     0.021381     0.021381
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+
+gem5, x86_64, detailed @ 2.0 GHz, ddr3_1600_x64, L1=32kB, L2=512kB, L3=none
+clock timer
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+info: Increasing stack size by one page.
+Array size = 2000000 (elements), Offset = 0 (elements)
+Memory per array = 15.3 MiB (= 0.0 GiB).
+Total memory required = 45.8 MiB (= 0.0 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1600.0     0.020000     0.020000     0.020000
+Scale:           1600.0     0.020000     0.020000     0.020000
+Add:             2400.0     0.020000     0.020000     0.020000
+Triad:           2400.0     0.020000     0.020000     0.020000
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+

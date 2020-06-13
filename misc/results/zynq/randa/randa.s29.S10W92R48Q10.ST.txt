@@ -1,0 +1,26 @@
+# Configuration
+# CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+# LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+# MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:92 DRAM_R:48 QUEUE:10 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:459 CPU_DRAM_R:287
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:387 ACC_DRAM_R:195
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.226212 seconds
+0.018541488 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.226008 sec
+Cache time: 0.000204 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4319651 8463336 138228832 270826880 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C2D0 length:0x183B4220

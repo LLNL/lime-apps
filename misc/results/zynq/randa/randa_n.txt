@@ -1,0 +1,131 @@
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:360 DRAM_R:45 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:360 V_R:45
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:1395 CPU_DRAM_R:136
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1419 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.266917 seconds
+0.015713870 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.265992 sec
+Cache time: 0.000925 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4316849 8502398 138139168 272076768 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:560 DRAM_R:70 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:560 V_R:70
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:2195 CPU_DRAM_R:236
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:2219 ACC_DRAM_R:243
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.408682 seconds
+0.010262993 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.407249 sec
+Cache time: 0.001433 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4293819 8498494 137402208 271951840 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:8000 DRAM_R:2000 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:8000 V_R:2000
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:31955 CPU_DRAM_R:7956
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:31979 ACC_DRAM_R:7963
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 5.714858 seconds
+0.000733930 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 5.695166 sec
+Cache time: 0.019693 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4273590 8492205 136754880 271750560 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:16000 DRAM_R:2000 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:16000 V_R:2000
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:63955 CPU_DRAM_R:7956
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:63979 ACC_DRAM_R:7963
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 11.384187 seconds
+0.000368432 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 11.343099 sec
+Cache time: 0.041087 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4262668 8533285 136405376 273065152 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:4000 DRAM_R:4000 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:4000 V_R:4000
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:15955 CPU_DRAM_R:15956
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:15979 ACC_DRAM_R:15963
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 8.585474 seconds
+0.000488535 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 8.579607 sec
+Cache time: 0.005867 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321545 8470632 138289440 271060288 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x40218680
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:8000 DRAM_R:8000 QUEUE_W:0 QUEUE_R:0 TRANS:0 V_W:8000 V_R:8000
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:4294967292 CPU_SRAM_R:1 CPU_DRAM_B:31955 CPU_DRAM_R:31956
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:31979 ACC_DRAM_R:31963
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 17.125710 seconds
+0.000244913 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 17.114064 sec
+Cache time: 0.011646 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321663 8471335 138293216 271082752 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.

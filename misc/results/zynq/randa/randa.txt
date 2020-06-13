@@ -1,0 +1,796 @@
+ARM: 666 MHz
+DRE_CONTROL: 166 MHz (includes MicroBlaze)
+DRE_DATA: 200 MHz
+DRAM: on-board DDR3-1333, 1 GB, 32-bit data path, Chip: Micron MT41J256M8HX-15E, D9LGK
+  controller: built-in, ddr_3x = 33e6*32/2 = 533.3 MHz * 2 = 1066.6 MTs * 4 = 4.26 GB/s
+  ARM path: AXI_GP0 -> AXI_HP0 (32-bit, 200 MHz)
+  DRE path: AXI_HP2 (64-bit, 200 MHz)
+DRAM: SODIMM DDR3-1600, 1 GB, 64-bit data path, Module: Micron MT8JTF12864HZ-1G6G1, PC3-12800S-11-11-B1
+  controller: MIG, sys_clk*2 = 400 MHz * 2 = 800 MTs * 8 = 6.4 GB/s
+  TCD path: AXI_MIG (256-bit, 200 MHz)
+
+Configuration
+CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+Application	CPU Only sec	CPU+DRE sec	Speedup	Base sec	Upper Bound
+RandomAccess (table 0.5 GiB)	0.310347	0.146333	2.12x	0.065912	4.71x
+
+Upper bound on speedup with DRE: 4.7x
+0.032703 (compact XOR operation from SRAM) + 0.001013 (cache) = 0.033716
+0.158554 (host only no reorg) / 0.033716 = 4.70263
+With CPU at 133 MHz scaled 20x, ~8ns access to memory
+0.138193 (compact XOR operation from SRAM) + 0.003968 (cache) = 0.142161
+0.190077 (host only no reorg) / 0.142161 = 1.33705
+
+########## Scalar Version ##########
+Release configuration with -O2 optimization
+randa
+
+random number size: 32-bit, table data size: 64-bit
+Begin of SingleRandomAccess section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 98.452075 seconds
+0.002726560 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess section.
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 100.926822 seconds
+0.002659704 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+random number size: 64-bit, table data size: 64-bit
+Begin of SingleRandomAccess section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 99.558710 seconds
+0.002696253 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess section.
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 85.966032 seconds
+0.003122576 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+random number size: 32-bit, table data size: 32-bit
+Begin of SingleRandomAccess section.
+Main table size   = 2^27 = 134217728 words
+Number of updates = 536870912
+Real time used = 192.672457 seconds
+0.002786443 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 134217728 locations (passed).
+End of SingleRandomAccess section.
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^27 = 134217728 words
+Number of updates = 536870912
+Real time used = 195.772686 seconds
+0.002742318 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 134217728 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+random number size: 64-bit, table data size: 64-bit
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.155595 seconds
+0.003369572 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+########## Vector Version ARM + DRE ##########
+Release configuration with -O2 optimization
+#define VECT_LEN 1024
+random number size: 64-bit, table data size: 64-bit
+randa
+
+---------- code mapped to loopback DDR memory ----------
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.134461 seconds
+0.031193476 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.073965 sec
+Oper. time: 0.060443 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573145 1053090 50340640 33698848 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C340 length:0x26EFBC20
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:291 CPU_DRAM_R:295
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:219 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.137986 seconds
+0.030396513 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.076249 sec
+Oper. time: 0.061684 sec
+Cache time: 0.000052 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1573145 1053088 50340640 33698752 0
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C340 length:0x26FA0E20
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:20 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:371 CPU_DRAM_R:375
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:299 ACC_DRAM_R:283
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.139223 seconds
+0.030126492 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.077498 sec
+Oper. time: 0.061673 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+pipe depth:16, SRAM use DRAM, separate paths (with reordering) for SRAM and DRAM
+On-chip SRAM - R:12 W:12, On-chip DRAM - R:90 W:92, Off-chip add 32
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:132 CPU_SRAM_R:140 CPU_DRAM_W:451 CPU_DRAM_R:447
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:347 ACC_DRAM_R:323
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.146333 seconds
+0.028662673 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.080421 sec
+Oper. time: 0.065860 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+pipe depth:16, SRAM use OCM, separate paths (with reordering) for SRAM and DRAM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:122 ARM_SRAM_R:122 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:0 ACC_SRAM_R:0 ACC_DRAM_W:323 ACC_DRAM_R:323
+Real time used = 0.143026 seconds
+0.029325394 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.076502 sec
+Oper. time: 0.066472 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+pipe depth:16, SRAM use DRAM, separate paths (with reordering) for SRAM and DRAM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:132 ARM_SRAM_R:132 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:10 ACC_SRAM_R:10 ACC_DRAM_W:323 ACC_DRAM_R:323
+Real time used = 0.138537 seconds
+0.030275695 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.073530 sec
+Oper. time: 0.064954 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+pipe depth:16, separate paths (with reordering) for SRAM and DRAM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:128 ARM_SRAM_R:137 ARM_DRAM_W:446 ARM_DRAM_R:455
+Slot 1 - ACC_SRAM_W:0 ACC_SRAM_R:9 ACC_DRAM_W:318 ACC_DRAM_R:327
+Real time used = 0.138812 seconds
+0.030215713 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.073298 sec
+Oper. time: 0.065461 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+pipe depth:8, separate paths (with reordering) for SRAM and DRAM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:128 ARM_SRAM_R:137 ARM_DRAM_W:446 ARM_DRAM_R:455
+Slot 1 - ACC_SRAM_W:0 ACC_SRAM_R:9 ACC_DRAM_W:318 ACC_DRAM_R:327
+Real time used = 0.167386 seconds
+0.025057607 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.101872 sec
+Oper. time: 0.065462 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - W_SRAM:128 W_DRAM:446 R_SRAM:137 R_DRAM:455
+Slot 1 - W_SRAM:0 W_DRAM:318 R_SRAM:9 R_DRAM:327
+Real time used = 0.286718 seconds
+0.014628678 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.221351 sec
+Oper. time: 0.065314 sec
+Cache time: 0.000052 sec
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C340 length:0x27025420
+
+CPU:133.33 MCU:62.50 LSU:62.50 20x
+1xCPU:2.67GHz,5.33GB/s 1xMCU:1.25GHz,5GB/s 1xLSU:1.25GHz,10GB/s 1xVault(SRAM&DRAM):10GB/s@~8ns
+ARM_CLK_CTRL:1F000A00 CLK_621_TRUE:00000000
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.409946 seconds (0.0204973)
+0.001278920 Billion(10^9) Updates per second [GUP/s] (0.0255784)
+Setup time: 0.000010 sec
+Reorg time: 0.267378 sec
+Oper. time: 0.138193 sec
+Cache time: 0.003968 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.128287 seconds
+0.004086841 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000004 sec
+Reorg time: 0.095864 sec
+Oper. time: 0.032218 sec
+Cache time: 0.000201 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+incorporate cache invalidate instruction on MicroBlaze within drain tidx loop
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.129626 seconds
+0.004044628 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000004 sec
+Reorg time: 0.095825 sec
+Oper. time: 0.032703 sec
+Cache time: 0.001013 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+incorporate cache flush instruction within ran & tidx loop
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.135490 seconds
+0.003869565 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000004 sec
+Reorg time: 0.095848 sec
+Oper. time: 0.032708 sec
+Cache time: 0.006849 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+incorporate cache flush-invalidate instruction within XOR loop
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.137580 seconds
+0.003810798 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000005 sec
+Reorg time: 0.095841 sec
+Oper. time: 0.033268 sec
+Cache time: 0.008382 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+for on-chip memory, enable L1 cache only
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.140658 seconds
+0.003727384 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000004 sec
+Reorg time: 0.095850 sec
+Oper. time: 0.031001 sec
+Cache time: 0.013722 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+DRE calls: nupdate/VECT_LEN*3+1 = 524288/1024*3+1 = 1,537
+DRE wait time: 1.837 usec
+DRE command overhead: ~ 1,537*1.837 usec = 2.823469 msec
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.188979 seconds
+0.002774314 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000007 sec
+Reorg time: 0.097751 sec includes messaging version of dre.wait()
+Oper. time: 0.031515 sec
+Cache time: 0.059626 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.193353 seconds
+0.002711564 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000005 sec
+Reorg time: 0.095861 sec
+Oper. time: 0.031522 sec
+Cache time: 0.065884 sec use dre.cache_invalidate(entire)
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+### C code ###
+for (j=0; j<VECT_LEN; j++) {
+	block[j] ^= ran[j];
+}
+### Assembly code ###
+.L13:
+	vld1.64	{d16-d17}, [r3:64]
+	vld1.64	{d18-d19}, [r2:64]!
+	veor	q8, q9, q8
+	vst1.64	{d16-d17}, [r3:64]!
+	cmp	r1, r3
+	bne	.L13
+
+use dre.cache_invalidate(range);
+use vector optimization: -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -mvectorize-with-neon-quad -mfloat-abi=softfp -ffast-math -fdump-tree-vect
+read and write index command loop unroll 16 times
+interruptible command loop
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.187009 seconds
+0.002803541 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000004 sec
+Reorg time: 0.095834 sec
+Oper. time: 0.031521 sec
+Cache time: 0.059568 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+read and write index command loop unroll 16 times
+interruptible command loop
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.189184 seconds
+0.002771307 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+index command loop unroll 16 times
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.188347 seconds
+0.002783635 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+index command loop unroll 8 times
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.189720 seconds
+0.002763485 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x4011c6e0 tidx:0x4091c700 block:0x40000000
+Real time used = 0.215862 seconds
+0.002428808 Billion(10^9) Updates per second [GUP/s]
+End of SingleRandomAccess_LCG section.
+trace address:0x11C2C0 length:0x558C420
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.215831 seconds
+0.002429160 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.217949 seconds
+0.002405555 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.221998 seconds
+0.002361681 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x401186a0 tidx:0x409186c0 block:0x40000000
+Real time used = 0.471861 seconds
+0.001111106 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+---------- code mapped directly to DDR memory ----------
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x40100420 tidx:0x40900440 block:0x40000000
+Real time used = 0.471836 seconds
+0.001111167 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+########## Vector Version ARM only ##########
+Release configuration with -O2 optimization
+random number size: 64-bit, table data size: 64-bit
+#define VECT_LEN 1024
+randa
+
+---------- DRE code on host ----------
+
+using vector optimization: -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -mvectorize-with-neon-quad -mfloat-abi=softfp -ffast-math -fdump-tree-vect
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.212219 seconds
+0.002470505 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000001 sec
+Reorg time: 0.186828 sec
+Oper. time: 0.024695 sec
+Cache time: 0.000532 sec
+Found 240 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x40118650 tidx:0x40918658 block:0x40919660
+Real time used = 0.215697 seconds
+0.002430669 Billion(10^9) Updates per second [GUP/s]
+End of SingleRandomAccess_LCG section.
+trace address:0x118240 length:0x39DBE20
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x40118650 tidx:0x40918658 block:0x40000000
+Real time used = 0.215863 seconds
+0.002428800 Billion(10^9) Updates per second [GUP/s]
+End of SingleRandomAccess_LCG section.
+trace address:0x118240 length:0x39A0820
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Table:0x40100410 tidx:0x40900418 block:0x40000000
+Real time used = 0.219160 seconds
+0.002392264 Billion(10^9) Updates per second [GUP/s]
+Found 227 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x100000 length:0x6E1E620
+
+---------- no DRE code ----------
+2.4 GHz AMD Opteron: 0.015 GUPS
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.199132 seconds
+0.021062907 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.199008 sec
+Cache time: 0.000124 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4322030 8464995 138304960 270879968 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C2D0 length:0x183D7A20
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:291 CPU_DRAM_R:295
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:219 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.230244 seconds
+0.018216744 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.230100 sec
+Cache time: 0.000144 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321593 8464815 138290976 270874208 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x11C2D0 length:0x183CE020
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:20 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:371 CPU_DRAM_R:375
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:299 ACC_DRAM_R:283
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.272503 seconds
+0.015391786 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.272330 sec
+Cache time: 0.000173 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+SRAM use DRAM, On-chip SRAM - R:12 W:12, On-chip DRAM - R:90 W:92, Off-chip add 32
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:132 CPU_SRAM_R:140 CPU_DRAM_W:451 CPU_DRAM_R:447
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:347 ACC_DRAM_R:323
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+Real time used = 0.310347 seconds
+0.013514871 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.310145 sec
+Cache time: 0.000202 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+SRAM use OCM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:122 ARM_SRAM_R:122 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:0 ACC_SRAM_R:0 ACC_DRAM_W:323 ACC_DRAM_R:323
+Real time used = 0.312566 seconds
+0.013418928 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.312374 sec
+Cache time: 0.000193 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+SRAM use DRAM
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:132 ARM_SRAM_R:132 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:10 ACC_SRAM_R:10 ACC_DRAM_W:323 ACC_DRAM_R:323
+Real time used = 0.312328 seconds
+0.013429160 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.312135 sec
+Cache time: 0.000193 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 4194304
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - W_SRAM:128 W_DRAM:446 R_SRAM:137 R_DRAM:455
+Slot 1 - W_SRAM:0 W_DRAM:318 R_SRAM:9 R_DRAM:327
+Real time used = 0.313953 seconds
+0.013359660 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.313762 sec
+Cache time: 0.000191 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+trace address:0x1182D0 length:0x18536220
+
+CPU:133.33 20x
+1xCPU:2.67GHz,5.33GB/s 1xVault(SRAM&DRAM):10GB/s@~8ns
+ARM_CLK_CTRL:1F000A00 CLK_621_TRUE:00000000
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.190077 seconds (0.00950385)
+0.002758290 Billion(10^9) Updates per second [GUP/s] (0.0551658)
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.188463 sec
+Cache time: 0.001611 sec
+Found 0 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.159090 seconds
+0.003295549 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.158685 sec
+Cache time: 0.000404 sec
+Found 0 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+using vector optimization: -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -mvectorize-with-neon-quad -mfloat-abi=softfp -ffast-math -fdump-tree-vect
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.158554 seconds
+0.003306691 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.158147 sec
+Cache time: 0.000405 sec
+Found 0 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.182604 seconds
+0.002871173 Billion(10^9) Updates per second [GUP/s]
+End of SingleRandomAccess_LCG section.
+trace address:0x118240 length:0x362C020
+
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^20 = 1048576 words
+Number of updates = 524288
+Real time used = 0.182145 seconds
+0.002878406 Billion(10^9) Updates per second [GUP/s]
+Found 0 errors in 1048576 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+---------- stock code, direct path to on-board DRAM memory ----------
+
+cache line size: 32 bytes
+demonstrated memory bandwidth: 607,140,650 bytes/s
+Standalone OS
+optimization: -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -mvectorize-with-neon-quad -mfloat-abi=softfp -ffast-math
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 28.296358 seconds
+0.009486573 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 28.296358 sec
+Cache time: 0.000000 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+cache line size: 32 bytes
+demonstrated memory bandwidth: 341,887,944 bytes/s
+Linux OS
+optimization: -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -mvectorize-with-neon-quad -mfloat-abi=softfp -ffast-math
+zynq> ./randa.elf
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 50.270000 seconds
+0.005339874 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 50.270000 sec
+Cache time: 0.000000 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+zynq> ./randa.elf
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 50.250000 seconds
+0.005341999 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 50.250000 sec
+Cache time: 0.000000 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+zynq> ./randa.elf
+Begin of SingleRandomAccess_LCG section.
+Main table size   = 2^26 = 67108864 words
+Number of updates = 268435456
+Real time used = 50.240000 seconds
+0.005343062 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 50.240000 sec
+Cache time: 0.000000 sec
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.

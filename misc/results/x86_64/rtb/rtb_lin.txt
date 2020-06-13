@@ -1,0 +1,422 @@
+[lloyd23@nome x86_64]$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o fasta.o ../src/fasta.c
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o path.o ../src/path.c
+cc  -O3 -Wall -DTIMEOFDAY -I../../shared -I../src  -c -o short.o ../src/short.c
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src -static  rtb.o fasta.o path.o short.o   -o rtb
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.20 -r\$HOME/bio/metag/reads/SRR033549.nr.fasta -q\$HOME/bio/metag/reads/SRR033549.nr.fasta
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+ -- can't open file: $HOME/bio/metag/reads/SRR033549.nr.fasta
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/SRR033549.nr.fasta
+block size: 4096
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+read........
+bases per second:2186057.421830
+add time in seconds:4.280184
+adds per second:2015398.403433
+Fill    time: 1.166628 sec
+Drain   time: 0.417945 sec
+Insert  time: 2.505062 sec
+Cache   time: 0.009425 sec
+Oper.   time: 0.181124 sec
+size:8626276 unique:6711258 duplicates:1915018 22.20%
+load_factor:0.200011
+bucket_count:33554432
+max_elem_per_key:19483
+max_psl:15
+query.............................................................................................................
+bases per second:7453838.316290
+query time in seconds:15.993015
+lookups per second:6856322.588330
+Fill    time: 13.740727 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.059147 sec
+Oper.   time: 2.193141 sec
+lookups:109653270 hits:41841138 38.16%
+
+# # # # # # # # # # Uses Accelerator Code # # # # # # # # # #
+
+[lloyd23@nome x86_64]$ make D=DIRECT,RDTSC,TICKS_SEC=2600000000
+g++  -O3 -Wall -std=c++11 -DDIRECT -DRDTSC -DTICKS_SEC=2600000000 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6757337.724839
+add time in seconds:1.076770
+adds per second:6233021.587810
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.938231 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.138539 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000027
+bases per second:8605055.396038
+query time in seconds:13.853409
+lookups per second:7915255.628331
+Fill    time: 11.511805 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.002484 sec
+Oper.   time: 2.339119 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6688594.290590
+add time in seconds:1.087837
+adds per second:6169612.102130
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.949084 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.138753 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000022
+bases per second:8645980.518709
+query time in seconds:13.787834
+lookups per second:7952900.105055
+Fill    time: 11.447311 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.002486 sec
+Oper.   time: 2.338038 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6621840.664647
+add time in seconds:1.098803
+adds per second:6108038.031319
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.959375 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.139429 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000026
+bases per second:8635801.474023
+query time in seconds:13.804086
+lookups per second:7943537.034507
+Fill    time: 11.465436 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.002485 sec
+Oper.   time: 2.336166 sec
+lookups:109653270 hits:36118031 32.94%
+
+[lloyd23@nome x86_64]$ make D=DIRECT,TIMEOFDAY
+g++  -O3 -Wall -std=c++11 -DDIRECT -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6920549.831839
+add time in seconds:1.051376
+adds per second:6383569.721964
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.923290 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.128086 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000025
+bases per second:8875832.081234
+query time in seconds:13.430780
+lookups per second:8164326.271445
+Fill    time: 11.327602 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.030893 sec
+Oper.   time: 2.072285 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6905810.443993
+add time in seconds:1.053620
+adds per second:6369973.994419
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.925458 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.128162 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000025
+bases per second:8960095.450605
+query time in seconds:13.304473
+lookups per second:8241834.907704
+Fill    time: 11.225230 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.030693 sec
+Oper.   time: 2.048550 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6936456.411796
+add time in seconds:1.048965
+adds per second:6398242.076714
+Fill    time: 0.000000 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.920581 sec
+Cache   time: 0.000000 sec
+Oper.   time: 0.128384 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.200019
+load_factor (keys):0.160329
+bucket_count:33554432
+max_elem_per_key:15512
+max_psl:14
+stats time in seconds:0.000026
+bases per second:8987346.326167
+query time in seconds:13.264132
+lookups per second:8266901.294408
+Fill    time: 11.184528 sec
+Drain   time: 0.000000 sec
+Insert  time: 0.000000 sec
+Cache   time: 0.030609 sec
+Oper.   time: 2.048995 sec
+lookups:109653270 hits:36118031 32.94%
+
+# # # # # # # # # # Uses STL # # # # # # # # # #
+
+[lloyd23@nome x86_64]$ make D=RDTSC,TICKS_SEC=2600000000
+g++  -O3 -Wall -std=c++11 -DRDTSC -DTICKS_SEC=2600000000 -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6856834.994955
+add time in seconds:1.061146
+adds per second:6324798.654136
+Insert  time: 0.923291 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.137855 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.363501
+bases per second:14208834.746896
+query time in seconds:8.389805
+lookups per second:13069823.961177
+Insert  time: 0.000000 sec
+Lookup  time: 6.116301 sec
+Oper.   time: 2.273503 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6863488.767670
+add time in seconds:1.060117
+adds per second:6330936.146543
+Insert  time: 0.922288 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.137829 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.364860
+bases per second:14223334.731002
+query time in seconds:8.381252
+lookups per second:13083161.595338
+Insert  time: 0.000000 sec
+Lookup  time: 6.107111 sec
+Oper.   time: 2.274141 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6851820.513407
+add time in seconds:1.061922
+adds per second:6320173.256826
+Insert  time: 0.923995 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.137927 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.366585
+bases per second:14228972.175357
+query time in seconds:8.377931
+lookups per second:13088347.130016
+Insert  time: 0.000000 sec
+Lookup  time: 6.104040 sec
+Oper.   time: 2.273891 sec
+lookups:109653270 hits:36118031 32.94%
+
+[lloyd23@nome x86_64]$ make D=TIMEOFDAY
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6926109.818644
+add time in seconds:1.050532
+adds per second:6388698.297624
+Insert  time: 0.923973 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.126559 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.315518
+bases per second:14371234.612864
+query time in seconds:8.294997
+lookups per second:13219205.504233
+Insert  time: 0.000000 sec
+Lookup  time: 6.188109 sec
+Oper.   time: 2.106888 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6936734.154938
+add time in seconds:1.048923
+adds per second:6398498.269177
+Insert  time: 0.922548 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.126375 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.313610
+bases per second:14424700.798657
+query time in seconds:8.264251
+lookups per second:13268385.725458
+Insert  time: 0.000000 sec
+Lookup  time: 6.160753 sec
+Oper.   time: 2.103498 sec
+lookups:109653270 hits:36118031 32.94%
+[lloyd23@nome x86_64]$ ./rtb -e32Mi -l.20 -r$HOME/bio/metag/reads/SRR033549.nr.fasta -q$HOME/bio/metag/reads/srr_sh.fa
+block length:1024
+k-mer length:18
+max entries:33554432
+key size:8 data size:4
+bases per second:6933997.371674
+add time in seconds:1.049337
+adds per second:6395973.838719
+Insert  time: 0.922182 sec
+Lookup  time: 0.000000 sec
+Oper.   time: 0.127155 sec
+size:6711532 unique:5379750 duplicates:1331782 19.84%
+load_factor (elem):0.199080
+load_factor (keys):0.159576
+bucket_count:33712729
+max_elem_per_bucket:13
+max_elem_per_key:7
+max_psl:10
+stats time in seconds:1.314109
+bases per second:14483308.748873
+query time in seconds:8.230809
+lookups per second:13322295.536198
+Insert  time: 0.000000 sec
+Lookup  time: 6.128818 sec
+Oper.   time: 2.101991 sec
+lookups:109653270 hits:36118031 32.94%
+
+[lloyd23@nome x86_64]$ make
+g++  -O3 -Wall -std=c++11 -DTIMEOFDAY -I../../shared -I../src  -c -o rtb.o ../src/rtb.cpp
+
+[lloyd23@nome x86_64]$ ./rtb -p -e32Mi -l.19 -r$HOME/bio/SRR000550.fa -w8Mi -h.90 -z.99
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.051980 sec
+read.......
+Insert count: 7184442
+Insert  rate: 8022504.957925 ops/sec
+Bases   rate: 7278687.704096 bp/sec
+Run     time: 1.058938 sec
+Oper.   time: 0.163402 sec
+Insert  time: 0.895536 sec
+gather stats...
+size: 6405649
+load_factor (elem): 0.190007
+bucket_count: 33712729
+max_elem_per_bucket: 7
+Stats   time: 0.479185 sec
+calc zeta... 17.544100
+generate misses...
+generate hits...
+shuffle keys...
+workload...
+Lookup count: 8388608
+Lookup  hits: 7549747 90.00%
+Lookup  rate: 20045948.445405 ops/sec
+Run     time: 0.424323 sec
+Oper.   time: 0.005854 sec
+Lookup  time: 0.418469 sec

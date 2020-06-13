@@ -1,0 +1,425 @@
+/root/apps4
+cd bfs/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/bfs/arm_64'
+rm -f   bfs makeflags
+make[1]: Leaving directory '/root/apps4/bfs/arm_64'
+cd dgemm/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/dgemm/arm_64'
+rm -f   dgemm makeflags
+make[1]: Leaving directory '/root/apps4/dgemm/arm_64'
+cd sort/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/sort/arm_64'
+rm -f   sort makeflags
+make[1]: Leaving directory '/root/apps4/sort/arm_64'
+cd strm/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/strm/arm_64'
+rm -f   strm makeflags
+make[1]: Leaving directory '/root/apps4/strm/arm_64'
+cd xsb/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/xsb/arm_64'
+rm -f io.o Materials.o CalculateXS.o clocks_ln.o monitor_ln.o XSutils.o GridInit.o Main.o XSutils.d Main.d io.d Materials.d CalculateXS.d clocks_ln.d monitor_ln.d GridInit.d xsb makeflags
+make[1]: Leaving directory '/root/apps4/xsb/arm_64'
+cd image/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/image/arm_64'
+rm -f   image makeflags
+make[1]: Leaving directory '/root/apps4/image/arm_64'
+cd pager/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/pager/arm_64'
+rm -f   pager makeflags
+make[1]: Leaving directory '/root/apps4/pager/arm_64'
+cd randa/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/randa/arm_64'
+rm -f   randa makeflags
+make[1]: Leaving directory '/root/apps4/randa/arm_64'
+cd rtb/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/rtb/arm_64'
+rm -f   rtb makeflags
+make[1]: Leaving directory '/root/apps4/rtb/arm_64'
+cd spmv/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/spmv/arm_64'
+rm -f   spmv makeflags
+make[1]: Leaving directory '/root/apps4/spmv/arm_64'
+r_ns: 45 w_ns: 45
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     11.276 seconds
+Lookups:     15,000,000
+Lookups/s:   1,330,204
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 760313 693176821 12164924 1415409072 1
+r_ns: 70 w_ns: 70
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     14.543 seconds
+Lookups:     15,000,000
+Lookups/s:   1,031,415
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 946919 693801378 15150600 1457112480 6
+r_ns: 100 w_ns: 100
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     18.492 seconds
+Lookups:     15,000,000
+Lookups/s:   811,175
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1180540 694730337 18888512 1516565872 3
+r_ns: 200 w_ns: 200
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     31.699 seconds
+Lookups:     15,000,000
+Lookups/s:   473,195
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1996312 696982207 31940836 1660783648 7
+r_ns: 400 w_ns: 400
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     58.302 seconds
+Lookups:     15,000,000
+Lookups/s:   257,281
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 3458849 701504161 55341524 1946900064 3
+r_ns: 800 w_ns: 800
+app: xsb config: STOCK
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o Main.o ../src/Main.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o io.o ../src/io.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o CalculateXS.o ../src/CalculateXS.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o GridInit.o ../src/GridInit.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o XSutils.o ../src/XSutils.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o Materials.o ../src/Materials.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=gnu99 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared -lm -static -L/root/local/lib  Main.o io.o CalculateXS.o GridInit.o XSutils.o Materials.o clocks_ln.o monitor_ln.o   -o xsb
+OMP_NUM_THREADS=4 ./xsb -s small
+AXI PMON is in Advanced Mode
+================================================================================
+                   __   __ ___________                 _                        
+                   \ \ / //  ___| ___ \               | |                       
+                    \ V / \ `--.| |_/ / ___ _ __   ___| |__                     
+                    /   \  `--. \ ___ \/ _ \ '_ \ / __| '_ \                    
+                   / /^\ \/\__/ / |_/ /  __/ | | | (__| | | |                   
+                   \/   \/\____/\____/ \___|_| |_|\___|_| |_|                   
+
+================================================================================
+                    Developed at Argonne National Laboratory
+                                   Version: 16
+================================================================================
+                                  INPUT SUMMARY
+================================================================================
+Grid Type:                    Unionized Grid
+Materials:                    12
+H-M Benchmark Size:           small
+Total Nuclides:               68
+Gridpoints (per Nuclide):     11,303
+Unionized Energy Gridpoints:  768,604
+XS Lookups:                   15,000,000
+Threads:                      4
+Est. Memory Usage (MB):       246
+================================================================================
+                         INITIALIZATION - DO NOT PROFILE
+================================================================================
+Generating Nuclide Energy Grids...
+Sorting Nuclide Energy Grids...
+Generating Unionized Energy Grid...
+Copying and Sorting all nuclide grids...
+Assigning energies to unionized grid...
+Assigning pointers to Unionized Energy Grid...
+Loading Mats...
+
+================================================================================
+                                   SIMULATION
+================================================================================
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+
+Simulation complete.
+================================================================================
+                                     RESULTS
+================================================================================
+Threads:     4
+Runtime:     112.321 seconds
+Lookups:     15,000,000
+Lookups/s:   133,545
+================================================================================
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 5678500 709623015 90855844 2469697328 5

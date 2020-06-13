@@ -1,0 +1,324 @@
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 3355649
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355551
+load_factor (elem): 0.100003
+bucket_count: 33554436
+max_psl: 5
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 54582266.562733 ops/sec
+Run     time: 0.000150 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000150 sec
+  Fill  time: 0.000127 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 6711297
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 6710956
+load_factor (elem): 0.200002
+bucket_count: 33554437
+max_psl: 6
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 54567141.883948 ops/sec
+Run     time: 0.000150 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000150 sec
+  Fill  time: 0.000127 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 10067969
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 10067144
+load_factor (elem): 0.300024
+bucket_count: 33554439
+max_psl: 8
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 54385719.669658 ops/sec
+Run     time: 0.000151 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000151 sec
+  Fill  time: 0.000128 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 13423617
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 13422255
+load_factor (elem): 0.400014
+bucket_count: 33554442
+max_psl: 11
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 42821767.107129 ops/sec
+Run     time: 0.000191 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000191 sec
+  Fill  time: 0.000169 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 16780289
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16778223
+load_factor (elem): 0.500030
+bucket_count: 33554444
+max_psl: 13
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 36675597.747774 ops/sec
+Run     time: 0.000223 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000223 sec
+  Fill  time: 0.000201 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 20135937
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 20132957
+load_factor (elem): 0.600009
+bucket_count: 33554448
+max_psl: 17
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 29114173.962648 ops/sec
+Run     time: 0.000281 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000281 sec
+  Fill  time: 0.000259 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 23492609
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 23488539
+load_factor (elem): 0.700013
+bucket_count: 33554454
+max_psl: 23
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 22414029.501416 ops/sec
+Run     time: 0.000365 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000365 sec
+  Fill  time: 0.000343 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 26849281
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 26843944
+load_factor (elem): 0.800011
+bucket_count: 33554464
+max_psl: 33
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 15887133.829492 ops/sec
+Run     time: 0.000516 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.000516 sec
+  Fill  time: 0.000493 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+time resolution: 1 ps
+max time: 18446744073709551615 ps
+
+Info: /OSCI/SystemC: Simulation begin.
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.000000 sec
+Insert count: 30205953
+Insert  rate: inf ops/sec
+Run     time: 0.000000 sec
+Oper.   time: 0.000000 sec
+Insert  time: 0.000000 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199345
+load_factor (elem): 0.900009
+bucket_count: 33554507
+max_psl: 76
+Stats   time: 0.000000 sec
+Lookup count: 8192
+Lookup  hits: 7373 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 7159854.205231 ops/sec
+Run     time: 0.001144 sec
+Oper.   time: 0.000000 sec
+Lookup  time: 0.001144 sec
+  Fill  time: 0.001121 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000023 sec
+
+Info: /OSCI/SystemC: Simulation stopped by user.

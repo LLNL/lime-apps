@@ -1,0 +1,711 @@
+#define ARGS (char*)"-e32Mi", (char*)"-l.10", (char*)"-rsrr550.fa", (char*)"-w1Mi", (char*)"-h.90", (char*)"-z.99"
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205360 sec
+Insert count: 3726356
+Insert  rate: 5855133.866060 ops/sec
+Bases   rate: 3524723.219057 bp/sec
+Run     time: 1.135761 sec
+Oper.   time: 0.499336 sec
+Insert  time: 0.636425 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006607 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 64491190.952001 ops/sec
+Run     time: 0.020375 sec
+Oper.   time: 0.004116 sec
+Lookup  time: 0.016259 sec
+  Fill  time: 0.013445 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002781 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131206 608 4198560 0
+ACC 1048576 2719818 4194304 109051904 1048576
+enter trace file name: r1.bin
+trace address:0x241340 length:0x763A420
+capture time:18 sec
+capture bandwidth:6887255 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670657 sec
+Insert count: 3726356
+Insert  rate: 5909997.192790 ops/sec
+Bases   rate: 3530392.855695 bp/sec
+Run     time: 1.133937 sec
+Oper.   time: 0.503420 sec
+Insert  time: 0.630517 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006609 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 6325631.773693 ops/sec
+Run     time: 0.168002 sec
+Oper.   time: 0.002236 sec
+Lookup  time: 0.165766 sec
+  Fill  time: 0.165686 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000028 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 12583 1508279 402656 48265024 0
+ACC 0 0 0 0 0
+enter trace file name: r2.bin
+trace address:0x2311B0 length:0x2E6AC20
+capture time:6 sec
+capture bandwidth:8111962 bytes/sec
+########## RTB ########## - make D=STL,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 3745024
+Insert  rate: 5525372.608930 ops/sec
+Bases   rate: 3379412.566745 bp/sec
+Run     time: 1.190506 sec
+Oper.   time: 0.512719 sec
+Insert  time: 0.677787 sec
+size: 3372379
+load_factor (elem): 0.100033
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c90b0 top:0x4ea59000 end:0x7f2c90b0
+total:1056964608 used:242810704
+Stats   time: 3.820003 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4964235.544152 ops/sec
+Run     time: 0.213900 sec
+Oper.   time: 0.002673 sec
+Lookup  time: 0.211226 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 24755 3326601 792160 106451360 0
+enter trace file name: r3.bin
+trace address:0x2C90B0 length:0x6647820
+capture time:14 sec
+capture bandwidth:7660546 bytes/sec
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205360 sec
+Insert count: 3726356
+Insert  rate: 5840170.245710 ops/sec
+Bases   rate: 3520750.577632 bp/sec
+Run     time: 1.137042 sec
+Oper.   time: 0.498986 sec
+Insert  time: 0.638056 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006606 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 30423442.511808 ops/sec
+Run     time: 0.038583 sec
+Oper.   time: 0.004117 sec
+Lookup  time: 0.034466 sec
+  Fill  time: 0.031650 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002783 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131220 608 4199008 0
+ACC 1048576 2719818 4194304 109051904 1048576
+enter trace file name: r4.bin
+trace address:0x241340 length:0x7646A20
+capture time:17 sec
+capture bandwidth:7295369 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670657 sec
+Insert count: 3726356
+Insert  rate: 5910117.317599 ops/sec
+Bases   rate: 3530271.921421 bp/sec
+Run     time: 1.133976 sec
+Oper.   time: 0.503471 sec
+Insert  time: 0.630505 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 3355978
+load_factor (elem): 0.100016
+bucket_count: 33554437
+max_psl: 6
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006610 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4440270.526883 ops/sec
+Run     time: 0.238619 sec
+Oper.   time: 0.002467 sec
+Lookup  time: 0.236151 sec
+  Fill  time: 0.236059 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000028 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 12728 1507813 407296 48250144 0
+ACC 0 0 0 0 0
+enter trace file name: r5.bin
+trace address:0x2311B0 length:0x2E68420
+capture time:6 sec
+capture bandwidth:8110256 bytes/sec
+########## RTB ########## - make D=STL,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 3745024
+Insert  rate: 5466536.445991 ops/sec
+Bases   rate: 3358365.257640 bp/sec
+Run     time: 1.197967 sec
+Oper.   time: 0.512885 sec
+Insert  time: 0.685082 sec
+size: 3372379
+load_factor (elem): 0.100033
+bucket_count: 33712729
+max_elem_per_bucket: 15
+heap start:0x402c90b0 top:0x4ea59000 end:0x7f2c90b0
+total:1056964608 used:242810704
+Stats   time: 3.820595 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2556131.737015 ops/sec
+Run     time: 0.413547 sec
+Oper.   time: 0.003327 sec
+Lookup  time: 0.410220 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 24507 3326729 784224 106455456 0
+enter trace file name: r6.bin
+trace address:0x2C90B0 length:0x6646A20
+capture time:15 sec
+capture bandwidth:7149604 bytes/sec
+
+
+#define ARGS (char*)"-e32Mi", (char*)"-l.50", (char*)"-rsrr550.fa", (char*)"-w1Mi", (char*)"-h.90", (char*)"-z.99"
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205361 sec
+Insert count: 19170321
+Insert  rate: 5399885.516094 ops/sec
+Bases   rate: 3368760.925605 bp/sec
+Run     time: 6.105740 sec
+Oper.   time: 2.555606 sec
+Insert  time: 3.550135 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006754 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 35773033.729040 ops/sec
+Run     time: 0.033436 sec
+Oper.   time: 0.004124 sec
+Lookup  time: 0.029312 sec
+  Fill  time: 0.026497 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002782 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131213 608 4198848 0
+ACC 1048576 3789334 4194304 243269632 1048576
+enter trace file name: rtbacc1.bin
+trace address:0x241340 length:0x9770420
+capture time:22 sec
+capture bandwidth:7217944 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670656 sec
+Insert count: 19170321
+Insert  rate: 5468095.183675 ops/sec
+Bases   rate: 3381725.271203 bp/sec
+Run     time: 6.082333 sec
+Oper.   time: 2.576483 sec
+Insert  time: 3.505850 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006761 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5786981.999978 ops/sec
+Run     time: 0.183625 sec
+Oper.   time: 0.002429 sec
+Lookup  time: 0.181196 sec
+  Fill  time: 0.181112 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000028 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15568 1825569 498176 58418240 0
+ACC 0 0 0 0 0
+enter trace file name: rtbsft.bin
+trace address:0x2311B0 length:0x3830E20
+capture time:8 sec
+capture bandwidth:7365060 bytes/sec
+########## RTB ########## - make D=STL,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168125 sec
+Insert count: 19263544
+Insert  rate: 4261175.739261 ops/sec
+Bases   rate: 2849491.342924 bp/sec
+Run     time: 7.253616 sec
+Oper.   time: 2.732905 sec
+Insert  time: 4.520711 sec
+size: 16856736
+load_factor (elem): 0.500011
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c90b0 top:0x685e1000 end:0x7f2c90b0
+total:1056964608 used:674332496
+Stats   time: 15.419870 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4149635.363993 ops/sec
+Run     time: 0.255680 sec
+Oper.   time: 0.002989 sec
+Lookup  time: 0.252691 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 30081 4075432 962592 130413856 0
+enter trace file name: rtbstl.bin
+trace address:0x2C90B0 length:0x7D4B420
+capture time:18 sec
+capture bandwidth:7298903 bytes/sec
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205353 sec
+Insert count: 19170321
+Insert  rate: 5411322.318774 ops/sec
+Bases   rate: 3372484.812396 bp/sec
+Run     time: 6.098999 sec
+Oper.   time: 2.556367 sec
+Insert  time: 3.542632 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006782 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 22296746.263893 ops/sec
+Run     time: 0.051149 sec
+Oper.   time: 0.004121 sec
+Lookup  time: 0.047028 sec
+  Fill  time: 0.044212 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002783 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131203 608 4198528 0
+ACC 1048576 3789334 4194304 243269632 1048576
+enter trace file name: rtbaccsc.bin
+trace address:0x241340 length:0x972A620
+capture time:22 sec
+capture bandwidth:7204935 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670656 sec
+Insert count: 19170321
+Insert  rate: 5453446.213423 ops/sec
+Bases   rate: 3376125.111849 bp/sec
+Run     time: 6.092422 sec
+Oper.   time: 2.577155 sec
+Insert  time: 3.515267 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 16777583
+load_factor (elem): 0.500011
+bucket_count: 33554445
+max_psl: 14
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006759 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4009754.713020 ops/sec
+Run     time: 0.264218 sec
+Oper.   time: 0.002712 sec
+Lookup  time: 0.261506 sec
+  Fill  time: 0.261405 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000028 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15424 1825950 493568 58430492 0
+ACC 0 0 0 0 0
+enter trace file name: rtbsftsc.bin
+trace address:0x2311B0 length:0x3832C20
+capture time:8 sec
+capture bandwidth:7366020 bytes/sec
+########## RTB ########## - make D=STL,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.168124 sec
+Insert count: 19263544
+Insert  rate: 4246473.373169 ops/sec
+Bases   rate: 2842202.726111 bp/sec
+Run     time: 7.272217 sec
+Oper.   time: 2.735854 sec
+Insert  time: 4.536363 sec
+size: 16856736
+load_factor (elem): 0.500011
+bucket_count: 33712729
+max_elem_per_bucket: 17
+heap start:0x402c90b0 top:0x685e1000 end:0x7f2c90b0
+total:1056964608 used:674332496
+Stats   time: 15.481110 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2131007.177371 ops/sec
+Run     time: 0.495942 sec
+Oper.   time: 0.003885 sec
+Lookup  time: 0.492057 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 29914 4075439 957248 130414176 0
+enter trace file name: rtbstlsc.bin
+trace address:0x2C90B0 length:0x7D4A220
+capture time:18 sec
+capture bandwidth:7298647 bytes/sec
+
+
+#define ARGS (char*)"-e32Mi", (char*)"-l.90", (char*)"-rsrr550.fa", (char*)"-w1Mi", (char*)"-h.90", (char*)"-z.99"
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205330 sec
+Insert count: 35363868
+Insert  rate: 3602347.946570 ops/sec
+Bases   rate: 2564165.180235 bp/sec
+Run     time: 14.801125 sec
+Oper.   time: 4.984231 sec
+Insert  time: 9.816894 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199352
+load_factor (elem): 0.900009
+bucket_count: 33554496
+max_psl: 65
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006784 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 9133980.565021 ops/sec
+Run     time: 0.118919 sec
+Oper.   time: 0.004120 sec
+Lookup  time: 0.114799 sec
+  Fill  time: 0.111984 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002782 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131203 608 4198432 0
+ACC 1048576 10485760 4194304 1098907648 1048576
+enter trace file name: r91.bin
+trace address:0x241340 length:0x16400220
+capture time:52 sec
+capture bandwidth:7178723 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670656 sec
+Insert count: 35363868
+Insert  rate: 3614624.882376 ops/sec
+Bases   rate: 2562950.059119 bp/sec
+Run     time: 14.808142 sec
+Oper.   time: 5.024591 sec
+Insert  time: 9.783551 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199352
+load_factor (elem): 0.900009
+bucket_count: 33554496
+max_psl: 65
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006787 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:37 QUEUE_R:16 TRANS:24 V_W:106 V_R:85
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:379 CPU_DRAM_R:296
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:307 ACC_DRAM_R:207
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 3142570.444698 ops/sec
+Run     time: 0.336931 sec
+Oper.   time: 0.003263 sec
+Lookup  time: 0.333668 sec
+  Fill  time: 0.333563 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000028 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 34540 4570664 1105280 146261344 0
+ACC 0 0 0 0 0
+enter trace file name: r92.bin
+trace address:0x2311B0 length:0x8C8B420
+capture time:21 sec
+capture bandwidth:7017668 bytes/sec
+########## RTB ########## - make D=USE_HASH,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 1.205330 sec
+Insert count: 35363868
+Insert  rate: 3603032.629835 ops/sec
+Bases   rate: 2564089.389568 bp/sec
+Run     time: 14.801562 sec
+Oper.   time: 4.986534 sec
+Insert  time: 9.815029 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199352
+load_factor (elem): 0.900009
+bucket_count: 33554496
+max_psl: 65
+heap start:0x40241340 top:0x60246000 end:0x7f241340
+total:1056964608 used:536890560
+Stats   time: 0.006783 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 8239112.466520 ops/sec
+Run     time: 0.131389 sec
+Oper.   time: 0.004121 sec
+Lookup  time: 0.127268 sec
+  Fill  time: 0.124452 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.002782 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19 131213 608 4198784 0
+ACC 1048576 10485760 4194304 1098907648 1048576
+enter trace file name: r93.bin
+trace address:0x241340 length:0x16400820
+capture time:51 sec
+capture bandwidth:7319512 bytes/sec
+########## RTB ########## - make D=DIRECT,CLOCKS,STATS,TRACE,USE_SD
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+slot size: 16
+Startup time: 0.670656 sec
+Insert count: 35363868
+Insert  rate: 3620647.329942 ops/sec
+Bases   rate: 2566146.812406 bp/sec
+Run     time: 14.789695 sec
+Oper.   time: 5.022417 sec
+Insert  time: 9.767278 sec
+  Fill  time: 0.000000 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000000 sec
+size: 30199352
+load_factor (elem): 0.900009
+bucket_count: 33554496
+max_psl: 65
+heap start:0x402311b0 top:0x6023d000 end:0x7f2311b0
+total:1056964608 used:536919632
+Stats   time: 0.006803 sec
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:131 TRANS:24 V_W:400 V_R:200
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:1555 CPU_DRAM_R:756
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:1483 ACC_DRAM_R:667
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1900498.192397 ops/sec
+Run     time: 0.556023 sec
+Oper.   time: 0.004286 sec
+Lookup  time: 0.551737 sec
+  Fill  time: 0.551594 sec
+  Drain time: 0.000000 sec
+  Cache time: 0.000029 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 34565 4569790 1106080 146233312 0
+ACC 0 0 0 0 0
+enter trace file name: r94.bin
+trace address:0x2311B0 length:0x8C84820
+capture time:21 sec
+capture bandwidth:7016352 bytes/sec

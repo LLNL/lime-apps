@@ -1,0 +1,887 @@
+/root/apps4
+cd bfs/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/bfs/arm_64'
+rm -f   bfs makeflags
+make[1]: Leaving directory '/root/apps4/bfs/arm_64'
+cd dgemm/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/dgemm/arm_64'
+rm -f   dgemm makeflags
+make[1]: Leaving directory '/root/apps4/dgemm/arm_64'
+cd sort/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/sort/arm_64'
+rm -f   sort makeflags
+make[1]: Leaving directory '/root/apps4/sort/arm_64'
+cd strm/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/strm/arm_64'
+rm -f   strm makeflags
+make[1]: Leaving directory '/root/apps4/strm/arm_64'
+cd xsb/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/xsb/arm_64'
+rm -f   xsb makeflags
+make[1]: Leaving directory '/root/apps4/xsb/arm_64'
+cd image/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/image/arm_64'
+rm -f   image makeflags
+make[1]: Leaving directory '/root/apps4/image/arm_64'
+cd pager/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/pager/arm_64'
+rm -f   pager makeflags
+make[1]: Leaving directory '/root/apps4/pager/arm_64'
+cd randa/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/randa/arm_64'
+rm -f   randa makeflags
+make[1]: Leaving directory '/root/apps4/randa/arm_64'
+cd rtb/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/rtb/arm_64'
+rm -f   rtb makeflags
+make[1]: Leaving directory '/root/apps4/rtb/arm_64'
+cd spmv/arm_64 && make clean
+make[1]: Entering directory '/root/apps4/spmv/arm_64'
+rm -f   spmv makeflags
+make[1]: Leaving directory '/root/apps4/spmv/arm_64'
+r_ns: 45 w_ns: 45
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.931762 sec
+ref2 w:24000 h:16000 element:4 init-time:2.600509 sec
+view w:12000 h:8000
+ref1:0x7f25a9e010 ref2:0x7eca1c5010 davg:0x7ec4637010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+overall time: 0.958737 sec
+Oper. time: 0.958736 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 6850817 31961945 109612756 2046901472 9
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:265.896 sec, EPS:126194
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+page rank time:4.14825 sec
+Oper. time: 4.14825 sec
+Cache time: 3e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 16321488 80748162 261142736 876852880 33
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7f0de08010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+Real time used = 2.360634 seconds
+0.007107081 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 2.360634 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 27290672 47581644 436649992 3047936304 34
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.458249 sec
+Insert count: 20971521
+Insert  rate: 12269780.082337 ops/sec
+Run     time: 1.775009 sec
+Oper.   time: 0.065808 sec
+Insert  time: 1.709201 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 28.207208 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 4594437.212376 ops/sec
+Run     time: 0.229848 sec
+Oper.   time: 0.001620 sec
+Lookup  time: 0.228227 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 550354 3907582 8805568 250428704 0
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=45 -DT_W=45 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:-24 QUEUE_R:-24 TRANS:24 W:45 R:45
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:218 CPU_DRAM_R:201
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            9398.0     0.204298     0.204298     0.204298
+Scale:           8034.0     0.238984     0.238984     0.238984
+Add:             6162.2     0.467364     0.467364     0.467364
+Triad:           5426.3     0.530745     0.530745     0.530745
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 131278289 201118862 2099988760 4284616944 9949
+r_ns: 70 w_ns: 70
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.962272 sec
+ref2 w:24000 h:16000 element:4 init-time:2.658629 sec
+view w:12000 h:8000
+ref1:0x7f34292010 ref2:0x7ed89b9010 davg:0x7ed2e2b010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+overall time: 1.033504 sec
+Oper. time: 1.033504 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 6688989 31712353 107023368 2030952304 16
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:265.635 sec, EPS:126318
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+page rank time:5.66383 sec
+Oper. time: 5.66383 sec
+Cache time: 2e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 21804376 90842799 348868292 1524553584 75
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7f0b50a010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+Real time used = 3.246136 seconds
+0.005168365 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 3.246136 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 30884314 53461469 494148148 3424821792 31
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.458694 sec
+Insert count: 20971521
+Insert  rate: 12232167.549993 ops/sec
+Run     time: 1.780697 sec
+Oper.   time: 0.066240 sec
+Insert  time: 1.714457 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 28.338864 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 3216613.640613 ops/sec
+Run     time: 0.327703 sec
+Oper.   time: 0.001716 sec
+Lookup  time: 0.325988 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 973690 4986119 15578940 319467312 2
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=70 -DT_W=70 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:368 CPU_DRAM_R:351
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            6893.9     0.278509     0.278509     0.278509
+Scale:           6145.6     0.312417     0.312417     0.312417
+Add:             4876.8     0.590546     0.590546     0.590546
+Triad:           4354.5     0.661387     0.661387     0.661387
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 134867635 207221983 2157368952 380875040 11200
+r_ns: 100 w_ns: 100
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.916628 sec
+ref2 w:24000 h:16000 element:4 init-time:2.609398 sec
+view w:12000 h:8000
+ref1:0x7f4e5ab010 ref2:0x7ef2cd2010 davg:0x7eed144010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+overall time: 1.169860 sec
+Oper. time: 1.169859 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 6948087 32065411 111168848 2053364000 23
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:266.675 sec, EPS:125825
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+page rank time:7.50052 sec
+Oper. time: 7.50052 sec
+Cache time: 2e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 26631922 99238683 426108604 2064036560 75
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7f1fc73010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+Real time used = 4.336743 seconds
+0.003868621 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 4.336743 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 34564289 59590576 553027276 3818262160 46
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.457918 sec
+Insert count: 20971521
+Insert  rate: 12208337.369496 ops/sec
+Run     time: 1.784210 sec
+Oper.   time: 0.066407 sec
+Insert  time: 1.717803 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 28.266113 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 2425292.919340 ops/sec
+Run     time: 0.434167 sec
+Oper.   time: 0.001817 sec
+Lookup  time: 0.432350 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1556165 5600329 24898584 358703248 5
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=100 -DT_W=100 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:31 QUEUE_R:31 TRANS:24 W:100 R:100
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:548 CPU_DRAM_R:531
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            4787.3     0.401065     0.401065     0.401065
+Scale:           4682.8     0.410010     0.410010     0.410010
+Add:             3605.7     0.798741     0.798741     0.798741
+Triad:           3476.3     0.828477     0.828477     0.828477
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 138094257 212968554 2208951764 749428720 10388
+r_ns: 200 w_ns: 200
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.925119 sec
+ref2 w:24000 h:16000 element:4 init-time:2.662809 sec
+view w:12000 h:8000
+ref1:0x7f2f76e010 ref2:0x7ed3e95010 davg:0x7ece307010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+overall time: 1.545321 sec
+Oper. time: 1.545321 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 7163569 32687378 114616508 2093672864 21
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:266.46 sec, EPS:125927
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+page rank time:13.9316 sec
+Oper. time: 13.9316 sec
+Cache time: 4.5e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 40147866 123477449 642362476 3619500784 116
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7f1fb32010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+Real time used = 7.625284 seconds
+0.002200209 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 7.625283 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19111316 34610385 305780924 2216512512 4
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.460558 sec
+Insert count: 20971521
+Insert  rate: 12718553.428605 ops/sec
+Run     time: 1.714547 sec
+Oper.   time: 0.065655 sec
+Insert  time: 1.648892 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 27.506397 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1479371.911409 ops/sec
+Run     time: 0.711956 sec
+Oper.   time: 0.003157 sec
+Lookup  time: 0.708798 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 176968 3395348 2831488 217301952 0
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=200 -DT_W=200 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:131 QUEUE_R:131 TRANS:24 W:200 R:200
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:1148 CPU_DRAM_R:1131
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            2767.6     0.693734     0.693734     0.693734
+Scale:           2717.0     0.706665     0.706665     0.706665
+Add:             2011.9     1.431511     1.431511     1.431511
+Triad:           1990.6     1.446778     1.446778     1.446778
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 120464384 181997540 1927296304 3058067520 2053
+r_ns: 400 w_ns: 400
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.862832 sec
+ref2 w:24000 h:16000 element:4 init-time:2.585179 sec
+view w:12000 h:8000
+ref1:0x7f273ac010 ref2:0x7ecbad3010 davg:0x7ec5f45010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+overall time: 2.301197 sec
+Oper. time: 2.301197 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 3167998 26021049 50687848 1665580112 2
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:256.096 sec, EPS:131023
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+page rank time:21.8136 sec
+Oper. time: 21.8136 sec
+Cache time: 2e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 714807 52027334 11436876 3329871872 1
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7efd3b8010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+Real time used = 14.574225 seconds
+0.001151157 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 14.574224 sec
+Cache time: 0.000001 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19183482 35112209 306935536 2250948496 4
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.460244 sec
+Insert count: 20971521
+Insert  rate: 12744950.885968 ops/sec
+Run     time: 1.711146 sec
+Oper.   time: 0.065670 sec
+Insert  time: 1.645477 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 27.501653 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 779770.624247 ops/sec
+Run     time: 1.350611 sec
+Oper.   time: 0.005887 sec
+Lookup  time: 1.344724 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 180180 3455113 2882880 221127296 0
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=400 -DT_W=400 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:331 QUEUE_R:331 TRANS:24 W:400 R:400
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:2348 CPU_DRAM_R:2331
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1397.0     1.374391     1.374391     1.374391
+Scale:           1414.6     1.357290     1.357290     1.357290
+Add:             1042.6     2.762228     2.762228     2.762228
+Triad:           1035.5     2.781283     2.781283     2.781283
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 120901022 183617558 1933584396 3161748608 2082
+r_ns: 800 w_ns: 800
+app: image config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o image.o ../src/image.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o ColorImage.o ../src/ColorImage.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DENTIRE -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DENTIRE -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  image.o ColorImage.o clocks_ln.o monitor_ln.o   -o image
+OMP_NUM_THREADS=1 ./image -d2 -v15 -w24000 -h16000 pat pat
+AXI PMON is in Advanced Mode
+threads: 1
+decimate: 2
+ref1 w:24000 h:16000 element:4 init-time:7.875641 sec
+ref2 w:24000 h:16000 element:4 init-time:2.597935 sec
+view w:12000 h:8000
+ref1:0x7f1ccfe010 ref2:0x7ec1425010 davg:0x7ebb897010
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+overall time: 4.524364 sec
+Oper. time: 4.524364 sec
+Cache time: 0.000000 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 3205785 26185724 51292456 1676094800 2
+max difference: 0
+app: pager config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o pager.o ../src/pager.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -I/root -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  pager.o clocks_ln.o monitor_ln.o  -lstdc++ -o pager
+OMP_NUM_THREADS=1 ./pager -s21 -v15
+AXI PMON is in Advanced Mode
+threads: 1
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:256.151 sec, EPS:130995
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+page rank time:42.7726 sec
+Oper. time: 42.7726 sec
+Cache time: 1.05e-06 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1039074 54090181 16625148 3461845008 1
+app: randa config: STOCK
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o randa.o ../src/randa.cpp
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o core_single_cpu_lcg.o ../src/core_single_cpu_lcg.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o utility.o ../src/utility.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DVECT_LEN=65536 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  randa.o core_single_cpu_lcg.o utility.o clocks_ln.o monitor_ln.o   -o randa
+OMP_NUM_THREADS=1 ./randa -s31
+AXI PMON is in Advanced Mode
+threads: 1
+table scale: 31
+vector length: 65536
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x7f0bbcd010
+Main table size   = 2^28 = 268435456 words (8 bytes)
+Number of updates = 16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+Real time used = 28.697263 seconds
+0.000584628 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 28.697262 sec
+Cache time: 0.000001 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 19398176 36145978 310370592 2313514304 5
+Found 0 errors in 268435456 locations (passed).
+End of SingleRandomAccess_LCG section.
+app: rtb config: STOCK
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o rtb.o ../src/rtb.cpp
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o fasta.o ../src/fasta.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o path.o ../src/path.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -std=c++11 -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  rtb.o fasta.o path.o clocks_ln.o monitor_ln.o   -o rtb
+OMP_NUM_THREADS=1 ./rtb -e32Mi -l.60 -c -w1Mi -h.90 -z.99 -b20
+AXI PMON is in Advanced Mode
+########## RTB ##########
+threads: 1
+block length: 1048576
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.458811 sec
+Insert count: 20971521
+Insert  rate: 12700476.593666 ops/sec
+Run     time: 1.716944 sec
+Oper.   time: 0.065705 sec
+Insert  time: 1.651239 sec
+size: 20968284
+load_factor (elem): 0.621969
+bucket_count: 33712729
+max_elem_per_bucket: 9
+Stats   time: 27.523899 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 396842.009932 ops/sec
+Run     time: 2.653901 sec
+Oper.   time: 0.011600 sec
+Lookup  time: 2.642301 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 193183 3571832 3090928 228597184 0
+app: strm config: STOCK
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o strm.o ../src/strm.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o clocks_ln.o ../../shared/clocks_ln.c
+cc -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared  -c -o monitor_ln.o ../../shared/monitor_ln.c
+g++ -march=armv8-a -O3 -fopenmp -Wall -MMD -DSTOCK -DCLOCKS -DSTATS -DT_R=800 -DT_W=800 -DSTREAM_ARRAY_SIZE=120000000 -DNTIMES=2 -DTIMEOFDAY -I../src -I../../shared -static -L/root/local/lib  strm.o clocks_ln.o monitor_ln.o   -o strm
+OMP_NUM_THREADS=1 ./strm 
+AXI PMON is in Advanced Mode
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 120000000 (elements), Offset = 0 (elements)
+Memory per array = 915.5 MiB (= 0.9 GiB).
+Total memory required = 2746.6 MiB (= 2.7 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Number of Threads requested = 1
+Number of Threads counted = 1
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45 QUEUE_W:731 QUEUE_R:731 TRANS:24 W:800 R:800
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:4748 CPU_DRAM_R:4731
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:             484.7     3.960975     3.960975     3.960975
+Scale:            717.9     2.674302     2.674302     2.674302
+Add:              525.0     5.485699     5.485699     5.485699
+Triad:            522.6     5.511107     5.511107     5.511107
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 121331212 203325585 1941243828 128119616 1944

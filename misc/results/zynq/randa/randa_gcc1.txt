@@ -1,0 +1,53 @@
+# OPT=-O3
+# ARM A9 - SDK 2018.2, gcc 7.2.1
+# BSP - SDK 2018.2
+# arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O3 -Wall -MMD
+#   -DCLOCKS -DSTATS -DT_W=70 -DT_R=70 -DZYNQ=_Z7_ -DXILTIME
+table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x4021c910
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:100 CPU_SRAM_R:105 CPU_DRAM_B:235 CPU_DRAM_R:236
+Slot 1 - ACC_SRAM_B:27 ACC_SRAM_R:12 ACC_DRAM_B:163 ACC_DRAM_R:147
+Real time used = 0.392724 seconds
+0.010680032 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 0.392598 sec
+Cache time: 0.000126 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321705 8472563 138294560 271122112 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+# OPT=-O2
+# ARM A9 - SDK 2018.2, gcc 7.2.1
+# BSP - SDK 2018.2
+# arm-none-eabi-g++ -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -O2 -Wall -MMD
+#   -DCLOCKS -DSTATS -DT_W=70 -DT_R=70 -DZYNQ=_Z7_ -DXILTIME
+table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x4021c910
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:1 QUEUE_R:1 TRANS:24 W:70 R:70
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:100 CPU_SRAM_R:105 CPU_DRAM_B:235 CPU_DRAM_R:236
+Slot 1 - ACC_SRAM_B:27 ACC_SRAM_R:12 ACC_DRAM_B:163 ACC_DRAM_R:147
+Real time used = 0.415264 seconds
+0.010100332 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 0.415138 sec
+Cache time: 0.000126 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4321149 8471871 138276768 271099968 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.

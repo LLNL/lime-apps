@@ -1,0 +1,106 @@
+[lloyd23@nome arm_64]$ make D=CLOCKS,STATS,OFFLOAD
+aarch64-linux-gnu-g++ -march=armv8-a -O3 -Wall -I/home/lloyd23/src/boost_1_66_0 -MMD -DCLOCKS -DSTATS -DOFFLOAD -DUSE_LSU -DTIMEOFDAY -I../src -I/home/lloyd23/work/lime.1/shared -I/home/lloyd23/work/lime.1/shared/linux -I/home/lloyd23/work/lime.1/shared/linux/xil_com -I/home/lloyd23/work/lime.1/shared/linux/xllfifo -I/home/lloyd23/work/lime.1/linux/drivers  -c -o pager.o ../src/pager.cpp
+
+root@lime:/run/media/mmcblk0p1# offload/pager.elf -s18 -v15
+rmat scale: 18
+view_size: 32768
+min_edges: 128
+RMAT generation, vertices:262144
+RMAT generation, edges:4194304
+RMAT generation, bytes:35651584
+RMAT generation, time:31.0539 sec, EPS:135065
+PageRank Vectors, bytes:4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:1.56365 sec
+Setup time: 0.00154305 sec
+Reorg time: 0.723703 sec
+Oper. time: 0.832775 sec
+Cache time: 0.0056322 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 189024 17634311 3492288 285184896 93443
+ACC 6207745 6207745 49661960 49661960 0
+errors:0
+
+root@lime:/run/media/mmcblk0p1# offload/pager.elf -s19 -v15
+rmat scale: 19
+view_size: 32768
+min_edges: 128
+RMAT generation, vertices:524288
+RMAT generation, edges:8388608
+RMAT generation, bytes:71303168
+RMAT generation, time:65.271 sec, EPS:128520
+PageRank Vectors, bytes:8388608
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:3.08922 sec
+Setup time: 0.00211945 sec
+Reorg time: 1.35006 sec
+Oper. time: 1.7286 sec
+Cache time: 0.00843875 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 371124 35264412 6945544 570173596 177869
+ACC 11641890 11641890 93135120 93135120 0
+errors:0
+
+root@lime:/run/media/mmcblk0p1# offload/pager.elf -s20 -v15
+rmat scale: 20
+view_size: 32768
+min_edges: 128
+RMAT generation, vertices:1048576
+RMAT generation, edges:16777216
+RMAT generation, bytes:142606336
+RMAT generation, time:136.59 sec, EPS:122829
+PageRank Vectors, bytes:16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:6.31459 sec
+Setup time: 0.00615195 sec
+Reorg time: 2.97457 sec
+Oper. time: 3.31132 sec
+Cache time: 0.0225498 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 728857 70540917 13698976 1141096620 340904
+ACC 25492501 25492501 203940008 203940008 0
+errors:0
+
+root@lime:/run/media/mmcblk0p1# offload/pager.elf -s21 -v15
+rmat scale: 21
+view_size: 32768
+min_edges: 128
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:284.605 sec, EPS:117898
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:12.646 sec
+Setup time: 0.0105332 sec
+Reorg time: 5.95723 sec
+Oper. time: 6.63783 sec
+Cache time: 0.0403671 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1435377 141172569 27341496 2287902692 651886
+ACC 51190885 51190885 409527080 409527080 0
+errors:0

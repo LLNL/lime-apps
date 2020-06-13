@@ -1,0 +1,777 @@
+ARM: 666 MHz
+DRE_CONTROL: 166 MHz (includes MicroBlaze)
+DRE_DATA: 200 MHz
+DRAM: on-board DDR3-1333, 1 GB, 32-bit data path, Chip: Micron MT41J256M8HX-15E, D9LGK
+  controller: built-in, ddr_3x = 33e6*32/2 = 533.3 MHz * 2 = 1066.6 MTs * 4 = 4.26 GB/s
+  ARM path: AXI_GP0 -> AXI_HP0 (32-bit, 200 MHz)
+  DRE path: AXI_HP2 (64-bit, 200 MHz)
+DRAM: SODIMM DDR3-1600, 1 GB, 64-bit data path, Module: Micron MT8JTF12864HZ-1G6G1, PC3-12800S-11-11-B1
+  controller: MIG, sys_clk*2 = 400 MHz * 2 = 800 MTs * 8 = 6.4 GB/s
+  TCD path: AXI_MIG (256-bit, 200 MHz)
+
+Configuration
+CPU: 32-bit ARM A9 core, 2.57 GHz, 5.14 GB/s bandwidth
+LSU: (Load-Store Unit) 64-bit data path, 1.25 GHz, 10.00 GB/s bandwidth
+MCU: (MicroBlaze) 32-bit data path, 1.25 GHz, 5.00 GB/s bandwidth
+Application	CPU Only sec	CPU+DRE sec	Speedup	Base sec	Upper Bound
+ImageDiff (decimate 16x)	0.068622	0.016547	4.15x	0.01014	6.77x
+
+########## ARM + DRE ##########
+Release configuration with -O2 optimization
+
+---------- 10800 ----------
+
+decimate: 4
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024527 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024528 sec
+view w:2700 h:1350
+ref1:0x40185020 ref2:0x4dffe300 davg:0x5be77520
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010227 sec
+flush time: 0.008643 sec
+setup time: 0.000019 sec
+block fill time: 0.675535 sec
+block invalidate time: 0.093644 sec
+block difference time: 0.116085 sec
+overall time: 0.904293 sec
+max difference: 0
+trace address:0x184C10 length:0x1DFCDA20
+
+decimate: 8
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024466 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024464 sec
+view w:1350 h:675
+ref1:0x40185020 ref2:0x4dffe300 davg:0x5be77520
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010147 sec
+flush time: 0.002338 sec
+setup time: 0.000019 sec
+block fill time: 0.171149 sec
+block invalidate time: 0.023548 sec
+block difference time: 0.029024 sec
+overall time: 0.236260 sec
+max difference: 0
+trace address:0x184C10 length:0x77E9A20
+
+decimate: 16
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024335 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024332 sec
+view w:675 h:337
+ref1:0x40185020 ref2:0x4dffe300 davg:0x5be77520
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010057 sec
+flush time: 0.000787 sec
+setup time: 0.000020 sec
+block fill time: 0.043898 sec
+block invalidate time: 0.005866 sec
+block difference time: 0.007219 sec
+overall time: 0.067856 sec
+max difference: 0
+trace address:0x184C10 length:0x1DD5220
+
+---------- 16000 ----------
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:10.028225 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639961 sec
+view w:1000 h:500
+ref1:0x401890a0 ref2:0x5e9d1180 davg:0x7d2191a0
+block size: 32768
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.014097 sec
+Setup time: 0.000002 sec
+Reorg time: 0.005905 sec
+Oper. time: 0.006522 sec
+Cache time: 0.001670 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15664 156510 501248 5008320 0
+ACC 1000000 1000000 4000000 8000000 1000000
+max difference: 0
+trace address:0x188C80 length:0x424B220
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:10.241163 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639960 sec
+view w:1000 h:500
+ref1:0x401890a0 ref2:0x5e9d1180 davg:0x7d2191a0
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:291 CPU_DRAM_R:295
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:219 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.014630 sec
+Setup time: 0.000002 sec
+Reorg time: 0.005925 sec
+Oper. time: 0.006802 sec
+Cache time: 0.001901 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15662 156608 501184 5011424 0
+ACC 1000000 1000000 4000000 8000000 1000000
+max difference: 0
+trace address:0x188C80 length:0x424BE20
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.240397 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149324 sec (clock off)
+view w:1000 h:500
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+block size: 32768
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:132 CPU_SRAM_R:140 CPU_DRAM_W:451 CPU_DRAM_R:447
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:347 ACC_DRAM_R:323
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.016547 sec
+Setup time: 0.000002 sec
+Reorg time: 0.006405 sec
+Oper. time: 0.007618 sec
+Cache time: 0.002522 sec
+max difference: 0
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.240404 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149324 sec (clock off)
+view w:1000 h:500
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+block size: 32768
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:132 ARM_SRAM_R:132 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:10 ACC_SRAM_R:10 ACC_DRAM_W:323 ACC_DRAM_R:323
+overall time: 0.016269 sec
+Setup time: 0.000002 sec
+Reorg time: 0.006385 sec
+Oper. time: 0.007445 sec
+Cache time: 0.002437 sec
+max difference: 0
+
+-- entire cache management --
+image -d4:16 -v12:15 -w16000 -h8000 pat pat
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - W_SRAM:128 W_DRAM:446 R_SRAM:137 R_DRAM:455
+Slot 1 - W_SRAM:0 W_DRAM:318 R_SRAM:9 R_DRAM:327
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:2.240397 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149323 sec (clock off)
+view w:4000 h:2000
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+block size: 4096
+overall time: 0.565462 sec
+Setup time: 0.000002 sec
+Reorg time: 0.382830 sec
+Oper. time: 0.128684 sec
+Cache time: 0.053945 sec
+max difference: 0
+block size: 8192
+overall time: 0.533115 sec
+Setup time: 0.000002 sec
+Reorg time: 0.373989 sec
+Oper. time: 0.128857 sec
+Cache time: 0.030267 sec
+max difference: 0
+block size: 16384
+overall time: 0.516981 sec
+Setup time: 0.000002 sec
+Reorg time: 0.369595 sec
+Oper. time: 0.128952 sec
+Cache time: 0.018433 sec
+max difference: 0
+block size: 32768
+overall time: 0.508888 sec
+Setup time: 0.000002 sec
+Reorg time: 0.367386 sec
+Oper. time: 0.128978 sec
+Cache time: 0.012522 sec
+max difference: 0
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:2.240394 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149325 sec (clock off)
+view w:2000 h:1000
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+block size: 4096
+overall time: 0.142811 sec
+Setup time: 0.000002 sec
+Reorg time: 0.095784 sec
+Oper. time: 0.032175 sec
+Cache time: 0.014850 sec
+max difference: 0
+block size: 8192
+overall time: 0.134733 sec
+Setup time: 0.000002 sec
+Reorg time: 0.093586 sec
+Oper. time: 0.032215 sec
+Cache time: 0.008930 sec
+max difference: 0
+block size: 16384
+overall time: 0.130712 sec
+Setup time: 0.000002 sec
+Reorg time: 0.092493 sec
+Oper. time: 0.032239 sec
+Cache time: 0.005979 sec
+max difference: 0
+block size: 32768
+overall time: 0.128701 sec
+Setup time: 0.000002 sec
+Reorg time: 0.091943 sec
+Oper. time: 0.032246 sec
+Cache time: 0.004510 sec
+max difference: 0
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.240389 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149325 sec (clock off)
+view w:1000 h:500
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+block size: 4096
+overall time: 0.037039 sec
+Setup time: 0.000002 sec
+Reorg time: 0.024003 sec
+Oper. time: 0.008044 sec
+Cache time: 0.004990 sec
+max difference: 0
+block size: 8192
+overall time: 0.035023 sec
+Setup time: 0.000002 sec
+Reorg time: 0.023451 sec
+Oper. time: 0.008054 sec
+Cache time: 0.003516 sec
+max difference: 0
+block size: 16384
+overall time: 0.034019 sec
+Setup time: 0.000002 sec
+Reorg time: 0.023175 sec
+Oper. time: 0.008060 sec
+Cache time: 0.002782 sec
+max difference: 0
+block size: 32768
+overall time: 0.033528 sec
+Setup time: 0.000002 sec
+Reorg time: 0.023039 sec
+Oper. time: 0.008062 sec
+Cache time: 0.002425 sec
+max difference: 0
+
+-- entire cache management --
+image -d16 -m15 -w16000 -h8000 pat pat
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:9.025469 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647958 sec
+view w:4000 h:2000
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 2.417567 sec
+Setup time: 0.000016 sec
+Reorg time: 1.750345 sec
+Oper. time: 0.463639 sec
+Cache time: 0.203567 sec
+max difference: 0
+block size: 8192
+overall time: 2.150708 sec
+Setup time: 0.000016 sec
+Reorg time: 1.584342 sec
+Oper. time: 0.454164 sec
+Cache time: 0.112186 sec
+max difference: 0
+block size: 16384
+overall time: 2.017191 sec
+Setup time: 0.000016 sec
+Reorg time: 1.501109 sec
+Oper. time: 0.449555 sec
+Cache time: 0.066512 sec
+max difference: 0
+block size: 32768
+overall time: 1.950361 sec
+Setup time: 0.000016 sec
+Reorg time: 1.459494 sec
+Oper. time: 0.447153 sec
+Cache time: 0.043698 sec
+max difference: 0
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:9.025418 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647963 sec
+view w:2000 h:1000
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 0.608298 sec
+Setup time: 0.000017 sec
+Reorg time: 0.439672 sec
+Oper. time: 0.115915 sec
+Cache time: 0.052694 sec
+max difference: 0
+block size: 8192
+overall time: 0.541779 sec
+Setup time: 0.000016 sec
+Reorg time: 0.398379 sec
+Oper. time: 0.113538 sec
+Cache time: 0.029846 sec
+max difference: 0
+block size: 16384
+overall time: 0.508577 sec
+Setup time: 0.000016 sec
+Reorg time: 0.377724 sec
+Oper. time: 0.112385 sec
+Cache time: 0.018452 sec
+max difference: 0
+block size: 32768
+overall time: 0.491998 sec
+Setup time: 0.000016 sec
+Reorg time: 0.367404 sec
+Oper. time: 0.111788 sec
+Cache time: 0.012790 sec
+max difference: 0
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:9.025325 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647963 sec
+view w:1000 h:500
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 0.154973 sec
+Setup time: 0.000016 sec
+Reorg time: 0.111117 sec
+Oper. time: 0.028979 sec
+Cache time: 0.014860 sec
+max difference: 0
+block size: 8192
+overall time: 0.138431 sec
+Setup time: 0.000016 sec
+Reorg time: 0.100863 sec
+Oper. time: 0.028388 sec
+Cache time: 0.009164 sec
+max difference: 0
+block size: 16384
+overall time: 0.130184 sec
+Setup time: 0.000016 sec
+Reorg time: 0.095736 sec
+Oper. time: 0.028099 sec
+Cache time: 0.006332 sec
+max difference: 0
+block size: 32768
+overall time: 0.126089 sec
+Setup time: 0.000016 sec
+Reorg time: 0.093171 sec
+Oper. time: 0.027949 sec
+Cache time: 0.004953 sec
+max difference: 0
+
+-- range cache management --
+image -d16 -m15 -w16000 -h8000 pat pat
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:9.025483 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647958 sec
+view w:4000 h:2000
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 2.279932 sec
+Setup time: 0.000016 sec
+Reorg time: 1.749510 sec
+Oper. time: 0.462618 sec
+Cache time: 0.067788 sec
+max difference: 0
+block size: 8192
+overall time: 2.104214 sec
+Setup time: 0.000016 sec
+Reorg time: 1.583714 sec
+Oper. time: 0.453683 sec
+Cache time: 0.066800 sec
+max difference: 0
+block size: 16384
+overall time: 2.016502 sec
+Setup time: 0.000017 sec
+Reorg time: 1.500908 sec
+Oper. time: 0.449282 sec
+Cache time: 0.066296 sec
+max difference: 0
+block size: 32768
+overall time: 1.972593 sec
+Setup time: 0.000016 sec
+Reorg time: 1.459489 sec
+Oper. time: 0.446999 sec
+Cache time: 0.066089 sec
+max difference: 0
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:9.025409 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647962 sec
+view w:2000 h:1000
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 0.573793 sec
+Setup time: 0.000017 sec
+Reorg time: 0.439366 sec
+Oper. time: 0.115660 sec
+Cache time: 0.018750 sec
+max difference: 0
+block size: 8192
+overall time: 0.530205 sec
+Setup time: 0.000016 sec
+Reorg time: 0.398247 sec
+Oper. time: 0.113424 sec
+Cache time: 0.018517 sec
+max difference: 0
+block size: 16384
+overall time: 0.508392 sec
+Setup time: 0.000016 sec
+Reorg time: 0.377672 sec
+Oper. time: 0.112318 sec
+Cache time: 0.018386 sec
+max difference: 0
+block size: 32768
+overall time: 0.497550 sec
+Setup time: 0.000016 sec
+Reorg time: 0.367411 sec
+Oper. time: 0.111754 sec
+Cache time: 0.018369 sec
+max difference: 0
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:9.025339 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647963 sec
+view w:1000 h:500
+ref1:0x40185040 ref2:0x5e9cd120 davg:0x7d215140
+block size: 4096
+overall time: 0.146337 sec
+Setup time: 0.000017 sec
+Reorg time: 0.111042 sec
+Oper. time: 0.028920 sec
+Cache time: 0.006358 sec
+max difference: 0
+block size: 8192
+overall time: 0.135515 sec
+Setup time: 0.000017 sec
+Reorg time: 0.100833 sec
+Oper. time: 0.028358 sec
+Cache time: 0.006308 sec
+max difference: 0
+block size: 16384
+overall time: 0.130118 sec
+Setup time: 0.000016 sec
+Reorg time: 0.095724 sec
+Oper. time: 0.028078 sec
+Cache time: 0.006299 sec
+max difference: 0
+block size: 32768
+overall time: 0.127455 sec
+Setup time: 0.000016 sec
+Reorg time: 0.093167 sec
+Oper. time: 0.027941 sec
+Cache time: 0.006330 sec
+max difference: 0
+
+--
+image -d8 -m15 -w16000 -h8000 pat pat
+decimate: 8
+view_size: 32768
+ref1 w:16000 h:8000 element:4 init-time:9.216647 sec
+ref2 w:16000 h:8000 element:4 init-time:9.216918 sec
+view w:2000 h:1000
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+flush time: 0.000197 sec
+setup time: 0.000017 sec
+block fill time: 0.371971 sec
+block invalidate time: 0.051605 sec
+block difference time: 0.071097 sec
+decimate + difference time: 0.495076 sec
+max difference: 0
+
+image -d8 -m15 -w16000 -h8000 pat pat
+decimate: 8
+view_size: 32768
+ref1 w:16000 h:8000 element:4 init-time:9.216636 sec
+ref2 w:16000 h:8000 element:4 init-time:9.216642 sec
+view w:2000 h:1000
+ref1:0x40185060 ref2:0x5e9cd140 davg:0x7d215160
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+flush time: 0.000197 sec
+setup time: 0.000017 sec
+block fill time: 0.371970 sec
+block invalidate time: 0.051606 sec
+block difference time: 0.070987 sec
+decimate + difference time: 0.494964 sec
+max difference: 0
+
+########## ARM only ##########
+Release configuration with -O2 optimization
+
+---------- 10800 ----------
+
+decimate: 4
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024673 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024674 sec
+view w:2700 h:1350
+ref1:0x40184f20 ref2:0x4dffe200 davg:0x5be77420
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010331 sec
+flush time: 0.008485 sec
+setup time: 0.000000 sec
+block fill time: 0.507549 sec
+block invalidate time: 0.000041 sec
+block difference time: 0.116945 sec
+overall time: 0.643655 sec
+max difference: 0
+trace address:0x184B10 length:0xA0BCE20
+
+decimate: 8
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024671 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024674 sec
+view w:1350 h:675
+ref1:0x40184f20 ref2:0x4dffe200 davg:0x5be77420
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010243 sec
+flush time: 0.002184 sec
+setup time: 0.000000 sec
+block fill time: 0.236263 sec
+block invalidate time: 0.000010 sec
+block difference time: 0.029368 sec
+overall time: 0.278165 sec
+max difference: 0
+trace address:0x184B10 length:0x4815620
+
+decimate: 16
+view_size: 32768
+ref1 w:10800 h:5400 element:4 init-time:4.024671 sec
+ref2 w:10800 h:5400 element:4 init-time:4.024673 sec
+view w:675 h:337
+ref1:0x40184f20 ref2:0x4dffe200 davg:0x5be77420
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+init time: 0.010159 sec
+flush time: 0.000594 sec
+setup time: 0.000000 sec
+block fill time: 0.062725 sec
+block invalidate time: 0.000003 sec
+block difference time: 0.007350 sec
+overall time: 0.080857 sec
+max difference: 0
+trace address:0x184B10 length:0x1FCBA20
+
+---------- 12800 x 6400 ----------
+
+decimate: 1
+ref1 w:12800 h:6400 element:4 init-time:5.940894 sec
+ref2 w:12800 h:6400 element:4 init-time:0.409557 sec
+view w:12800 h:6400
+ref1:0x4028d320 ref2:0x53b0d400 davg:0x6738d408
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE_W:34 QUEUE_R:15 TRANS:24 V_W:103 V_R:84
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_B:92 CPU_SRAM_R:97 CPU_DRAM_B:367 CPU_DRAM_R:292
+Slot 1 - ACC_SRAM_B:19 ACC_SRAM_R:4 ACC_DRAM_B:295 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.882090 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.832127 sec
+Cache time: 0.049963 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 2562178 23047753 81989696 737528096 0
+max difference: 0
+enter trace file name: image1.bin
+trace length:0x30D82420
+capture time:122 sec
+capture bandwidth:6716978 bytes/sec
+
+---------- 16000 ----------
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:10.028417 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639961 sec
+view w:1000 h:500
+ref1:0x40188fa0 ref2:0x5e9d1080 davg:0x7d219088
+SRAM_W:10 SRAM_R:10 DRAM_W:45 DRAM_R:45 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:92 CPU_SRAM_R:100 CPU_DRAM_W:231 CPU_DRAM_R:235
+Slot 1 - ACC_SRAM_W:22 ACC_SRAM_R:10 ACC_DRAM_W:159 ACC_DRAM_R:143
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.042134 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.041827 sec
+Cache time: 0.000307 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15754 1997602 504128 63923392 0
+max difference: 0
+trace address:0x188B80 length:0x3D71E20
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:10.028409 sec
+ref2 w:16000 h:8000 element:4 init-time:0.639959 sec
+view w:1000 h:500
+ref1:0x40188fa0 ref2:0x5e9d1080 davg:0x7d219088
+SRAM_W:12 SRAM_R:12 DRAM_W:60 DRAM_R:60 QUEUE:0 TRANS:24
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:100 CPU_SRAM_R:108 CPU_DRAM_W:291 CPU_DRAM_R:295
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:219 ACC_DRAM_R:203
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.049455 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.049147 sec
+Cache time: 0.000309 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 15769 1997643 504608 63924704 0
+max difference: 0
+trace address:0x188B80 length:0x3D72220
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.339933 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149324 sec (clock off)
+view w:1000 h:500
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215048
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - CPU_SRAM_W:132 CPU_SRAM_R:140 CPU_DRAM_W:451 CPU_DRAM_R:447
+Slot 1 - ACC_SRAM_W:30 ACC_SRAM_R:18 ACC_DRAM_W:347 ACC_DRAM_R:323
+Slot 2 - CPU_ACC(AW,W,B,AR,R):0,0,0,0,0
+overall time: 0.068622 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.068307 sec
+Cache time: 0.000315 sec
+max difference: 0
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.339930 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149324 sec (clock off)
+view w:1000 h:500
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215048
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - ARM_SRAM_W:132 ARM_SRAM_R:132 ARM_DRAM_W:451 ARM_DRAM_R:451
+Slot 1 - ACC_SRAM_W:10 ACC_SRAM_R:10 ACC_DRAM_W:323 ACC_DRAM_R:323
+overall time: 0.068987 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.068672 sec
+Cache time: 0.000315 sec
+max difference: 0
+
+image -d4:16 -w16000 -h8000 pat pat
+ARM_PLL_CTRL:00036008 DDR_PLL_CTRL:00020008 IO_PLL_CTRL:0001E008
+ARM_CLK_CTRL:1F000E00 CLK_621_TRUE:00000000 DDR_CLK_CTRL:0C200003
+FPGA0_CLK_CTRL:00101000 FPGA1_CLK_CTRL:00101000
+Slot 0 - W_SRAM:128 W_DRAM:446 R_SRAM:137 R_DRAM:455
+Slot 1 - W_SRAM:0 W_DRAM:318 R_SRAM:9 R_DRAM:327
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:2.339992 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149324 sec (clock off)
+view w:4000 h:2000
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215048
+overall time: 0.344961 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.340139 sec
+Cache time: 0.004822 sec
+max difference: 0
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:2.339965 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149325 sec (clock off)
+view w:2000 h:1000
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215048
+overall time: 0.164471 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.163252 sec
+Cache time: 0.001219 sec
+max difference: 0
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:2.339931 sec (clock off)
+ref2 w:16000 h:8000 element:4 init-time:0.149325 sec (clock off)
+view w:1000 h:500
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215048
+overall time: 0.069352 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.069037 sec
+Cache time: 0.000315 sec
+max difference: 0
+
+image -d16 -m15 -w16000 -h8000 pat pat
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:9.216828 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647958 sec
+view w:4000 h:2000
+ref1:0x40180f60 ref2:0x5e9c9040 davg:0x7d211048
+overall time: 0.804803 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.786369 sec
+Cache time: 0.018435 sec
+max difference: 0
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:9.216781 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647962 sec
+view w:2000 h:1000
+ref1:0x40180f60 ref2:0x5e9c9040 davg:0x7d211048
+overall time: 0.391970 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.387340 sec
+Cache time: 0.004630 sec
+max difference: 0
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:9.216679 sec
+ref2 w:16000 h:8000 element:4 init-time:0.647964 sec
+view w:1000 h:500
+ref1:0x40180f60 ref2:0x5e9c9040 davg:0x7d211048
+overall time: 0.139329 sec
+Setup time: 0.000000 sec
+Reorg time: 0.000000 sec
+Oper. time: 0.138163 sec
+Cache time: 0.001166 sec
+max difference: 0
+
+--
+image -d8 -m15 -w16000 -h8000 pat pat
+decimate: 8
+view_size: 32768
+ref1 w:16000 h:8000 element:4 init-time:9.216726 sec
+ref2 w:16000 h:8000 element:4 init-time:9.216725 sec
+view w:2000 h:1000
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215060
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+flush time: 0.000000 sec
+setup time: 0.000001 sec
+block fill time: 0.543213 sec
+block invalidate time: 0.000021 sec
+block difference time: 0.070914 sec
+decimate + difference time: 0.614419 sec
+max difference: 0
+
+image -d16 -m15 -w16000 -h8000 pat pat
+decimate: 16
+view_size: 32768
+ref1 w:16000 h:8000 element:4 init-time:9.216630 sec
+ref2 w:16000 h:8000 element:4 init-time:9.216632 sec
+view w:1000 h:500
+ref1:0x40184f60 ref2:0x5e9cd040 davg:0x7d215060
+v0.b1:0x40000000 v0.b2:0x40008000 v1.b1:0x40010000 v1.b2:0x40018000
+flush time: 0.000000 sec
+setup time: 0.000000 sec
+block fill time: 0.140769 sec
+block invalidate time: 0.000005 sec
+block difference time: 0.017743 sec
+decimate + difference time: 0.158600 sec
+max difference: 0
+

@@ -1,0 +1,32 @@
+
+RandomAccess Run Time (seconds) - Stock Algorithm
+Queue Delay / Link Delay, 24
+20, 0.242625
+
+RandomAccess Run Time (seconds) - View Buffer Algorithm
+Queue Delay / Link Delay, 24
+20, 0.133144
+
+RandomAccess Giga Updates per Second (GUP/s) - Stock Algorithm
+Queue Delay / Link Delay, 24
+20, 0.017287167
+
+RandomAccess Giga Updates per Second (GUP/s) - View Buffer Algorithm
+Queue Delay / Link Delay, 24
+20, 0.031501975
+
+RandomAccess Speedup
+ST_RUN/VB_RUN
+Queue Delay / Link Delay, 24
+20, 1.82227513068557
+
+RandomAccess Speedup Upper Bound
+ST_RUN/(VB_OPERATION+VB_CACHE)
+Queue Delay / Link Delay, 24
+20, 4.02123110580748
+
+RandomAccess CPU Data Transferred (bytes) - Stock Algorithm
+Average, 409385280
+
+RandomAccess CPU Data Transferred (bytes) - View Buffer Algorithm
+Average, 84039808

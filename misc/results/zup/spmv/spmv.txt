@@ -1,0 +1,107 @@
+lloyd23@kome ~/work/apps/spmv/zup
+$ make D=CLOCKS,STATS,CLIENT
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DCLIENT -DUSE_SP -DUSE_OCM -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s18 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -IM:/work/lime.tst/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00015300 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000300
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+SpMV time: 0.291599 sec
+Setup time: 0.000000 sec
+Reorg time: 0.204410 sec
+Oper. time: 0.063588 sec
+Cache time: 0.023601 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32783 2277503 2098112 145760192 0
+ACC 8912896 11141120 71303168 106954752 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            61.131207
+num_loads:          36700188
+num_stores:         71303168
+
+lloyd23@kome ~/work/apps/spmv/zup
+$ make D=CLOCKS,STATS,CLIENT ARG=1
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DCLIENT -DUSE_SP -DUSE_OCM -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s23 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -IM:/work/lime.tst/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+*** ERROR:  at line 566 of ../src/matrix_generator/create_rand.c:  failed to malloc 2281701376 bytes! ***
+
+lloyd23@kome ~/work/apps/spmv/zup
+$ make D=CLOCKS,STATS,CLIENT ARG=1
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DCLIENT -DUSE_SP -DUSE_OCM -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s22 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -IM:/work/lime.tst/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00015300 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000300
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+SpMV time: 4.667660 sec
+Setup time: 0.000000 sec
+Reorg time: 3.271879 sec
+Oper. time: 1.019260 sec
+Cache time: 0.376521 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 524303 36438745 33555392 2332079680 0
+ACC 142606336 178257920 1140850688 1711276032 0
+Matrix Dim (r x c): (4194304 x 4194304)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    142606336
+Repetitions:        1
+Mflop/s:            61.103992
+num_loads:          587202588
+num_stores:         1140850688
+
+lloyd23@kome ~/work/apps/spmv/zup
+$ make D=CLOCKS,STATS
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s18 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -IM:/work/lime.tst/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00015300 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000300
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+SpMV time: 0.428357 sec
+Oper. time: 0.427746 sec
+Cache time: 0.000611 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32776 4124766 2097664 263985152 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            41.614307
+num_loads:          36700188
+num_stores:         71303168
+
+lloyd23@kome ~/work/apps/spmv/zup
+$ make D=CLOCKS,STATS ARG=1
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s22 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -I../../shared -IM:/work/lime.tst/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00015300 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000300
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+SpMV time: 14.437432 sec
+Oper. time: 14.427882 sec
+Cache time: 0.009550 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 524302 161077992 33555328 *1719057088 0
+Matrix Dim (r x c): (4194304 x 4194304)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    142606336
+Repetitions:        1
+Mflop/s:            19.755084
+num_loads:          587202588
+num_stores:         1140850688
