@@ -4,7 +4,7 @@ SRC += ../src $(addprefix ../src/,bebop_util matrix_generator spmvbench) ../../s
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
-  MODULES += spmv
+  MODULES += spmv gdt
   MODULES += block_smvm_code smvm_benchmark smvm_timing_results smvm_timing_run smvm_verify_result timing
   MODULES += bcoo_matrix bcsr_matrix create_rand
   MODULES += __complex mt19937ar random_number smvm_malloc smvm_util sort_joint_arrays

@@ -1,7 +1,7 @@
 TARGET = strm
 VERSION = 1.0
 SRC += ../src ../../shared
-MODULES += strm
+MODULES += strm gdt
 ifeq ($(ARG),1)
   DEFS += -DSTREAM_ARRAY_SIZE=120000000
 else

@@ -26,6 +26,7 @@ using namespace std;
 #include "ticks.h"
 #include "clocks.h"
 #include "sysinit.h"
+#include "gdt.h"
 
 #define DEFAULT_LOOP_COUNT 10000
 #define DEFAULT_DECIMATE_MIN 4
@@ -123,6 +124,9 @@ MAIN
 	int image_h = DEFAULT_IMAGE_H;
 	char *oname = NULL;
 	bool sflag = false;
+
+	/* --- Configure the Gaussian Delay Tables (GTD) --- */
+	config_gdt();
 
 #if defined(USE_ACC)
 	dre1.wait(); // wait for DRE initialization

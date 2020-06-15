@@ -5,7 +5,7 @@ DEFS += -DENTIRE
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
-  MODULES += image ColorImage
+  MODULES += image ColorImage gdt
 endif
 ifneq ($(NEED_STREAM),)
   DEFS += -DUSE_LSU

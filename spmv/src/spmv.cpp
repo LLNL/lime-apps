@@ -26,6 +26,7 @@ extern "C" {
 #include "ticks.h"
 #include "clocks.h"
 #include "sysinit.h"
+#include "gdt.h"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -52,6 +53,9 @@ MAIN
 	struct SMVM_timing_results timing_results;
 	struct SMVM_parameters spmv_params;
 	FILE *fout = stdout;
+
+	/* --- Configure the Gaussian Delay Tables (GTD) --- */
+	config_gdt();
 
 	//smvm_set_debug_level_from_environment();
 	spmv_params.m = 1 << DEFAULT_MATRIX_LSZ;

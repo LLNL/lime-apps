@@ -30,6 +30,7 @@ using namespace std;
 #include "ticks.h"
 #include "clocks.h"
 #include "sysinit.h"
+#include "gdt.h"
 
 #define DEFAULT_RMAT_SCALE 16U // log 2 size
 #define DEFAULT_BLOCK_LSZ 12 // log 2 size
@@ -287,6 +288,9 @@ MAIN
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
 	bool nok = false;
+
+	/* --- Configure the Gaussian Delay Tables (GTD) --- */
+	config_gdt();
 
 #if defined(USE_ACC)
 	dre.wait(); // wait for DRE initialization
