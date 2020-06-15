@@ -127,7 +127,7 @@ void clocks_normal(void)
 #define IOPLL_CHK  0x00015A00 /*             NA,    PS_REF_CLK,       1,         90,        0,       0 */
 #define PL0_REF_CTRL    0x0C0 /* 24 CLKACT, 21:16 DIVISOR1, 13:8 DIVISOR0, 2:0 SRCSEL */
 #define PL0_EMUL   0x01011800 /*         1,              1,            24,      IOPLL */
-#define PL0_NORM   0x01010600 /*         1,              1,             6,      IOPLL */
+#define PL0_NORM   0x01010800 /*         1,              1,             8,      IOPLL */
 #define PL1_REF_CTRL    0x0C4 /* 24 CLKACT, 21:16 DIVISOR1, 13:8 DIVISOR0, 2:0 SRCSEL */
 
 void clocks_emulate(void)
