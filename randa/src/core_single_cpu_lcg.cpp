@@ -97,6 +97,8 @@ cmpp(const void *p1, const void *p2)
 static void
 RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Table, nupdate_t nupdate)
 {
+    printf("RandomAccessUpdate_LCG # 1...\n");  //CMEdit
+
 	nupdate_t i;
 	size_t j;
 #ifdef RAND_SERIAL
@@ -134,6 +136,7 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 #endif
 
 	for (i=0; i<nupdate/VECT_LEN; i++) {
+		 if (i % 1000 == 0) printf(".");  //CMEdit
 		// if (i % 1000 == 0) outbyte('.');
 		/* The good, the bad, and the ugly:
 		 * Good: inserting cache management within the loop is faster
@@ -249,6 +252,8 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 static void
 RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Table, nupdate_t nupdate)
 {
+    printf("RandomAccessUpdate_LCG # 2...\n");  //CMEdit
+
 	nupdate_t i;
 	size_t j;
 	uran_t ran[VECT_LEN]; /* current random numbers */
@@ -260,7 +265,11 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 	for (j=0; j<VECT_LEN; j++)
 		ran[j] = HPCC_starts_LCG((nupdate/VECT_LEN) * j);
 
+
 	for (i=0; i<nupdate/VECT_LEN; i++) {
+
+        if (i % 1000 == 0) printf(".");  //CMEdit
+
 #if defined(_OPENMP)
 		#pragma omp parallel for
 #endif
@@ -282,12 +291,16 @@ RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Tabl
 static void
 RandomAccessUpdate_LCG(unsigned int logTableSize, size_t TableSize, table_p Table, nupdate_t nupdate)
 {
+    printf("RandomAccessUpdate_LCG # 3...\n");
+
 	nupdate_t i;
 	uran_t ran;
 	ran = 1;
 	for (i=0; i<nupdate; i++) {
 		ran = LCG_MUL64 * ran + LCG_ADD64;
 		Table[ran >> (sizeof(uran_t)*8 - logTableSize)] ^= ran;
+
+        if (i % 1000 == 0) printf(".");  //CMEdit
 	}
 }
 
@@ -360,6 +373,8 @@ HPCC_RandomAccess_LCG(HPCC_Params *params, int doIO, double *GUPs, int *failure)
 //	realtime = -RTSEC();
 
 	RandomAccessUpdate_LCG(logTableSize, TableSize, Table, nupdate);
+    printf("RandomAccessUpdate_LCG # 4...\n");
+
 
 	/* End timed section */
 	/* assume output data is in memory (flushed) */
@@ -400,6 +415,9 @@ HPCC_RandomAccess_LCG(HPCC_Params *params, int doIO, double *GUPs, int *failure)
 		for (i=0; i<nupdate; i++) {
 			temp = LCG_MUL64 * temp + LCG_ADD64;
 			Table[temp >> (sizeof(uran_t)*8 - logTableSize)] ^= temp;
+
+            if (i % 1000 == 0) printf(".");  //CMEdit
+
 		}
 
 		for (t=0; t<TableSize; t++)
