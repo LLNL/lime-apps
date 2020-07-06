@@ -19,14 +19,7 @@ extern "C" {
 // #define MARGS "-c -s18 -n34 -v15" *
 // #define MARGS "-c -s21 -n34 -v15"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
-#include "gdt.h"
+#include "lime.h"
 
 #define DEFAULT_BLOCK_LSZ 15 // log 2 size
 #define DEFAULT_MATRIX_LSZ 21 // log 2 size
@@ -43,7 +36,7 @@ IndexArray<index_t> dre; // Data Reorganization Engine
 #endif
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
@@ -53,9 +46,6 @@ MAIN
 	struct SMVM_timing_results timing_results;
 	struct SMVM_parameters spmv_params;
 	FILE *fout = stdout;
-
-	/* --- Configure the Gaussian Delay Tables (GTD) --- */
-	config_gdt();
 
 	//smvm_set_debug_level_from_environment();
 	spmv_params.m = 1 << DEFAULT_MATRIX_LSZ;

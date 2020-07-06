@@ -9,13 +9,7 @@ using namespace std;
 // Example main arguments
 // #define MARGS "-c -s20" *
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_SCALE 16U // log 2 size
 
@@ -33,7 +27,7 @@ unsigned long long tsetup, treorg, toper, tcache;
 //------------------ Main ------------------//
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
@@ -95,7 +89,7 @@ MAIN
 	// Sort Data
 	tsetup = treorg = tcache = 0;
 	CLOCKS_EMULATE
-	CACHE_BARRIER
+	CACHE_BARRIER(NULL)
 	TRACE_START
 	STATS_START
 
@@ -109,7 +103,7 @@ MAIN
 	// assume output data is in memory (flushed)
 	tget(finish);
 
-	CACHE_BARRIER
+	CACHE_BARRIER(NULL)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

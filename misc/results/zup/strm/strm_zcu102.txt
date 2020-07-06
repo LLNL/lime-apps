@@ -1,0 +1,60 @@
+$ make D=STATS run
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -I../../shared -IM:/work/lime/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o strm.o ../src/strm.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013346100 0x1009aaf900 0x1000219100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1881.4     0.170087     0.170087     0.170087
+Scale:           1870.7     0.171056     0.171056     0.171056
+Add:             1414.9     0.339255     0.339255     0.339255
+Triad:           1415.4     0.339123     0.339123     0.339123
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000185 29999904 1280011336 1919993920 0
+
+$ make D=STATS,CLOCKS
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DCLOCKS -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -I../../shared -IM:/work/lime/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o strm.o ../src/strm.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013346100 0x1009aaf900 0x1000219100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            6497.3     0.049251     0.049251     0.049251
+Scale:           6225.3     0.051403     0.051403     0.051403
+Add:             4652.1     0.103180     0.103180     0.103180
+Triad:           4672.1     0.102737     0.102737     0.102737
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000185 29999992 1280011340 1919999552 0

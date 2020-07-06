@@ -35,13 +35,7 @@ $Log: $
 // #define MARGS "-e8Mi -ramr_cur.fa -qamr_cur.fa"
 // #define MARGS "-e1K -k16 -rtestdb.fa -qtestqr.fa"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #include "block_map.h"
 
@@ -439,7 +433,7 @@ static unsigned long atoulk(const char *s)
 }
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	int nok = 0;
 	char *s;

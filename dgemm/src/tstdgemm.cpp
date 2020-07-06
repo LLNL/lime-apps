@@ -11,12 +11,7 @@ extern "C" {
 }
 #endif
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
+#include "lime.h"
 
 #ifndef CLOCKS_PER_SEC // from time.h
 /* Used to generate a seed */
@@ -130,7 +125,7 @@ HPCC_TestDGEMM(HPCC_Params *params, int doIO, double *UGflops, int *Un, int *Ufa
   if (doIO) fprintf( outFile, "Matrix dimension = %d x %d\n", n, n );
 
   CLOCKS_EMULATE
-  CACHE_BARRIER
+  CACHE_BARRIER(NULL)
   TRACE_START
   STATS_START
   /* assume input data is in memory and not cached (flushed and invalidated) */
@@ -144,7 +139,7 @@ HPCC_TestDGEMM(HPCC_Params *params, int doIO, double *UGflops, int *Un, int *Ufa
   tget(t4);
 
   /* assume output data is in memory (flushed) */
-  CACHE_BARRIER
+  CACHE_BARRIER(NULL)
   STATS_STOP
   TRACE_STOP
   CLOCKS_NORMAL

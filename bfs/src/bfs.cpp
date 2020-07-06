@@ -23,13 +23,7 @@ using namespace std;
 // #define MARGS "-s20 -v15"
 // #define MARGS "-s22 -v15"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_RMAT_SCALE 16U // log 2 size
 #define DEFAULT_BLOCK_LSZ 12 // log 2 size
@@ -63,6 +57,8 @@ unsigned long long tsetup, treorg, toper, tcache;
 
 
 //------------------ Support ------------------//
+
+#undef USE_ACC // not implemented
 
 #if defined(USE_ACC)
 
@@ -148,7 +144,7 @@ void bfs(
 //------------------ Main ------------------//
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */
 	int opt;
@@ -258,7 +254,7 @@ MAIN
 
 	tsetup = treorg = tcache = 0;
 	CLOCKS_EMULATE
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	TRACE_START
 	STATS_START
 
@@ -268,7 +264,7 @@ MAIN
 	// assume output data is in memory (flushed)
 	tget(finish);
 
-	CACHE_BARRIER
+	CACHE_BARRIER(dre)
 	STATS_STOP
 	TRACE_STOP
 	CLOCKS_NORMAL

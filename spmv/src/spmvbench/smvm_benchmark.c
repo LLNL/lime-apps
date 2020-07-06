@@ -320,8 +320,8 @@ smvm_benchmark_with_results (struct SMVM_parameters *p_params,
 
   WITH_DEBUG( fprintf(stderr,"\nDeallocating matrix and vectors...") );
   destroy_bcsr_matrix (A);
-  free (x);
-  free (yy0);
+  smvm_free (x);
+  smvm_free (yy0);
   WITH_DEBUG( fprintf(stderr,"done.\n\n") );
 
   return 0;
@@ -555,8 +555,8 @@ smvm_benchmark (struct SMVM_parameters *p_params)
 
   WITH_DEBUG( fprintf (stderr, "\nDeallocating matrix and vectors...") );
   destroy_bcsr_matrix (A);
-  free (x);
-  free (yy0);
+  smvm_free (x);
+  smvm_free (yy0);
   WITH_DEBUG( fprintf (stderr, "done.\n\n") );
 
   return 0;

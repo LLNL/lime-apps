@@ -1,6 +1,6 @@
 TARGET = pager
 VERSION = 1.1
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
@@ -12,9 +12,12 @@ else
   endif
   LDLIBS += -lstdc++
 endif
-ifneq ($(NEED_STREAM),)
+ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
   DEFS += -DUSE_LSU
   MODULES += lsu_cmd
+  ifeq ($(filter zup zynq,$(notdir $(CURDIR))),)
+    MODULES += dlmalloc
+  endif
 endif
 ifeq ($(ARG),1)
   RUN_ARGS = -s21 -v15

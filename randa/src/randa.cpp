@@ -15,14 +15,7 @@
 // Example main arguments
 // #define MARGS "-s29" *
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
-//#include "gdt.h"
+#include "lime.h"
 
 #define DEFAULT_SCALE 29U // log 2 size
 #define DEFAULT_VECTOR_LSZ 10U // log 2 size
@@ -37,10 +30,9 @@ unsigned vect_len = 1U<<DEFAULT_VECTOR_LSZ;
 IndexArray<index_t> dre; // Data Reorganization Engine
 #endif // USE_ACC
 
-MAIN
+
+int MAIN(int argc, char *argv[])
 {
-//	/* --- Configure the Gaussian Delay Tables (GTD) --- */
-//	config_gdt();
 
 	HPCC_Params params;
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */

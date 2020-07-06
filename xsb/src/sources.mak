@@ -18,7 +18,7 @@ BINARY_READ = no
 
 TARGET = xsb
 VERSION = 16
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 MODULES += \
 Main \
 io \

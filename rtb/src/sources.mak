@@ -1,6 +1,6 @@
 TARGET = rtb
 VERSION = 3.1
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
@@ -9,10 +9,10 @@ else
     MODULES += fatfs
   endif
 endif
-ifneq ($(NEED_ACC),)
+ifneq ($(filter $(NEED_ACC),$(DEFS)),)
   MODULES += short
 endif
-ifneq ($(NEED_STREAM),)
+ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
   DEFS += -DUSE_HASH
   ifneq ($(filter %SYSTEMC,$(DEFS)),)
     MODULES += kvs

@@ -71,7 +71,7 @@ smvm_verify_result (int m, int n, int r, int c, int row_start[],
                           x, y_check);
 
   err = smvm_max_norm_error (y, y_check, m);
-  free(y_check);
+  smvm_free(y_check);
 
   if (err > tol)
     {

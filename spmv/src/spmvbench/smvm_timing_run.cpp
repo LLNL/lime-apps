@@ -24,12 +24,7 @@ extern "C" {
 }
 #endif
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
+#include "lime.h"
 
 #define __WITH_DEBUG2( OP )  do {if(b_dbg) { OP; }} while(0)
 
@@ -195,7 +190,7 @@ smvm_timing_run_with_results (struct SMVM_timing_results* p_results,
                                 num_stores);
      
       __WITH_DEBUG2( fprintf (stderr, "Deallocating space for timing data...") );
-      free (timings);
+      smvm_free (timings);
       __WITH_DEBUG2( fprintf (stderr, "done.\n") );
     } /* the non-dryrun case */
 }
@@ -298,7 +293,7 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
 #endif
 		tsetup = treorg = tcache = 0;
 		CLOCKS_EMULATE
-		CACHE_BARRIER
+		CACHE_BARRIER(dre)
 		TRACE_START
 		STATS_START
 
@@ -312,7 +307,7 @@ smvm_timing_run_with_results2 (struct SMVM_timing_results* p_results,
 		// assume output data is in memory (flushed)
 		tget(finish);
 
-		CACHE_BARRIER
+		CACHE_BARRIER(dre)
 		STATS_STOP
 		TRACE_STOP
 		CLOCKS_NORMAL
@@ -510,7 +505,7 @@ smvm_timing_run (int m, int n, int r, int c,
       /* sleep(1); // Pause to let the file write proceed. */
 
       __WITH_DEBUG2( fprintf (stderr, "Deallocating space for timing data...") );
-      free (timings);
+      smvm_free (timings);
       __WITH_DEBUG2( fprintf (stderr, "done.\n") );
     } /* the non-dryrun case */
 }

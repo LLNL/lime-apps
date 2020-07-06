@@ -87,9 +87,16 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #endif
 
 #if defined(__microblaze__)
-#define cprint(s)
-#else
-#define cprint(s) fprintf(stderr,s)
+#define cprint(str)
+#define cprintf(format, ...)
+#elif defined(ZYNQ)
+#include "xil_printf.h"
+#define cprint(str) print(str)
+#define cprintf(format, ...) xil_printf(format, ## __VA_ARGS__)
+#else // not __microblaze__, ZYNQ
+#include <stdio.h>
+#define cprint(str) fprintf(stderr, str)
+#define cprintf(format, ...) fprintf(stderr, format, ## __VA_ARGS__)
 #endif
 
 // NOTE: no cycle counters are available on the MicroBlaze
@@ -109,14 +116,8 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 /* TODO: decide where to allocate and introduce stream ids to base class? */
 #if defined(__microblaze__)
 #define THIS_PN MCU0_PN
-#define STREAM_DEVICE_ID 0
-#elif defined(__ARM_ARCH) && defined(ZYNQ)
-#include "xparameters.h"
+#else
 #define THIS_PN ARM0_PN
-#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
-#elif defined(SYSTEMC)
-#define THIS_PN 0
-#define STREAM_DEVICE_ID 0
 #endif
 
 #define THIS_ID getID(THIS_PN)
@@ -127,18 +128,21 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 #define LSU2_ID getID(LSU2_PN)
 #define PRU0_ID getID(PRU0_PN)
 
-#if defined(__ARM_ARCH)
+#if defined(ZYNQ)
+#include "xparameters.h"
+#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
+#else
+#define STREAM_DEVICE_ID 0
+#endif
+
 inline void dump_reg(void)
 {
-	for (int i = 0; i < 8; i++) xil_printf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
-	for (int i = 0; i < 2; i++) xil_printf(" PRU0   [%d]:%x\r\n", i, aport_read(PRU0_ID, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU1_RD[%d]:%x\r\n", i, aport_read(LSU1_ID+READ_CH, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU2_RD[%d]:%x\r\n", i, aport_read(LSU2_ID+READ_CH, THIS_ID, i));
-	for (int i = 0; i < 6; i++) xil_printf(" LSU2_WR[%d]:%x\r\n", i, aport_read(LSU2_ID+WRITE_CH, THIS_ID, i));
+	for (int i = 0; i < 8; i++) cprintf(" HSU0   [%d]:%x\r\n", i, aport_read(HSU0_ID, THIS_ID, i));
+	for (int i = 0; i < 2; i++) cprintf(" PRU0   [%d]:%x\r\n", i, aport_read(PRU0_ID, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU1_RD[%d]:%x\r\n", i, aport_read(LSU1_ID+READ_CH, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU2_RD[%d]:%x\r\n", i, aport_read(LSU2_ID+READ_CH, THIS_ID, i));
+	for (int i = 0; i < 6; i++) cprintf(" LSU2_WR[%d]:%x\r\n", i, aport_read(LSU2_ID+WRITE_CH, THIS_ID, i));
 }
-#else
-#define dump_reg()
-#endif
 
 class stream_port {
 public:
@@ -589,21 +593,23 @@ public:
 
 	void fill(void *buf, size_t len, const void *key, size_t stride)
 	{
+		uintptr_t paddr;
 		flit_t reg[7];
 
+		paddr = ATRAN(buf);
 #if defined(CONTIG)
 		/* LSU2 contiguous store (with move command) */
 		reg[1] = 0x00000000;              /* clear status */
-		reg[2] = LSU_ACMD(buf,1,LSU_move);     /* reqstat=1, command=move */
-		reg[3] = ATRAN(buf);              /* address */
+		reg[2] = LSU_ACMD(paddr,1,LSU_move); /* reqstat=1, command=move */
+		reg[3] = flit_t(paddr);           /* address */
 		reg[4] = sizeof(mapped_type)*len; /* size */
 		aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 1, 0, reg, 4); // go
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 4); // debug
 #else
 		/* LSU2 contiguous store (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(buf,1,LSU_smove); /* reqstat=1, command=smove */
-		reg[3] = ATRAN(buf);           /* address */
+		reg[2] = LSU_ACMD(paddr,1,LSU_smove); /* reqstat=1, command=smove */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(mapped_type);  /* size */
 		reg[5] = sizeof(mapped_type);  /* increment */
 		reg[6] = len;                  /* repetitions */
@@ -611,10 +617,11 @@ public:
 		// aport_nwrite(LSU2_ID+WRITE_CH, THIS_ID, 0, 0, reg, 6); // debug
 #endif
 
+		paddr = ATRAN(data_base);
 		/* LSU2 index2 load */
 		reg[1] = 0x00000000;               /* clear status */
-		reg[2] = LSU_ACMD(data_base,0,LSU_index2);    /* reqstat=0, command=index2 */
-		reg[3] = ATRAN(data_base);         /* base address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_index2); /* reqstat=0, command=index2 */
+		reg[3] = flit_t(paddr);            /* base address */
 		reg[4] = sizeof(slot_s);           /* size */
 		reg[5] = 0x00000000;               /* index (spacer) */
 		reg[6] = sizeof(slot_s)*topsearch; /* transfer size */
@@ -625,12 +632,13 @@ public:
 		reg[2] = topsearch-1;    /* plen, minus 1 */
 		aport_nwrite(PRU0_ID, THIS_ID, 0, 0, reg, 2);
 
+		paddr = ATRAN(key);
 #if defined(CONTIG)
 		/* start streaming keys */
 		/* LSU1 contiguous load (with move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(key,0,LSU_move);  /* reqstat=0, command=move */
-		reg[3] = ATRAN(key);           /* address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_move); /* reqstat=0, command=move */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(key_type)*len; /* size */
 		aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 1, 0, reg, 4); // go
 		// aport_nwrite(LSU1_ID+READ_CH, THIS_ID, 0, 0, reg, 4); // debug
@@ -638,8 +646,8 @@ public:
 		/* start streaming keys */
 		/* LSU1 contiguous load (with strided move command) */
 		reg[1] = 0x00000000;           /* clear status */
-		reg[2] = LSU_ACMD(key,0,LSU_smove); /* reqstat=0, command=smove */
-		reg[3] = ATRAN(key);           /* address */
+		reg[2] = LSU_ACMD(paddr,0,LSU_smove); /* reqstat=0, command=smove */
+		reg[3] = flit_t(paddr);        /* address */
 		reg[4] = sizeof(key_type);     /* size */
 		reg[5] = stride;               /* increment */
 		reg[6] = len;                  /* repetitions */

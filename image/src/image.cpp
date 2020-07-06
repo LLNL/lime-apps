@@ -19,14 +19,7 @@ using namespace std;
 // #define MARGS "-d4:16 -v12:15 -w16000 -h8000 pat pat"
 // #define MARGS "-d16 -v15 -w16000 -h8000 pat pat" *
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
-#include "gdt.h"
+#include "lime.h"
 
 #define DEFAULT_LOOP_COUNT 10000
 #define DEFAULT_DECIMATE_MIN 4
@@ -109,7 +102,7 @@ bool check(void *buf, size_t buf_sz)
 //------------------  ------------------//
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	/* get arguments */
 	int opt;
@@ -124,9 +117,6 @@ MAIN
 	int image_h = DEFAULT_IMAGE_H;
 	char *oname = NULL;
 	bool sflag = false;
-
-	/* --- Configure the Gaussian Delay Tables (GTD) --- */
-	config_gdt();
 
 #if defined(USE_ACC)
 	dre1.wait(); // wait for DRE initialization
@@ -218,18 +208,16 @@ MAIN
 		int i;
 		typedef struct {int x,y;} point_t;
 		typedef point_t* point_p;
-		point_p pt = NEWA(point_t, loop_count); // list of points in decimated view
 		const int ref_width = image_w;
 		const int ref_height = image_h;
 		typedef unsigned int element_t;
 		typedef element_t* element_p;
-		element_p ref = NEWA(element_t, ref_width*ref_height); // reference array
 #ifdef USE_SP
-		uchar_p block = (uchar_t*)SP_BEG; // view block
 		if (block_max > SP_SIZE) block_max = SP_SIZE;
-#else
-		uchar_p block = NEWA(uchar_t, block_max); // view block
 #endif
+		point_p pt = new point_t [loop_count]; // list of points in decimated view
+		element_p ref = NEWA(element_t, ref_width*ref_height); // reference array
+		uchar_p block = SP_NALLOC(uchar_t, block_max); // view block
 
 		for (int decimate = decimate_min; decimate <= decimate_max; decimate <<= 1) {
 		printf("decimate: %d\n", decimate);
@@ -269,7 +257,7 @@ MAIN
 			/* time decimation */
 			printf(", "); fflush(stdout);
 			CLOCKS_EMULATE
-			CACHE_BARRIER
+			CACHE_BARRIER(dre1)
 			STATS_START
 
 			/* assume input data is in memory and not cached (flushed and invalidated) */
@@ -286,7 +274,7 @@ MAIN
 			/* assume output data is in memory (flushed) */
 			tget(finish);
 
-			CACHE_BARRIER
+			CACHE_BARRIER(dre1)
 			STATS_STOP
 			CLOCKS_NORMAL
 			printf("time: %.3f usec\n", tesec(finish, start)/loop_count*1000000);
@@ -300,14 +288,11 @@ MAIN
 
 		} // for decimate...
 
-		CACHE_DISPOSE(block, block_max*sizeof(uchar_t));
-		CACHE_DISPOSE(ref, ref_width*ref_height*sizeof(element_t));
-		CACHE_DISPOSE(pt, loop_count*sizeof(point_t));
-#ifndef USE_SP
-		DELETEA((uchar_t*)block);
-#endif
+		CACHE_DISPOSE(dre1, block, block_max*sizeof(uchar_t));
+		CACHE_DISPOSE(dre1, ref, ref_width*ref_height*sizeof(element_t));
+		SP_NFREE((uchar_t*)block);
 		DELETEA((element_t*)ref);
-		DELETEA((point_t*)pt);
+		delete[] pt;
 	}
 
 	/* * * * * * * * * * one image argument * * * * * * * * * */
@@ -342,7 +327,7 @@ MAIN
 		printf("view size: %lu\n", (ulong_t)buf_sz);
 
 		CLOCKS_EMULATE
-		CACHE_BARRIER
+		CACHE_BARRIER(dre1)
 		STATS_START
 
 		/* decimate entire reference image into view buffer */
@@ -365,7 +350,7 @@ MAIN
 		/* assume output data is in memory (flushed) */
 		tget(finish);
 
-		CACHE_BARRIER
+		CACHE_BARRIER(dre1)
 		STATS_STOP
 		CLOCKS_NORMAL
 		printf("decimate time: %f sec\n", tesec(finish, start));
@@ -445,7 +430,7 @@ MAIN
 
 		/* difference image allocation */
 		int davg_sz = (ref_w/decimate) * (ref_h/decimate);
-		uchar_p davg = NEWA(uchar_t, davg_sz);
+		uchar_p davg = new uchar_t [davg_sz];
 		printf("view w:%d h:%d\n", ref_w/decimate, ref_h/decimate);
 		printf("ref1:%p ref2:%p davg:%p\n", (void*)ref_a1, (void*)ref_a2, (void*)davg);
 
@@ -458,7 +443,7 @@ MAIN
 
 		tsetup = treorg = tcache = 0;
 		CLOCKS_EMULATE
-		CACHE_BARRIER
+		CACHE_BARRIER2(dre1,dre2)
 		TRACE_START
 		STATS_START
 
@@ -536,17 +521,10 @@ MAIN
 
 		} view[2];
 
-#ifdef USE_SP
-		view[0].block1 = (uchar_t*)SP_BEG + 0*(SP_SIZE/4); // view block 1
-		view[0].block2 = (uchar_t*)SP_BEG + 1*(SP_SIZE/4); // view block 2
-		view[1].block1 = (uchar_t*)SP_BEG + 2*(SP_SIZE/4); // view block 1
-		view[1].block2 = (uchar_t*)SP_BEG + 3*(SP_SIZE/4); // view block 2
-#else
-		view[0].block1 = NEWA(uchar_t, block_sz); // view block 1
-		view[0].block2 = NEWA(uchar_t, block_sz); // view block 2
-		view[1].block1 = NEWA(uchar_t, block_sz); // view block 1
-		view[1].block2 = NEWA(uchar_t, block_sz); // view block 2
-#endif
+		view[0].block1 = SP_NALLOC(uchar_t, block_sz); // view block 1
+		view[0].block2 = SP_NALLOC(uchar_t, block_sz); // view block 2
+		view[1].block1 = SP_NALLOC(uchar_t, block_sz); // view block 1
+		view[1].block2 = SP_NALLOC(uchar_t, block_sz); // view block 2
 
 //		printf("v0.b1:%p v0.b2:%p v1.b1:%p v1.b2:%p\n",
 //			(void*)view[0].block1, (void*)view[0].block2,
@@ -576,25 +554,17 @@ MAIN
 		/* flush output product to memory */
 		host::cache_flush(davg, davg_sz*sizeof(uchar_t));
 		/* make sure to invalidate cache before delete */
-#ifdef USE_SP
-		Xil_L1DCacheInvalidateRange((INTPTR)view[0].block1, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((INTPTR)view[0].block2, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((INTPTR)view[1].block1, block_sz*sizeof(uchar_t));
-		Xil_L1DCacheInvalidateRange((INTPTR)view[1].block2, block_sz*sizeof(uchar_t));
-#else
-		CACHE_DISPOSE(view[1].block2, block_sz*sizeof(uchar_t));
-		CACHE_DISPOSE(view[1].block1, block_sz*sizeof(uchar_t));
-		CACHE_DISPOSE(view[0].block2, block_sz*sizeof(uchar_t));
-		CACHE_DISPOSE(view[0].block1, block_sz*sizeof(uchar_t));
-#endif
+		CACHE_DISPOSE(dre2, view[1].block2, block_sz*sizeof(uchar_t));
+		CACHE_DISPOSE(dre1, view[1].block1, block_sz*sizeof(uchar_t));
+		CACHE_DISPOSE(dre2, view[0].block2, block_sz*sizeof(uchar_t));
+		CACHE_DISPOSE(dre1, view[0].block1, block_sz*sizeof(uchar_t));
 		tget(t7);
 
-#ifndef USE_SP
-		DELETEA((uchar_t*)view[1].block2);
-		DELETEA((uchar_t*)view[1].block1);
-		DELETEA((uchar_t*)view[0].block2);
-		DELETEA((uchar_t*)view[0].block1);
-#endif
+		SP_NFREE((uchar_t*)view[1].block2);
+		SP_NFREE((uchar_t*)view[1].block1);
+		SP_NFREE((uchar_t*)view[0].block2);
+		SP_NFREE((uchar_t*)view[0].block1);
+
 		tinc(tcache, tdiff(t1,t0) + tdiff(t7,t6));
 		tinc(tsetup, tdiff(t2,t1));
 
@@ -633,7 +603,7 @@ MAIN
 		/* assume output data is in memory (flushed) */
 		tget(finish);
 
-		CACHE_BARRIER
+		CACHE_BARRIER2(dre1,dre2)
 		STATS_STOP
 		TRACE_STOP
 		CLOCKS_NORMAL
@@ -677,8 +647,7 @@ MAIN
 			}
 		}
 
-		CACHE_DISPOSE(davg, davg_sz*sizeof(uchar_t));
-		DELETEA((uchar_t*)davg);
+		delete[] davg;
 		} // for decimate...
 
 		/* ColorImage ref1, ref2 destructors call CACHE_DISPOSE */

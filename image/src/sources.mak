@@ -1,13 +1,13 @@
 TARGET = image
 VERSION = 1.1
-SRC += ../src ../../shared
+SRC += ../src $(SHARED)
 DEFS += -DENTIRE
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
   MODULES += image ColorImage gdt
 endif
-ifneq ($(NEED_STREAM),)
+ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
   DEFS += -DUSE_LSU
   MODULES += lsu_cmd
 endif

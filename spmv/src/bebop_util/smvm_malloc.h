@@ -141,14 +141,14 @@ mfh_realloc (void* ptr, size_t size, char* srcfile, int linenum);
  * @return  Valid pointer to allocated memory.  Client is responsible for 
  *          `free'-ing it.
  */
-#define smvm_realloc( ptr, size )   mfh_realloc (ptr, size, __FILE__, __LINE__)
+#define smvm_realloc( ptr, size )   mfh_realloc (ptr, size, (char*)__FILE__, __LINE__)
 
 
 void
 mfh_free (void* ptr, char* srcfile, int linenum);
 
 
-#define smvm_free( ptr )  mfh_free (ptr, __FILE__, __LINE__)
+#define smvm_free( ptr )  mfh_free (ptr, (char*)__FILE__, __LINE__)
 
 
 

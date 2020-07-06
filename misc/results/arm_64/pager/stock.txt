@@ -1,0 +1,86 @@
+[lloyd23@nome arm_64]$ make D=CLOCKS,STATS,STOCK
+aarch64-linux-gnu-g++ -march=armv8-a -O3 -Wall -I/home/lloyd23/src/boost_1_66_0 -MMD -DCLOCKS -DSTATS -DSTOCK -DTIMEOFDAY -I../src -I/home/lloyd23/work/lime.1/shared -I/home/lloyd23/work/lime.1/shared/linux  -c -o pager.o ../src/pager.cpp
+
+root@lime:/run/media/mmcblk0p1# stock/pager.elf -s18 -v15
+rmat scale: 18
+RMAT generation, vertices:262144
+RMAT generation, edges:4194304
+RMAT generation, bytes:35651584
+RMAT generation, time:25.5231 sec, EPS:164334
+PageRank Vectors, bytes:4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:0.25352 sec
+Oper. time: 0.25352 sec
+Cache time: 7e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 73671 2703474 4709792 172976640 92
+errors:0
+
+root@lime:/run/media/mmcblk0p1# stock/pager.elf -s19 -v15
+rmat scale: 19
+RMAT generation, vertices:524288
+RMAT generation, edges:8388608
+RMAT generation, bytes:71303168
+RMAT generation, time:55.0415 sec, EPS:152405
+PageRank Vectors, bytes:8388608
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:0.735612 sec
+Oper. time: 0.735611 sec
+Cache time: 8e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 119981 8179753 7662264 523357808 295
+errors:0
+
+root@lime:/run/media/mmcblk0p1# stock/pager.elf -s20 -v15
+rmat scale: 20
+RMAT generation, vertices:1048576
+RMAT generation, edges:16777216
+RMAT generation, bytes:142606336
+RMAT generation, time:118.659 sec, EPS:141390
+PageRank Vectors, bytes:16777216
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:1.87021 sec
+Oper. time: 1.87021 sec
+Cache time: 8e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 268491 21310102 17143104 1363489344 720
+errors:0
+
+root@lime:/run/media/mmcblk0p1# stock/pager.elf -s21 -v15
+rmat scale: 21
+RMAT generation, vertices:2097152
+RMAT generation, edges:33554432
+RMAT generation, bytes:285212672
+RMAT generation, time:256.53 sec, EPS:130801
+PageRank Vectors, bytes:33554432
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010500
+Slot 0 - CPU_SRAM_B:164 CPU_SRAM_R:147 CPU_DRAM_B:584 CPU_DRAM_R:441
+Slot 1 - ACC_SRAM_B:24 ACC_SRAM_R:6 ACC_DRAM_B:444 ACC_DRAM_R:300
+page rank time:4.37699 sec
+Oper. time: 4.37699 sec
+Cache time: 7e-07 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 599605 50844660 38272688 3252881996 1822
+errors:0

@@ -17,20 +17,14 @@ extern "C" {
 // Example main arguments
 // #define MARGS "-s20"
 
-#include "config.h"
-#include "alloc.h"
-#include "cache.h"
-#include "monitor.h"
-#include "ticks.h"
-#include "clocks.h"
-#include "sysinit.h"
+#include "lime.h"
 
 #define DEFAULT_SCALE 20U // log 2 size
 
 unsigned scale = DEFAULT_SCALE;
 
 
-MAIN
+int MAIN(int argc, char *argv[])
 {
 	HPCC_Params params;
 	/* * * * * * * * * * get arguments beg * * * * * * * * * */

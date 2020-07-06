@@ -3,6 +3,7 @@
 
 #include <cstddef> // size_t
 #include <algorithm> // min
+
 #include "config.h"
 
 /* * * * * * * * * * Access, Cache, Memory, and Stats * * * * * * * * * */
@@ -76,19 +77,23 @@ inline void cache_invalidate(const void *ptr, size_t size) {}
 
 /* * * * * * * * * * Stream Support * * * * * * * * * */
 
-#ifdef USE_STREAM
+#if defined(USE_STREAM)
 #include "aport.h"
 
 #define FWD_PN LSU0_PN
 
-#ifdef __microblaze__
+#if defined(__microblaze__)
 #include "fsl.h"
-#define DEVICE_ID 0
 #define RET_PN MCU0_PN
 #else
-#include "xparameters.h"
-#define DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
 #define RET_PN ARM0_PN
+#endif
+
+#if defined(ZYNQ)
+#include "xparameters.h"
+#define STREAM_DEVICE_ID XPAR_AXI_FIFO_0_DEVICE_ID
+#else
+#define STREAM_DEVICE_ID 0
 #endif
 
 class stream_port {
@@ -97,7 +102,7 @@ public:
 	stream_t port;
 
 	stream_port(void) {
-		stream_init(&port, DEVICE_ID);
+		stream_init(&port, STREAM_DEVICE_ID);
 	}
 };
 #endif // USE_STREAM
@@ -332,29 +337,31 @@ public:
 	void fill(void *buf, size_t buf_sz, size_t offset)
 	{
 		size_t idx = 0; // offset / ref_elem_sz;
-		char *vptr = (char*)buf; /* pointer to current view element */
 		unsigned n = buf_sz/ref_elem_sz;
+		uintptr_t paddr;
 		flit_t reg[7];
 
+		paddr = ATRAN(ref_base);
 		/* indexed load */
-		reg[1] = 0x00000000;      /* clear status */
-		reg[2] = LSU_index;       /* index command */
-		reg[3] = ATRAN(ref_base); /* base address */
-		reg[4] = ref_elem_sz;     /* size */
+		reg[1] = 0x00000000;    /* clear status */
+		reg[2] = LSU_ACMD(paddr,0,LSU_index); /* reqstat=0, command=index */
+		reg[3] = flit_t(paddr); /* base address */
+		reg[4] = ref_elem_sz;   /* size */
 		aport_nwrite(gfwd_id+READ_CH, gret_id, 0, 0, reg, 4);
 
+		paddr = ATRAN(buf);
 		/* contiguous store (with stride command) */
-		reg[1] = 0x00000000;       /* clear status */
-		reg[2] = 0x80 | LSU_smove; /* request status, smove command */
-		reg[3] = ATRAN(vptr);      /* address */
-		reg[4] = ref_elem_sz;      /* size */
-		reg[5] = ref_elem_sz;      /* increment */
-		reg[6] = n;                /* repetitions */
+		reg[1] = 0x00000000;    /* clear status */
+		reg[2] = LSU_ACMD(paddr,1,LSU_smove); /* reqstat=1, command=smove */
+		reg[3] = flit_t(paddr); /* address */
+		reg[4] = ref_elem_sz;   /* size */
+		reg[5] = ref_elem_sz;   /* increment */
+		reg[6] = n;             /* repetitions */
 		aport_nwrite(gfwd_id+WRITE_CH, gret_id, 1, 0, reg, 6);
 
 		/* feed indexes */
 		/* go=1, write=1, select=4, length=1, tid=gret_id, tdest=gfwd_id */
-		reg[0] = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+READ_CH);
+		reg[0] = AP_HEAD(1,1,4,1,gret_id,gfwd_id+READ_CH);
 		for (size_t i = 0; i < n; i++) {
 			reg[1] = idx_base[idx++];
 			stream_send(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
@@ -369,33 +376,35 @@ public:
 	void drain(void *buf, size_t buf_sz, size_t offset)
 	{
 		size_t idx = 0; // offset / ref_elem_sz;
-		char *vptr = (char*)buf; /* pointer to current view element */
 		unsigned n = buf_sz/ref_elem_sz;
+		uintptr_t pbase, paddr;
 		flit_t reg[7];
 
+		pbase = ATRAN(ref_base);
 		/* indexed store */
-		reg[1] = 0x00000000;      /* clear status */
-		reg[2] = LSU_index;       /* index command */
-		reg[3] = ATRAN(ref_base); /* base address */
-		reg[4] = ref_elem_sz;     /* size */
+		reg[1] = 0x00000000;    /* clear status */
+		reg[2] = LSU_ACMD(pbase,0,LSU_index); /* reqstat=0, command=index */
+		reg[3] = flit_t(pbase); /* base address */
+		reg[4] = ref_elem_sz;   /* size */
 		aport_nwrite(gfwd_id+WRITE_CH, gret_id, 0, 0, reg, 4);
 
+		paddr = ATRAN(buf);
 		/* contiguous load (with stride command) */
-		reg[1] = 0x00000000;  /* clear status */
-		reg[2] = LSU_smove;   /* smove command */
-		reg[3] = ATRAN(vptr); /* address */
-		reg[4] = ref_elem_sz; /* size */
-		reg[5] = ref_elem_sz; /* increment */
-		reg[6] = n;           /* repetitions */
+		reg[1] = 0x00000000;    /* clear status */
+		reg[2] = LSU_ACMD(paddr,0,LSU_smove); /* reqstat=0, command=smove */
+		reg[3] = flit_t(paddr); /* address */
+		reg[4] = ref_elem_sz;   /* size */
+		reg[5] = ref_elem_sz;   /* increment */
+		reg[6] = n;             /* repetitions */
 		aport_nwrite(gfwd_id+READ_CH, gret_id, 1, 0, reg, 6);
 
 		/* feed indexes */
 		/* go=1, write=1, select=4, length=1, tid=gret_id, tdest=gfwd_id */
-		reg[0] = 1 << 23 | 1 << 22 | 4 << 19 | 1 << 16 | gret_id << 8 | (gfwd_id+WRITE_CH);
+		reg[0] = AP_HEAD(1,1,4,1,gret_id,gfwd_id+WRITE_CH);
 		for (size_t i = 0; i < n; i++) {
 			reg[1] = idx_base[idx++];
 			/* request response after last index */
-			if (i == n-1) aport_write(gfwd_id+WRITE_CH, gret_id, 0, 1, 0x80|LSU_index);
+			if (i == n-1) aport_write(gfwd_id+WRITE_CH, gret_id, 0, 1, LSU_ACMD(pbase,1,LSU_index));
 			stream_send(gport, reg, 2*sizeof(flit_t), F_BEGP|F_ENDP);
 		}
 
