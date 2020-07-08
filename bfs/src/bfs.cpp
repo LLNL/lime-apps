@@ -243,7 +243,7 @@ int MAIN(int argc, char *argv[])
 	level_info.clear();
 	level_info.resize(adj_list_graph.size(), std::numeric_limits<level_t>::max());
 	parent_info.clear();
-	parent_info.resize(adj_list_graph.size(), std::numeric_limits<index_t>::max());    
+	parent_info.resize(adj_list_graph.size(), std::numeric_limits<index_t>::max());
 
 	// Choose a source that has edges
 	index_t source = 0;

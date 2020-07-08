@@ -216,8 +216,6 @@ extern void tuned_STREAM_Triad(STREAM_TYPE scalar);
 extern int omp_get_num_threads();
 #endif
 
-void config_gdt();
-
 int MAIN(int argc, char *argv[])
 {
 	int         BytesPerWord;
@@ -225,9 +223,6 @@ int MAIN(int argc, char *argv[])
 	ssize_t     j;
 	STREAM_TYPE scalar;
 	double      times[4][NTIMES];
-
-	/* --- Configure the Gaussian Delay Tables (GTD) --- */
-	config_gdt();
 
 	/* --- SETUP --- determine precision and check timing --- */
 
