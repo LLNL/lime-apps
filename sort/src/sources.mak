@@ -1,7 +1,7 @@
 TARGET = sort
 VERSION = 1.0
 SRC += ../src $(SHARED)
-MODULES += sort
+MODULES += sort gdt
 ifeq ($(ARG),1)
   RUN_ARGS = -c -s28
 else
