@@ -4,7 +4,7 @@ SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
-  MODULES += bfs
+  MODULES += bfs gdt
   ifdef BOOST_ROOT
     CPPFLAGS += -I$(BOOST_ROOT)
   else ifneq ($(wildcard $(HOME)/local/include/boost),)

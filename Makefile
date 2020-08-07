@@ -66,6 +66,7 @@ help:
 	@echo -e "\nD=DEF1[=VAL1],DEF2[=VAL2],..."
 	@echo "  -- LiME Configuration Options --"
 	@echo "  CLOCKS - enable clock scaling for emulation"
+	@echo "  VAR_DELAY - enable variable delay into read/write accesses, =_GDT_"
 	@echo "  STATS  - print memory access statistics"
 	@echo "  TRACE  - enable trace capture, =_TADDR_, =_TALL_"
 	@echo "           _TADDR_ - capture only R/W address AXI events (default)"
