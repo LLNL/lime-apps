@@ -4,7 +4,7 @@ SRC += ../src $(SHARED)
 ifneq ($(filter %SERVER,$(DEFS)),)
   MODULES += server
 else
-  MODULES += ngram path
+  MODULES += ngram path gdt
   ifneq ($(filter zup zynq,$(notdir $(CURDIR))),)
     MODULES += fatfs
   endif

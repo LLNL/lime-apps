@@ -19,7 +19,7 @@ BINARY_READ = no
 TARGET = xsb
 VERSION = 16
 SRC += ../src $(SHARED)
-MODULES += \
+MODULES +=  gdt \
 Main \
 io \
 CalculateXS \
@@ -59,7 +59,7 @@ endif
 # PAPI source (you may need to provide -I and -L pointing
 # to PAPI depending on your installation
 ifeq ($(PAPI),yes)
-  MODULES += papi
+  MODULES += papi 
   DEFS += -DPAPI
   #CPPFLAGS += -I/soft/apps/packages/papi/papi-5.1.1/include
   #LDFLAGS += -L/soft/apps/packages/papi/papi-5.1.1/lib -lpapi
