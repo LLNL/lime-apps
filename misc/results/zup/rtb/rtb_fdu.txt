@@ -1,0 +1,107 @@
+" FDU Master Branch @ 187.5MHz (frequency scaling in clocks.c), ZCU102 Board
+2020-0929
+
+"
+make run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+######### RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.170612 sec
+Insert count: 20231169
+Insert  rate: 1173176.215677 ops/sec
+Run     time: 18.453925 sec
+Oper.   time: 1.209142 sec
+Insert  time: 17.244783 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x100024d040 top:0x1036cdc000 end:0x10ff24d040
+total:4278190080 used:917041088
+Stats   time: 19.036135 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1320977.541214 ops/sec
+Run     time: 0.799998 sec
+Oper.   time: 0.006210 sec
+Lookup  time: 0.793788 sec
+
+$ make D=STATS,CLOCKS,USE_HASH run
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.170592 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+Insert count: 20231169
+Insert  rate: 4411063.137370 ops/sec
+Run     time: 5.068140 sec
+Oper.   time: 0.481679 sec
+Insert  time: 4.586461 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x1000251080 top:0x1036ce0000 end:0x10ff251080
+total:4278190080 used:917041024
+Stats   time: 19.036023 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5409510.659765 ops/sec
+Run     time: 0.196220 sec
+Oper.   time: 0.002381 sec
+Lookup  time: 0.193839 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 72 1809785 4608 115826176 0
+
+
+$ make D=USE_HASH,STATS run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DUSE_HASH -DSTATS -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+
+Startup time: 0.168604 sec
+Insert count: 20231169
+Insert  rate: 1182187.281095 ops/sec
+Run     time: 18.322585 sec
+Oper.   time: 1.209248 sec
+Insert  time: 17.113337 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x1000250080 top:0x1036cdf000 end:0x10ff250080
+total:4278190080 used:917041024
+Stats   time: 18.939593 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1337335.947858 ops/sec
+Run     time: 0.790284 sec
+Oper.   time: 0.006206 sec
+Lookup  time: 0.784078 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 73 1809252 4672 115792128 0
+

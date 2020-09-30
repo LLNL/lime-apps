@@ -1,0 +1,137 @@
+"VLD axi_delayv branch @ 187.5MHz (GDTs filled with  Gaussians, Std Dev = mu/8)
+NOTE: offset/compensation delay values have been adjusted so performance matches FDU@187.5MHz
+Date: 20200930"
+# make D=CLIENT,CLOCKS,STATS,VAR_DELAY=_GDT_ RUN_ARGS="-d<int> -v15 -w16000 -h8000 pat pat"
+
+decimate: 4
+ref1 w:16000 h:8000 element:4 init-time:1.714045 sec
+ref2 w:16000 h:8000 element:4 init-time:0.336970 sec
+view w:4000 h:2000
+ref1:0x1000313600 ref2:0x101eb5b880 davg:0x103d3a3890
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.154886 sec
+Setup time: 0.000001 sec
+Reorg time: 0.092657 sec
+Oper. time: 0.028456 sec
+Cache time: 0.033771 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 141626 1153194 9064064 73804352 0
+ACC 16000000 16000000 64000000 128000000 16000000
+max difference: 0
+
+decimate: 8
+ref1 w:16000 h:8000 element:4 init-time:1.682273 sec
+ref2 w:16000 h:8000 element:4 init-time:0.336992 sec
+view w:2000 h:1000
+ref1:0x1000313600 ref2:0x101eb5b880 davg:0x103d3a3890
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.038998 sec
+Setup time: 0.000001 sec
+Reorg time: 0.023345 sec
+Oper. time: 0.007126 sec
+Cache time: 0.008526 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 35432 288370 2267648 18455616 0
+ACC 4000000 4000000 16000000 32000000 4000000
+max difference: 0
+
+decimate: 16
+ref1 w:16000 h:8000 element:4 init-time:1.621525 sec
+ref2 w:16000 h:8000 element:4 init-time:0.337003 sec
+view w:1000 h:500
+ref1:0x1000313600 ref2:0x101eb5b880 davg:0x103d3a3890
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.009936 sec
+Setup time: 0.000001 sec
+Reorg time: 0.005926 sec
+Oper. time: 0.001794 sec
+Cache time: 0.002215 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 8883 72205 568512 4621056 0
+ACC 1000000 1000000 4000000 8000000 1000000
+max difference: 0
+
+decimate: 32
+ref1 w:16000 h:8000 element:4 init-time:1.613618 sec
+ref2 w:16000 h:8000 element:4 init-time:0.337008 sec
+view w:500 h:250
+ref1:0x1000313600 ref2:0x101eb5b880 davg:0x103d3a3890
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.002611 sec
+Setup time: 0.000001 sec
+Reorg time: 0.001527 sec
+Oper. time: 0.000449 sec
+Cache time: 0.000634 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 2242 18162 143488 1162304 0
+ACC 250000 250000 1000000 2000000 250000
+max difference: 0
+
+decimate: 64
+ref1 w:16000 h:8000 element:4 init-time:1.597805 sec
+ref2 w:16000 h:8000 element:4 init-time:0.337013 sec
+view w:250 h:125
+ref1:0x1000313600 ref2:0x101eb5b880 davg:0x103d3a3890
+block size: 32768
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.000750 sec
+Setup time: 0.000001 sec
+Reorg time: 0.000403 sec
+Oper. time: 0.000114 sec
+Cache time: 0.000232 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 573 4626 36672 296128 0
+ACC 62500 62500 250000 500000 62500
+max difference: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

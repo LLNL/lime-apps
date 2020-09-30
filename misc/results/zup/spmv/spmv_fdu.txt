@@ -1,0 +1,54 @@
+" FDU Master Branch @ 187.5MHz (frequency scaling in clocks.c), ZCU102 Board
+2020-0929
+
+"
+
+$ make D=CLOCKS,STATS,CLIENT
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DCLIENT -DUSE_LSU -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s18 -n34 -v15"' -DUSE_SP -DUSE_OCM -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+SpMV time: 0.294397 sec
+Setup time: 0.000000 sec
+Reorg time: 0.204277 sec
+Oper. time: 0.066536 sec
+Cache time: 0.023583 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32785 2277488 2098240 145759360 0
+ACC 8912896 11141120 71303168 106954752 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            60.550232
+num_loads:          36700188
+num_stores:         71303168
+
+
+$ make D=CLOCKS,STATS
+aarch64-none-elf-g++  -O3 -Wall -MMD -DCLOCKS -DSTATS -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-c -s18 -n34 -v15"' -I../src -I../src/bebop_util -I../src/matrix_generator -I../src/spmvbench -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o spmv.o ../src/spmv.cpp
+
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+SpMV time: 0.437034 sec
+Oper. time: 0.436424 sec
+Cache time: 0.000610 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 32775 4123921 2097600 263931008 0
+Matrix Dim (r x c): (262144 x 262144)
+Block Dim (r x c):  (1 x 1)
+Non-zero blocks:    8912896
+Repetitions:        1
+Mflop/s:            40.788088
+num_loads:          36700188
+num_stores:         71303168

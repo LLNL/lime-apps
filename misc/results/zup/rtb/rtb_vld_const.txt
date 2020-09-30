@@ -1,0 +1,106 @@
+"VLD axi_delayv branch @ 187.5MHz (GDTs filled with constants, frequency scaling in gdt.c), ZCU102 Board
+NOTE: offset/compensation delays adjusted so performance matches FDU@187.5MHz
+Date: 20200929"
+$ make run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.177600 sec
+Insert count: 20231169
+Insert  rate: 1114920.432460 ops/sec
+Run     time: 19.354902 sec
+Oper.   time: 1.209061 sec
+Insert  time: 18.145841 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x100026a040 top:0x1036cf9000 end:0x10ff26a040
+total:4278190080 used:917041088
+Stats   time: 20.164467 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1245527.876370 ops/sec
+Run     time: 0.848082 sec
+Oper.   time: 0.006210 sec
+Lookup  time: 0.841873 sec
+
+$ make D=STATS,CLOCKS,USE_HASH,VAR_DELAY=_GDT_ run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DSTATS -DCLOCKS -DUSE_HASH -DVAR_DELAY=_GDT_ -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+Startup time: 0.177608 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+Insert count: 20231169
+Insert  rate: 4419842.727851 ops/sec
+Run     time: 5.059133 sec
+Oper.   time: 0.481783 sec
+Insert  time: 4.577350 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x1000276080 top:0x1036d05000 end:0x10ff276080
+total:4278190080 used:917041024
+Stats   time: 20.164347 sec
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 5424983.706168 ops/sec
+Run     time: 0.195667 sec
+Oper.   time: 0.002381 sec
+Lookup  time: 0.193286 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 72 1809660 4608 115818240 0
+
+
+$ make D=USE_HASH,STATS run
+aarch64-none-elf-g++ -std=c++11  -O3 -Wall -MMD -DUSE_HASH -DSTATS -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-e32Mi -l.60 -c -w1Mi -h.90 -z.99"' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o rtb.o ../src/rtb.cpp
+########## RTB ##########
+block length: 1024
+k-mer length: 18
+max entries: 33554432
+key size: 8 data size: 4
+
+Startup time: 0.177568 sec
+Insert count: 20231169
+Insert  rate: 1113137.696945 ops/sec
+Run     time: 19.384084 sec
+Oper.   time: 1.209182 sec
+Insert  time: 18.174902 sec
+size: 20228165
+load_factor (elem): 0.600016
+bucket_count: 33712729
+max_elem_per_bucket: 9
+heap start:0x100026c080 top:0x1036cfb000 end:0x10ff26c080
+total:4278190080 used:917041024
+Stats   time: 20.164347 sec
+Lookup count: 1048576
+Lookup  hits: 943718 90.00%
+Lookup  zipf: 0.99
+Lookup  rate: 1245686.733919 ops/sec
+Run     time: 0.847971 sec
+Oper.   time: 0.006206 sec
+Lookup  time: 0.841765 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 73 1809547 4672 115811008 0

@@ -1,0 +1,120 @@
+"VLD axi_delayv branch @ 187.5MHz (GDTs filled with constants, frequency scaling in gdt.c), ZCU102 Board
+NOTE: offset/compensation delays adjusted so performance matches FDU@187.5MHz
+Date: 20200929"
+# make D=CLOCKS,STATS,VAR_DELAY=_GDT_ RUN_ARGS="-d<int> -v15 -w24000 -h16000 pat pat"
+
+decimate: 4
+ref1 w:24000 h:16000 element:4 init-time:5.173704 sec
+ref2 w:24000 h:16000 element:4 init-time:1.011335 sec
+view w:6000 h:4000
+ref1:0x1000310370 ref2:0x105bbe85f0 davg:0x10b74c0600
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.288547 sec
+Oper. time: 0.281653 sec
+Cache time: 0.006894 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 375005 12435326 24000320 795860928 0
+max difference: 0
+
+decimate: 8
+ref1 w:24000 h:16000 element:4 init-time:5.110163 sec
+ref2 w:24000 h:16000 element:4 init-time:1.011481 sec
+view w:3000 h:2000
+ref1:0x1000310370 ref2:0x105bbe85f0 davg:0x10b74c0600
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.125476 sec
+Oper. time: 0.123730 sec
+Cache time: 0.001746 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 93755 6122474 6000320 391838464 0
+max difference: 0
+
+decimate: 16
+ref1 w:24000 h:16000 element:4 init-time:4.983082 sec
+ref2 w:24000 h:16000 element:4 init-time:1.011406 sec
+view w:1500 h:1000
+ref1:0x1000310370 ref2:0x105bbe85f0 davg:0x10b74c0600
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.061844 sec
+Oper. time: 0.061391 sec
+Cache time: 0.000452 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 23443 3036478 1500352 194334720 0
+max difference: 0
+
+decimate: 32
+ref1 w:24000 h:16000 element:4 init-time:4.856480 sec
+ref2 w:24000 h:16000 element:4 init-time:1.011362 sec
+view w:750 h:500
+ref1:0x1000310370 ref2:0x105bbe85f0 davg:0x10b74c0600
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.016349 sec
+Oper. time: 0.015887 sec
+Cache time: 0.000462 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 5865 760367 375360 48663552 0
+max difference: 0
+
+decimate: 64
+ref1 w:24000 h:16000 element:4 init-time:4.824855 sec
+ref2 w:24000 h:16000 element:4 init-time:1.011440 sec
+view w:375 h:250
+ref1:0x1000310370 ref2:0x105bbe85f0 davg:0x10b74c0600
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+overall time: 0.005094 sec
+Oper. time: 0.004973 sec
+Cache time: 0.000121 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 1470 190529 94080 12193920 0
+max difference: 0
+
+Overall Time
+Oper. Time
+Cache Time
+
+int cpu_dram_wr_lat = 62;
+int cpu_dram_rd_lat = 79;
+int acc_dram_wr_lat = 60; //60; //100;
+int acc_dram_rd_lat = 78; //78; //118;
+
+int cpu_sram_wr_lat = 62;
+int cpu_sram_rd_lat = 79;
+int acc_sram_wr_lat = 48; //28; //48;
+int acc_sram_rd_lat = 66; //46; //66;
+
+
+
+
+
+
+

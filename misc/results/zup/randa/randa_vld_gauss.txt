@@ -1,0 +1,97 @@
+"VLD axi_delayv branch @ 187.5MHz (GDTs filled with  Gaussians, Std Dev = mu/8)
+NOTE: offset/compensation delay values have been adjusted so performance matches FDU@187.5MHz
+Date: 20200930"
+$ make D=STATS,CLOCKS,CLIENT,VAR_DELAY=_GDT_
+aarch64-none-elf-g++  -O3 -Wall -MMD -DSTATS -DCLOCKS -DCLIENT -DVAR_DELAY=_GDT_ -DUSE_LSU -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-s29"' -DUSE_SP -DUSE_OCM -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o randa.o ../src/randa.cpp
+
+
+table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x1000242780
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+Real time used = 0.136970 seconds
+0.030622123 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.076360 sec
+Oper. time: 0.060577 sec
+Cache time: 0.000032 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 786579 524496 50341000 33567872 1
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+$ make D=STATS,CLOCKS,VAR_DELAY=_GDT_
+
+table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x1000240660
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+Real time used = 0.444865 seconds
+0.009428268 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 0.444611 sec
+Cache time: 0.000253 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4185927 4185952 267899328 267900864 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

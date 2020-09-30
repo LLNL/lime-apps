@@ -1,0 +1,98 @@
+" FDU Master Branch @ 187.5MHz (frequency scaling in clocks.c), ZCU102 Board
+2020-0929
+
+"
+$ make D=STATS,CLOCKS,CLIENT
+aarch64-none-elf-g++  -O3 -Wall -MMD -DSTATS -DCLOCKS -DCLIENT -DUSE_LSU -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='"-s29"' -DUSE_SP -DUSE_OCM -I../src -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o randa.o ../src/randa.cpp
+
+
+table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x100021d780
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+Real time used = 0.132705 seconds
+0.031606128 Billion(10^9) Updates per second [GUP/s]
+Setup time: 0.000000 sec
+Reorg time: 0.072049 sec
+Oper. time: 0.060624 sec
+Cache time: 0.000032 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 786580 524495 50341064 33567808 1
+ACC 8388608 9437184 67108864 83886080 0
+Found 26 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+$ make D=STATS,CLOCKS
+
+Table scale: 29
+vector length: 1024
+Begin of SingleRandomAccess_LCG section.
+Main table addr   = 0x100021b660
+Main table size   = 2^26 = 67108864 words (8 bytes)
+Number of updates = 4194304
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+Real time used = 0.441979 seconds
+0.009489834 Billion(10^9) Updates per second [GUP/s]
+Oper. time: 0.441740 sec
+Cache time: 0.000238 sec
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 4185877 4185908 267896128 267898176 0
+Found 0 errors in 67108864 locations (passed).
+End of SingleRandomAccess_LCG section.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+"VLD axi_delayv branch @ 187.5MHz (GDTs filled with constants, frequency scaling in gdt.c), ZCU102 Board
+NOTE: offset/compensation delays adjusted so performance matches FDU@187.5MHz
+Date: 20200929"
+
+$ make D=STATS run
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o strm.o ../src/strm.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013360100 0x1009ac9900 0x1000233100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1380.6     0.231777     0.231777     0.231777
+Scale:           1199.2     0.266845     0.266845     0.266845
+Add:             1043.1     0.460150     0.460150     0.460150
+Triad:           1071.6     0.447910     0.447910     0.447910
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000195 30000049 1280011856 1920003136 8
+
+$ make D=STATS,CLOCKS,VAR_DELAY=_GDT_
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DCLOCKS -DVAR_DELAY=_GDT_ -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o clocks.o c:/users/macaraeg1/projects/comp/repositories/lime_axi_delayv/shared/standalone/clocks.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013368100 0x1009ad1900 0x100023b100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Gaussian Delay Tables Initialized
+Gaussian Delay Tables have been cleared
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            6257.5     0.051138     0.051138     0.051138
+Scale:           6047.4     0.052916     0.052916     0.052916
+Add:             4539.8     0.105732     0.105732     0.105732
+Triad:           4456.2     0.107715     0.107715     0.107715
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000188 30000004 1280011364 1920000192 11
+
+int cpu_dram_wr_lat = 62;
+int cpu_dram_rd_lat = 79;
+int acc_dram_wr_lat = 60;
+int acc_dram_rd_lat = 78;
+
+int cpu_sram_wr_lat = 62;
+int cpu_sram_rd_lat = 79;
+int acc_sram_wr_lat = 48;
+int acc_sram_rd_lat = 66;

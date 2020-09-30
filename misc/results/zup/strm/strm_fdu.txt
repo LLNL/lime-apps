@@ -1,0 +1,75 @@
+" FDU Master Branch @ 187.5MHz (frequency scaling in clocks.c), ZCU102 Board
+2020-0929
+
+"
+
+$ make D=STATS run
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o strm.o ../src/strm.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013346100 0x1009aaf900 0x1000219100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            1480.1     0.216203     0.216203     0.216203
+Scale:           1492.4     0.214418     0.214418     0.214418
+Add:             1156.4     0.415066     0.415066     0.415066
+Triad:           1146.0     0.418836     0.418836     0.418836
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000185 29999872 1280011312 1919991872 6
+
+$ make D=STATS,CLOCKS
+aarch64-none-elf-gcc  -O3 -Wall -MMD -DSTATS -DCLOCKS -DSTREAM_ARRAY_SIZE=20000000 -DNTIMES=2 -DZYNQ=_ZU_ -DXILTIME -DUSE_MARGS -DMARGS='""' -I../src -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/shared/standalone -Ic:/users/macaraeg1/projects/comp/repositories/temp_for_comparison/lime_master_187.5MHz/standalone/sdk/standalone_bsp_a53/psu_cortexa53_0/include  -c -o strm.o ../src/strm.c
+
+-------------------------------------------------------------
+STREAM version $Revision: 5.10 $
+-------------------------------------------------------------
+This system uses 8 bytes per array element.
+-------------------------------------------------------------
+Array size = 20000000 (elements), Offset = 0 (elements)
+Array addr 0x1013346100 0x1009aaf900 0x1000219100
+Memory per array = 152.6 MiB (= 0.1 GiB).
+Total memory required = 457.8 MiB (= 0.4 GiB).
+Each kernel will be executed 2 times.
+ The *best* time for each kernel (excluding the first iteration)
+ will be used to compute the reported bandwidth.
+-------------------------------------------------------------
+SRAM_W:12 SRAM_R:12 DRAM_W:45 DRAM_R:45
+QUEUE_W:37 QUEUE_R:16 TRANS:24 W:106 R:85
+ARM_PLL_CTRL:00014200 DDR_PLL_CTRL:00014000 IO_PLL_CTRL:00015A00
+ARM_CLK_CTRL:03000800 DDR_CLK_CTRL:01000200
+FPGA0_CLK_CTRL:01011800 FPGA1_CLK_CTRL:01010800
+Slot 0 - CPU_SRAM_B:102 CPU_SRAM_R:91 CPU_DRAM_B:365 CPU_DRAM_R:275
+Slot 1 - ACC_SRAM_B:15 ACC_SRAM_R:3 ACC_DRAM_B:277 ACC_DRAM_R:187
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:            6253.5     0.051172     0.051172     0.051172
+Scale:           6047.5     0.052914     0.052914     0.052914
+Add:             4536.2     0.105815     0.105815     0.105815
+Triad:           4466.9     0.107458     0.107458     0.107458
+-------------------------------------------------------------
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+-------------------------------------------------------------
+Slot TranW TranR ByteW ByteR StrobeLW
+CPU 20000189 29999793 1280011540 1919986880 9
+
+
+
+
+
+
+
+
+
+
