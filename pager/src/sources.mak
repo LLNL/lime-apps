@@ -15,9 +15,9 @@ endif
 ifneq ($(filter $(NEED_STREAM),$(DEFS)),)
   DEFS += -DUSE_LSU
   MODULES += lsu_cmd
-  ifeq ($(filter zup zynq,$(notdir $(CURDIR))),)
-    MODULES += dlmalloc
-  endif
+  # ifeq ($(filter zup zynq,$(notdir $(CURDIR))),)
+  #   MODULES += dlmalloc
+  # endif
 endif
 ifeq ($(ARG),1)
   RUN_ARGS = -s21 -v15

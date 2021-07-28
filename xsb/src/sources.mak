@@ -25,8 +25,7 @@ io \
 CalculateXS \
 GridInit \
 XSutils \
-Materials \
-gdt
+Materials
 
 RUN_ARGS = -s small
 
