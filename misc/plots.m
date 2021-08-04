@@ -13,7 +13,8 @@ end
 if isunix()
     A = csvread('runtimes_final.csv');
 else
-    A = csvread('../runtimes_final.csv');
+    A = csvread('results/vld-results/runtimes_pwclt.csv');
+%     A = csvread('../runtimes_interconnect21_final_backup.csv');
 end
 
 % Baseline FDU runs
@@ -171,7 +172,7 @@ else
     xlabel('Accelerator');
     lgd=legend({'\sigma=\mu/4','\sigma=\mu/8','\sigma=\mu/16','\sigma=\mu/32',...
         '\sigma=\mu/4','\sigma=\mu/8','\sigma=\mu/16','\sigma=\mu/32'},...
-        'Location','northeast','NumColumns',1);
+        'Location','northeast','NumColumns',2);
     title(lgd,'t_{W/R}=106/85ns  t_{W/R}=400/200ns')     
     lgd.Layout.Tile = 'east';
     saveas(gcf,'figure_matlab.png')
