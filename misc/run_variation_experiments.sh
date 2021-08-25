@@ -123,7 +123,7 @@ done
 pkill screen
 
 # Extract the runtimes from serial port log (from screenlog.0) and print to file
-source misc/extract_runtimes.sh > runtimes_final.csv
+source misc/extract_runtimes.sh screenlog.0 > runtimes_final.csv
 
 # Read the runtime results, generate the barchart and plot to file
 octave misc/plots.m
