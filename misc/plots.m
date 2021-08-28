@@ -21,7 +21,7 @@ end
 % Image d4, Image d8, Image d16, Image d32, Image d64, pager, spmv, randa,
 % rtb(first number), rtb(second number), strm (add), strm (copy), strm
 % (scale), strm (add), strm (triad), xsb
-fdu_106_85_stock = [0.15344; 0.125916; 0.062097; 0.016402; 0.005106;...
+fdu_106_85_stock = [0.288778; 0.125916; 0.062097; 0.016402; 0.005109;...
                     0.284904; 0.437967; 0.441957; 5.059381; 0.195671;...
                     0.051172; 0.052914; 0.105815; 0.107458; 76.259];
 fdu_400_200_stock = [0.544779; 0.264122; 0.132263; 0.035032; 0.010736;...
@@ -176,4 +176,28 @@ else
     title(lgd,'t_{W/R}=106/85ns  t_{W/R}=400/200ns')     
     lgd.Layout.Tile = 'east';
     saveas(gcf,'figure_matlab.png')
+    
+    figure
+    semilogx(2.^(2:6),fdu_106_85_stock(1:5),'--','LineWidth',1.5); hold on
+    semilogx(2.^(2:6),A(1:5),'-o','LineWidth',2); hold on
+%     semilogx(2.^(2:6),A(11:15),'-*','LineWidth',1.5); hold on
+%     semilogx(2.^(2:6),A(21:25),'-^','LineWidth',1.5); hold on
+    semilogx(2.^(2:6),A(31:35),'-d','LineWidth',1.5); hold on
+    xlabel('Decimation (d)');
+    ylabel('Runtime (s)');
+    legend('FDU','\sigma=\mu/4','\sigma=\mu/32');
+%     title('Image 106/85ns latency runtimes for FDU and PwCLT based VDU');
+    
+    
+    figure
+    leg = categorical({'4', '8', '16', '32', '64'});
+    LEG = reordercats(leg,{'4', '8', '16', '32', '64'});
+    bar(LEG,100*(A(1:5)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5)); hold on
+    bar(LEG,100*(A(11:15)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5)); hold on
+    bar(LEG,100*(A(21:25)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5)); hold on
+    bar(LEG,100*(A(31:35)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5)); hold on
+    xlabel('Decimation (d)');
+    ylabel('Variation vs FDU (%)');
+    legend('\sigma=\mu/4','\sigma=\mu/8','\sigma=\mu/16','\sigma=\mu/32');
+%     title('Image 106/85ns latency variation for PwCLT based VDU');
 end

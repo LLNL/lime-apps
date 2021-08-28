@@ -2,9 +2,14 @@ make build=zup fpga
 sleep 15
 
 # Parameters to sweep
-div_="4 8 16 32"
-resps_="106W85R 400W200R"
+# div_="4 8 16 32"
+div_="4"
+# resps_="106W85R 400W200R"
+resps_="400W200R"
+# generator_="pwclt table"
 generator_="pwclt table"
+# experiment="image"
+experiment="randa"
 
 # This is the FPGA serial port device to listen to
 serialport="/dev/ttyS3"
@@ -74,10 +79,20 @@ for generator in $generator_ ; do
             screen -dm -L $serialport 115200
 
             echo "Started listening to the serial port"
+            sleep 3
 
-            cd image/zup
+            cd $experiment/zup
             make clean
-            make D=CLOCKS,STATS,TRACE=_TALL_,VAR_DELAY=$var_delay run > /dev/null 2>&1 & 
+            if [[ $experiment == "image" || $experiment == "spmv" || $experiment == "randa" ]];
+            then
+                make D=CLOCKS,STATS,TRACE=_TALL_,CLIENT,VAR_DELAY=$var_delay run > /dev/null 2>&1 & 
+            elif [[ $experiment == "rtb" ]];
+            then
+                make D=CLOCKS,STATS,TRACE=_TALL_,USE_HASH,USE_OCM,OFFLOAD,USE_SD,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run > /dev/null 2>&1 & 
+            else
+                echo "ERROR: The experiment is not recognized!"
+                exit 0
+            fi
             cd ../..
 
             echo "The application is running. Wait until the trace is available. "
@@ -110,13 +125,13 @@ for generator in $generator_ ; do
 
             echo "Trace read done. Now generating CSV."
 
-            $LIME/trace/parser.exe trace.bin image_$generator$resp$div.csv
+            $LIME/trace/parser.exe trace.bin $experiment$generator$resp$div.csv
 
             echo "CSV generated. Now plotting the histogram."
 
             limeapps=$PWD
             cd $LIME/trace/tools
-            ./lplot.sh -a -bimage$generator$resp$div -f -s -z $limeapps/image_$generator$resp$div.csv $generator$resp$div   
+            ./lplot.sh -a -b$experiment$generator$resp$div -f -s $limeapps/$experiment$generator$resp$div.csv $generator$resp$div   
             cd $limeapps     
 
             echo "Plot done."

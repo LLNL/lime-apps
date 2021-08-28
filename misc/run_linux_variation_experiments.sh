@@ -32,6 +32,6 @@ for resp in $resps_ ; do
     $sdcard/randa_$gen$resp$div.elf
     $sdcard/rtb_$gen$resp$div.elf -e32Mi -l.60 -c -w1Mi -h.90 -z.99
     $sdcard/strm_$gen$resp$div.elf
-    # $sdcard/xsb_$gen$resp$div.elf
+    $sdcard/xsb_$gen$resp$div.elf -s small
   done
 done

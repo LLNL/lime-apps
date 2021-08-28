@@ -6,21 +6,41 @@ t = tiledlayout('flow','TileSpacing','compact');
 gens = {'Table','PwCLT'};
 for gg=1:numel(gens)
 %     A = csvread(strcat('results/vld-results/runtimes_linux_',lower(gens{gg}),'.csv'));
-    A = csvread(strcat('../runtimes_linux_',lower(gens{gg}),'.txt'));
+    A = csvread(strcat('results/vld-results/runtimes_linux_',lower(gens{gg}),'.csv'));
 
-    % Baseline FDU runs
+    % Runtime order:
     % Image d4, Image d8, Image d16, Image d32, Image d64, spmv, randa,
-    % rtb(first number), rtb(second number), strm (add), strm (copy), strm
+    % rtb(insertion), rtb(lookup), strm (add), strm (copy), strm
     % (scale), strm (add), strm (triad), xsb
-    fdu_106_85_stock = [0.15344; 0.125916; 0.062097; 0.016402; 0.005106;...
-                        0.437967; 0.441957; 5.059381; 0.195671;...
-                        0.051172; 0.052914; 0.105815; 0.107458];
-    fdu_400_200_stock = [0.544779; 0.264122; 0.132263; 0.035032; 0.010736;...
-                         0.876994; 0.924307; 8.795193; 0.402458;...
-                         0.12716; 0.127172; 0.220953; 0.22266];
+    
+    % Linux  baseline FDU runs (master)
+    fdu_106_85_stock = [0.304060; 0.129311; 0.065314; 0.018200; 0.005131;...
+                        7.395966;  0.682189; 8.758910; 0.330395; 0.052419;...
+                        0.054690; 0.106550; 0.108718; 81.061];
+    fdu_400_200_stock = [0.589763; 0.280872; 0.141871; 0.039818; 0.011081;...
+                        15.549092; 1.441151; 15.406092; 0.685404; 0.131510;... 
+                        0.134760; 0.226782; 0.230861; 162.674];
+                    
+    % Linux  baseline FDU runs (187.5MHz) % These turned out to be wrong
+    % when I checked the histograms of the 187.5MHz FDU branch.
+%     fdu_106_85_stock = [0.318640; 0.141480; 0.071837; 0.019944; 0.005640; ...
+%                         8.108245; 0.746114; 9.321568; 0.361769; 0.057743; ...
+%                         0.060840; 0.116741;  0.118369; 88.250];
+%     fdu_400_200_stock = [0.797792; 0.383151; 0.196278; 0.053856; 0.015090; ...
+%                          21.148864; 1.978381; 19.957321; 0.928822; 0.212397; ...
+%                          0.204769; 0.310968; 0.311729; 218.346];
+
+    % Standalone baseline FDU runs -- comparing against these we realized
+    % randa and rtb are very different although image&strm were fine
+%     fdu_106_85_stock = [0.286834; 0.125916; 0.062097; 0.016402; 0.005106;...
+%                         0.437967; 0.441957; 5.059381; 0.195671;...
+%                         0.051172; 0.052914; 0.105815; 0.107458; 76.259];
+%     fdu_400_200_stock = [0.544779; 0.264122; 0.132263; 0.035032; 0.010736;...
+%                          0.876994; 0.924307; 8.795193; 0.402458;...
+%                          0.12716; 0.127172; 0.220953; 0.22266; 152.668];
 
     % These are hardcoded, changing them is not sufficient for different
-    % persing pattern
+    % parsing pattern
     num_latencies = 2;
     num_divs = 4;
     result_cnts = [5 1 1 2 4];
@@ -42,9 +62,9 @@ for gg=1:numel(gens)
     for i=6:7
         for n=1:8
             if n <=4
-                overall_cpu(n,i-4) = abs(A(k)-fdu_106_85_stock(i))./fdu_106_85_stock(i);
+                overall_cpu(n,i-4) = (A(k)-fdu_106_85_stock(i))./fdu_106_85_stock(i);
             else
-                overall_cpu(n,i-4) = abs(A(k)-fdu_400_200_stock(i))./fdu_400_200_stock(i);
+                overall_cpu(n,i-4) = (A(k)-fdu_400_200_stock(i))./fdu_400_200_stock(i);
             end
             k = k+1;
         end
@@ -74,10 +94,8 @@ for gg=1:numel(gens)
     nexttile;
     
     leg_cpu = categorical({'image', 'spmv', 'randa', 'rtb', 'strm'});
-    leg_cpu = categorical({'image', 'randa', 'rtb', 'strm'});
-
     
-    b=bar(leg_cpu, (100.*[overall_cpu(:,1) overall_cpu(:,3:5)]),1,'FaceColor','flat');
+    b=bar(leg_cpu, (100.*[overall_cpu]),1,'FaceColor','flat');
     for k = 1:size(b,2)/2
         b(k).CData = [0.05 0.2+k*0.2 0.05];
     end
