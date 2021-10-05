@@ -51,14 +51,14 @@ for generator in $generator_ ; do
                 fi
 
                 # Copy the tables to the LIME code
-                cp $LIME/shared/gdt_data_g${arr[0]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[1]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[2]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[3]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[4]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[5]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[6]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[7]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_read.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[0]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_cpu_sram_write.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[1]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_cpu_sram_read.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[2]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_cpu_dram_write.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[3]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_cpu_dram_read.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[4]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_acc_sram_write.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[5]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_acc_sram_read.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[6]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_acc_dram_write.txt
+                cp $LIME/shared/gdt_data/gdt_data_g${arr[7]}_mu_div$div.txt $LIME/shared/gdt_data/gdt_data_acc_dram_read.txt
 
                 var_delay="_GDT_"
 
