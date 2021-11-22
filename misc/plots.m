@@ -39,8 +39,8 @@ fdu_400_200_cloff = [0.257754; 0.064799; 0.016451; 0.004297; 0.001233;...
 % persing pattern
 num_latencies = 2;
 num_divs = 4;
-result_cnts = [5 1 1 1 2 4 1];
-acc_enabled = [1 1 1 1 1 0 0];
+result_cnts = [5 1 1 1 1 2 4 1];
+acc_enabled = [1 1 1 1 1 1 0 0];
 overall_cpu = zeros(num_latencies*num_divs, numel(result_cnts));
 overall_acc = zeros(num_latencies*num_divs, sum(acc_enabled));
 
@@ -82,11 +82,11 @@ end
 s=128;
 for k=1:8
     if k<=4
-        overall_cpu(floor((2*k-1)/2)+1,5) = geomean( abs(A((s+(k-1)*4+1):(s+(k-1)*4+2))-fdu_106_85_stock(9:10))./fdu_106_85_stock(9:10));
-        overall_acc(floor((2*k-1)/2)+1,5) = geomean( abs(A((s+(k-1)*4+3):(s+(k-1)*4+4))-fdu_106_85_cloff(9:10))./fdu_106_85_cloff(9:10));
+        overall_cpu(floor((2*k-1)/2)+1,5:6) = ( abs(A((s+(k-1)*4+1):(s+(k-1)*4+2))-fdu_106_85_stock(9:10))./fdu_106_85_stock(9:10));
+        overall_acc(floor((2*k-1)/2)+1,5:6) = ( abs(A((s+(k-1)*4+3):(s+(k-1)*4+4))-fdu_106_85_cloff(9:10))./fdu_106_85_cloff(9:10));
     else
-        overall_cpu(floor((2*k-1)/2)+1,5) = geomean( abs(A((s+(k-1)*4+1):(s+(k-1)*4+2))-fdu_400_200_stock(9:10))./fdu_400_200_stock(9:10));
-        overall_acc(floor((2*k-1)/2)+1,5) = geomean( abs(A((s+(k-1)*4+3):(s+(k-1)*4+4))-fdu_400_200_cloff(9:10))./fdu_400_200_cloff(9:10));
+        overall_cpu(floor((2*k-1)/2)+1,5:6) = ( abs(A((s+(k-1)*4+1):(s+(k-1)*4+2))-fdu_400_200_stock(9:10))./fdu_400_200_stock(9:10));
+        overall_acc(floor((2*k-1)/2)+1,5:6) = ( abs(A((s+(k-1)*4+3):(s+(k-1)*4+4))-fdu_400_200_cloff(9:10))./fdu_400_200_cloff(9:10));
     end
 end
 
@@ -94,15 +94,15 @@ end
 % STRM
 for t=1:8
     if t<=4
-        overall_cpu(t,6) = geomean( abs(A(160+t:8:184+t)-fdu_106_85_stock(11:14))./fdu_106_85_stock(11:14));
+        overall_cpu(t,7) = geomean( abs(A(160+t:8:184+t)-fdu_106_85_stock(11:14))./fdu_106_85_stock(11:14));
     else
-        overall_cpu(t,6) = geomean( abs(A(160+t:8:184+t)-fdu_400_200_stock(11:14))./fdu_400_200_stock(11:14));
+        overall_cpu(t,7) = geomean( abs(A(160+t:8:184+t)-fdu_400_200_stock(11:14))./fdu_400_200_stock(11:14));
     end
 end
 
 % XSBench
-overall_cpu(1:4,7) = abs(A(193:196)-fdu_106_85_stock(15))./fdu_106_85_stock(15);
-overall_cpu(5:8,7) = abs(A(197:200)-fdu_400_200_stock(15))./fdu_400_200_stock(15);
+overall_cpu(1:4,8) = abs(A(193:196)-fdu_106_85_stock(15))./fdu_106_85_stock(15);
+overall_cpu(5:8,8) = abs(A(197:200)-fdu_400_200_stock(15))./fdu_400_200_stock(15);
 
 %% Plot the parsed arrays
 
@@ -110,8 +110,8 @@ if isunix()
     f = figure;
     set(f, "visible", "off")
 
-    leg_cpu = {'image', 'pager', 'spmv', 'randa', 'rtb', 'strm', 'xsb'};
-    leg_acc = {'image', 'pager', 'spmv', 'randa', 'rtb'};
+    leg_cpu = {'image', 'pager', 'spmv', 'randa', 'rtb insertion', 'rtb lookup', 'strm', 'xsb'};
+    leg_acc = {'image', 'pager', 'spmv', 'randa', 'rtb insertion', 'rtb lookup'};
     subplot(1,2,1)
     b=bar(1:7, transpose(100.*overall_cpu),1,'FaceColor','flat');
     for k = 1:size(b,2)/2
@@ -147,10 +147,10 @@ else
     t = tiledlayout('flow','TileSpacing','compact');
     nexttile;
     
-    leg_cpu = categorical({'image', 'pager', 'spmv', 'randa', 'rtb', 'strm', 'xsb'});
-    leg_acc = categorical({'image', 'pager', 'spmv', 'randa', 'rtb'});
+    leg_cpu = categorical({'image', 'pager', 'spmv', 'randa', 'rtb insertion', 'rtb lookup', 'strm', 'xsb'});
+    leg_acc = categorical({'image', 'pager', 'spmv', 'randa', 'rtb insertion', 'rtb lookup'});
     
-    b=bar(leg_cpu, (100.*overall_cpu),1,'FaceColor','flat');
+    b=bar(leg_cpu, (100.*transpose(overall_cpu)),1,'FaceColor','flat');
     for k = 1:size(b,2)/2
         b(k).CData = [0.05 0.2+k*0.2 0.05];
     end

@@ -51,9 +51,9 @@ for gg=1:numel(gens)
     % Image
     for i=1:8
         if i<=4
-            overall_cpu(i,1) = geomean( abs(A((i-1)*5+1:(i-1)*5+5)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5));
+            overall_cpu(i,1) = mean( (A((i-1)*5+1:(i-1)*5+5)-fdu_106_85_stock(1:5))./fdu_106_85_stock(1:5));
         else
-            overall_cpu(i,1) = geomean( abs(A((i-1)*5+1:(i-1)*5+5)-fdu_400_200_stock(1:5))./fdu_400_200_stock(1:5));
+            overall_cpu(i,1) = mean( (A((i-1)*5+1:(i-1)*5+5)-fdu_400_200_stock(1:5))./fdu_400_200_stock(1:5));
         end
     end
 
@@ -74,9 +74,9 @@ for gg=1:numel(gens)
     s=56;
     for k=1:8
         if k<=4
-            overall_cpu(k,4) = geomean( abs(A((s+(k-1)*2+1):(s+(k-1)*2+2))-fdu_106_85_stock(8:9))./fdu_106_85_stock(8:9));
+            overall_cpu(k,4:5) = ( (A((s+(k-1)*2+1):(s+(k-1)*2+2))-fdu_106_85_stock(8:9))./fdu_106_85_stock(8:9));
         else
-            overall_cpu(k,4) = geomean( abs(A((s+(k-1)*2+1):(s+(k-1)*2+2))-fdu_400_200_stock(8:9))./fdu_400_200_stock(8:9));
+            overall_cpu(k,4:5) = ( (A((s+(k-1)*2+1):(s+(k-1)*2+2))-fdu_400_200_stock(8:9))./fdu_400_200_stock(8:9));
         end
     end
 
@@ -84,18 +84,18 @@ for gg=1:numel(gens)
     % STRM
     for t=1:8
         if t<=4
-            overall_cpu(t,5) = geomean( abs(A(72+t:8:96+t)-fdu_106_85_stock(10:13))./fdu_106_85_stock(10:13));
+            overall_cpu(t,6) = mean( (A(72+t:8:96+t)-fdu_106_85_stock(10:13))./fdu_106_85_stock(10:13));
         else
-            overall_cpu(t,5) = geomean( abs(A(72+t:8:96+t)-fdu_400_200_stock(10:13))./fdu_400_200_stock(10:13));
+            overall_cpu(t,6) = mean( (A(72+t:8:96+t)-fdu_400_200_stock(10:13))./fdu_400_200_stock(10:13));
         end
     end
 
     %% Plot the parsed arrays
     nexttile;
     
-    leg_cpu = categorical({'image', 'spmv', 'randa', 'rtb', 'strm'});
+    leg_cpu = categorical({'image', 'spmv', 'randa', 'rtb insertion', 'rtb lookup', 'strm'});
     
-    b=bar(leg_cpu, (100.*[overall_cpu]),1,'FaceColor','flat');
+    b=bar(leg_cpu, (100.*overall_cpu),1,'FaceColor','flat');
     for k = 1:size(b,2)/2
         b(k).CData = [0.05 0.2+k*0.2 0.05];
     end

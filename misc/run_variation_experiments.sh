@@ -72,50 +72,50 @@ for resp in $resps_ ; do
     fi
 
     # Do benchmark runs
-    cd image/zup
-    make clean
-    ds_="4 8 16 32 64"
-    for d in $ds_ ; do
-      make D=CLOCKS,STATS,VAR_DELAY=$var_delay RUN_ARGS="-d$d -v15 -w24000 -h16000 pat pat" run
-    done
-    for d in $ds_ ; do
-      make D=CLIENT,CLOCKS,STATS,VAR_DELAY=$var_delay RUN_ARGS="-d$d -v15 -w16000 -h8000 pat pat" run
-    done
-    cd ../..
+    # cd image/zup
+    # make clean
+    # ds_="4 8 16 32 64"
+    # for d in $ds_ ; do
+    #   make D=CLOCKS,STATS,VAR_DELAY=$var_delay RUN_ARGS="-d$d -v15 -w24000 -h16000 pat pat" run
+    # done
+    # for d in $ds_ ; do
+    #   make D=CLIENT,CLOCKS,STATS,VAR_DELAY=$var_delay RUN_ARGS="-d$d -v15 -w16000 -h8000 pat pat" run
+    # done
+    # cd ../..
 
-    cd pager/zup 
-    make clean
-    make D=STATS,CLOCKS,VAR_DELAY=$var_delay run
-    make D=STATS,CLOCKS,CLIENT,VAR_DELAY=$var_delay run
-    cd ../..
+    # cd pager/zup 
+    # make clean
+    # make D=STATS,CLOCKS,VAR_DELAY=$var_delay run
+    # make D=STATS,CLOCKS,CLIENT,VAR_DELAY=$var_delay run
+    # cd ../..
 
-    cd spmv/zup
-    make clean
-    make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
-    make D=CLOCKS,STATS,CLIENT,VAR_DELAY=$var_delay run
-    cd ../..
+    # cd spmv/zup
+    # make clean
+    # make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
+    # make D=CLOCKS,STATS,CLIENT,VAR_DELAY=$var_delay run
+    # cd ../..
 
     cd randa/zup 
     make clean
-    make D=STATS,CLOCKS,VAR_DELAY=$var_delay run
+    # make D=STATS,CLOCKS,VAR_DELAY=$var_delay run
     make D=STATS,CLOCKS,CLIENT,VAR_DELAY=$var_delay run
     cd ../..
 
-    cd rtb/zup 
-    make clean
-    make D=CLOCKS,STATS,USE_HASH,USE_OCM,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run
-    make D=CLOCKS,STATS,USE_HASH,USE_OCM,OFFLOAD,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run
-    cd ../..
+    # cd rtb/zup 
+    # make clean
+    # make D=CLOCKS,STATS,USE_HASH,USE_OCM,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run
+    # make D=CLOCKS,STATS,USE_HASH,USE_OCM,OFFLOAD,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run
+    # cd ../..
 
-    cd strm/zup
-    make clean
-    make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
-    cd ../..
+    # cd strm/zup
+    # make clean
+    # make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
+    # cd ../..
 
-    cd xsb/zup
-    make clean
-    make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
-    cd ../..
+    # cd xsb/zup
+    # make clean
+    # make D=CLOCKS,STATS,VAR_DELAY=$var_delay run
+    # cd ../..
   done
 done
 

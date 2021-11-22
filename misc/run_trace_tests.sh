@@ -2,14 +2,20 @@ make build=zup fpga
 sleep 15
 
 # Parameters to sweep
+
 # div_="4 8 16 32"
-div_="4"
+div_="32"
+
 # resps_="106W85R 400W200R"
-resps_="400W200R"
+resps_="106W85R"
+
 # generator_="pwclt table"
-generator_="pwclt table"
-# experiment="image"
-experiment="randa"
+generator_="table"
+nongaussian = "true" # Only if table is selected instead of Gaussian
+
+experiment="image"
+# experiment="randa"
+
 
 # This is the FPGA serial port device to listen to
 serialport="/dev/ttyS3"
@@ -36,7 +42,15 @@ for generator in $generator_ ; do
                     for lat in $lats_106_85_ ; do
                     limeapps=$PWD
                     cd $LIME/ip/2018.2/llnl.gov_user_axi_delayv_1.0.0/hdl/gaussian_delay
-                    python gaussian_delay.py $lat $div
+
+                    # Use a non-gaussian distribution to populate the tables
+                    if [[ $nongaussian == "true" ]];
+                    then
+                        python ivy_custom_delay.py $experiment
+                    else
+                        python gaussian_delay.py $lat $div
+                    fi
+
                     cd $limeapps
                     done
                     arr=($lats_106_85_)
@@ -50,15 +64,27 @@ for generator in $generator_ ; do
                     arr=($lats_400_200_)
                 fi
 
-                # Copy the tables to the LIME code
-                cp $LIME/shared/gdt_data_g${arr[0]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[1]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[2]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[3]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[4]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[5]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_read.txt
-                cp $LIME/shared/gdt_data_g${arr[6]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_write.txt
-                cp $LIME/shared/gdt_data_g${arr[7]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_read.txt
+                #  Copy the tables to the LIME code
+                if [[ $nongaussian == "true" ]];
+                then
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_cpu_sram_write.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_cpu_sram_read.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_cpu_dram_write.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_cpu_dram_read.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_acc_sram_write.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_acc_sram_read.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_acc_dram_write.txt
+                    cp $LIME/shared/${experiment}_dt_data_custom.txt $LIME/shared/gdt_data_acc_dram_read.txt
+                else
+                    cp $LIME/shared/gdt_data_g${arr[0]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_write.txt
+                    cp $LIME/shared/gdt_data_g${arr[1]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_sram_read.txt
+                    cp $LIME/shared/gdt_data_g${arr[2]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_write.txt
+                    cp $LIME/shared/gdt_data_g${arr[3]}_mu_div$div.txt $LIME/shared/gdt_data_cpu_dram_read.txt
+                    cp $LIME/shared/gdt_data_g${arr[4]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_write.txt
+                    cp $LIME/shared/gdt_data_g${arr[5]}_mu_div$div.txt $LIME/shared/gdt_data_acc_sram_read.txt
+                    cp $LIME/shared/gdt_data_g${arr[6]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_write.txt
+                    cp $LIME/shared/gdt_data_g${arr[7]}_mu_div$div.txt $LIME/shared/gdt_data_acc_dram_read.txt
+                fi
 
                 var_delay="_GDT_"
 
@@ -83,9 +109,9 @@ for generator in $generator_ ; do
 
             cd $experiment/zup
             make clean
-            if [[ $experiment == "image" || $experiment == "spmv" || $experiment == "randa" ]];
+            if [[ $experiment == "image" || $experiment == "spmv" || $experiment == "randa" || $experiment == "strm" || $experiment == "xsb" ]];
             then
-                make D=CLOCKS,STATS,TRACE=_TALL_,CLIENT,VAR_DELAY=$var_delay run > /dev/null 2>&1 & 
+                make D=CLOCKS,STATS,TRACE=_TALL_,VAR_DELAY=$var_delay RUN_ARGS="-d16 -v15 -w16000  -h8000 pat pat" run > /dev/null 2>&1 & 
             elif [[ $experiment == "rtb" ]];
             then
                 make D=CLOCKS,STATS,TRACE=_TALL_,USE_HASH,USE_OCM,OFFLOAD,USE_SD,VAR_DELAY=$var_delay RUN_ARGS="-e32Mi -l.60 -c -w1Mi -h.90 -z.99" run > /dev/null 2>&1 & 
@@ -131,7 +157,7 @@ for generator in $generator_ ; do
 
             limeapps=$PWD
             cd $LIME/trace/tools
-            ./lplot.sh -a -b$experiment$generator$resp$div -f -s $limeapps/$experiment$generator$resp$div.csv $generator$resp$div   
+            ./lplot.sh -b$experiment$generator$resp$div -f -s $limeapps/$experiment$generator$resp$div.csv $generator$resp$div   
             cd $limeapps     
 
             echo "Plot done."
